@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MapMountain : MapBase
+public class MapMountain : MapCardBase
 {
 
     // Use this for initialization
