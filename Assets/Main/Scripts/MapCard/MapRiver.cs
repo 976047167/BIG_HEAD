@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MapCardRiver : MapBase
+public class MapCardRiver : MapCardBase
 {
 
     // Use this for initialization
