@@ -9,6 +9,7 @@ public class DataDialog : MonoBehaviour {
 
     private List<Dialog> listDialog = new List<Dialog>();
 
+
     public static DataDialog getInstance()
     {
         if (instance == null)
@@ -41,19 +42,19 @@ public class DataDialog : MonoBehaviour {
             int.TryParse(aryLine[1], out index);
             int type;
             int.TryParse(aryLine[3], out type);
-            List<int>  nextIndex = new List<int>();
+            List<int>  nextIndices = new List<int>();
             string[] indexArry = aryLine[4].Split(',');
             foreach(string i in indexArry)
             {
                 int _index;
                 int.TryParse(i, out _index);
-                nextIndex.Add(_index);
+                nextIndices.Add(_index);
             }
            
             int imageIndex;
             int.TryParse(aryLine[5], out imageIndex);
 
-            Dialog temp = new Dialog(index, aryLine[2], type, nextIndex, imageIndex);
+            Dialog temp = new Dialog(index, aryLine[2], type, nextIndices, imageIndex);
             listDialog.Add(temp);
 
         }
@@ -73,23 +74,36 @@ public class DataDialog : MonoBehaviour {
         return i.getString();
     }
 
-    public List<int> getDialogNextIndex(int index)
+    public List<int> getDialogNextIndices(int index)
+    {
+        Dialog i = GetDialog(index);
+        if (i == null)
+        {
+            print("getNextIndices fail!");
+            return null;
+        }
+
+        return i.getNextIndices();
+    }
+    public int getDialogType(int index)
     {
         Dialog i = GetDialog(index);
         if (i == null)
         {
             print("getNextIndex fail!");
-            return null;
+            return 0;
         }
 
-        return i.getNextIndex();
+        return i.getType();
     }
 
 
 
 
-
-
+    ~DataDialog()
+    {
+        instance = null;
+    }
 
 
 
@@ -111,14 +125,14 @@ public class DataDialog : MonoBehaviour {
         private int index;
         private string text;
         private int type;
-        private List<int> nextIndex = new List<int>();
+        private List<int> nextIndices = new List<int>();
         private int imageIndex;
-        public Dialog(int index, string text, int type, List<int> nextIndex, int imageIndex)
+        public Dialog(int index, string text, int type, List<int> nextIndices, int imageIndex)
         {
             this.index = index;
             this.text = text;
             this.type = type;
-            this.nextIndex = nextIndex;
+            this.nextIndices = nextIndices;
             this.imageIndex = imageIndex;
         }
 
@@ -132,9 +146,13 @@ public class DataDialog : MonoBehaviour {
             return this.text;
         }
 
-        public List<int> getNextIndex()
+        public List<int> getNextIndices()
         {
-            return nextIndex;
+            return nextIndices;
+        }
+        public int getType()
+        {
+            return type;
         }
     }
 }
