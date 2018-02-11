@@ -5,15 +5,5 @@ using UnityEngine;
 public class MapMountain : MapCardBase
 {
 
-    // Use this for initialization
-    void Start()
-    {
-
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
+    
 }

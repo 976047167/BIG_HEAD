@@ -35,9 +35,7 @@ public class MapCardBase : MonoBehaviour
 
     static string[] MapCardName = {
         "MapCardMonster",
-        "MapMountain",
         "MapCardShop",
-        "MapRiver",
         "MapCardBox",
         "MapCardNpc"
     };
@@ -46,14 +44,18 @@ public class MapCardBase : MonoBehaviour
 
     public static MapCardBase CreateMapCard<T>() where T : MapCardBase
     {
-        Debug.LogError("Prefab/MapCard/" + typeof(T).ToString());
-        MapCardBase mapCard = Resources.Load<MapCardBase>("Prefab/MapCard/" + typeof(T).ToString());
+        //Debug.LogError("Prefabs/MapCard/" + typeof(T).ToString());
+        GameObject prefab = Resources.Load<GameObject>("Prefabs/MapCard/" + typeof(T).ToString());
+        GameObject go = Instantiate(prefab);
+        MapCardBase mapCard = go.GetComponent<T>();
         return mapCard;
     }
 
     public static MapCardBase GetRandomMapCard()
     {
-        return Resources.Load<MapCardBase>("Prefab/MapCard/" + MapCardName[Random.Range(0, MapCardName.Length)]);
+        string cardType = MapCardName[Random.Range(0, MapCardName.Length)];
+        //Debug.LogError("Prefabs/MapCard/" + cardType);
+        return Instantiate(Resources.Load<MapCardBase>("Prefabs/MapCard/" + cardType));
     }
 
     // Use this for initialization
@@ -72,7 +74,15 @@ public class MapCardBase : MonoBehaviour
     /// </summary>
     public virtual void Init()
     {
-
+        transform.position = new Vector3((X - 2) * 2f, 0.1f, (Y - 2) * 2f);
+        if (state == CardState.Behind)
+        {
+            transform.localEulerAngles = new Vector3(0f, 0f, 180f);
+        }
+        else if (state == CardState.Front)
+        {
+            transform.localEulerAngles = new Vector3(0f, 0f, 0f);
+        }
     }
     /// <summary>
     /// 被放置到地图里
