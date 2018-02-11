@@ -93,6 +93,7 @@ public class WND_ChosePass : MonoBehaviour
                     if (nextIndex == 0)
                     {
                         btnShowAll.SetActive(false);
+                        Destroy(gameObject);
                         return;
                     }
                     showDialog(nextIndex);
