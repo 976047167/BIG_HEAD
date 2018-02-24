@@ -5,15 +5,10 @@ using UnityEngine;
 public class MapCardDoor : MapCardBase
 {
 
-    // Use this for initialization
-    void Start()
+    public override void OnPlayerEnter()
     {
-
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-
+        base.OnPlayerEnter();
+        //MapLogic.Instance
+        //下一关
     }
 }

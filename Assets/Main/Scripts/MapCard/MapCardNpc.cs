@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class MapCardNpc : MapCardBase
 {
-
-    
+    public override void OnPlayerEnter()
+    {
+        base.OnPlayerEnter();
+        //进入对话
+    }
 }

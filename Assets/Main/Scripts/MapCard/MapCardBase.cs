@@ -9,18 +9,6 @@ using DG;
 /// </summary>
 public class MapCardBase : MonoBehaviour
 {
-    [SerializeField]
-    private Material matOpened;
-    [SerializeField]
-    private Material matCurrent;
-    [SerializeField]
-    private Material matClosed;
-    [SerializeField]
-    private Material matShop;
-    [SerializeField]
-    private Material matMonster;
-    [SerializeField]
-    private Material matClick;
     public GameObject prefab;
     public TextMeshPro infoBoard;
     public int X { get { return Pos.X; } set { Pos.X = value; } }
@@ -58,6 +46,8 @@ public class MapCardBase : MonoBehaviour
         return Instantiate(Resources.Load<MapCardBase>("Prefabs/MapCard/" + cardType));
     }
 
+
+
     // Use this for initialization
     protected virtual void Start()
     {
@@ -83,7 +73,17 @@ public class MapCardBase : MonoBehaviour
         {
             transform.localEulerAngles = new Vector3(0f, 0f, 0f);
         }
+        UIEventListener.Get(transform.Find("Card").gameObject).onClick = OnClick;
     }
+
+    void OnClick(GameObject go)
+    {
+        Debug.LogError(name + "  " + Pos.X + ":" + Pos.Y);
+        MapLogic.Instance.OnClickMapCard(this);
+
+    }
+    #region 地图事件响应
+
     /// <summary>
     /// 被放置到地图里
     /// </summary>
@@ -105,12 +105,16 @@ public class MapCardBase : MonoBehaviour
     {
 
     }
+    protected bool isFirstEnter = true;
     /// <summary>
     /// 玩家进入时发生
     /// </summary>
     public virtual void OnPlayerEnter()
     {
-
+        if (isFirstEnter)
+        {
+            isFirstEnter = false;
+        }
     }
     /// <summary>
     /// 与玩家互动时发生
@@ -147,7 +151,7 @@ public class MapCardBase : MonoBehaviour
     {
 
     }
-
+    #endregion
     public virtual void SetState(CardState newState)
     {
         if ((int)newState < 10)
@@ -158,17 +162,19 @@ public class MapCardBase : MonoBehaviour
         {
             return;
         }
+        state = newState;
         switch (newState)
         {
             case CardState.Behind:
+                TweenRotation.Begin(gameObject, 0.5f, transform.localRotation * Quaternion.Euler(0f, 0f, 0f));
                 break;
             case CardState.Front:
+                TweenRotation.Begin(gameObject, 0.5f, transform.localRotation * Quaternion.Euler(0f, 0f, 180f));
                 break;
             default:
                 break;
         }
     }
-
 
 
     public enum CardState
@@ -183,10 +189,12 @@ public class MapCardBase : MonoBehaviour
         Front = 11,
     }
 }
-
+[SerializeField]
 public struct MapCardPos
 {
+    [SerializeField]
     public int X;
+    [SerializeField]
     public int Y;
     public MapCardPos(int x, int y)
     {
