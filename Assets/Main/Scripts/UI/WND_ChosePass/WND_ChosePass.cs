@@ -51,7 +51,7 @@ public class WND_ChosePass : MonoBehaviour
     {
         preserntIndex = index;
         StopCoroutine("PrintStringByStep");
-        printString = DataDialog.getInstance().getDialogString(index);
+        printString = DialogTable.getInstance().getDialogString(index);
         StartCoroutine("PrintStringByStep");
     }
 
@@ -84,11 +84,11 @@ public class WND_ChosePass : MonoBehaviour
         }
         else
         {
-            int type = DataDialog.getInstance().getDialogType(preserntIndex);
+            int type = DialogTable.getInstance().getDialogType(preserntIndex);
             switch (type)
             {
                 case 1:
-                    List<int> nextIndices = DataDialog.getInstance().getDialogNextIndices(preserntIndex);
+                    List<int> nextIndices = DialogTable.getInstance().getDialogNextIndices(preserntIndex);
                     int nextIndex = nextIndices[0];
                     if (nextIndex == 0)
                     {

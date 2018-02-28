@@ -4,6 +4,12 @@ using UnityEngine;
 
 public class MapCardNpc : MapCardBase
 {
+    public override void Init()
+    {
+        base.Init();
+
+    }
+
     public override void OnPlayerEnter()
     {
         base.OnPlayerEnter();

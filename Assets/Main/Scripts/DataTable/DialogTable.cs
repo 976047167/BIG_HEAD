@@ -2,18 +2,21 @@
 using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
+//DataTableBase
+//DataTableParser     DataTableParser.Parser<DialogTable>();
+//DataTableManager  统一加载
 
-public class DataDialog : MonoBehaviour {
+public class DialogTable  {
 
-    static DataDialog instance = null;
+    static DialogTable instance = null;
 
     private List<Dialog> listDialog = new List<Dialog>();
 
 
-    public static DataDialog getInstance()
+    public static DialogTable getInstance()
     {
         if (instance == null)
-            instance = new DataDialog();
+            instance = new DialogTable();
         return instance;
     }
     public int loadTsvFile(string filePath)
@@ -21,11 +24,11 @@ public class DataDialog : MonoBehaviour {
         WWW config = new WWW(filePath);
         if (config == null)
         {
-            print("loadFile failed!");
+            Debug.Log("loadFile failed!");
             return 1;
         }
+        //Resources.Load<TextAsset>();
         listDialog.Clear();
-
         MemoryStream stream = new MemoryStream(config.bytes);
         StreamReader sr = new StreamReader(stream);
         string strLine = "";
@@ -67,7 +70,7 @@ public class DataDialog : MonoBehaviour {
         Dialog i = GetDialog(index);
         if (i == null)
         {
-            print("getSting fail!");
+            Debug.Log("getSting fail!");
             return "";
         }
             
@@ -79,7 +82,7 @@ public class DataDialog : MonoBehaviour {
         Dialog i = GetDialog(index);
         if (i == null)
         {
-            print("getNextIndices fail!");
+            Debug.Log("getNextIndices fail!");
             return null;
         }
 
@@ -90,7 +93,7 @@ public class DataDialog : MonoBehaviour {
         Dialog i = GetDialog(index);
         if (i == null)
         {
-            print("getNextIndex fail!");
+            Debug.Log("getNextIndex fail!");
             return 0;
         }
 
@@ -100,7 +103,7 @@ public class DataDialog : MonoBehaviour {
 
 
 
-    ~DataDialog()
+    ~DialogTable()
     {
         instance = null;
     }
@@ -115,7 +118,7 @@ public class DataDialog : MonoBehaviour {
             if (i.getIndex() == index)
                 return i;
         }
-        print("index has no Dialog,it's maybe wrong !");
+        Debug.Log("index has no Dialog,it's maybe wrong !");
         return null;
     }
 
