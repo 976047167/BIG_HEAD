@@ -59,11 +59,11 @@ public class UIBattleCard : MonoBehaviour
     }
     void OnDragOver()
     {
-        Debug.Log("OnDragOver ：" + name);
+        //Debug.Log("OnDragOver ：" + name);
     }
     void OnDragOut()
     {
-        Debug.LogError("OnDragOut ：" + name);
+        //Debug.LogError("OnDragOut ：" + name);
     }
     void OnDragEnd()
     {
@@ -78,6 +78,7 @@ public class UIBattleCard : MonoBehaviour
                 if (hits[i].collider.name== "UsedCards")
                 {
                     m_Used = true;
+                    GetComponent<BoxCollider>().enabled = false;
                     Debug.LogError("释放卡牌");
                 }
             }
@@ -89,6 +90,22 @@ public class UIBattleCard : MonoBehaviour
     }
     void OnDrop(GameObject go)
     {
-        Debug.Log("OnDrop ：" + name);
+        //Debug.Log("OnDrop ：" + name);
+    }
+    void OnHover(bool isOver)
+    {
+        if (m_Used)
+        {
+            transform.localScale = Vector3.one;
+            return;
+        }
+        if (isOver)
+        {
+            transform.localScale = new Vector3(2f, 2f, 2f);
+        }
+        else
+        {
+            transform.localScale = Vector3.one;
+        }
     }
 }
