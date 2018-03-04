@@ -26,7 +26,7 @@ public class MapLogic : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Mouse0))
+        if (UICamera.isOverUI == false && Input.GetKeyDown(KeyCode.Mouse0))
         {
             RaycastHit[] hits = Physics.RaycastAll(mainCamera.ScreenPointToRay(Input.mousePosition), 100f, 1 << 9);
             for (int i = 0; i < hits.Length; i++)
@@ -102,7 +102,7 @@ public class MapLogic : MonoBehaviour
     public void OnClickMapCard(MapCardBase mapCard)
     {
         int distance = Mathf.Abs(mapCard.Pos.X - currentPos.X) + Mathf.Abs(mapCard.Y - currentPos.Y);
-        if (distance==1)
+        if (distance == 1)
         {
             PlayerMoveTo(mapCard.Pos);
         }
