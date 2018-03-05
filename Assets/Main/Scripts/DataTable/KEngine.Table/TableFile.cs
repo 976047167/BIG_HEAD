@@ -263,7 +263,7 @@ namespace KEngine.Table
         {
             get
             {
-                return typeof(T).GetFields(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
+                return typeof(TableRow).GetFields(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
             }
         }
 
@@ -307,9 +307,8 @@ namespace KEngine.Table
             {
                 var fieldName = field.Name;
                 var fieldType = field.FieldType;
-                var typeName = GetTypeName(fieldType);
-                var methodName = string.Format("Get{0}", typeName);
-                var method = type.GetMethod(methodName, BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public);
+                var methodName = string.Format("Get_{0}", fieldType.Name);
+                var method = type.GetMethod(methodName, BindingFlags.Instance | BindingFlags.NonPublic);
                 if (method != null)
                 {
                     // 找寻FieldName所在索引
@@ -336,24 +335,6 @@ namespace KEngine.Table
                 }
             }
 
-        }
-        private string GetTypeName(Type T)
-        {
-            string Name = "";
-            if (T.IsGenericType)
-            {
-                Name ="_" + T.Name.Split('`')[0];
-                Type[] subT = T.GetGenericArguments();
-                foreach (Type t in subT)
-                {
-                    Name += GetTypeName(t);
-                }
-                return Name;
-            }
-            else
-            {
-                return "_" + T.Name;
-            }
         }
         protected bool ParseString(string content)
         {
