@@ -2,12 +2,14 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class UIBattleForm : MonoBehaviour
+public class UIBattleForm : UIFormBase
 {
     [SerializeField]
     private GameObject m_BattleCardTemplate;
     [SerializeField]
     private UIGrid m_MyCardsGrid;
+
+
     // Use this for initialization
     void Start()
     {

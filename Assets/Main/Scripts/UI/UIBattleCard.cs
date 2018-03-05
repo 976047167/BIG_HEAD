@@ -25,13 +25,13 @@ public class UIBattleCard : MonoBehaviour
     Vector3 offsetPos;
     Transform cacheCardTrans;
 
-    void Start()
+    protected void Start()
     {
         cacheCardTrans = transform.GetChild(0);
     }
 
 
-    void Update()
+    protected void Update()
     {
         if (m_Draging && UICamera.mainCamera != null)
         {
@@ -46,26 +46,26 @@ public class UIBattleCard : MonoBehaviour
         }
     }
 
-    void OnDragStart()
+    protected void OnDragStart()
     {
         Debug.Log("OnDragStart ：" + name);
         m_Draging = true;
         offsetPos = transform.position - UICamera.lastWorldPosition;
     }
-    void OnDrag(Vector2 delta)
+    protected void OnDrag(Vector2 delta)
     {
         //Debug.Log("OnDrag ：" + name);
         //transform.Translate(delta, Space.Self);
     }
-    void OnDragOver()
+    protected void OnDragOver()
     {
         //Debug.Log("OnDragOver ：" + name);
     }
-    void OnDragOut()
+    protected void OnDragOut()
     {
         //Debug.LogError("OnDragOut ：" + name);
     }
-    void OnDragEnd()
+    protected void OnDragEnd()
     {
         Debug.Log("OnDragEnd ：" + name);
         m_Draging = false;
@@ -75,11 +75,11 @@ public class UIBattleCard : MonoBehaviour
         {
             for (int i = 0; i < hits.Length; i++)
             {
-                if (hits[i].collider.name== "UsedCards")
+                if (hits[i].collider.name == "UsedCards")
                 {
-                    m_Used = true;
-                    GetComponent<BoxCollider>().enabled = false;
-                    Debug.LogError("释放卡牌");
+                    m_Used = UseCard();
+                    //GetComponent<BoxCollider>().enabled = false;
+                    
                 }
             }
         }
@@ -88,11 +88,11 @@ public class UIBattleCard : MonoBehaviour
             TweenPosition.Begin(cacheCardTrans.gameObject, 0.5f, Vector3.zero);
         }
     }
-    void OnDrop(GameObject go)
+    protected void OnDrop(GameObject go)
     {
         //Debug.Log("OnDrop ：" + name);
     }
-    void OnHover(bool isOver)
+    protected void OnHover(bool isOver)
     {
         if (m_Used)
         {
@@ -101,11 +101,19 @@ public class UIBattleCard : MonoBehaviour
         }
         if (isOver)
         {
-            transform.localScale = new Vector3(2f, 2f, 2f);
+            transform.localScale = new Vector3(1.5f, 1.5f, 1.5f);
         }
         else
         {
             transform.localScale = Vector3.one;
         }
     }
+
+    protected virtual bool UseCard()
+    {
+        //判断使用条件，不允许返回false
+        Debug.LogError("释放卡牌");
+        return true;
+    }
+
 }
