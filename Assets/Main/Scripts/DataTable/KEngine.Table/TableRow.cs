@@ -109,10 +109,31 @@ namespace KEngine.Table
             return dict;
         }
 
+        public List<int> Get_List_int(string value, string defaultValue)
+        {
+            return GetList<int>(value, defaultValue);
+        }
+
+        public List<T> GetList<T>(string value, string defaultValue)
+        {
+            var list = new List<T>();
+            var str = Get_String(value, defaultValue);
+            var arr = str.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+            foreach (var item in arr)
+            {
+                var itemValue = ConvertString<T>(item);
+                list.Add(itemValue);
+            }
+            return list;
+        }
+
+
+
         protected T ConvertString<T>(string value)
         {
             return (T)Convert.ChangeType(value, typeof(T));
         }
+
 
     }
 

@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using AppSettings;
 
 public class WND_ChosePass : MonoBehaviour
 {
@@ -51,7 +52,10 @@ public class WND_ChosePass : MonoBehaviour
     {
         preserntIndex = index;
         StopCoroutine("PrintStringByStep");
+        
+
         printString = DialogTable.getInstance().getDialogString(index);
+        printString = DialogSettings.Get(index).text;
         StartCoroutine("PrintStringByStep");
     }
 
@@ -85,10 +89,12 @@ public class WND_ChosePass : MonoBehaviour
         else
         {
             int type = DialogTable.getInstance().getDialogType(preserntIndex);
+            type = DialogSettings.Get(preserntIndex).type;
             switch (type)
             {
                 case 1:
                     List<int> nextIndices = DialogTable.getInstance().getDialogNextIndices(preserntIndex);
+                    nextIndices = DialogSettings.Get(preserntIndex).nextIndices;
                     int nextIndex = nextIndices[0];
                     if (nextIndex == 0)
                     {

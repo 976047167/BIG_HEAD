@@ -1,0 +1,6 @@
+index	text	type	nextIndices	imageIndex
+int/0	string/ 	int/1	List<int>	int
+1	321	1	2	0
+2	333	1	3	0
+3	11	1	4	0
+4	5	1	0	0
