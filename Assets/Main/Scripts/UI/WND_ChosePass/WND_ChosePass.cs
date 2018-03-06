@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using AppSettings;
 
-public class WND_ChosePass : MonoBehaviour
+public class WND_ChosePass : UIFormBase
 {
     private string printString;
     private UILabel labTips;

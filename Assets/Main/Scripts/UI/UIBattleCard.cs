@@ -12,7 +12,7 @@ public class UIBattleCard : MonoBehaviour
     [SerializeField]
     private UITexture m_TexIcon;
     [SerializeField]
-    private UILabel m_lblDesc;
+    private UILabel m_lblName;
     [SerializeField]
     private UILabel m_lblExpand;
     [SerializeField]

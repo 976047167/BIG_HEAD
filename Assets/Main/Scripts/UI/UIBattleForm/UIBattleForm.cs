@@ -8,7 +8,10 @@ public class UIBattleForm : UIFormBase
     private GameObject m_BattleCardTemplate;
     [SerializeField]
     private UIGrid m_MyCardsGrid;
-
+    [SerializeField]
+    private UIGrid m_UsedCardsGrid;
+    [SerializeField]
+    private UIGrid m_OppCardsGrid;
 
     // Use this for initialization
     void Start()

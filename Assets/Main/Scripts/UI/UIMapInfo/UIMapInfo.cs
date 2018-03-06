@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class UIMapInfo : MonoBehaviour
+public class UIMapInfo : UIFormBase
 {
     [SerializeField]
     private UILabel m_PlayerInfo;

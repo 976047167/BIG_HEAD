@@ -14,7 +14,7 @@ public class UIModule
     {
         get
         {
-            if (_instance==null)
+            if (_instance == null)
             {
                 _instance = new UIModule();
             }
@@ -23,22 +23,22 @@ public class UIModule
     }
 
     Dictionary<Type, UIFormBase> DicOpenedUIForm = new Dictionary<Type, UIFormBase>();
-    
-    public void OpenUIForm<T>() where T:UIFormBase
+
+    public void OpenForm<T>() where T : UIFormBase
     {
-        if (DicOpenedUIForm.ContainsKey(typeof(T)))
+        if (DicOpenedUIForm[typeof(T)] != null)
         {
             DicOpenedUIForm[typeof(T)].gameObject.SetActive(true);
             return;
         }
         UIConfig config = DicUIConfig[typeof(T)];
-        if (config==null)
+        if (config == null)
         {
             Debug.LogError("The UI[" + typeof(T).ToString() + "] is not configed!");
             return;
         }
         GameObject uiForm = Resources.Load<GameObject>(config.PrefabName);
-        if (uiForm==null)
+        if (uiForm == null)
         {
             Debug.LogError("The UI prefab[" + config.PrefabName + "] is not exist!");
             return;
@@ -48,20 +48,44 @@ public class UIModule
         form.transform.localScale = Vector3.one;
         form.transform.localEulerAngles = Vector3.zero;
         form.SetActive(true);
-        DicOpenedUIForm[typeof(T)] = form.GetComponent<T>();
-        DicOpenedUIForm[typeof(T)].Init();
+        T script = form.GetComponent<T>();
+        if (script == null)
+        {
+            Debug.LogError("The UI need a script[" + typeof(T).ToString() + "]!");
+            GameObject.Destroy(form);
+            return;
+        }
+        DicOpenedUIForm[typeof(T)] = script;
+        script.Init();
     }
 
+    public T GetForm<T>() where T : UIFormBase
+    {
+        return DicOpenedUIForm[typeof(T)] as T;
+    }
 
+    public void CloseForm<T>() where T:UIFormBase
+    {
+        if (DicOpenedUIForm[typeof(T)] == null)
+        {
+            return;
+        }
+        GameObject.Destroy(DicOpenedUIForm[typeof(T)].gameObject);
+        DicOpenedUIForm.Remove(typeof(T));
+        Resources.UnloadUnusedAssets();
+        GC.Collect();
+    }
 
     static Dictionary<Type, UIConfig> DicUIConfig = new Dictionary<Type, UIConfig>()
     {
-        {typeof(UIBattleForm),new UIConfig("Prefabs/UIForm/WND_BattleForm") }
+        {typeof(UIBattleForm),new UIConfig("Prefabs/UIForm/WND_BattleForm") },
+        {typeof(UIMapInfo),new UIConfig("Prefabs/UIForm/WND_MapInfo") },
+        {typeof(WND_ChosePass),new UIConfig("Prefabs/UIForm/WND_ ChosePass") },
     };
     class UIConfig
     {
         public string PrefabName;
-        
+
         public UIConfig(string prefabName)
         {
             PrefabName = prefabName;
