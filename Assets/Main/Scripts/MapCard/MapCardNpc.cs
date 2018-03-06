@@ -16,7 +16,7 @@ public class MapCardNpc : MapCardBase
     {
         base.OnPlayerEnter();
         //进入对话
-        WND_ChosePass.ShowDialog(DialogSettings.Get(id).index);
+        UIModule.Instance.OpenForm<WND_ChosePass>();
 
     }
 }

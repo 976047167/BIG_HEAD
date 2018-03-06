@@ -26,7 +26,7 @@ public class UIModule
 
     public void OpenForm<T>() where T : UIFormBase
     {
-        if (DicOpenedUIForm[typeof(T)] != null)
+        if (DicOpenedUIForm.ContainsKey(typeof(T)) && DicOpenedUIForm[typeof(T)] != null)
         {
             DicOpenedUIForm[typeof(T)].gameObject.SetActive(true);
             return;
@@ -64,7 +64,7 @@ public class UIModule
         return DicOpenedUIForm[typeof(T)] as T;
     }
 
-    public void CloseForm<T>() where T:UIFormBase
+    public void CloseForm<T>() where T : UIFormBase
     {
         if (DicOpenedUIForm[typeof(T)] == null)
         {

@@ -10,14 +10,13 @@ public class WND_ChosePass : UIFormBase
     private GameObject btnShowAll;
     private int preserntIndex;
     private bool isPrinting;
-    GameObject self;
     // Use this for initialization
     void Awake()
     {
-        instance = this;
         labTips = transform.Find("imgBg/imgTips/labTips").GetComponent<UILabel>();
         btnShowAll = transform.Find("btnShowAll").gameObject;
         UIEventListener.Get(btnShowAll.gameObject).onClick = PrintStringAll;
+        showDialog(1);
     }
 
     void Start()
@@ -31,22 +30,21 @@ public class WND_ChosePass : UIFormBase
 
     }
 
-    static WND_ChosePass instance = null;
-    public static void ShowDialog(int index)
-    {
-        if (instance == null)
-        {
-            GameObject prefab = (GameObject)Resources.Load("Prefabs/UIForm/WND");
-            GameObject wnd = Instantiate(prefab) as GameObject;
-            wnd.transform.position = Vector3.zero;
-        }
+    //public static void ShowDialog(int index)
+    //{
+    //    if (instance == null)
+    //    {
+    //        GameObject prefab = (GameObject)Resources.Load("Prefabs/UIForm/WND");
+    //        GameObject wnd =
+    //        wnd.transform.position = Vector3.zero;
+    //    }
 
-        instance.showDialog(index);
+    //    instance.showDialog(index);
 
-    }
+    //}
     private void OnDestroy()
     {
-        instance = null;
+        
     }
     private void showDialog(int index)
     {
@@ -85,6 +83,7 @@ public class WND_ChosePass : UIFormBase
             StopCoroutine("PrintStringByStep");
             print("PrintStringByStep is stop");
             labTips.text = this.printString;
+            isPrinting = false;
         }
         else
         {
