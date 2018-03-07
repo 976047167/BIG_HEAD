@@ -6,7 +6,7 @@ public abstract class UIFormBase : MonoBehaviour
 {
 
 
-    public void Init()
+    public void Init(object userdata)
     {
 
     }

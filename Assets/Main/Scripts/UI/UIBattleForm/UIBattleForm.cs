@@ -28,4 +28,18 @@ public class UIBattleForm : UIFormBase
             m_MyCardsGrid.Reposition();
         }
     }
+
+    public void UseCard(UIBattleCard battleCard)
+    {
+        StartCoroutine(CoroutineUser(battleCard));
+    }
+    IEnumerator CoroutineUser(UIBattleCard battleCard)
+    {
+        battleCard.transform.SetParent(m_UsedCardsGrid.transform, false);
+        m_UsedCardsGrid.repositionNow = true;
+        m_MyCardsGrid.repositionNow = true;
+        yield return null;
+        battleCard.RevertCardPos();
+    }
+
 }

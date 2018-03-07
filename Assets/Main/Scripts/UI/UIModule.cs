@@ -24,7 +24,7 @@ public class UIModule
 
     Dictionary<Type, UIFormBase> DicOpenedUIForm = new Dictionary<Type, UIFormBase>();
 
-    public void OpenForm<T>() where T : UIFormBase
+    public void OpenForm<T>(object userdata = null) where T : UIFormBase
     {
         if (DicOpenedUIForm.ContainsKey(typeof(T)) && DicOpenedUIForm[typeof(T)] != null)
         {
@@ -56,7 +56,7 @@ public class UIModule
             return;
         }
         DicOpenedUIForm[typeof(T)] = script;
-        script.Init();
+        script.Init(userdata);
     }
 
     public T GetForm<T>() where T : UIFormBase

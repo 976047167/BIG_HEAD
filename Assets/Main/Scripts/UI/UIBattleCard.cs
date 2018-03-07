@@ -23,11 +23,12 @@ public class UIBattleCard : MonoBehaviour
     private UILabel m_lblAttackCount;
 
     Vector3 offsetPos;
-    Transform cacheCardTrans;
+    Transform cacheChildCardTrans;
+    Vector3 cacheCardPos;
 
     protected void Start()
     {
-        cacheCardTrans = transform.GetChild(0);
+        cacheChildCardTrans = transform.GetChild(0);
     }
 
 
@@ -42,7 +43,7 @@ public class UIBattleCard : MonoBehaviour
             //Physics
 
             //transform.position = UICamera.mainCamera.ScreenToWorldPoint(UICamera.lastWorldPosition);
-            cacheCardTrans.position = UICamera.lastWorldPosition + offsetPos;
+            cacheChildCardTrans.position = UICamera.lastWorldPosition + offsetPos;
         }
     }
 
@@ -85,7 +86,7 @@ public class UIBattleCard : MonoBehaviour
         }
         if (m_Used == false)
         {
-            TweenPosition.Begin(cacheCardTrans.gameObject, 0.5f, Vector3.zero);
+            TweenPosition.Begin(cacheChildCardTrans.gameObject, 0.5f, Vector3.zero);
         }
     }
     protected void OnDrop(GameObject go)
@@ -113,7 +114,15 @@ public class UIBattleCard : MonoBehaviour
     {
         //判断使用条件，不允许返回false
         Debug.LogError("释放卡牌");
+        UIBattleForm form = UIModule.Instance.GetForm<UIBattleForm>();
+        cacheCardPos = cacheChildCardTrans.position;
+        form.UseCard(this);
         return true;
     }
 
+    public void RevertCardPos()
+    {
+        cacheChildCardTrans.position = cacheCardPos;
+        TweenPosition.Begin(cacheChildCardTrans.gameObject, 0.5f, Vector3.zero);
+    }
 }
