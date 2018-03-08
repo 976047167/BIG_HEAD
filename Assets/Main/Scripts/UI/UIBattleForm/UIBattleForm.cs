@@ -25,6 +25,7 @@ public class UIBattleForm : UIFormBase
         if (Input.GetKeyDown(KeyCode.A))
         {
             GameObject card = Instantiate<GameObject>(m_BattleCardTemplate, m_MyCardsGrid.transform);
+            card.SetActive(true);
             m_MyCardsGrid.Reposition();
         }
     }
@@ -35,10 +36,15 @@ public class UIBattleForm : UIFormBase
     }
     IEnumerator CoroutineUser(UIBattleCard battleCard)
     {
+        Vector3 cachePos = battleCard.cacheChildCardTrans.position;
         battleCard.transform.SetParent(m_UsedCardsGrid.transform, false);
-        m_UsedCardsGrid.repositionNow = true;
-        m_MyCardsGrid.repositionNow = true;
+        //m_UsedCardsGrid.repositionNow = true;
+        //m_MyCardsGrid.repositionNow = true;
+        m_UsedCardsGrid.Reposition();
+        m_MyCardsGrid.Reposition();
+        battleCard.cacheChildCardTrans.position = cachePos;
         yield return null;
+        
         battleCard.RevertCardPos();
     }
 

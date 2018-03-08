@@ -23,7 +23,8 @@ public class UIBattleCard : MonoBehaviour
     private UILabel m_lblAttackCount;
 
     Vector3 offsetPos;
-    Transform cacheChildCardTrans;
+    [HideInInspector]
+    public Transform cacheChildCardTrans;
     Vector3 cacheCardPos;
 
     protected void Start()
@@ -97,16 +98,19 @@ public class UIBattleCard : MonoBehaviour
     {
         if (m_Used)
         {
-            transform.localScale = Vector3.one;
+            //transform.localScale = Vector3.one;
+            TweenScale.Begin(cacheChildCardTrans.gameObject, 0.2f, Vector3.one);
             return;
         }
         if (isOver)
         {
-            transform.localScale = new Vector3(1.5f, 1.5f, 1.5f);
+            //transform.localScale = new Vector3(1.5f, 1.5f, 1.5f);
+            TweenScale.Begin(cacheChildCardTrans.gameObject, 0.2f, new Vector3(1.5f, 1.5f, 1.5f));
         }
         else
         {
-            transform.localScale = Vector3.one;
+            //transform.localScale = Vector3.one;
+            TweenScale.Begin(cacheChildCardTrans.gameObject, 0.2f, Vector3.one);
         }
     }
 
@@ -122,7 +126,7 @@ public class UIBattleCard : MonoBehaviour
 
     public void RevertCardPos()
     {
-        cacheChildCardTrans.position = cacheCardPos;
+        //cacheChildCardTrans.position = cacheCardPos;
         TweenPosition.Begin(cacheChildCardTrans.gameObject, 0.5f, Vector3.zero);
     }
 }
