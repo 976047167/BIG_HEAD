@@ -44,8 +44,33 @@ public class UIBattleForm : UIFormBase
         m_MyCardsGrid.Reposition();
         battleCard.cacheChildCardTrans.position = cachePos;
         yield return null;
-        
         battleCard.RevertCardPos();
     }
 
+    [SerializeField]
+    class PlayerInfoViews
+    {
+        public UILabel HP;
+        public UILabel MaxHP;
+        public UILabel MP;
+        public UILabel MaxMP;
+        public UILabel Level;
+        public UITexture HeadIcon;
+        public UILabel CardCount;
+    }
+    class PlayerInfo
+    {
+        public int HP = 0;
+        public int MaxHP = 0;
+        public int MP = 0;
+        public int MaxMP = 0;
+        public int Level = 1;
+        public string HeadIcon = "";
+        public List<CardInfo> CardList = new List<CardInfo>();
+    }
+
+    class CardInfo
+    {
+
+    }
 }
