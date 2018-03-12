@@ -11,12 +11,17 @@ public class WND_ChosePass : UIFormBase
     private int preserntIndex;
     private bool isPrinting;
     // Use this for initialization
+    protected override void OnInit(object id)
+    {
+        showDialog((int)id);
+    }
+    
     void Awake()
     {
         labTips = transform.Find("imgBg/imgTips/labTips").GetComponent<UILabel>();
         btnShowAll = transform.Find("btnShowAll").gameObject;
         UIEventListener.Get(btnShowAll.gameObject).onClick = PrintStringAll;
-        showDialog(1);
+        
     }
 
     void Start()
@@ -30,7 +35,7 @@ public class WND_ChosePass : UIFormBase
 
     }
 
-    //public static void ShowDialog(int index)
+    //public static void ShowDialog(int Id)
     //{
     //    if (instance == null)
     //    {
@@ -39,21 +44,21 @@ public class WND_ChosePass : UIFormBase
     //        wnd.transform.position = Vector3.zero;
     //    }
 
-    //    instance.showDialog(index);
+    //    instance.showDialog(Id);
 
     //}
     private void OnDestroy()
     {
         
     }
-    private void showDialog(int index)
+    private void showDialog(int Id)
     {
-        preserntIndex = index;
+        preserntIndex = Id;
         StopCoroutine("PrintStringByStep");
         
 
-        printString = DialogTable.getInstance().getDialogString(index);
-        printString = DialogSettings.Get(index).text;
+         printString = DialogTableSettings.Get(Id).Text;
+       // printString = "你好5555555";
         StartCoroutine("PrintStringByStep");
     }
 
@@ -69,9 +74,10 @@ public class WND_ChosePass : UIFormBase
         btnShowAll.SetActive(true);
         isPrinting = true;
         print("pintStringByStep is printing" + printString);
-        for (int i = 0; i < printString.Length; i++)
+        for (int i = 1; i <= printString.Length; i++)
         {
             labTips.text = printString.Substring(0, i);
+            print(labTips.text);
             yield return new WaitForSeconds(0.5f);
         }
         isPrinting = false;
@@ -87,21 +93,19 @@ public class WND_ChosePass : UIFormBase
         }
         else
         {
-            int type = DialogTable.getInstance().getDialogType(preserntIndex);
-            type = DialogSettings.Get(preserntIndex).type;
+            int type = DialogTableSettings.Get(preserntIndex).Type;
             switch (type)
             {
                 case 1:
-                    List<int> nextIndices = DialogTable.getInstance().getDialogNextIndices(preserntIndex);
-                    nextIndices = DialogSettings.Get(preserntIndex).nextIndices;
-                    int nextIndex = nextIndices[0];
-                    if (nextIndex == 0)
+                    List<int> NextIds = DialogTableSettings.Get(preserntIndex).NextIds;
+                    int NextId = NextIds[0];
+                    if (NextId == 0)
                     {
                         btnShowAll.SetActive(false);
                         Destroy(gameObject);
                         return;
                     }
-                    showDialog(nextIndex);
+                    showDialog(NextId);
                     break;
                 default:
                     print("Unknow type!");

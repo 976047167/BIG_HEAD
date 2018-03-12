@@ -80,7 +80,7 @@ public class UIModule
     {
         {typeof(UIBattleForm),new UIConfig("Prefabs/UIForm/WND_BattleForm") },
         {typeof(UIMapInfo),new UIConfig("Prefabs/UIForm/WND_MapInfo") },
-        {typeof(WND_ChosePass),new UIConfig("Prefabs/UIForm/WND_ ChosePass") },
+        {typeof(WND_ChosePass),new UIConfig("Prefabs/UIForm/WND_ChosePass") },
     };
     class UIConfig
     {

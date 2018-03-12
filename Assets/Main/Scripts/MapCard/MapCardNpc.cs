@@ -9,14 +9,18 @@ public class MapCardNpc : MapCardBase
     public override void Init()
     {
         base.Init();
-        id = Random.Range(0, 2);
+        
+        int NpcCount = NpcTableSettings.GetInstance().Count;
+      
+        id = Random.Range(1, NpcCount);
     }
 
     public override void OnPlayerEnter()
     {
         base.OnPlayerEnter();
         //进入对话
-        UIModule.Instance.OpenForm<WND_ChosePass>();
+       int DialogId = NpcTableSettings.Get(id).DialogId;
+        UIModule.Instance.OpenForm<WND_ChosePass>(DialogId);
 
     }
 }
