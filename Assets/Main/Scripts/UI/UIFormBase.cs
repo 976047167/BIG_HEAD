@@ -8,9 +8,9 @@ public abstract class UIFormBase : MonoBehaviour
 
     public void Init(object userdata)
     {
-
+        OnInit(userdata);
     }
-    protected virtual void OnInit()
+    protected virtual void OnInit(object userdata)
     {
 
     }
