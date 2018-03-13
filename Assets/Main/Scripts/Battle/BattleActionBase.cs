@@ -10,7 +10,7 @@ public abstract class BattleActionBase
     /// 当前action的ID
     /// </summary>
     /// <returns></returns>
-    public abstract int GetActionId();
+    public abstract int ActionId();
     /// <summary>
     /// 效果的实现
     /// </summary>

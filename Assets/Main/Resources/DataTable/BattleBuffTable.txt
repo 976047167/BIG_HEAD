@@ -1,0 +1,4 @@
+Id	Name	Desc	Time	ActionTypes	ActionPrarms
+int	string 	string	int	List<int>	List<int>
+1	流血	进入了流血状态	3	2	1
+2	回血	打绷带	3	3	1
