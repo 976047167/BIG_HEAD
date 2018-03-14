@@ -19,6 +19,6 @@ public class UIMapInfo : UIFormBase
     // Update is called once per frame
     void Update()
     {
-        m_PlayerInfo.text = string.Format(formatString, DataMgr.Instance.Blood, DataMgr.Instance.MaxBlood, DataMgr.Instance.Food, DataMgr.Instance.Coin);
+        m_PlayerInfo.text = string.Format(formatString, DataMgr.Instance.MyPlayerData.HP, DataMgr.Instance.MyPlayerData.MaxHP, DataMgr.Instance.Food, DataMgr.Instance.Coin);
     }
 }
