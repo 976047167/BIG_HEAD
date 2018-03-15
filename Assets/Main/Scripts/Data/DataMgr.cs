@@ -4,24 +4,24 @@ using UnityEngine;
 
 public class DataMgr
 {
-    private DataMgr()
+    public DataMgr()
     {
 
     }
-    static DataMgr instance = null;
-    public static DataMgr Instance
-    {
-        get
-        {
-            if (instance == null)
-            {
-                instance = new DataMgr();
-                instance.OnInit();
-            }
-            return instance;
-        }
+    //static DataMgr instance = null;
+    //public static DataMgr Instance
+    //{
+    //    get
+    //    {
+    //        if (instance == null)
+    //        {
+    //            instance = new DataMgr();
+    //            //instance.OnInit();
+    //        }
+    //        return instance;
+    //    }
 
-    }
+    //}
     public int Food;
     public int Coin;
     public BattlePlayerData MyPlayerData;

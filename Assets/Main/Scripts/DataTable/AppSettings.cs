@@ -48,6 +48,7 @@ namespace AppSettings
                 {
                     _settingsList = new IReloadableSettings[]
                     { 
+                        BattleBuffTableSettings._instance,
                         BattleCardTableSettings._instance,
                         DialogTableSettings._instance,
                         NpcTableSettings._instance,
@@ -79,6 +80,235 @@ namespace AppSettings
 
     }
 
+
+	/// <summary>
+	/// Auto Generate for Tab File: "BattleBuffTable.txt"
+    /// No use of generic and reflection, for better performance,  less IL code generating
+	/// </summary>>
+    public partial class BattleBuffTableSettings : IReloadableSettings
+    {
+        /// <summary>
+        /// How many reload function load?
+        /// </summary>>
+        public static int ReloadCount { get; private set; }
+
+		public static readonly string[] TabFilePaths = 
+        {
+            "BattleBuffTable.txt"
+        };
+        internal static BattleBuffTableSettings _instance = new BattleBuffTableSettings();
+        Dictionary<int, BattleBuffTableSetting> _dict = new Dictionary<int, BattleBuffTableSetting>();
+
+        /// <summary>
+        /// Trigger delegate when reload the Settings
+        /// </summary>>
+	    public static System.Action OnReload;
+
+        /// <summary>
+        /// Constructor, just reload(init)
+        /// When Unity Editor mode, will watch the file modification and auto reload
+        /// </summary>
+	    private BattleBuffTableSettings()
+	    {
+        }
+
+        /// <summary>
+        /// Get the singleton
+        /// </summary>
+        /// <returns></returns>
+	    public static BattleBuffTableSettings GetInstance()
+	    {
+            if (ReloadCount == 0)
+            {
+                _instance._ReloadAll(true);
+    #if UNITY_EDITOR
+                if (SettingModule.IsFileSystemMode)
+                {
+                    for (var j = 0; j < TabFilePaths.Length; j++)
+                    {
+                        var tabFilePath = TabFilePaths[j];
+                        SettingModule.WatchSetting(tabFilePath, (path) =>
+                        {
+                            if (path.Replace("\\", "/").EndsWith(path))
+                            {
+                                _instance.ReloadAll();
+                                Log.LogConsole_MultiThread("File Watcher! Reload success! -> " + path);
+                            }
+                        });
+                    }
+
+                }
+    #endif
+            }
+
+	        return _instance;
+	    }
+        
+        public int Count
+        {
+            get
+            {
+                return _dict.Count;
+            }
+        }
+
+        /// <summary>
+        /// Do reload the setting file: BattleBuffTable, no exception when duplicate primary key
+        /// </summary>
+        public void ReloadAll()
+        {
+            _ReloadAll(false);
+        }
+
+        /// <summary>
+        /// Do reload the setting class : BattleBuffTable, no exception when duplicate primary key, use custom string content
+        /// </summary>
+        public void ReloadAllWithString(string context)
+        {
+            _ReloadAll(false, context);
+        }
+
+        /// <summary>
+        /// Do reload the setting file: BattleBuffTable
+        /// </summary>
+	    void _ReloadAll(bool throwWhenDuplicatePrimaryKey, string customContent = null)
+        {
+            for (var j = 0; j < TabFilePaths.Length; j++)
+            {
+                var tabFilePath = TabFilePaths[j];
+                TableFile tableFile;
+                if (customContent == null)
+                    tableFile = SettingModule.Get(tabFilePath, false);
+                else
+                    tableFile = TableFile.LoadFromString(customContent);
+
+                using (tableFile)
+                {
+                    foreach (var row in tableFile)
+                    {
+                        var pk = BattleBuffTableSetting.ParsePrimaryKey(row);
+                        BattleBuffTableSetting setting;
+                        if (!_dict.TryGetValue(pk, out setting))
+                        {
+                            setting = new BattleBuffTableSetting(row);
+                            _dict[setting.Id] = setting;
+                        }
+                        else 
+                        {
+                            if (throwWhenDuplicatePrimaryKey) throw new System.Exception(string.Format("DuplicateKey, Class: {0}, File: {1}, Key: {2}", this.GetType().Name, tabFilePath, pk));
+                            else setting.Reload(row);
+                        }
+                    }
+                }
+            }
+
+	        if (OnReload != null)
+	        {
+	            OnReload();
+	        }
+
+            ReloadCount++;
+            Log.Info("Reload settings: {0}, Row Count: {1}, Reload Count: {2}", GetType(), Count, ReloadCount);
+        }
+
+	    /// <summary>
+        /// foreachable enumerable: BattleBuffTable
+        /// </summary>
+        public static IEnumerable GetAll()
+        {
+            foreach (var row in GetInstance()._dict.Values)
+            {
+                yield return row;
+            }
+        }
+
+        /// <summary>
+        /// GetEnumerator for `MoveNext`: BattleBuffTable
+        /// </summary> 
+	    public static IEnumerator GetEnumerator()
+	    {
+	        return GetInstance()._dict.Values.GetEnumerator();
+	    }
+         
+	    /// <summary>
+        /// Get class by primary key: BattleBuffTable
+        /// </summary>
+        public static BattleBuffTableSetting Get(int primaryKey)
+        {
+            BattleBuffTableSetting setting;
+            if (GetInstance()._dict.TryGetValue(primaryKey, out setting)) return setting;
+            return null;
+        }
+
+        // ========= CustomExtraString begin ===========
+        
+        // ========= CustomExtraString end ===========
+    }
+
+	/// <summary>
+	/// Auto Generate for Tab File: "BattleBuffTable.txt"
+    /// Singleton class for less memory use
+	/// </summary>
+	public partial class BattleBuffTableSetting : TableRowFieldParser
+	{
+		
+        /// <summary>
+        /// #目录
+        /// </summary>
+        public int Id { get; private set;}
+        
+        /// <summary>
+        /// 文本
+        /// </summary>
+        public string  Name { get; private set;}
+        
+        /// <summary>
+        /// Buff描述
+        /// </summary>
+        public string Desc { get; private set;}
+        
+        /// <summary>
+        /// Buff默认持续时间
+        /// </summary>
+        public int Time { get; private set;}
+        
+        /// <summary>
+        /// Buff的效果类型,BattleActionType
+        /// </summary>
+        public List<int> ActionTypes { get; private set;}
+        
+        /// <summary>
+        /// Buff效果的参数
+        /// </summary>
+        public List<int> ActionPrarms { get; private set;}
+        
+
+        internal BattleBuffTableSetting(TableFileRow row)
+        {
+            Reload(row);
+        }
+
+        internal void Reload(TableFileRow row)
+        { 
+            Id = row.Get_int(row.Values[0], ""); 
+            Name = row.Get_string (row.Values[1], ""); 
+            Desc = row.Get_string(row.Values[2], ""); 
+            Time = row.Get_int(row.Values[3], ""); 
+            ActionTypes = row.Get_List_int(row.Values[4], ""); 
+            ActionPrarms = row.Get_List_int(row.Values[5], ""); 
+        }
+
+        /// <summary>
+        /// Get PrimaryKey from a table row
+        /// </summary>
+        /// <param name="row"></param>
+        /// <returns></returns>
+        public static int ParsePrimaryKey(TableFileRow row)
+        {
+            var primaryKey = row.Get_int(row.Values[0], "");
+            return primaryKey;
+        }
+	}
 
 	/// <summary>
 	/// Auto Generate for Tab File: "BattleCardTable.txt"
@@ -267,19 +497,34 @@ namespace AppSettings
         public string Desc { get; private set;}
         
         /// <summary>
-        /// 卡牌类型(攻击,装备,特效,法术)
+        /// 卡牌类型(攻击0,装备1,法术2)
         /// </summary>
         public int Type { get; private set;}
         
         /// <summary>
+        /// 魔法开销
+        /// </summary>
+        public int Spending { get; private set;}
+        
+        /// <summary>
+        /// 图标路径
+        /// </summary>
+        public string Icon { get; private set;}
+        
+        /// <summary>
+        /// 购买开销
+        /// </summary>
+        public int Price { get; private set;}
+        
+        /// <summary>
         /// 特效类型(攻击,加攻击,回血,吸血,加buff,抽卡,弃卡,对面弃卡,对面抽卡)
         /// </summary>
-        public int Effect0 { get; private set;}
+        public List<int> ActionTypes { get; private set;}
         
         /// <summary>
         /// 特效参数
         /// </summary>
-        public int Arg0 { get; private set;}
+        public List<int> ActionParams { get; private set;}
         
 
         internal BattleCardTableSetting(TableFileRow row)
@@ -293,8 +538,11 @@ namespace AppSettings
             Name = row.Get_string (row.Values[1], ""); 
             Desc = row.Get_string(row.Values[2], ""); 
             Type = row.Get_int(row.Values[3], ""); 
-            Effect0 = row.Get_int(row.Values[4], ""); 
-            Arg0 = row.Get_int(row.Values[5], ""); 
+            Spending = row.Get_int(row.Values[4], ""); 
+            Icon = row.Get_string(row.Values[5], ""); 
+            Price = row.Get_int(row.Values[6], ""); 
+            ActionTypes = row.Get_List_int(row.Values[7], ""); 
+            ActionParams = row.Get_List_int(row.Values[8], ""); 
         }
 
         /// <summary>

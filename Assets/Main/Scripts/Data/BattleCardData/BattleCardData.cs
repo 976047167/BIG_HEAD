@@ -5,12 +5,13 @@ using AppSettings;
 
 public class BattleCardData
 {
-    public int CardId = 0;
+    public int CardId { get; private set; }
 
+    public BattleCardTableSetting Data { get; private set; }
     public BattleCardData(int cardId)
     {
-        BattleCardTableSetting row = BattleCardTableSettings.Get(cardId);
-        if (row == null)
+        Data = BattleCardTableSettings.Get(cardId);
+        if (Data == null)
         {
             Debug.LogError("cardId: " + cardId + " not exist!");
             return;

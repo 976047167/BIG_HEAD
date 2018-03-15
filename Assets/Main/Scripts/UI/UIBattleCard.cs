@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using AppSettings;
 
 public class UIBattleCard : MonoBehaviour
 {
@@ -26,6 +27,8 @@ public class UIBattleCard : MonoBehaviour
     [HideInInspector]
     public Transform cacheChildCardTrans;
     Vector3 cacheCardPos;
+
+    BattleCardData cardData;
 
     protected void Start()
     {
@@ -81,7 +84,7 @@ public class UIBattleCard : MonoBehaviour
                 {
                     m_Used = UseCard();
                     //GetComponent<BoxCollider>().enabled = false;
-                    
+
                 }
             }
         }
@@ -113,8 +116,47 @@ public class UIBattleCard : MonoBehaviour
             TweenScale.Begin(cacheChildCardTrans.gameObject, 0.2f, Vector3.one);
         }
     }
+    public void SetData(int cardId)
+    {
+        cardData = new BattleCardData(cardId);
+        m_TexIcon.mainTexture = Resources.Load<Texture>(cardData.Data.Icon);
+        m_lblName.text = cardData.Data.Name;
+        if (cardData.Data.Type != 0)
+        {
+            m_lblAttack.text = "";
+            m_lblAttackCount.text = "";
+        }
+        for (int i = 0; i < cardData.Data.ActionTypes.Count; i++)
+        {
+            switch ((BattleActionType)cardData.Data.ActionTypes[i])
+            {
+                case BattleActionType.None:
+                    break;
+                case BattleActionType.AddBuff:
+                    break;
+                case BattleActionType.Attack:
+                    if (cardData.Data.Type == 0)
+                    {
+                        m_lblAttack.text = "攻击";
+                        m_lblAttackCount.text = cardData.Data.ActionParams[i].ToString();
+                    }
+                    break;
+                case BattleActionType.RecoverHP:
+                    break;
+                case BattleActionType.RecoverMP:
+                    break;
+                case BattleActionType.DrawCard:
+                    break;
+                default:
+                    break;
+            }
+        }
+        m_lblExpand.text = "";
+        m_lblExpandCount.text= cardData.Data.Spending.ToString();
+        
 
-    protected virtual bool UseCard()
+    }
+    protected bool UseCard()
     {
         //判断使用条件，不允许返回false
         Debug.LogError("释放卡牌");
@@ -124,9 +166,9 @@ public class UIBattleCard : MonoBehaviour
         return true;
     }
 
-    public void RevertCardPos()
-    {
-        //cacheChildCardTrans.position = cacheCardPos;
-        TweenPosition.Begin(cacheChildCardTrans.gameObject, 0.5f, Vector3.zero);
-    }
+    //public void RevertCardPos()
+    //{
+    //    //cacheChildCardTrans.position = cacheCardPos;
+    //    TweenPosition.Begin(cacheChildCardTrans.gameObject, 0.5f, Vector3.zero);
+    //}
 }

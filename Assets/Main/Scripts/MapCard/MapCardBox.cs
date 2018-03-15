@@ -10,9 +10,9 @@ public class MapCardBox : MapCardBase
         if (isFirstEnter)
         {
             if (Random.Range(0, 1000) % 2 == 0)
-                DataMgr.Instance.Food += 5;
+                Game.DataManager.Food += 5;
             else
-                DataMgr.Instance.Coin += 5;
+                Game.DataManager.Coin += 5;
         }
         base.OnPlayerEnter();
     }

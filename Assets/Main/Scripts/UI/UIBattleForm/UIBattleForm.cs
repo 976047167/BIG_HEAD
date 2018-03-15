@@ -22,19 +22,19 @@ public class UIBattleForm : UIFormBase
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.A))
-        {
-            GameObject card = Instantiate<GameObject>(m_BattleCardTemplate, m_MyCardsGrid.transform);
-            card.SetActive(true);
-            m_MyCardsGrid.Reposition();
-        }
+        //if (Input.GetKeyDown(KeyCode.A))
+        //{
+        //    GameObject card = Instantiate<GameObject>(m_BattleCardTemplate, m_MyCardsGrid.transform);
+        //    card.SetActive(true);
+        //    m_MyCardsGrid.Reposition();
+        //}
     }
 
     public void UseCard(UIBattleCard battleCard)
     {
-        StartCoroutine(CoroutineUser(battleCard));
+        StartCoroutine(CoroutineUseCard(battleCard));
     }
-    IEnumerator CoroutineUser(UIBattleCard battleCard)
+    IEnumerator CoroutineUseCard(UIBattleCard battleCard)
     {
         Vector3 cachePos = battleCard.cacheChildCardTrans.position;
         battleCard.transform.SetParent(m_UsedCardsGrid.transform, false);
@@ -44,7 +44,7 @@ public class UIBattleForm : UIFormBase
         m_MyCardsGrid.Reposition();
         battleCard.cacheChildCardTrans.position = cachePos;
         yield return null;
-        battleCard.RevertCardPos();
+        TweenPosition.Begin(battleCard.gameObject, 0.5f, Vector3.zero);
     }
 
     [SerializeField]
