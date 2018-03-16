@@ -12,7 +12,7 @@ public class BattleMgr
     /// </summary>
     public void StartBattle()
     {
-        
+        Game.UI.OpenForm<UIBattleForm>();
     }
 
 }

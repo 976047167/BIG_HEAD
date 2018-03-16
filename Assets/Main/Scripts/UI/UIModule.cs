@@ -10,6 +10,8 @@ public class UIModule
 
     }
     private static UIModule _instance;
+    private static Transform uiRoot;
+    private static Transform uiCamera;
     public static UIModule Instance
     {
         get
@@ -82,6 +84,17 @@ public class UIModule
         {typeof(UIMapInfo),new UIConfig("Prefabs/UIForm/WND_MapInfo") },
         {typeof(WND_ChosePass),new UIConfig("Prefabs/UIForm/WND_ChosePass") },
     };
+    public bool SetUICamera(UIModelCameraHelper uiCameraHelper)
+    {
+        if (uiCamera == null)
+        {
+            uiRoot = uiCameraHelper.transform;
+            uiCamera = uiRoot.Find("Camera");
+            return true;
+        }
+        GameObject.Destroy(uiCameraHelper.gameObject);
+        return false;
+    }
     class UIConfig
     {
         public string PrefabName;

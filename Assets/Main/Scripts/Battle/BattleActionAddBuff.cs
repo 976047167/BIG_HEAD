@@ -4,9 +4,9 @@ using UnityEngine;
 
 public class BattleActionAddBuff : BattleActionBase
 {
-    public override int ActionId()
+    public override BattleActionType ActionId()
     {
-        return (int)BattleActionType.AddBuff;
+        return BattleActionType.AddBuff;
     }
     public override void GameAction(int num)
     {

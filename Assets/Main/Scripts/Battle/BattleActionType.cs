@@ -25,6 +25,10 @@ public enum BattleActionType : int
     /// 抽卡
     /// </summary>
     DrawCard = 5,
+    /// <summary>
+    /// 使用装备
+    /// </summary>
+    AddEuipment =6,
 
 
 

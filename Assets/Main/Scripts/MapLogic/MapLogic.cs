@@ -21,6 +21,7 @@ public class MapLogic : MonoBehaviour
         mainCamera = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();
         MakeMap();
         MakePlayer();
+        Game.UI.OpenForm<UIMapInfo>();
     }
 
     // Update is called once per frame
@@ -58,6 +59,7 @@ public class MapLogic : MonoBehaviour
                 mapCards[i].state = MapCardBase.CardState.Behind;
                 mapCards[i].Init();
                 mapCards[i].gameObject.SetActive(true);
+                mapCards[i].transform.SetParent(transform);
                 continue;
             }
             MapCardPos pos = mapCards[Random.Range(0, i)].Pos;
@@ -85,6 +87,7 @@ public class MapLogic : MonoBehaviour
             mapCards[i].state = MapCardBase.CardState.Behind;
             mapCards[i].Init();
             mapCards[i].gameObject.SetActive(true);
+            mapCards[i].transform.SetParent(transform);
         }
     }
 
