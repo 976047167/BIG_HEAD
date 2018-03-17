@@ -17,10 +17,15 @@ public class MapCardNpc : MapCardBase
 
     public override void OnPlayerEnter()
     {
+        if (isFirstEnter)
+        {
+            int DialogId = NpcTableSettings.Get(id).DialogId;
+            UIModule.Instance.OpenForm<WND_ChosePass>(DialogId);
+        }
+     
         base.OnPlayerEnter();
         //进入对话
-       int DialogId = NpcTableSettings.Get(id).DialogId;
-        UIModule.Instance.OpenForm<WND_ChosePass>(DialogId);
+   
 
     }
 }

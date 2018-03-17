@@ -16,7 +16,7 @@ using TableML;
             var arr = str.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
             foreach (var item in arr)
             {
-                var itemValue = (T)Convert.ChangeType(value, typeof(T));
+                var itemValue = (T)Convert.ChangeType(item, typeof(T));
                 list.Add(itemValue);
             }
             return list;

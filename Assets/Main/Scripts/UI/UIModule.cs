@@ -83,6 +83,8 @@ public class UIModule
         {typeof(UIBattleForm),new UIConfig("Prefabs/UIForm/WND_BattleForm") },
         {typeof(UIMapInfo),new UIConfig("Prefabs/UIForm/WND_MapInfo") },
         {typeof(WND_ChosePass),new UIConfig("Prefabs/UIForm/WND_ChosePass") },
+        {typeof(WND_Bag),new UIConfig("Prefabs/UIForm/WND_Bag") },
+        {typeof(WND_Bag),new UIConfig("Prefabs/UIForm/WND_Deck") },
     };
     public bool SetUICamera(UIModelCameraHelper uiCameraHelper)
     {

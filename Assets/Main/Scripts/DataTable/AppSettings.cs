@@ -1023,19 +1023,19 @@ namespace AppSettings
         public string Text { get; private set;}
         
         /// <summary>
-        /// #类型
+        /// #类型(1正常对话，2选项，3事件）
         /// </summary>
         public int Type { get; private set;}
         
         /// <summary>
-        /// #下一目录（组）
+        /// #下一目录（组）（事件为对话Id+事件ID）
         /// </summary>
         public List<int> NextIds { get; private set;}
         
         /// <summary>
-        /// #图片目录
+        /// #头像图片路径
         /// </summary>
-        public int ImageId { get; private set;}
+        public string ImagePath { get; private set;}
         
 
         internal DialogTableSetting(TableFileRow row)
@@ -1049,7 +1049,7 @@ namespace AppSettings
             Text = row.Get_string(row.Values[1], ""); 
             Type = row.Get_int(row.Values[2], "1"); 
             NextIds = row.Get_List_int(row.Values[3], ""); 
-            ImageId = row.Get_int(row.Values[4], ""); 
+            ImagePath = row.Get_string(row.Values[4], ""); 
         }
 
         /// <summary>
