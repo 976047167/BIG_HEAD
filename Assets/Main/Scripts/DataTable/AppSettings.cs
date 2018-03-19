@@ -790,6 +790,11 @@ namespace AppSettings
         public string Icon { get; private set;}
         
         /// <summary>
+        /// 手上的卡组
+        /// </summary>
+        public List<int> BattleCards { get; private set;}
+        
+        /// <summary>
         /// 身上的buff
         /// </summary>
         public List<int> BuffIds { get; private set;}
@@ -824,9 +829,10 @@ namespace AppSettings
             MaxAP = row.Get_int(row.Values[9], ""); 
             SkillId = row.Get_int(row.Values[10], ""); 
             Icon = row.Get_string(row.Values[11], ""); 
-            BuffIds = row.Get_List_int(row.Values[12], ""); 
-            BuffParams = row.Get_List_int(row.Values[13], ""); 
-            EquipIds = row.Get_List_int(row.Values[14], ""); 
+            BattleCards = row.Get_List_int(row.Values[12], ""); 
+            BuffIds = row.Get_List_int(row.Values[13], ""); 
+            BuffParams = row.Get_List_int(row.Values[14], ""); 
+            EquipIds = row.Get_List_int(row.Values[15], ""); 
         }
 
         /// <summary>

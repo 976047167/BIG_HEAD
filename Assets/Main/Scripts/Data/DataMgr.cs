@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using AppSettings;
 
 public class DataMgr
 {
@@ -24,7 +25,8 @@ public class DataMgr
     //}
     public int Food;
     public int Coin;
-    public BattlePlayerData MyPlayerData;
+    public BattlePlayerData MyPlayerData { get; private set; }
+    public BattlePlayerData OppPlayerData { get; private set; }
     /// <summary>
     /// 游戏启动时初始化
     /// </summary>
@@ -34,6 +36,9 @@ public class DataMgr
         MyPlayerData.HP = MyPlayerData.MaxHP = 10;
         MyPlayerData.MP = MyPlayerData.MaxMP = 2;
         MyPlayerData.AP = MyPlayerData.MaxAP = 1;
+        MyPlayerData.Level = 1;
+        MyPlayerData.SkillId = 0;
+        MyPlayerData.HeadIcon = "UITexture/Head/npc_009";
         MyPlayerData.CardList.Clear();
         MyPlayerData.CardList.Add(new BattleCardData(1));
         MyPlayerData.CardList.Add(new BattleCardData(1));
@@ -49,5 +54,27 @@ public class DataMgr
         Food = 20;
         Coin = 20;
     }
-    
+    public void SetOppData(int monsterId)
+    {
+        BattleMonsterTableSetting monster = BattleMonsterTableSettings.Get(monsterId);
+        if (monster==null)
+        {
+            Debug.LogError("怪物表格配置错误");
+            return;
+        }
+        OppPlayerData = new BattlePlayerData();
+        OppPlayerData.HP = monster.HP;
+        OppPlayerData.MaxHP = monster.MaxHp;
+        OppPlayerData.MP = monster.MP;
+        OppPlayerData.MaxMP = monster.MaxMP;
+        OppPlayerData.AP = monster.AP;
+        OppPlayerData.MaxAP = monster.MaxAP;
+        OppPlayerData.Level = monster.Level;
+        OppPlayerData.HeadIcon = monster.Icon;
+        for (int i = 0; i < monster.BattleCards.Count; i++)
+        {
+            OppPlayerData.CardList.Add(new BattleCardData(monster.BattleCards[i]));
+        }
+        //TODO: Buff Equip
+    }
 }

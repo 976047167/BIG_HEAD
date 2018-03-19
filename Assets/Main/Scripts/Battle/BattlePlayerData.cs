@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class BattlePlayerData
 {
+    public string Name;
+    public int Level;
+    public int SkillId;
     /// <summary>
     /// 血量
     /// </summary>
@@ -13,6 +16,7 @@ public class BattlePlayerData
     public int MaxMP;
     public int AP;
     public int MaxAP;
+    public string HeadIcon;
 
     //public BattleCardData
     public List<BattleCardData> EquipList = new List<BattleCardData>();
