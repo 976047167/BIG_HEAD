@@ -10,8 +10,9 @@ public class BattleMgr
     /// <summary>
     /// 开始战斗
     /// </summary>
-    public void StartBattle()
+    public void StartBattle(int monsterId)
     {
+        Game.DataManager.SetOppData(monsterId);
         Game.UI.OpenForm<UIBattleForm>();
     }
 
