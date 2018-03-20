@@ -69,6 +69,7 @@ namespace KEngine.Modules
             if (!useCache || !_tableFilesCache.TryGetValue(path, out tableFile))
             {
                 var fileContent = LoadSetting(path);
+                //Debug.LogError(path);
                 var tab = TableFile.LoadFromString(fileContent);
                 _tableFilesCache[path] = tableFile = tab;
                 return tab;

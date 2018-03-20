@@ -14,9 +14,9 @@ public class MapCardMonster : MapCardBase
         Game.BattleManager.StartBattle(monsterId);
     }
 
-    public override void Init()
+    public override void OnInit()
     {
         int count = BattleMonsterTableSettings.GetInstance().Count;
-        monsterId = Random.Range(0, count);
+        monsterId = Random.Range(1, count + 1);
     }
 }

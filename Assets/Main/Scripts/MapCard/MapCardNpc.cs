@@ -6,9 +6,8 @@ using AppSettings;
 public class MapCardNpc : MapCardBase
 {
     int id;
-    public override void Init()
+    public override void OnInit()
     {
-        base.Init();
         
         int NpcCount = NpcTableSettings.GetInstance().Count;
       

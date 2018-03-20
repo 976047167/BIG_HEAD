@@ -1,9 +1,9 @@
 Id	Name	Desc	Level	HP	MaxHp	MP	MaxMP	AP	MaxAP	SkillId	Icon	BattleCards	BuffIds	BuffParams	EquipIds
-int	string 	string	int	int	int	int	int	int	int	int	string	List<int>	List<int>	List<int>	List<int>	
-1	兔子	兔子	1	10	10	2	2	1	1	0	UITexture/Head/npc_001	1,1,1,1,2,2,5,6	0	0	0	
-2	狗	狗	1	11	11	2	2	1	1	0	UITexture/Head/npc_002	1,1,1,1,2,2,5,6	0	0	0	
-3	牛	牛	1	12	12	2	2	1	1	0	UITexture/Head/npc_003	1,1,1,1,2,2,5,6	0	0	0	
-4	猪	猪	2	13	13	2	2	1	1	0	UITexture/Head/npc_004	1,1,1,1,2,2,5,6	0	0	0	
-5	羊	羊	2	14	14	2	2	1	1	0	UITexture/Head/npc_005	1,1,1,1,2,2,5,6	0	0	0	
-6	马	马	2	15	15	2	2	1	1	0	UITexture/Head/npc_006	1,1,1,1,2,2,5,6	0	0	0	
-7	鹿	鹿	3	16	16	2	2	1	1	0	UITexture/Head/npc_007	1,1,1,1,2,2,5,6	0	0	0	
+int	string 	string	int	int	int	int	int	int	int	int	string	List<int>	List<int>	List<int>	List<int>
+1	兔子	兔子	1	10	10	2	2	1	1	0	UITexture/Head/npc_001	1,1,1,1,2,2,5,6	0	0	0
+2	狗	狗	1	11	11	2	2	1	1	0	UITexture/Head/npc_002	1,1,1,1,2,2,5,6	0	0	0
+3	牛	牛	1	12	12	2	2	1	1	0	UITexture/Head/npc_003	1,1,1,1,2,2,5,6	0	0	0
+4	猪	猪	2	13	13	2	2	1	1	0	UITexture/Head/npc_004	1,1,1,1,2,2,5,6	0	0	0
+5	羊	羊	2	14	14	2	2	1	1	0	UITexture/Head/npc_005	1,1,1,1,2,2,5,6	0	0	0
+6	马	马	2	15	15	2	2	1	1	0	UITexture/Head/npc_006	1,1,1,1,2,2,5,6	0	0	0
+7	鹿	鹿	3	16	16	2	2	1	1	0	UITexture/Head/npc_007	1,1,1,1,2,2,5,6	0	0	0

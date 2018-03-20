@@ -7,7 +7,7 @@ public class DataMgr
 {
     public DataMgr()
     {
-
+        AppSettings.SettingsManager.AllSettingsReload();
     }
     //static DataMgr instance = null;
     //public static DataMgr Instance

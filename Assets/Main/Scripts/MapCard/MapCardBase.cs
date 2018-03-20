@@ -62,7 +62,7 @@ public class MapCardBase : MonoBehaviour
     /// <summary>
     /// 初始化
     /// </summary>
-    public virtual void Init()
+    public void Init()
     {
         transform.position = new Vector3((X - 2) * 2f, 0.1f, (Y - 2) * 2f);
         if (state == CardState.Behind)
@@ -74,6 +74,12 @@ public class MapCardBase : MonoBehaviour
             transform.localEulerAngles = new Vector3(0f, 0f, 0f);
         }
         UIEventListener.Get(transform.Find("Card").gameObject).onClick = OnClick;
+        OnInit();
+    }
+
+    public virtual void OnInit()
+    {
+
     }
 
     void OnClick(GameObject go)
