@@ -25,6 +25,7 @@ public class UIBattleForm : UIFormBase
         myPlayerViews.GetUIController(transform.Find("BattleInfo/MeInfo"));
         oppPlayerViews.GetUIController(transform.Find("BattleInfo/OppInfo"));
         UpdateInfo();
+        Game.BattleManager.ReadyStart(this);
     }
 
     // Update is called once per frame
@@ -44,6 +45,15 @@ public class UIBattleForm : UIFormBase
         oppPlayerViews.UpdateInfo(Game.DataManager.OppPlayerData);
     }
 
+    public void AddBattleCard(int cardId)
+    {
+
+    }
+
+    /// <summary>
+    /// 使用卡牌
+    /// </summary>
+    /// <param name="battleCard"></param>
     public void UseCard(UIBattleCard battleCard)
     {
         StartCoroutine(CoroutineUseCard(battleCard));

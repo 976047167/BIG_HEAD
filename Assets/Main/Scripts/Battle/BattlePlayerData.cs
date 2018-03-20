@@ -21,8 +21,21 @@ public class BattlePlayerData
     //public BattleCardData
     public List<BattleCardData> EquipList = new List<BattleCardData>();
     public List<BattleBuff> BuffList = new List<BattleBuff>();
+    /// <summary>
+    /// 当前设置的卡牌库，除了初始化，不许改
+    /// </summary>
     public List<BattleCardData> CardList = new List<BattleCardData>();
+    /// <summary>
+    /// 当前战斗中的牌库
+    /// </summary>
     public List<BattleCardData> CurrentCardList = new List<BattleCardData>();
+    /// <summary>
+    /// 当前的手牌
+    /// </summary>
+    public List<BattleCardData> HandCardList = new List<BattleCardData>();
+    /// <summary>
+    /// 已经使用过的卡牌，坟场
+    /// </summary>
     public List<BattleCardData> UsedCardList = new List<BattleCardData>();
 
 
