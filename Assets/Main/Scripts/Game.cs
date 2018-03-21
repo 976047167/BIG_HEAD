@@ -13,7 +13,7 @@ public class Game : MonoBehaviour
         DontDestroyOnLoad(gameObject);
         dataMgr = new DataMgr();
         battleMgr = new BattleMgr();
-        uIModule = UIModule.Instance;
+        uiModule = UIModule.Instance;
     }
 
     private void Start()
@@ -36,9 +36,9 @@ public class Game : MonoBehaviour
     #region Game Module Managers
     static DataMgr dataMgr;
     static BattleMgr battleMgr;
-    static UIModule uIModule;
+    static UIModule uiModule;
     public static DataMgr DataManager { get { return dataMgr; } }
     public static BattleMgr BattleManager { get { return battleMgr; } }
-    public static UIModule UI { get { return uIModule; } }
+    public static UIModule UI { get { return uiModule; } }
     #endregion
 }
