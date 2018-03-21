@@ -11,7 +11,7 @@ public class MapCardNpc : MapCardBase
         
         int NpcCount = NpcTableSettings.GetInstance().Count;
       
-        id = Random.Range(1, NpcCount);
+        id = Random.Range(1, NpcCount + 1);
     }
 
     public override void OnPlayerEnter()
@@ -19,7 +19,7 @@ public class MapCardNpc : MapCardBase
         if (isFirstEnter)
         {
             int DialogId = NpcTableSettings.Get(id).DialogId;
-            UIModule.Instance.OpenForm<WND_ChosePass>(DialogId);
+            UIModule.Instance.OpenForm<WND_Dialog>(DialogId);
         }
      
         base.OnPlayerEnter();

@@ -1,4 +1,5 @@
 Id	DialogId
 int	int
-1	1
-2	5
+1	17
+2	21
+3	24

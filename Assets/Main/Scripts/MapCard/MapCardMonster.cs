@@ -9,9 +9,15 @@ public class MapCardMonster : MapCardBase
 
     public override void OnPlayerEnter()
     {
-        base.OnPlayerEnter();
+        
         //进入战斗
-        Game.BattleManager.StartBattle(monsterId);
+        if (isFirstEnter)
+        {
+            
+            int DialogId = BattleMonsterTableSettings.Get(monsterId).DialogId;
+            UIModule.Instance.OpenForm<WND_Dialog>(DialogId);
+        }
+        base.OnPlayerEnter();
     }
 
     public override void OnInit()
