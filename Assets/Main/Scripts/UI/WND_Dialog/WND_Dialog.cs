@@ -182,7 +182,9 @@ public class WND_Dialog : UIFormBase
                 Destroy(gameObject);
                 break;
             default:
+                
                 print("Unknow type!");
+                Destroy(gameObject);
                 break;
         }
         

@@ -16,26 +16,27 @@ public class WND_Bag : UIFormBase
     protected override void OnInit(object userdata)
     {
         base.OnInit(userdata);
-        LoadCard((Dictionary<int, int>)userdata);
+        List<BattleCardData> cardList = Game.DataManager.MyPlayerData.CardList;
+        LoadCard((List<BattleCardData>)cardList);
     }
     //key为卡片id，value为卡片张数；
-    private void LoadCard(Dictionary<int,int> dicCard)
+    private void LoadCard(List<BattleCardData> cardList)
     {
-        foreach (var card in dicCard)
+        foreach (var card in cardList)
         {
-            for (int i=0; i <card.Value;i++)
-            {
+
                 GameObject item = Instantiate(battleCard);
-                item.name = "Card" + card.Key;
+                item.name = "Card" + card.CardId;
                 item.transform.parent = grid.transform;
                 item.transform.localPosition = new Vector3();
                 item.transform.localScale = new Vector3(1, 1, 1);
                 item.SetActive(true);
-                UIEventListener.Get(item).onClick += (GameObject a) => {
-                    UIModule.Instance.OpenForm<WND_ShowCard>(card.Key);
+            UIEventListener.Get(item).onClick = (GameObject a) =>
+            {
+                UIModule.Instance.OpenForm<WND_ShowCard>(card.CardId);
 
-                };
-            }
+
+            };
         }
         grid.repositionNow = true;
 

@@ -1,19 +1,26 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using AppSettings;
 
 public class MapCardBox : MapCardBase
 {
+    int boxId;
+
     public override void OnPlayerEnter()
     {
-
         if (isFirstEnter)
         {
-            if (Random.Range(0, 1000) % 2 == 0)
-                Game.DataManager.Food += 5;
-            else
-                Game.DataManager.Coin += 5;
+            int DialogId = BoxTableSettings.Get(boxId).DialogId;
+            UIModule.Instance.OpenForm<WND_Dialog>(DialogId);
         }
+
         base.OnPlayerEnter();
+        //进入商店
+    }
+    public override void OnInit()
+    {
+        int count = BoxTableSettings.GetInstance().Count;
+        boxId = Random.Range(1, count + 1);
     }
 }

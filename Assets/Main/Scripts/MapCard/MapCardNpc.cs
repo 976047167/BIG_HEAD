@@ -18,8 +18,9 @@ public class MapCardNpc : MapCardBase
     {
         if (isFirstEnter)
         {
-            int DialogId = NpcTableSettings.Get(id).DialogId;
-            UIModule.Instance.OpenForm<WND_Dialog>(DialogId);
+             int DialogId = NpcTableSettings.Get(id).DialogId;
+             UIModule.Instance.OpenForm<WND_Dialog>(DialogId);
+            //UIModule.Instance.OpenForm<WND_Bag>(1);
         }
      
         base.OnPlayerEnter();
