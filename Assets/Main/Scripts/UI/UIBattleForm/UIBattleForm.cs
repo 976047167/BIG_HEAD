@@ -44,10 +44,23 @@ public class UIBattleForm : UIFormBase
         myPlayerViews.UpdateInfo(Game.DataManager.MyPlayerData);
         oppPlayerViews.UpdateInfo(Game.DataManager.OppPlayerData);
     }
-
-    public void AddBattleCard(int cardId)
+    /// <summary>
+    /// 添加卡牌至手牌
+    /// </summary>
+    /// <param name="cardId"></param>
+    public void AddHandCard(BattleCardData card)
     {
-
+        GameObject newCard = GameObject.Instantiate(m_BattleCardTemplate);
+        newCard.transform.SetParent(m_MyCardsGrid.transform);
+        m_MyCardsGrid.Reposition();
+    }
+    /// <summary>
+    /// 添加卡牌到牌库
+    /// </summary>
+    /// <param name="cardId"></param>
+    public void AddCurrentList(int cardId)
+    {
+        
     }
 
     /// <summary>

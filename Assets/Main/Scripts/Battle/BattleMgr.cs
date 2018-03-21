@@ -6,7 +6,7 @@ public class BattleMgr
 {
 
     UIBattleForm battleForm;
-
+    public BattleState State { get; private set; }
     /// <summary>
     /// 开始战斗
     /// </summary>
@@ -19,7 +19,7 @@ public class BattleMgr
 
         Game.DataManager.OppPlayerData.CurrentCardList = new List<BattleCardData>(Game.DataManager.OppPlayerData.CardList);
         Game.UI.OpenForm<UIBattleForm>();
-        
+        State = BattleState.Loading;
 
 
 
@@ -31,7 +31,14 @@ public class BattleMgr
     {
         //预装的buff和武器、技能等上膛
         this.battleForm = battleForm;
+        State = BattleState.Ready;
+        for (int i = 0; i < 3; i++)
+        {
+            BattleCardData card = Game.DataManager.MyPlayerData.CurrentCardList[Game.DataManager.MyPlayerData.CurrentCardList.Count - 1];
+            Game.DataManager.MyPlayerData.CurrentCardList.RemoveAt(Game.DataManager.MyPlayerData.CurrentCardList.Count - 1);
+            battleForm.AddHandCard(card);
 
+        }
 
     }
     /// <summary>
@@ -41,5 +48,18 @@ public class BattleMgr
     {
 
     }
-
+    public enum BattleState
+    {
+        Loading = 0,
+        Ready = 1,
+        MyRoundStart = 2,
+        MyRound = 3,
+        MyUsingCard = 4,
+        MyRoundEnd = 5,
+        OppRoundStart = 6,
+        OppRound = 7,
+        OppUsingCard = 8,
+        OppRoundEnd = 9,
+        BattleEnd = 10,
+    }
 }
