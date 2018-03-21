@@ -24,7 +24,7 @@ public class MapCardNpc : MapCardBase
      
         base.OnPlayerEnter();
         //进入对话
-   
+        
 
     }
 }
