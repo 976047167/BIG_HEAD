@@ -7,11 +7,13 @@ public class BattleMgr
 
     UIBattleForm battleForm;
     public BattleState State { get; private set; }
+    public bool CanUseCard { get; private set; }
     /// <summary>
     /// 开始战斗
     /// </summary>
     public void StartBattle(int monsterId)
     {
+        State = BattleState.Loading;
         Debug.LogError("StartBattle => " + monsterId);
         Game.DataManager.SetOppData(monsterId);
 
@@ -19,19 +21,15 @@ public class BattleMgr
 
         Game.DataManager.OppPlayerData.CurrentCardList = new List<BattleCardData>(Game.DataManager.OppPlayerData.CardList);
         Game.UI.OpenForm<UIBattleForm>();
-        State = BattleState.Loading;
-
-
-
     }
     /// <summary>
     /// UI加载完毕，准备开始游戏
     /// </summary>
     public void ReadyStart(UIBattleForm battleForm)
     {
+        State = BattleState.Ready;
         //预装的buff和武器、技能等上膛
         this.battleForm = battleForm;
-        State = BattleState.Ready;
         for (int i = 0; i < 3; i++)
         {
             BattleCardData card = Game.DataManager.MyPlayerData.CurrentCardList[Game.DataManager.MyPlayerData.CurrentCardList.Count - 1];
@@ -39,15 +37,72 @@ public class BattleMgr
             battleForm.AddHandCard(card);
 
         }
-
     }
     /// <summary>
     /// 一回合开始
     /// </summary>
     public void RoundStart()
     {
+        if (State == BattleState.MyUsingCard || State == BattleState.OppUsingCard)
+        {
+            return;
+        }
+        //demo版本，玩家先手
+        if (State == BattleState.Ready)
+        {
+            State = BattleState.MyRoundStart;
+            //触发回合开始的效果
+        }
+        if (State == BattleState.OppRoundEnd)
+        {
+            State = BattleState.MyRoundStart;
+        }
+        else if (State == BattleState.MyRoundEnd)
+        {
+            State = BattleState.MyRoundStart;
+        }
+
 
     }
+
+    public void Rounding()
+    {
+        if (State == BattleState.MyUsingCard || State == BattleState.OppUsingCard)
+        {
+            return;
+        }
+        if (State == BattleState.MyRoundStart)
+        {
+            State = BattleState.MyRound;
+            //解锁玩家操作，可以使用卡牌
+            CanUseCard = true;
+        }
+        else if (State == BattleState.OppRoundStart)
+        {
+            State = BattleState.OppRound;
+            //TODO: AI启动
+        }
+
+    }
+    /// <summary>
+    /// 玩家点击回合结束的按钮
+    /// </summary>
+    public void RoundEnd()
+    {
+        if (State == BattleState.MyUsingCard || State == BattleState.OppUsingCard)
+        {
+            return;
+        }
+        if (State == BattleState.MyRound)
+        {
+            State = BattleState.MyRoundEnd;
+        }
+        else if (State == BattleState.OppRound)
+        {
+            State = BattleState.OppRoundEnd;
+        }
+    }
+
     public enum BattleState
     {
         Loading = 0,

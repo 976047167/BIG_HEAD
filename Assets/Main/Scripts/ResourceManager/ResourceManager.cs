@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 using Object = UnityEngine.Object;
-
+/// <summary>
+/// 资源加载类
+/// </summary>
 public class ResourceManager
 {
     public static void Load<T>(string path, object arg, Action<string, object, T> callback) where T : Object
