@@ -20,7 +20,7 @@ public class BattlePlayerData
 
     //public BattleCardData
     public List<BattleCardData> EquipList = new List<BattleCardData>();
-    public List<BattleBuff> BuffList = new List<BattleBuff>();
+    public List<BattleBuffData> BuffList = new List<BattleBuffData>();
     /// <summary>
     /// 当前设置的卡牌库，除了初始化，不许改
     /// </summary>

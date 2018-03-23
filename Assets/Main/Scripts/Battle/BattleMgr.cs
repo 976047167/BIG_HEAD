@@ -102,6 +102,13 @@ public class BattleMgr
             State = BattleState.OppRoundEnd;
         }
     }
+    public class CardAction
+    {
+        public int ActionId;
+        public int ActionArg;
+        public BattleCardData CardData;
+    }
+    
 
     public enum BattleState
     {
