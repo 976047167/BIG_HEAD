@@ -20,7 +20,7 @@ public class MapCardNpc : MapCardBase
         {
              int DialogId = NpcTableSettings.Get(id).DialogId;
              UIModule.Instance.OpenForm<WND_Dialog>(DialogId);
-            //UIModule.Instance.OpenForm<WND_Bag>(1);
+           // UIModule.Instance.OpenForm<WND_Bag>(1);
         }
      
         base.OnPlayerEnter();
