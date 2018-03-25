@@ -7,8 +7,10 @@ public class BattleCardData
 {
     public int CardId { get; private set; }
 
+    public BattlePlayerData Owner { get; private set; }
+
     public BattleCardTableSetting Data { get; private set; }
-    public BattleCardData(int cardId)
+    public BattleCardData(int cardId, BattlePlayerData owner)
     {
         Data = BattleCardTableSettings.Get(cardId);
         if (Data == null)
@@ -16,5 +18,6 @@ public class BattleCardData
             Debug.LogError("cardId: " + cardId + " not exist!");
             return;
         }
+        Owner = owner;
     }
 }

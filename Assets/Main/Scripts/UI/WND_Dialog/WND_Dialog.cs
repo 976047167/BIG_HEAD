@@ -20,7 +20,7 @@ public class WND_Dialog : UIFormBase
         base.OnInit(id);
         ShowDialog((int)id);
     }
-    
+
     void Awake()
     {
         labTips = transform.Find("imgTips/labTips").GetComponent<UILabel>();
@@ -28,7 +28,7 @@ public class WND_Dialog : UIFormBase
         btnShowAll = transform.Find("btnShowAll").gameObject;
         UIEventListener.Get(btnShowAll).onClick = PrintStringAll;
         btnSelect = transform.Find("btnSelect").GetComponent<UIButton>();
-        
+
         grid = transform.Find("Container/Grid").GetComponent<UIGrid>();
 
 
@@ -59,7 +59,7 @@ public class WND_Dialog : UIFormBase
     //}
     private void OnDestroy()
     {
-        
+
     }
     private void ShowDialog(int Id)
     {
@@ -71,9 +71,9 @@ public class WND_Dialog : UIFormBase
         }
         preserntIndex = Id;
         StopCoroutine("PrintStringByStep");
-        
 
-         printString = DialogTableSettings.Get(Id).Text;
+
+        printString = DialogTableSettings.Get(Id).Text;
         string path = DialogTableSettings.Get(Id).ImagePath;
         if (path == "")
             imgHead.gameObject.SetActive(false);
@@ -82,15 +82,15 @@ public class WND_Dialog : UIFormBase
             imgHead.gameObject.SetActive(transform);
             imgHead.mainTexture = Resources.Load(path) as Texture2D;
         }
-           
+
 
         // printString = "你好5555555";
         StartCoroutine("PrintStringByStep");
     }
     private void ClearGrid()
     {
-        List < Transform > list = grid.GetChildList();
-        foreach(Transform i in list)
+        List<Transform> list = grid.GetChildList();
+        foreach (Transform i in list)
         {
             Destroy(i.gameObject);
 
@@ -126,37 +126,39 @@ public class WND_Dialog : UIFormBase
             isPrinting = false;
             return;
         }
-      
-       
+
+
         int type = DialogTableSettings.Get(preserntIndex).Type;
         List<int> NextIds = DialogTableSettings.Get(preserntIndex).NextIds;
         switch (type)
         {
             case 1:
-                    
+
                 int NextId = NextIds[0];
 
                 ShowDialog(NextId);
                 break;
             case 2:
-                if (isChosing) {
+                if (isChosing)
+                {
                     return;
                 }
                 isChosing = true;
                 int nums = NextIds.Count;
                 ClearGrid();
-                for(int i= 0; i<nums; i++)
+                for (int i = 0; i < nums; i++)
                 {
                     GameObject item = Instantiate(btnSelect.gameObject);
                     item.name = "option" + i;
-                    item.transform.Find("imgNum/labSelectNum").GetComponent<UILabel>().text = ""+(i+1);
+                    item.transform.Find("imgNum/labSelectNum").GetComponent<UILabel>().text = "" + (i + 1);
                     item.transform.Find("labSelectString").GetComponent<UILabel>().text = DialogTableSettings.Get(NextIds[i]).Text;
                     int nextId = NextIds[i];
-                    UIEventListener.Get(item.gameObject).onClick = (GameObject a)=> {
+                    UIEventListener.Get(item.gameObject).onClick = (GameObject a) =>
+                    {
                         isChosing = false;
                         ClearGrid();
                         ShowDialog(nextId);
-                  
+
                     };
 
                     item.transform.parent = grid.transform;
@@ -168,13 +170,13 @@ public class WND_Dialog : UIFormBase
                 break;
             case 3:
                 int result = DealEvent(NextIds[0]);
-               if (result == 0) 
-                   ShowDialog(NextIds[1]);
-               else if(result == 1)
+                if (result == 0)
+                    ShowDialog(NextIds[1]);
+                else if (result == 1)
                 {
                     ShowDialog(NextIds[2]);
                 }
-               else
+                else
                     Destroy(gameObject);
                 break;
             case 4:
@@ -182,17 +184,17 @@ public class WND_Dialog : UIFormBase
                 Destroy(gameObject);
                 break;
             default:
-                
+
                 print("Unknow type!");
                 Destroy(gameObject);
                 break;
         }
-        
+
     }
     //返回值为错误码，0表示成功
     private int DealEvent(int eventId)
     {
-  
+
         EventTableSetting tmpEvent = EventTableSettings.Get(eventId);
         int costType = tmpEvent.CostType;
         switch (costType)
@@ -205,7 +207,7 @@ public class WND_Dialog : UIFormBase
                 else
                     Game.DataManager.MyPlayerData.HP -= tmpEvent.CostNum;
                 break;
-       
+
             case 2:
                 if (Game.DataManager.Food < tmpEvent.CostNum)
                     return 1;
@@ -225,7 +227,7 @@ public class WND_Dialog : UIFormBase
                     Game.DataManager.Coin -= tmpEvent.CostNum;
                 break;
             case 6:
-                for (int j= 0; j<tmpEvent.CostNum; j++)
+                for (int j = 0; j < tmpEvent.CostNum; j++)
                 {
                     bool done = false;
                     foreach (BattleCardData i in Game.DataManager.MyPlayerData.EquipList)
@@ -240,13 +242,14 @@ public class WND_Dialog : UIFormBase
                         return 1;
                 }
                 break;
-               
+
 
             default:
                 return 2;
-                
+
         }
-        switch(tmpEvent.Type) {
+        switch (tmpEvent.Type)
+        {
             case 0:
                 break;
             case 1:
@@ -271,8 +274,8 @@ public class WND_Dialog : UIFormBase
                 for (int j = 0; j < tmpEvent.CostNum; j++)
                 {
 
-                    Game.DataManager.MyPlayerData.EquipList.Add(new BattleCardData(tmpEvent.ItemId));
-                 
+                    Game.DataManager.MyPlayerData.EquipList.Add(new BattleCardData(tmpEvent.ItemId, Game.DataManager.MyPlayerData));
+
                 }
                 break;
 
@@ -285,5 +288,5 @@ public class WND_Dialog : UIFormBase
 
         return 0;
     }
-    
+
 }

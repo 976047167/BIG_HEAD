@@ -26,17 +26,16 @@ public class UIBattleForm : UIFormBase
         oppPlayerViews.GetUIController(transform.Find("BattleInfo/OppInfo"));
         UpdateInfo();
         Game.BattleManager.ReadyStart(this);
+        UIEventListener.Get(transform.Find("btnRoundEnd").gameObject).onClick = OnClick_RoundEnd;
     }
-
+    private void OnGUI()
+    {
+        GUILayout.Label(Game.BattleManager.State.ToString());
+    }
     // Update is called once per frame
     void Update()
     {
-        //if (Input.GetKeyDown(KeyCode.A))
-        //{
-        //    GameObject card = Instantiate<GameObject>(m_BattleCardTemplate, m_MyCardsGrid.transform);
-        //    card.SetActive(true);
-        //    m_MyCardsGrid.Reposition();
-        //}
+        Game.BattleManager.UpdateScope();
     }
 
     public void UpdateInfo()
@@ -44,15 +43,37 @@ public class UIBattleForm : UIFormBase
         myPlayerViews.UpdateInfo(Game.DataManager.MyPlayerData);
         oppPlayerViews.UpdateInfo(Game.DataManager.OppPlayerData);
     }
+
     /// <summary>
-    /// 添加卡牌至手牌
+    /// 结束当前回合的按钮
+    /// </summary>
+    /// <param name="go"></param>
+    void OnClick_RoundEnd(GameObject go)
+    {
+        Game.BattleManager.RoundEnd();
+    }
+
+    /// <summary>
+    /// 添加卡牌至手牌，要做成列表，显示抽牌动画
     /// </summary>
     /// <param name="cardId"></param>
-    public void AddHandCard(BattleCardData card)
+    public void AddMyHandCard(BattleCardData card)
     {
-        GameObject newCard = GameObject.Instantiate(m_BattleCardTemplate);
-        newCard.transform.SetParent(m_MyCardsGrid.transform);
+        GameObject newCard = GameObject.Instantiate(m_BattleCardTemplate, m_MyCardsGrid.transform);
+        newCard.SetActive(true);
+        //newCard.transform.SetParent(m_MyCardsGrid.transform);
         m_MyCardsGrid.Reposition();
+    }
+    /// <summary>
+    /// 添加卡牌至手牌，要做成列表，显示抽牌动画
+    /// </summary>
+    /// <param name="cardId"></param>
+    public void AddOppHandCard(BattleCardData card)
+    {
+        //GameObject newCard = GameObject.Instantiate(m_BattleCardTemplate, m_MyCardsGrid.transform);
+        //newCard.SetActive(true);
+        ////newCard.transform.SetParent(m_MyCardsGrid.transform);
+        //m_MyCardsGrid.Reposition();
     }
     /// <summary>
     /// 添加卡牌到牌库
@@ -60,7 +81,7 @@ public class UIBattleForm : UIFormBase
     /// <param name="cardId"></param>
     public void AddCurrentList(int cardId)
     {
-        
+
     }
 
     /// <summary>
@@ -81,7 +102,9 @@ public class UIBattleForm : UIFormBase
         m_MyCardsGrid.Reposition();
         battleCard.cacheChildCardTrans.position = cachePos;
         yield return null;
-        TweenPosition.Begin(battleCard.gameObject, 0.5f, Vector3.zero);
+        TweenPosition.Begin(battleCard.cacheChildCardTrans.gameObject, 0.5f, Vector3.zero, false);
+        yield return null;
+        battleCard.ApplyUseEffect();
     }
 
     [System.Serializable]
@@ -121,7 +144,7 @@ public class UIBattleForm : UIFormBase
 
         public void UpdateInfo(BattlePlayerData playerData)
         {
-            if (HeadIcon.mainTexture==null || HeadIcon.mainTexture.name!=playerData.HeadIcon)
+            if (HeadIcon.mainTexture == null || HeadIcon.mainTexture.name != playerData.HeadIcon)
             {
                 HeadIcon.Load(playerData.HeadIcon);
             }

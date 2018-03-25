@@ -42,8 +42,8 @@ public class MapCardBase : MonoBehaviour
     public static MapCardBase GetRandomMapCard()
     {
         string cardType = MapCardName[Random.Range(0, MapCardName.Length)];
-        //Debug.LogError("Prefabs/MapCard/" + cardType);
-        return Instantiate(Resources.Load<MapCardBase>("Prefabs/MapCard/" + cardType));
+        return Instantiate(Resources.Load<MapCardBase>("Prefabs/MapCard/MapCardMonster"));
+        //return Instantiate(Resources.Load<MapCardBase>("Prefabs/MapCard/" + cardType));
     }
 
 

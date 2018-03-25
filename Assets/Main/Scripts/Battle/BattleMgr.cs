@@ -16,11 +16,17 @@ public class BattleMgr
         State = BattleState.Loading;
         Debug.LogError("StartBattle => " + monsterId);
         Game.DataManager.SetOppData(monsterId);
-
-        Game.DataManager.MyPlayerData.CurrentCardList = new List<BattleCardData>(Game.DataManager.MyPlayerData.CardList);
-
-        Game.DataManager.OppPlayerData.CurrentCardList = new List<BattleCardData>(Game.DataManager.OppPlayerData.CardList);
+        SetMyBattleCardList();
+        SetOppBattleCardList();
         Game.UI.OpenForm<UIBattleForm>();
+    }
+    void SetMyBattleCardList()
+    {
+        Game.DataManager.MyPlayerData.CurrentCardList = new List<BattleCardData>(Game.DataManager.MyPlayerData.CardList);
+    }
+    void SetOppBattleCardList()
+    {
+        Game.DataManager.OppPlayerData.CurrentCardList = new List<BattleCardData>(Game.DataManager.OppPlayerData.CardList);
     }
     /// <summary>
     /// UI加载完毕，准备开始游戏
@@ -30,69 +36,184 @@ public class BattleMgr
         State = BattleState.Ready;
         //预装的buff和武器、技能等上膛
         this.battleForm = battleForm;
-        for (int i = 0; i < 3; i++)
-        {
-            BattleCardData card = Game.DataManager.MyPlayerData.CurrentCardList[Game.DataManager.MyPlayerData.CurrentCardList.Count - 1];
-            Game.DataManager.MyPlayerData.CurrentCardList.RemoveAt(Game.DataManager.MyPlayerData.CurrentCardList.Count - 1);
-            battleForm.AddHandCard(card);
 
+        State = BattleState.MyRoundStart;
+    }
+
+    BattleState lastState = BattleState.Loading;
+    public void UpdateScope()
+    {
+        if (Game.DataManager.OppPlayerData.HP <= 0)
+        {
+            State = BattleState.BattleEnd_Win;
+        }
+        if (Game.DataManager.MyPlayerData.HP <= 0)
+        {
+            State = BattleState.BattleEnd_Lose;
+        }
+        if (lastState != State)
+        {
+            lastState = State;
+            OnExitState();
+            OnEnterState();
+            return;
+        }
+        OnUpdateState();
+    }
+
+    void OnEnterState()
+    {
+        switch (State)
+        {
+            case BattleState.Loading:
+                break;
+            case BattleState.Ready:
+                break;
+            case BattleState.MyRoundStart:
+                State++;
+                break;
+            case BattleState.MyDrawCard:
+                for (int i = 0; i < 3; i++)
+                {
+                    if (Game.DataManager.MyPlayerData.CurrentCardList.Count <= 0)
+                    {
+                        SetMyBattleCardList();
+                    }
+                    BattleCardData card = Game.DataManager.MyPlayerData.CurrentCardList[Game.DataManager.MyPlayerData.CurrentCardList.Count - 1];
+                    Game.DataManager.MyPlayerData.CurrentCardList.RemoveAt(Game.DataManager.MyPlayerData.CurrentCardList.Count - 1);
+                    battleForm.AddMyHandCard(card);
+
+                }
+                State++;
+                break;
+            case BattleState.MyRound:
+                CanUseCard = true;
+                break;
+            case BattleState.MyUsingCard:
+                break;
+            case BattleState.MyRoundEnd:
+                CanUseCard = false;
+                State++;
+                break;
+            case BattleState.OppRoundStart:
+
+                State++;
+                break;
+            case BattleState.OppDrawCard:
+                for (int i = 0; i < 3; i++)
+                {
+                    if (Game.DataManager.OppPlayerData.CurrentCardList.Count<=0)
+                    {
+                        SetOppBattleCardList();
+                    }
+                    BattleCardData card = Game.DataManager.OppPlayerData.CurrentCardList[Game.DataManager.OppPlayerData.CurrentCardList.Count - 1];
+                    Game.DataManager.OppPlayerData.CurrentCardList.RemoveAt(Game.DataManager.OppPlayerData.CurrentCardList.Count - 1);
+                    battleForm.AddOppHandCard(card);
+
+                }
+                State++;
+                break;
+            case BattleState.OppRound:
+                //开启AI
+                State++;
+                break;
+            case BattleState.OppUsingCard:
+                State++;
+                break;
+            case BattleState.OppRoundEnd:
+                State = BattleState.MyRoundStart;
+                break;
+            case BattleState.BattleEnd_Win:
+                Game.UI.CloseForm<UIBattleForm>();
+                break;
+            case BattleState.BattleEnd_Lose:
+                Game.UI.CloseForm<UIBattleForm>();
+                break;
+            default:
+                break;
         }
     }
-    /// <summary>
-    /// 一回合开始
-    /// </summary>
-    public void RoundStart()
+    void OnUpdateState()
     {
-        if (State == BattleState.MyUsingCard || State == BattleState.OppUsingCard)
+        switch (State)
+        {
+            case BattleState.Loading:
+                break;
+            case BattleState.Ready:
+                break;
+            case BattleState.MyRoundStart:
+                break;
+            case BattleState.MyDrawCard:
+                break;
+            case BattleState.MyRound:
+                break;
+            case BattleState.MyUsingCard:
+                break;
+            case BattleState.MyRoundEnd:
+                break;
+            case BattleState.OppRoundStart:
+                break;
+            case BattleState.OppDrawCard:
+                break;
+            case BattleState.OppRound:
+                break;
+            case BattleState.OppUsingCard:
+                break;
+            case BattleState.OppRoundEnd:
+                break;
+            case BattleState.BattleEnd_Win:
+                break;
+            case BattleState.BattleEnd_Lose:
+                break;
+            default:
+                break;
+        }
+    }
+    void OnExitState()
+    {
+        if (State == BattleState.BattleEnd_Win || State == BattleState.BattleEnd_Lose)
         {
             return;
         }
-        //demo版本，玩家先手
-        if (State == BattleState.Ready)
+        switch (lastState)
         {
-            State = BattleState.MyRoundStart;
-            //触发回合开始的效果
+            case BattleState.Loading:
+                break;
+            case BattleState.Ready:
+                break;
+            case BattleState.MyRoundStart:
+                break;
+            case BattleState.MyDrawCard:
+                break;
+            case BattleState.MyRound:
+                break;
+            case BattleState.MyUsingCard:
+                break;
+            case BattleState.MyRoundEnd:
+                break;
+            case BattleState.OppRoundStart:
+                break;
+            case BattleState.OppDrawCard:
+                break;
+            case BattleState.OppRound:
+                break;
+            case BattleState.OppUsingCard:
+                break;
+            case BattleState.OppRoundEnd:
+                break;
+            case BattleState.BattleEnd_Win:
+                break;
+            case BattleState.BattleEnd_Lose:
+                break;
+            default:
+                break;
         }
-        if (State == BattleState.OppRoundEnd)
-        {
-            State = BattleState.MyRoundStart;
-        }
-        else if (State == BattleState.MyRoundEnd)
-        {
-            State = BattleState.MyRoundStart;
-        }
-
-
-    }
-
-    public void Rounding()
-    {
-        if (State == BattleState.MyUsingCard || State == BattleState.OppUsingCard)
-        {
-            return;
-        }
-        if (State == BattleState.MyRoundStart)
-        {
-            State = BattleState.MyRound;
-            //解锁玩家操作，可以使用卡牌
-            CanUseCard = true;
-        }
-        else if (State == BattleState.OppRoundStart)
-        {
-            State = BattleState.OppRound;
-            //TODO: AI启动
-        }
-
     }
     /// <summary>
     /// 玩家点击回合结束的按钮
     /// </summary>
     public void RoundEnd()
     {
-        if (State == BattleState.MyUsingCard || State == BattleState.OppUsingCard)
-        {
-            return;
-        }
         if (State == BattleState.MyRound)
         {
             State = BattleState.MyRoundEnd;
@@ -108,20 +229,25 @@ public class BattleMgr
         public int ActionArg;
         public BattleCardData CardData;
     }
-    
 
-    public enum BattleState
+    /// <summary>
+    /// 回合开始 -> 抽卡阶段 -> 行动阶段（出牌） -> 行动结束-> 回合结束
+    /// </summary>
+    public enum BattleState : int
     {
         Loading = 0,
-        Ready = 1,
-        MyRoundStart = 2,
-        MyRound = 3,
-        MyUsingCard = 4,
-        MyRoundEnd = 5,
-        OppRoundStart = 6,
-        OppRound = 7,
-        OppUsingCard = 8,
-        OppRoundEnd = 9,
-        BattleEnd = 10,
+        Ready,
+        MyRoundStart,
+        MyDrawCard,
+        MyRound,
+        MyUsingCard,
+        MyRoundEnd,
+        OppRoundStart,
+        OppDrawCard,
+        OppRound,
+        OppUsingCard,
+        OppRoundEnd,
+        BattleEnd_Win,
+        BattleEnd_Lose,
     }
 }

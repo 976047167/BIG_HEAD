@@ -51,8 +51,24 @@ public class UIBattleCard : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// 应用使用特效
+    /// </summary>
+    public void ApplyUseEffect()
+    {
+
+    }
+
     protected void OnDragStart()
     {
+        if (!Game.BattleManager.CanUseCard)
+        {
+            return;
+        }
+        if (m_Used)
+        {
+            return;
+        }
         Debug.Log("OnDragStart ：" + name);
         m_Draging = true;
         offsetPos = transform.position - UICamera.lastWorldPosition;
@@ -72,6 +88,14 @@ public class UIBattleCard : MonoBehaviour
     }
     protected void OnDragEnd()
     {
+        if (!Game.BattleManager.CanUseCard)
+        {
+            return;
+        }
+        if (m_Used)
+        {
+            return;
+        }
         Debug.Log("OnDragEnd ：" + name);
         m_Draging = false;
         Ray ray = UICamera.mainCamera.ScreenPointToRay(UICamera.lastEventPosition);
@@ -116,9 +140,9 @@ public class UIBattleCard : MonoBehaviour
             TweenScale.Begin(cacheChildCardTrans.gameObject, 0.2f, Vector3.one);
         }
     }
-    public void SetData(int cardId)
+    public void SetData(BattleCardData card)
     {
-        cardData = new BattleCardData(cardId);
+        cardData = card;
         m_TexIcon.mainTexture = Resources.Load<Texture>(cardData.Data.Icon);
         m_lblName.text = cardData.Data.Name;
         if (cardData.Data.Type != 0)
@@ -163,6 +187,7 @@ public class UIBattleCard : MonoBehaviour
         UIBattleForm form = UIModule.Instance.GetForm<UIBattleForm>();
         cacheCardPos = cacheChildCardTrans.position;
         form.UseCard(this);
+        m_Used = true;
         return true;
     }
 

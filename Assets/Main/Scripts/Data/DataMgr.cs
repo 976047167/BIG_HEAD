@@ -40,24 +40,24 @@ public class DataMgr
         MyPlayerData.SkillId = 0;
         MyPlayerData.HeadIcon = "UITexture/Head/npc_009";
         MyPlayerData.CardList.Clear();
-        MyPlayerData.CardList.Add(new BattleCardData(1));
-        MyPlayerData.CardList.Add(new BattleCardData(1));
-        MyPlayerData.CardList.Add(new BattleCardData(1));
-        MyPlayerData.CardList.Add(new BattleCardData(1));
-        MyPlayerData.CardList.Add(new BattleCardData(2));
-        MyPlayerData.CardList.Add(new BattleCardData(2));
-        MyPlayerData.CardList.Add(new BattleCardData(3));
-        MyPlayerData.CardList.Add(new BattleCardData(4));
-        MyPlayerData.CardList.Add(new BattleCardData(5));
-        MyPlayerData.CardList.Add(new BattleCardData(6));
-        MyPlayerData.CardList.Add(new BattleCardData(7));
+        MyPlayerData.CardList.Add(new BattleCardData(1, MyPlayerData));
+        MyPlayerData.CardList.Add(new BattleCardData(1, MyPlayerData));
+        MyPlayerData.CardList.Add(new BattleCardData(1, MyPlayerData));
+        MyPlayerData.CardList.Add(new BattleCardData(1, MyPlayerData));
+        MyPlayerData.CardList.Add(new BattleCardData(2, MyPlayerData));
+        MyPlayerData.CardList.Add(new BattleCardData(2, MyPlayerData));
+        MyPlayerData.CardList.Add(new BattleCardData(3, MyPlayerData));
+        MyPlayerData.CardList.Add(new BattleCardData(4, MyPlayerData));
+        MyPlayerData.CardList.Add(new BattleCardData(5, MyPlayerData));
+        MyPlayerData.CardList.Add(new BattleCardData(6, MyPlayerData));
+        MyPlayerData.CardList.Add(new BattleCardData(7, MyPlayerData));
         Food = 20;
         Coin = 20;
     }
     public void SetOppData(int monsterId)
     {
         BattleMonsterTableSetting monster = BattleMonsterTableSettings.Get(monsterId);
-        if (monster==null)
+        if (monster == null)
         {
             Debug.LogError("怪物表格配置错误");
             return;
@@ -73,7 +73,7 @@ public class DataMgr
         OppPlayerData.HeadIcon = monster.Icon;
         for (int i = 0; i < monster.BattleCards.Count; i++)
         {
-            OppPlayerData.CardList.Add(new BattleCardData(monster.BattleCards[i]));
+            OppPlayerData.CardList.Add(new BattleCardData(monster.BattleCards[i], OppPlayerData));
         }
         //TODO: Buff Equip
     }
