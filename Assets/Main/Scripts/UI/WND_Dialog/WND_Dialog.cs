@@ -14,13 +14,21 @@ public class WND_Dialog : UIFormBase
     private bool isPrinting;
     private bool isChosing;
     private UIGrid grid;
+    private enum DialogType
+    {
+      Normal = 1,
+      Select,
+      Event,
+      NextPass,
+
+    }
     // Use this for initialization
     protected override void OnInit(object id)
     {
         base.OnInit(id);
         ShowDialog((int)id);
     }
-
+    
     void Awake()
     {
         labTips = transform.Find("imgTips/labTips").GetComponent<UILabel>();
@@ -28,7 +36,7 @@ public class WND_Dialog : UIFormBase
         btnShowAll = transform.Find("btnShowAll").gameObject;
         UIEventListener.Get(btnShowAll).onClick = PrintStringAll;
         btnSelect = transform.Find("btnSelect").GetComponent<UIButton>();
-
+        
         grid = transform.Find("Container/Grid").GetComponent<UIGrid>();
 
 
@@ -59,7 +67,7 @@ public class WND_Dialog : UIFormBase
     //}
     private void OnDestroy()
     {
-
+        
     }
     private void ShowDialog(int Id)
     {
@@ -71,26 +79,26 @@ public class WND_Dialog : UIFormBase
         }
         preserntIndex = Id;
         StopCoroutine("PrintStringByStep");
+        
 
-
-        printString = DialogTableSettings.Get(Id).Text;
+         printString = DialogTableSettings.Get(Id).Text;
         string path = DialogTableSettings.Get(Id).ImagePath;
         if (path == "")
             imgHead.gameObject.SetActive(false);
         else
         {
-            imgHead.gameObject.SetActive(transform);
+            imgHead.gameObject.SetActive(true);
             imgHead.mainTexture = Resources.Load(path) as Texture2D;
         }
-
+           
 
         // printString = "你好5555555";
         StartCoroutine("PrintStringByStep");
     }
     private void ClearGrid()
     {
-        List<Transform> list = grid.GetChildList();
-        foreach (Transform i in list)
+        List < Transform > list = grid.GetChildList();
+        foreach(Transform i in list)
         {
             Destroy(i.gameObject);
 
@@ -126,39 +134,37 @@ public class WND_Dialog : UIFormBase
             isPrinting = false;
             return;
         }
-
-
+      
+       
         int type = DialogTableSettings.Get(preserntIndex).Type;
         List<int> NextIds = DialogTableSettings.Get(preserntIndex).NextIds;
-        switch (type)
+        switch ((DialogType)type)
         {
-            case 1:
-
+            case DialogType.Normal:
+                    
                 int NextId = NextIds[0];
 
                 ShowDialog(NextId);
                 break;
-            case 2:
-                if (isChosing)
-                {
+            case DialogType.Select:
+                if (isChosing) {
                     return;
                 }
                 isChosing = true;
                 int nums = NextIds.Count;
                 ClearGrid();
-                for (int i = 0; i < nums; i++)
+                for(int i= 0; i<nums; i++)
                 {
                     GameObject item = Instantiate(btnSelect.gameObject);
                     item.name = "option" + i;
-                    item.transform.Find("imgNum/labSelectNum").GetComponent<UILabel>().text = "" + (i + 1);
+                    item.transform.Find("imgNum/labSelectNum").GetComponent<UILabel>().text = ""+(i+1);
                     item.transform.Find("labSelectString").GetComponent<UILabel>().text = DialogTableSettings.Get(NextIds[i]).Text;
                     int nextId = NextIds[i];
-                    UIEventListener.Get(item.gameObject).onClick = (GameObject a) =>
-                    {
+                    UIEventListener.Get(item.gameObject).onClick = (GameObject a)=> {
                         isChosing = false;
                         ClearGrid();
                         ShowDialog(nextId);
-
+                  
                     };
 
                     item.transform.parent = grid.transform;
@@ -168,125 +174,28 @@ public class WND_Dialog : UIFormBase
                 }
                 grid.repositionNow = true;
                 break;
-            case 3:
-                int result = DealEvent(NextIds[0]);
-                if (result == 0)
-                    ShowDialog(NextIds[1]);
-                else if (result == 1)
+            case DialogType.Event:
+                int result = DealEvent.deal(NextIds[0]);
+               if (result == 0) 
+                   ShowDialog(NextIds[1]);
+               else if(result == 1)
                 {
                     ShowDialog(NextIds[2]);
                 }
-                else
+               else
                     Destroy(gameObject);
                 break;
-            case 4:
+            case DialogType.NextPass:
                 Game.BattleManager.StartBattle(NextIds[0]);
                 Destroy(gameObject);
                 break;
             default:
-
+                
                 print("Unknow type!");
                 Destroy(gameObject);
                 break;
         }
-
+        
     }
-    //返回值为错误码，0表示成功
-    private int DealEvent(int eventId)
-    {
-
-        EventTableSetting tmpEvent = EventTableSettings.Get(eventId);
-        int costType = tmpEvent.CostType;
-        switch (costType)
-        {
-            case 0:
-                break;
-            case 1:
-                if (Game.DataManager.MyPlayerData.HP <= tmpEvent.CostNum)
-                    return 1;
-                else
-                    Game.DataManager.MyPlayerData.HP -= tmpEvent.CostNum;
-                break;
-
-            case 2:
-                if (Game.DataManager.Food < tmpEvent.CostNum)
-                    return 1;
-                else
-                    Game.DataManager.Food -= tmpEvent.CostNum;
-                break;
-            case 3:
-                if (Game.DataManager.MyPlayerData.MP < tmpEvent.CostNum)
-                    return 1;
-                else
-                    Game.DataManager.MyPlayerData.MP -= tmpEvent.CostNum;
-                break;
-            case 4:
-                if (Game.DataManager.Coin < tmpEvent.CostNum)
-                    return 1;
-                else
-                    Game.DataManager.Coin -= tmpEvent.CostNum;
-                break;
-            case 6:
-                for (int j = 0; j < tmpEvent.CostNum; j++)
-                {
-                    bool done = false;
-                    foreach (BattleCardData i in Game.DataManager.MyPlayerData.EquipList)
-                    {
-                        if (i.CardId == tmpEvent.CostItemId)
-                        {
-                            Game.DataManager.MyPlayerData.EquipList.Remove(i);
-                            done = true;
-                        }
-                    }
-                    if (done == false)
-                        return 1;
-                }
-                break;
-
-
-            default:
-                return 2;
-
-        }
-        switch (tmpEvent.Type)
-        {
-            case 0:
-                break;
-            case 1:
-
-                Game.DataManager.MyPlayerData.HP += tmpEvent.Num;
-                if (Game.DataManager.MyPlayerData.HP > Game.DataManager.MyPlayerData.MaxHP)
-                    Game.DataManager.MyPlayerData.HP = Game.DataManager.MyPlayerData.MaxHP;
-                break;
-
-            case 2:
-                Game.DataManager.Food += tmpEvent.Num;
-                break;
-            case 3:
-                Game.DataManager.MyPlayerData.MP += tmpEvent.Num;
-                if (Game.DataManager.MyPlayerData.MP > Game.DataManager.MyPlayerData.MaxMP)
-                    Game.DataManager.MyPlayerData.MP = Game.DataManager.MyPlayerData.MaxMP;
-                break;
-            case 4:
-                Game.DataManager.Coin += tmpEvent.Num;
-                break;
-            case 6:
-                for (int j = 0; j < tmpEvent.CostNum; j++)
-                {
-
-                    Game.DataManager.MyPlayerData.EquipList.Add(new BattleCardData(tmpEvent.ItemId, Game.DataManager.MyPlayerData));
-
-                }
-                break;
-
-
-            default:
-                return 2;
-
-
-        }
-
-        return 0;
-    }
-
+  
 }
