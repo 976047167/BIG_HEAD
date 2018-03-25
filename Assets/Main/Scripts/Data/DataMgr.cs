@@ -27,6 +27,7 @@ public class DataMgr
     public int Coin;
     public BattlePlayerData MyPlayerData { get; private set; }
     public BattlePlayerData OppPlayerData { get; private set; }
+    public List<BattleCardData> Kaku = new List<BattleCardData>();
     /// <summary>
     /// 游戏启动时初始化
     /// </summary>
@@ -51,6 +52,17 @@ public class DataMgr
         MyPlayerData.CardList.Add(new BattleCardData(5));
         MyPlayerData.CardList.Add(new BattleCardData(6));
         MyPlayerData.CardList.Add(new BattleCardData(7));
+        Kaku.Add(new BattleCardData((1)));
+        Kaku.Add(new BattleCardData((3)));
+        Kaku.Add(new BattleCardData((3)));
+        Kaku.Add(new BattleCardData((3)));
+        Kaku.Add(new BattleCardData((2)));
+        Kaku.Add(new BattleCardData((4)));
+        Kaku.Add(new BattleCardData((5)));
+        Kaku.Add(new BattleCardData((6)));
+        Kaku.Add(new BattleCardData((7)));
+        Kaku.Add(new BattleCardData((7)));
+        Kaku.Add(new BattleCardData((7)));
         Food = 20;
         Coin = 20;
     }

@@ -9,7 +9,7 @@ public class WND_Bag : UIFormBase
     private GameObject battleCard;
     void Awake()
     {
-        grid = transform.Find("ScrollView/Grid").GetComponent<UIGrid>();
+        grid = transform.Find("bg/ScrollView/Grid").GetComponent<UIGrid>();
         battleCard = Resources.Load("Prefabs/Card/BattleCard") as GameObject;
 
     }
@@ -28,6 +28,8 @@ public class WND_Bag : UIFormBase
                 GameObject item = Instantiate(battleCard);
                 int id = card.Data.Id;
                 item.name = "Card" + id;
+                item.GetComponent<UIBattleCard>().SetData(id);
+                item.AddComponent<UIDragScrollView>();
                 item.transform.parent = grid.transform;
                 item.transform.localPosition = new Vector3();
                 item.transform.localScale = new Vector3(1, 1, 1);

@@ -14,6 +14,14 @@ public class WND_Dialog : UIFormBase
     private bool isPrinting;
     private bool isChosing;
     private UIGrid grid;
+    private enum DialogType
+    {
+      Normal = 1,
+      Select,
+      Event,
+      NextPass,
+
+    }
     // Use this for initialization
     protected override void OnInit(object id)
     {
@@ -130,15 +138,15 @@ public class WND_Dialog : UIFormBase
        
         int type = DialogTableSettings.Get(preserntIndex).Type;
         List<int> NextIds = DialogTableSettings.Get(preserntIndex).NextIds;
-        switch (type)
+        switch ((DialogType)type)
         {
-            case 1:
+            case DialogType.Normal:
                     
                 int NextId = NextIds[0];
 
                 ShowDialog(NextId);
                 break;
-            case 2:
+            case DialogType.Select:
                 if (isChosing) {
                     return;
                 }
@@ -166,8 +174,8 @@ public class WND_Dialog : UIFormBase
                 }
                 grid.repositionNow = true;
                 break;
-            case 3:
-                int result = DealEvent(NextIds[0]);
+            case DialogType.Event:
+                int result = DealEvent.deal(NextIds[0]);
                if (result == 0) 
                    ShowDialog(NextIds[1]);
                else if(result == 1)
@@ -177,7 +185,7 @@ public class WND_Dialog : UIFormBase
                else
                     Destroy(gameObject);
                 break;
-            case 4:
+            case DialogType.NextPass:
                 Game.BattleManager.StartBattle(NextIds[0]);
                 Destroy(gameObject);
                 break;
@@ -189,101 +197,5 @@ public class WND_Dialog : UIFormBase
         }
         
     }
-    //返回值为错误码，0表示成功
-    private int DealEvent(int eventId)
-    {
   
-        EventTableSetting tmpEvent = EventTableSettings.Get(eventId);
-        int costType = tmpEvent.CostType;
-        switch (costType)
-        {
-            case 0:
-                break;
-            case 1:
-                if (Game.DataManager.MyPlayerData.HP <= tmpEvent.CostNum)
-                    return 1;
-                else
-                    Game.DataManager.MyPlayerData.HP -= tmpEvent.CostNum;
-                break;
-       
-            case 2:
-                if (Game.DataManager.Food < tmpEvent.CostNum)
-                    return 1;
-                else
-                    Game.DataManager.Food -= tmpEvent.CostNum;
-                break;
-            case 3:
-                if (Game.DataManager.MyPlayerData.MP < tmpEvent.CostNum)
-                    return 1;
-                else
-                    Game.DataManager.MyPlayerData.MP -= tmpEvent.CostNum;
-                break;
-            case 4:
-                if (Game.DataManager.Coin < tmpEvent.CostNum)
-                    return 1;
-                else
-                    Game.DataManager.Coin -= tmpEvent.CostNum;
-                break;
-            case 6:
-                for (int j= 0; j<tmpEvent.CostNum; j++)
-                {
-                    bool done = false;
-                    foreach (BattleCardData i in Game.DataManager.MyPlayerData.EquipList)
-                    {
-                        if (i.CardId == tmpEvent.CostItemId)
-                        {
-                            Game.DataManager.MyPlayerData.EquipList.Remove(i);
-                            done = true;
-                        }
-                    }
-                    if (done == false)
-                        return 1;
-                }
-                break;
-               
-
-            default:
-                return 2;
-                
-        }
-        switch(tmpEvent.Type) {
-            case 0:
-                break;
-            case 1:
-
-                Game.DataManager.MyPlayerData.HP += tmpEvent.Num;
-                if (Game.DataManager.MyPlayerData.HP > Game.DataManager.MyPlayerData.MaxHP)
-                    Game.DataManager.MyPlayerData.HP = Game.DataManager.MyPlayerData.MaxHP;
-                break;
-
-            case 2:
-                Game.DataManager.Food += tmpEvent.Num;
-                break;
-            case 3:
-                Game.DataManager.MyPlayerData.MP += tmpEvent.Num;
-                if (Game.DataManager.MyPlayerData.MP > Game.DataManager.MyPlayerData.MaxMP)
-                    Game.DataManager.MyPlayerData.MP = Game.DataManager.MyPlayerData.MaxMP;
-                break;
-            case 4:
-                Game.DataManager.Coin += tmpEvent.Num;
-                break;
-            case 6:
-                for (int j = 0; j < tmpEvent.CostNum; j++)
-                {
-
-                    Game.DataManager.MyPlayerData.EquipList.Add(new BattleCardData(tmpEvent.ItemId));
-                 
-                }
-                break;
-
-
-            default:
-                return 2;
-
-
-        }
-
-        return 0;
-    }
-    
 }
