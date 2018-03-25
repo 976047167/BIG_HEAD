@@ -56,7 +56,36 @@ public class UIBattleCard : MonoBehaviour
     /// </summary>
     public void ApplyUseEffect()
     {
-
+        for (int i = 0; i < cardData.Data.ActionTypes.Count; i++)
+        {
+            switch ((BattleActionType)cardData.Data.ActionTypes[i])
+            {
+                case BattleActionType.None:
+                    break;
+                case BattleActionType.AddBuff:
+                    break;
+                case BattleActionType.Attack:
+                    if (cardData.Owner == Game.DataManager.MyPlayerData)
+                    {
+                        Game.DataManager.OppPlayerData.HP -= cardData.Data.ActionParams[i];
+                    }
+                    else if (cardData.Owner == Game.DataManager.OppPlayerData)
+                    {
+                        Game.DataManager.MyPlayerData.HP -= cardData.Data.ActionParams[i];
+                    }
+                    break;
+                case BattleActionType.RecoverHP:
+                    break;
+                case BattleActionType.RecoverMP:
+                    break;
+                case BattleActionType.DrawCard:
+                    break;
+                case BattleActionType.AddEuipment:
+                    break;
+                default:
+                    break;
+            }
+        }
     }
 
     protected void OnDragStart()
@@ -176,8 +205,8 @@ public class UIBattleCard : MonoBehaviour
             }
         }
         m_lblExpand.text = "";
-        m_lblExpandCount.text= cardData.Data.Spending.ToString();
-        
+        m_lblExpandCount.text = cardData.Data.Spending.ToString();
+
 
     }
     protected bool UseCard()
