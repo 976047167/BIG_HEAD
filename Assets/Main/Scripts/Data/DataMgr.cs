@@ -52,17 +52,17 @@ public class DataMgr
         MyPlayerData.CardList.Add(new BattleCardData(5, MyPlayerData));
         MyPlayerData.CardList.Add(new BattleCardData(6, MyPlayerData));
         MyPlayerData.CardList.Add(new BattleCardData(7, MyPlayerData));
-        Kaku.Add(new BattleCardData((1)));
-        Kaku.Add(new BattleCardData((3)));
-        Kaku.Add(new BattleCardData((3)));
-        Kaku.Add(new BattleCardData((3)));
-        Kaku.Add(new BattleCardData((2)));
-        Kaku.Add(new BattleCardData((4)));
-        Kaku.Add(new BattleCardData((5)));
-        Kaku.Add(new BattleCardData((6)));
-        Kaku.Add(new BattleCardData((7)));
-        Kaku.Add(new BattleCardData((7)));
-        Kaku.Add(new BattleCardData((7)));
+        Kaku.Add(new BattleCardData(1, MyPlayerData));
+        Kaku.Add(new BattleCardData(3, MyPlayerData));
+        Kaku.Add(new BattleCardData(3, MyPlayerData));
+        Kaku.Add(new BattleCardData(3, MyPlayerData));
+        Kaku.Add(new BattleCardData(2, MyPlayerData));
+        Kaku.Add(new BattleCardData(4, MyPlayerData));
+        Kaku.Add(new BattleCardData(5, MyPlayerData));
+        Kaku.Add(new BattleCardData(6, MyPlayerData));
+        Kaku.Add(new BattleCardData(7, MyPlayerData));
+        Kaku.Add(new BattleCardData(7, MyPlayerData));
+        Kaku.Add(new BattleCardData(7, MyPlayerData));
         Food = 20;
         Coin = 20;
     }

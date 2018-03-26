@@ -28,7 +28,7 @@ public class WND_Bag : UIFormBase
                 GameObject item = Instantiate(battleCard);
                 int id = card.Data.Id;
                 item.name = "Card" + id;
-                item.GetComponent<UIBattleCard>().SetData(id);
+                //item.GetComponent<UIBattleCard>().SetData(id);
                 item.AddComponent<UIDragScrollView>();
                 item.transform.parent = grid.transform;
                 item.transform.localPosition = new Vector3();

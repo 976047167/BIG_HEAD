@@ -30,7 +30,7 @@ public class WND_Kaku : UIFormBase {
             GameObject item = Instantiate(battleCard);
             int id = card.Data.Id;
             item.name = "Card" + id;
-            item.GetComponent<UIBattleCard>().SetData(id);
+            //item.GetComponent<UIBattleCard>().SetData(id);
             item.AddComponent<UIDragScrollView>();
             item.transform.parent = deckGrid.transform;
             item.transform.localPosition = new Vector3();
@@ -54,7 +54,7 @@ public class WND_Kaku : UIFormBase {
             GameObject item = Instantiate(battleCard);
             int id = card.Data.Id;
             item.name = "Card" + id;
-            item.GetComponent<UIBattleCard>().SetData(id);
+            //item.GetComponent<UIBattleCard>().SetData(id);
             item.AddComponent<UIDragScrollView>();
             item.transform.parent = kakuGrid.transform;
             item.transform.localPosition = new Vector3();

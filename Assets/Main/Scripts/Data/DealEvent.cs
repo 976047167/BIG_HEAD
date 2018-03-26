@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using AppSettings;
 
 
-public class DealEvent  {
+public class DealEvent
+{
     //返回值为错误码，0表示成功
     enum EventType
     {
@@ -98,8 +99,7 @@ public class DealEvent  {
             case EventType.Equip:
                 for (int j = 0; j < tmpEvent.CostNum; j++)
                 {
-
-                    Game.DataManager.MyPlayerData.EquipList.Add(new BattleCardData(tmpEvent.ItemId));
+                    Game.DataManager.MyPlayerData.EquipList.Add(new BattleCardData(tmpEvent.ItemId, Game.DataManager.MyPlayerData));
 
                 }
                 break;
