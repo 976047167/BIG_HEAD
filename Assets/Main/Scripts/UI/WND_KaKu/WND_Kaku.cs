@@ -10,7 +10,7 @@ public class WND_Kaku : UIFormBase {
     {
         deckGrid = transform.Find("bgDeck/ScrollView/Grid").GetComponent<UIGrid>();
         kakuGrid = transform.Find("bgKaku/ScrollView/Grid").GetComponent<UIGrid>();
-        battleCard = Resources.Load("Prefabs/Card/BattleCard") as GameObject;
+        battleCard = Resources.Load("Prefabs/Card/NormalCard") as GameObject;
 
     }
     protected override void OnInit(object userdata)
@@ -30,7 +30,9 @@ public class WND_Kaku : UIFormBase {
             GameObject item = Instantiate(battleCard);
             int id = card.Data.Id;
             item.name = "Card" + id;
-            //item.GetComponent<UIBattleCard>().SetData(id);
+            item.GetComponent<UINormalCard>().SetData(card);
+            item.GetComponent<UINormalCard>().Parent = transform;
+            item.GetComponent<UINormalCard>().Grid = deckGrid;
             item.AddComponent<UIDragScrollView>();
             item.transform.parent = deckGrid.transform;
             item.transform.localPosition = new Vector3();
@@ -54,7 +56,9 @@ public class WND_Kaku : UIFormBase {
             GameObject item = Instantiate(battleCard);
             int id = card.Data.Id;
             item.name = "Card" + id;
-            //item.GetComponent<UIBattleCard>().SetData(id);
+            item.GetComponent<UINormalCard>().SetData(card);
+            item.GetComponent<UINormalCard>().Parent = transform;
+            item.GetComponent<UINormalCard>().Grid = kakuGrid;
             item.AddComponent<UIDragScrollView>();
             item.transform.parent = kakuGrid.transform;
             item.transform.localPosition = new Vector3();
