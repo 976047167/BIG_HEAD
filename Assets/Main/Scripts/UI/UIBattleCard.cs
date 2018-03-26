@@ -29,6 +29,7 @@ public class UIBattleCard : MonoBehaviour
     Vector3 cacheCardPos;
 
     BattleCardData cardData;
+    UIBattleForm cacheForm;
 
     protected void Start()
     {
@@ -56,6 +57,7 @@ public class UIBattleCard : MonoBehaviour
     /// </summary>
     public void ApplyUseEffect()
     {
+        cardData.Owner.AP -= cardData.Data.Spending;
         for (int i = 0; i < cardData.Data.ActionTypes.Count; i++)
         {
             switch ((BattleActionType)cardData.Data.ActionTypes[i])
@@ -65,20 +67,21 @@ public class UIBattleCard : MonoBehaviour
                 case BattleActionType.AddBuff:
                     break;
                 case BattleActionType.Attack:
-                    //if (cardData.Owner == Game.DataManager.MyPlayerData)
-                    //{
-                    //    Game.DataManager.OppPlayerData.HP -= cardData.Data.ActionParams[i];
-                    //}
-                    //else if (cardData.Owner == Game.DataManager.OppPlayerData)
-                    //{
-                    //    Game.DataManager.MyPlayerData.HP -= cardData.Data.ActionParams[i];
-                    //}
+                    if (cardData.Owner == Game.DataManager.MyPlayerData)
+                    {
+                        Game.DataManager.OppPlayerData.HP -= cardData.Data.ActionParams[i];
+                    }
+                    else if (cardData.Owner == Game.DataManager.OppPlayerData)
+                    {
+                        Game.DataManager.MyPlayerData.HP -= cardData.Data.ActionParams[i];
+                    }
                     break;
                 case BattleActionType.RecoverHP:
                     break;
                 case BattleActionType.RecoverMP:
                     break;
                 case BattleActionType.DrawCard:
+                    Game.BattleManager.DrawCard(cardData.Owner, cardData.Data.ActionParams[i]);
                     break;
                 case BattleActionType.AddEuipment:
                     break;
@@ -87,7 +90,14 @@ public class UIBattleCard : MonoBehaviour
             }
         }
     }
-
+    bool IsMine()
+    {
+        if (cardData != null && cardData.Owner == Game.DataManager.MyPlayerData)
+        {
+            return true;
+        }
+        return false;
+    }
     protected void OnDragStart()
     {
         if (!Game.BattleManager.CanUseCard)
@@ -98,9 +108,16 @@ public class UIBattleCard : MonoBehaviour
         {
             return;
         }
+        if (!IsMine())
+        {
+            return;
+        }
         Debug.Log("OnDragStart ：" + name);
         m_Draging = true;
         offsetPos = transform.position - UICamera.lastWorldPosition;
+        cacheChildCardTrans.SetParent(cacheForm.MovingPanel.transform, true);
+        RefreshDepth(cacheChildCardTrans);
+
     }
     protected void OnDrag(Vector2 delta)
     {
@@ -125,7 +142,12 @@ public class UIBattleCard : MonoBehaviour
         {
             return;
         }
+        if (!IsMine())
+        {
+            return;
+        }
         Debug.Log("OnDragEnd ：" + name);
+        cacheChildCardTrans.SetParent(transform, true);
         m_Draging = false;
         Ray ray = UICamera.mainCamera.ScreenPointToRay(UICamera.lastEventPosition);
         RaycastHit[] hits = Physics.RaycastAll(ray, 20f, 1 << 8);
@@ -136,14 +158,13 @@ public class UIBattleCard : MonoBehaviour
                 if (hits[i].collider.name == "UsedCards")
                 {
                     m_Used = UseCard();
-                    //GetComponent<BoxCollider>().enabled = false;
-
                 }
             }
         }
         if (m_Used == false)
         {
             TweenPosition.Begin(cacheChildCardTrans.gameObject, 0.5f, Vector3.zero);
+            RefreshDepth(cacheChildCardTrans);
         }
     }
     protected void OnDrop(GameObject go)
@@ -152,6 +173,10 @@ public class UIBattleCard : MonoBehaviour
     }
     protected void OnHover(bool isOver)
     {
+        if (!IsMine())
+        {
+            return;
+        }
         if (m_Used)
         {
             //transform.localScale = Vector3.one;
@@ -169,53 +194,85 @@ public class UIBattleCard : MonoBehaviour
             TweenScale.Begin(cacheChildCardTrans.gameObject, 0.2f, Vector3.one);
         }
     }
-    public void SetData(BattleCardData card)
+    public void SetData(BattleCardData card, UIBattleForm form)
     {
         cardData = card;
-        m_TexIcon.mainTexture = Resources.Load<Texture>(cardData.Data.Icon);
-        m_lblName.text = cardData.Data.Name;
-        if (cardData.Data.Type != 0)
+        cacheForm = form;
+        if (card.Owner == Game.DataManager.MyPlayerData)
         {
-            m_lblAttack.text = "";
-            m_lblAttackCount.text = "";
-        }
-        for (int i = 0; i < cardData.Data.ActionTypes.Count; i++)
-        {
-            switch ((BattleActionType)cardData.Data.ActionTypes[i])
+            m_TexIcon.mainTexture = Resources.Load<Texture>(cardData.Data.Icon);
+            m_lblName.text = cardData.Data.Name;
+            if (cardData.Data.Type != 0)
             {
-                case BattleActionType.None:
-                    break;
-                case BattleActionType.AddBuff:
-                    break;
-                case BattleActionType.Attack:
-                    if (cardData.Data.Type == 0)
-                    {
-                        m_lblAttack.text = "攻击";
-                        m_lblAttackCount.text = cardData.Data.ActionParams[i].ToString();
-                    }
-                    break;
-                case BattleActionType.RecoverHP:
-                    break;
-                case BattleActionType.RecoverMP:
-                    break;
-                case BattleActionType.DrawCard:
-                    break;
-                default:
-                    break;
+                m_lblAttack.text = "";
+                m_lblAttackCount.text = "";
             }
+            for (int i = 0; i < cardData.Data.ActionTypes.Count; i++)
+            {
+                switch ((BattleActionType)cardData.Data.ActionTypes[i])
+                {
+                    case BattleActionType.None:
+                        break;
+                    case BattleActionType.AddBuff:
+                        break;
+                    case BattleActionType.Attack:
+                        if (cardData.Data.Type == 0)
+                        {
+                            m_lblAttack.text = "攻击";
+                            m_lblAttackCount.text = cardData.Data.ActionParams[i].ToString();
+                        }
+                        break;
+                    case BattleActionType.RecoverHP:
+                        break;
+                    case BattleActionType.RecoverMP:
+                        break;
+                    case BattleActionType.DrawCard:
+                        break;
+                    default:
+                        break;
+                }
+            }
+            m_lblExpand.text = "";
+            m_lblExpandCount.text = cardData.Data.Spending.ToString();
         }
-        m_lblExpand.text = "";
-        m_lblExpandCount.text = cardData.Data.Spending.ToString();
+        else
+        {
+            m_TexIcon.gameObject.SetActive(false);
+            m_lblName.gameObject.SetActive(false);
+            m_lblExpand.gameObject.SetActive(false);
+            m_lblExpandCount.gameObject.SetActive(false);
+            m_lblAttack.gameObject.SetActive(false);
+            m_lblAttackCount.gameObject.SetActive(false);
+        }
 
 
+    }
+    public void RefreshDepth()
+    {
+        RefreshDepth(transform);
+    }
+    public void RefreshDepth(Transform trans)
+    {
+        UIWidget[] widgets = trans.GetComponentsInChildren<UIWidget>(true);
+        foreach (var item in widgets)
+        {
+            if (item.enabled)
+            {
+                item.Refresh();
+            }
+
+        }
     }
     protected bool UseCard()
     {
         //判断使用条件，不允许返回false
         Debug.Log("释放卡牌: " + cardData.Data.Name);
-        UIBattleForm form = UIModule.Instance.GetForm<UIBattleForm>();
+        if (cardData.Owner.AP < cardData.Data.Spending)
+        {
+            return false;
+        }
         cacheCardPos = cacheChildCardTrans.position;
-        form.UseCard(this);
+        cacheForm.UseCard(this);
         m_Used = true;
         return true;
     }

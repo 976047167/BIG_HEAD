@@ -23,10 +23,14 @@ public class BattleMgr
     void SetMyBattleCardList()
     {
         Game.DataManager.MyPlayerData.CurrentCardList = new List<BattleCardData>(Game.DataManager.MyPlayerData.CardList);
+        Game.DataManager.MyPlayerData.AP = 0;
+        Game.DataManager.MyPlayerData.MaxAP = 0;
     }
     void SetOppBattleCardList()
     {
         Game.DataManager.OppPlayerData.CurrentCardList = new List<BattleCardData>(Game.DataManager.OppPlayerData.CardList);
+        Game.DataManager.OppPlayerData.AP = 0;
+        Game.DataManager.OppPlayerData.MaxAP = 0;
     }
     /// <summary>
     /// UI加载完毕，准备开始游戏
@@ -70,20 +74,11 @@ public class BattleMgr
             case BattleState.Ready:
                 break;
             case BattleState.MyRoundStart:
+                Game.DataManager.MyPlayerData.AP = Game.DataManager.MyPlayerData.MaxAP = Game.DataManager.MyPlayerData.MaxAP + 1;
                 State++;
                 break;
             case BattleState.MyDrawCard:
-                for (int i = 0; i < 3; i++)
-                {
-                    if (Game.DataManager.MyPlayerData.CurrentCardList.Count <= 0)
-                    {
-                        SetMyBattleCardList();
-                    }
-                    BattleCardData card = Game.DataManager.MyPlayerData.CurrentCardList[Game.DataManager.MyPlayerData.CurrentCardList.Count - 1];
-                    Game.DataManager.MyPlayerData.CurrentCardList.RemoveAt(Game.DataManager.MyPlayerData.CurrentCardList.Count - 1);
-                    battleForm.AddMyHandCard(card);
-
-                }
+                DrawCard(Game.DataManager.MyPlayerData, 3);
                 State++;
                 break;
             case BattleState.MyRound:
@@ -96,21 +91,11 @@ public class BattleMgr
                 State++;
                 break;
             case BattleState.OppRoundStart:
-
+                Game.DataManager.OppPlayerData.AP = Game.DataManager.OppPlayerData.MaxAP = Game.DataManager.OppPlayerData.MaxAP + 1;
                 State++;
                 break;
             case BattleState.OppDrawCard:
-                for (int i = 0; i < 3; i++)
-                {
-                    if (Game.DataManager.OppPlayerData.CurrentCardList.Count<=0)
-                    {
-                        SetOppBattleCardList();
-                    }
-                    BattleCardData card = Game.DataManager.OppPlayerData.CurrentCardList[Game.DataManager.OppPlayerData.CurrentCardList.Count - 1];
-                    Game.DataManager.OppPlayerData.CurrentCardList.RemoveAt(Game.DataManager.OppPlayerData.CurrentCardList.Count - 1);
-                    battleForm.AddOppHandCard(card);
-
-                }
+                DrawCard(Game.DataManager.OppPlayerData, 3);
                 State++;
                 break;
             case BattleState.OppRound:
@@ -221,6 +206,20 @@ public class BattleMgr
         else if (State == BattleState.OppRound)
         {
             State = BattleState.OppRoundEnd;
+        }
+    }
+    public void DrawCard(BattlePlayerData playerData, int count = 1)
+    {
+        for (int i = 0; i < count; i++)
+        {
+            if (playerData.CurrentCardList.Count <= 0)
+            {
+                playerData.CurrentCardList = new List<BattleCardData>(playerData.CardList);
+            }
+            BattleCardData card = playerData.CurrentCardList[playerData.CurrentCardList.Count - 1];
+            playerData.CurrentCardList.RemoveAt(playerData.CurrentCardList.Count - 1);
+            card.Owner.HandCardList.Add(card);
+            battleForm.AddHandCard(card);
         }
     }
     public class CardAction

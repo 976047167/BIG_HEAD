@@ -5,6 +5,7 @@ using AppSettings;
 
 public class MapCardMonster : MapCardBase
 {
+    [SerializeField]
     int monsterId = 0;
 
     public override void OnPlayerEnter()

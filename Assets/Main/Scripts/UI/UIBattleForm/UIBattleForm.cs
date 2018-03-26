@@ -21,6 +21,8 @@ public class UIBattleForm : UIFormBase
     [SerializeField]
     private UILabel lblResultInfo;
 
+    public UIPanel MovingPanel { get; private set; }
+
 
     // Use this for initialization
     void Start()
@@ -31,14 +33,11 @@ public class UIBattleForm : UIFormBase
         oppPlayerViews.GetUIController(transform.Find("BattleInfo/OppInfo"));
         resultInfo = transform.Find("ResultInfo").gameObject;
         lblResultInfo = transform.Find("ResultInfo/result").GetComponent<UILabel>();
+        MovingPanel = transform.Find("MovingPanel").GetComponent<UIPanel>();
         UpdateInfo();
         Game.BattleManager.ReadyStart(this);
         UIEventListener.Get(transform.Find("btnRoundEnd").gameObject).onClick = OnClick_RoundEnd;
         UIEventListener.Get(transform.Find("ResultInfo/mask").gameObject).onClick = Onclick_CloseUI;
-    }
-    private void OnGUI()
-    {
-        GUILayout.Label(Game.BattleManager.State.ToString());
     }
     // Update is called once per frame
     void Update()
@@ -80,23 +79,23 @@ public class UIBattleForm : UIFormBase
     /// 添加卡牌至手牌，要做成列表，显示抽牌动画
     /// </summary>
     /// <param name="cardId"></param>
-    public void AddMyHandCard(BattleCardData card)
+    public void AddHandCard(BattleCardData card)
     {
-        GameObject newCard = GameObject.Instantiate(m_BattleCardTemplate, m_MyCardsGrid.transform);
-        newCard.SetActive(true);
-        newCard.GetComponent<UIBattleCard>().SetData(card);
-        m_MyCardsGrid.Reposition();
-    }
-    /// <summary>
-    /// 添加卡牌至手牌，要做成列表，显示抽牌动画
-    /// </summary>
-    /// <param name="cardId"></param>
-    public void AddOppHandCard(BattleCardData card)
-    {
-        //GameObject newCard = GameObject.Instantiate(m_BattleCardTemplate, m_MyCardsGrid.transform);
-        //newCard.SetActive(true);
-        ////newCard.transform.SetParent(m_MyCardsGrid.transform);
-        //m_MyCardsGrid.Reposition();
+        if (card.Owner == Game.DataManager.MyPlayerData)
+        {
+            GameObject newCard = GameObject.Instantiate(m_BattleCardTemplate, m_MyCardsGrid.transform);
+            newCard.SetActive(true);
+            newCard.GetComponent<UIBattleCard>().SetData(card, this);
+            m_MyCardsGrid.Reposition();
+        }
+        else
+        {
+            GameObject newCard = GameObject.Instantiate(m_BattleCardTemplate, m_OppCardsGrid.transform);
+            newCard.SetActive(true);
+            newCard.GetComponent<UIBattleCard>().SetData(card, this);
+            m_OppCardsGrid.Reposition();
+        }
+
     }
     /// <summary>
     /// 添加卡牌到牌库
@@ -128,7 +127,8 @@ public class UIBattleForm : UIFormBase
         TweenPosition.Begin(battleCard.cacheChildCardTrans.gameObject, 0.5f, Vector3.zero, false);
         yield return null;
         battleCard.ApplyUseEffect();
-        GetComponent<UIPanel>().Refresh();
+        yield return new WaitForSeconds(0.5f);
+        battleCard.RefreshDepth();
     }
 
     [System.Serializable]
@@ -176,9 +176,9 @@ public class UIBattleForm : UIFormBase
             HP_Progress.fillAmount = (float)playerData.HP / playerData.MaxHP;
             HP.text = playerData.HP.ToString();
             MaxHP.text = playerData.MaxHP.ToString();
-            MP.text = playerData.MP.ToString();
-            MaxMP.text = playerData.MaxMP.ToString();
-            MP_Progress.fillAmount = (float)playerData.MP / playerData.MaxMP;
+            MP.text = playerData.AP.ToString();
+            MaxMP.text = playerData.MaxAP.ToString();
+            MP_Progress.fillAmount = (float)playerData.AP / playerData.MaxAP;
             CardCount.text = playerData.CardList.Count.ToString();
             CemeteryCount.text = playerData.UsedCardList.Count.ToString();
         }

@@ -1550,4 +1550,12 @@ public class UIWidget : UIRect
 		//if (onPostFill != null)
 		//	onPostFill(this, verts.size, verts, uvs, cols);
 	}
+    /// <summary>
+    /// 自定义方法
+    /// </summary>
+    public void Refresh()
+    {
+        OnDisable();
+        OnEnable();
+    }
 }
