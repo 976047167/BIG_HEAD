@@ -121,6 +121,11 @@ public class MapCardBase : MonoBehaviour
         {
             isFirstEnter = false;
         }
+        Game.DataManager.Food--;
+        if (Game.DataManager.MyPlayerData.HP < Game.DataManager.MyPlayerData.MaxHP)
+        {
+            Game.DataManager.MyPlayerData.HP++;
+        }
     }
     /// <summary>
     /// 与玩家互动时发生
