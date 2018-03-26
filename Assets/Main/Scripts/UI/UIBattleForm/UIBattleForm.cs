@@ -16,6 +16,11 @@ public class UIBattleForm : UIFormBase
     private PlayerInfoViews myPlayerViews;
     [SerializeField]
     private PlayerInfoViews oppPlayerViews;
+    [SerializeField]
+    private GameObject resultInfo;
+    [SerializeField]
+    private UILabel lblResultInfo;
+
 
     // Use this for initialization
     void Start()
@@ -24,9 +29,12 @@ public class UIBattleForm : UIFormBase
         oppPlayerViews = new PlayerInfoViews();
         myPlayerViews.GetUIController(transform.Find("BattleInfo/MeInfo"));
         oppPlayerViews.GetUIController(transform.Find("BattleInfo/OppInfo"));
+        resultInfo = transform.Find("ResultInfo").gameObject;
+        lblResultInfo = transform.Find("ResultInfo/result").GetComponent<UILabel>();
         UpdateInfo();
         Game.BattleManager.ReadyStart(this);
         UIEventListener.Get(transform.Find("btnRoundEnd").gameObject).onClick = OnClick_RoundEnd;
+        UIEventListener.Get(transform.Find("ResultInfo/mask").gameObject).onClick = Onclick_CloseUI;
     }
     private void OnGUI()
     {
@@ -36,6 +44,7 @@ public class UIBattleForm : UIFormBase
     void Update()
     {
         Game.BattleManager.UpdateScope();
+        UpdateInfo();
     }
 
     public void UpdateInfo()
@@ -43,7 +52,18 @@ public class UIBattleForm : UIFormBase
         myPlayerViews.UpdateInfo(Game.DataManager.MyPlayerData);
         oppPlayerViews.UpdateInfo(Game.DataManager.OppPlayerData);
     }
-
+    public void WinBattle()
+    {
+        resultInfo.SetActive(true);
+        lblResultInfo.text = "WIN!";
+        lblResultInfo.color = new Color32(255, 0, 0, 255);
+    }
+    public void LoseBattle()
+    {
+        resultInfo.SetActive(true);
+        lblResultInfo.text = "Lose!";
+        lblResultInfo.color = new Color32(150, 150, 150, 255);
+    }
     /// <summary>
     /// 结束当前回合的按钮
     /// </summary>
@@ -52,7 +72,10 @@ public class UIBattleForm : UIFormBase
     {
         Game.BattleManager.RoundEnd();
     }
-
+    void Onclick_CloseUI(GameObject go)
+    {
+        Game.UI.CloseForm<UIBattleForm>();
+    }
     /// <summary>
     /// 添加卡牌至手牌，要做成列表，显示抽牌动画
     /// </summary>
@@ -61,7 +84,7 @@ public class UIBattleForm : UIFormBase
     {
         GameObject newCard = GameObject.Instantiate(m_BattleCardTemplate, m_MyCardsGrid.transform);
         newCard.SetActive(true);
-        //newCard.transform.SetParent(m_MyCardsGrid.transform);
+        newCard.GetComponent<UIBattleCard>().SetData(card);
         m_MyCardsGrid.Reposition();
     }
     /// <summary>
@@ -105,6 +128,7 @@ public class UIBattleForm : UIFormBase
         TweenPosition.Begin(battleCard.cacheChildCardTrans.gameObject, 0.5f, Vector3.zero, false);
         yield return null;
         battleCard.ApplyUseEffect();
+        GetComponent<UIPanel>().Refresh();
     }
 
     [System.Serializable]
@@ -149,12 +173,12 @@ public class UIBattleForm : UIFormBase
                 HeadIcon.Load(playerData.HeadIcon);
             }
             Level.text = playerData.Level.ToString();
-            HP_Progress.fillAmount = playerData.HP / playerData.MaxHP;
+            HP_Progress.fillAmount = (float)playerData.HP / playerData.MaxHP;
             HP.text = playerData.HP.ToString();
             MaxHP.text = playerData.MaxHP.ToString();
             MP.text = playerData.MP.ToString();
             MaxMP.text = playerData.MaxMP.ToString();
-            MP_Progress.fillAmount = playerData.MP / playerData.MaxMP;
+            MP_Progress.fillAmount = (float)playerData.MP / playerData.MaxMP;
             CardCount.text = playerData.CardList.Count.ToString();
             CemeteryCount.text = playerData.UsedCardList.Count.ToString();
         }

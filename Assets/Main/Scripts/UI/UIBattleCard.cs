@@ -41,7 +41,7 @@ public class UIBattleCard : MonoBehaviour
         if (m_Draging && UICamera.mainCamera != null)
         {
             //UICamera.current.cachedCamera.ScreenPointToRay
-            Debug.Log(UICamera.lastEventPosition.ToString());
+            //Debug.Log(UICamera.lastEventPosition.ToString());
 
             //Ray ray = UICamera.mainCamera.ScreenPointToRay(UICamera.lastEventPosition);
             //Physics
@@ -65,14 +65,14 @@ public class UIBattleCard : MonoBehaviour
                 case BattleActionType.AddBuff:
                     break;
                 case BattleActionType.Attack:
-                    if (cardData.Owner == Game.DataManager.MyPlayerData)
-                    {
-                        Game.DataManager.OppPlayerData.HP -= cardData.Data.ActionParams[i];
-                    }
-                    else if (cardData.Owner == Game.DataManager.OppPlayerData)
-                    {
-                        Game.DataManager.MyPlayerData.HP -= cardData.Data.ActionParams[i];
-                    }
+                    //if (cardData.Owner == Game.DataManager.MyPlayerData)
+                    //{
+                    //    Game.DataManager.OppPlayerData.HP -= cardData.Data.ActionParams[i];
+                    //}
+                    //else if (cardData.Owner == Game.DataManager.OppPlayerData)
+                    //{
+                    //    Game.DataManager.MyPlayerData.HP -= cardData.Data.ActionParams[i];
+                    //}
                     break;
                 case BattleActionType.RecoverHP:
                     break;
@@ -212,7 +212,7 @@ public class UIBattleCard : MonoBehaviour
     protected bool UseCard()
     {
         //判断使用条件，不允许返回false
-        Debug.LogError("释放卡牌");
+        Debug.Log("释放卡牌: " + cardData.Data.Name);
         UIBattleForm form = UIModule.Instance.GetForm<UIBattleForm>();
         cacheCardPos = cacheChildCardTrans.position;
         form.UseCard(this);

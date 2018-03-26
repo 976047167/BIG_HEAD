@@ -124,10 +124,10 @@ public class BattleMgr
                 State = BattleState.MyRoundStart;
                 break;
             case BattleState.BattleEnd_Win:
-                Game.UI.CloseForm<UIBattleForm>();
+                battleForm.WinBattle();
                 break;
             case BattleState.BattleEnd_Lose:
-                Game.UI.CloseForm<UIBattleForm>();
+                battleForm.LoseBattle();
                 break;
             default:
                 break;
