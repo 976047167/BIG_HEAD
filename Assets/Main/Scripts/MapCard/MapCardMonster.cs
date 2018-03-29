@@ -16,7 +16,10 @@ public class MapCardMonster : MapCardBase
         {
             
             int DialogId = BattleMonsterTableSettings.Get(monsterId).DialogId;
-            UIModule.Instance.OpenForm<WND_Dialog>(DialogId);
+            List<int> a = new List<int>();
+            a.Add( DialogId);
+            a.Add(monsterId);
+            UIModule.Instance.OpenForm<WND_Dialog>(a);
         }
         base.OnPlayerEnter();
     }

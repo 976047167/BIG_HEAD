@@ -14,11 +14,13 @@ public class WND_Dialog : UIFormBase
     private bool isPrinting;
     private bool isChosing;
     private UIGrid grid;
+    private int MonsterId = 0;
     private enum DialogType
     {
       Normal = 1,
       Select,
       Event,
+      Battle,
       NextPass,
 
     }
@@ -26,9 +28,17 @@ public class WND_Dialog : UIFormBase
     protected override void OnInit(object id)
     {
         base.OnInit(id);
-        ShowDialog((int)id);
+        if (id.GetType() == typeof(int))
+        {
+            ShowDialog((int)id);
+        }else if(id.GetType() == typeof(List<int>))
+            {
+           List<int> a = (List<int>)id;
+            MonsterId = a[1];
+            ShowDialog(a[0]);
+        }
+        
     }
-    
     void Awake()
     {
         labTips = transform.Find("imgTips/labTips").GetComponent<UILabel>();
@@ -185,8 +195,9 @@ public class WND_Dialog : UIFormBase
                else
                     Destroy(gameObject);
                 break;
-            case DialogType.NextPass:
-                Game.BattleManager.StartBattle(NextIds[0]);
+            case DialogType.Battle:
+                if (MonsterId != 0)
+                    Game.BattleManager.StartBattle(MonsterId);
                 Destroy(gameObject);
                 break;
             default:
