@@ -277,6 +277,11 @@ namespace AppSettings
         public int Time { get; private set;}
         
         /// <summary>
+        /// Buff的效果触发时机(1回合开始,2回合结束,3受到伤害,4发起伤害)
+        /// </summary>
+        public List<int> ActionTimes { get; private set;}
+        
+        /// <summary>
         /// Buff的效果类型,BattleActionType
         /// </summary>
         public List<int> ActionTypes { get; private set;}
@@ -298,8 +303,9 @@ namespace AppSettings
             Name = row.Get_string (row.Values[1], ""); 
             Desc = row.Get_string(row.Values[2], ""); 
             Time = row.Get_int(row.Values[3], ""); 
-            ActionTypes = row.Get_List_int(row.Values[4], ""); 
-            ActionPrarms = row.Get_List_int(row.Values[5], ""); 
+            ActionTimes = row.Get_List_int(row.Values[4], ""); 
+            ActionTypes = row.Get_List_int(row.Values[5], ""); 
+            ActionPrarms = row.Get_List_int(row.Values[6], ""); 
         }
 
         /// <summary>
