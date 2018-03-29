@@ -78,6 +78,7 @@ public class BattleMgr
                 State++;
                 break;
             case BattleState.MyDrawCard:
+                ApplyPlayerBuffs(Game.DataManager.MyPlayerData, 1);
                 DrawCard(Game.DataManager.MyPlayerData, 3);
                 State++;
                 break;
@@ -88,6 +89,7 @@ public class BattleMgr
                 break;
             case BattleState.MyRoundEnd:
                 CanUseCard = false;
+                ApplyPlayerBuffs(Game.DataManager.MyPlayerData, 2);
                 State++;
                 break;
             case BattleState.OppRoundStart:
@@ -95,6 +97,7 @@ public class BattleMgr
                 State++;
                 break;
             case BattleState.OppDrawCard:
+                ApplyPlayerBuffs(Game.DataManager.OppPlayerData, 1);
                 DrawCard(Game.DataManager.OppPlayerData, 3);
                 State++;
                 break;
@@ -106,6 +109,7 @@ public class BattleMgr
                 State++;
                 break;
             case BattleState.OppRoundEnd:
+                ApplyPlayerBuffs(Game.DataManager.OppPlayerData, 2);
                 State = BattleState.MyRoundStart;
                 break;
             case BattleState.BattleEnd_Win:
@@ -208,6 +212,11 @@ public class BattleMgr
             State = BattleState.OppRoundEnd;
         }
     }
+    /// <summary>
+    /// 触发buff的时机  1回合开始,2回合结束,3受到伤害,4发起伤害
+    /// </summary>
+    /// <param name="playerData"></param>
+    /// <param name="count"></param>
     public void DrawCard(BattlePlayerData playerData, int count = 1)
     {
         for (int i = 0; i < count; i++)
@@ -222,6 +231,90 @@ public class BattleMgr
             battleForm.AddHandCard(card);
         }
     }
+    public void ApplyPlayerBuffs(BattlePlayerData playerData, int actionTime)
+    {
+        List<BattleBuffData> removeList = new List<BattleBuffData>();
+        foreach (var buff in playerData.BuffList)
+        {
+            for (int i = 0; i < buff.Data.ActionTimes.Count; i++)
+            {
+                if (buff.Data.ActionTimes[i] == actionTime)
+                {
+                    ApplyAction(buff.Data.ActionTypes[i], buff.Data.ActionPrarms[i], buff.CardData, playerData, playerData);
+                    buff.Time--;
+                    if (buff.Time <= 0)
+                    {
+                        removeList.Add(buff);
+                    }
+                }
+            }
+        }
+    }
+    /// <summary>
+    /// 应用卡牌的效果
+    /// </summary>
+    /// <param name="cardData"></param>
+    public void ApplyCardEffect(BattleCardData cardData)
+    {
+        cardData.Owner.AP -= cardData.Data.Spending;
+        for (int i = 0; i < cardData.Data.ActionTypes.Count; i++)
+        {
+            ApplyAction(cardData.Data.ActionTypes[i], cardData.Data.ActionParams[i], cardData, cardData.Owner, null);
+        }
+    }
+    public void ApplyAction(int actionType, int actionArg, BattleCardData cardData, BattlePlayerData owner, BattlePlayerData target)
+    {
+        if (target == null)
+        {
+            target = owner;
+        }
+        switch ((BattleActionType)actionType)
+        {
+            case BattleActionType.None:
+                break;
+            case BattleActionType.AddBuff:
+                bool added = false;
+                for (int i = 0; i < target.BuffList.Count; i++)
+                {
+                    if (actionArg == target.BuffList[i].BuffId)
+                    {
+                        added = true;
+                        //刷新buff时间，不叠加
+                        target.BuffList[i].Time = AppSettings.BattleBuffTableSettings.Get(target.BuffList[i].BuffId).Time;
+                        break;
+                    }
+                }
+                if (added == false)
+                {
+                    target.BuffList.Add(new BattleBuffData(actionArg, 0, cardData, owner, target));
+                }
+                break;
+            case BattleActionType.Attack:
+                if (owner == Game.DataManager.MyPlayerData)
+                {
+                    Game.DataManager.OppPlayerData.HP -= actionArg;
+                }
+                else if (owner == Game.DataManager.OppPlayerData)
+                {
+                    Game.DataManager.MyPlayerData.HP -= actionArg;
+                }
+                break;
+            case BattleActionType.RecoverHP:
+                target.HP += actionArg;
+                target.HP = target.HP > target.MaxHP ? target.MaxHP : target.HP;
+                break;
+            case BattleActionType.RecoverMP:
+                break;
+            case BattleActionType.DrawCard:
+                Game.BattleManager.DrawCard(owner, actionArg);
+                break;
+            case BattleActionType.AddEuipment:
+                break;
+            default:
+                break;
+        }
+    }
+
     public class CardAction
     {
         public int ActionId;
@@ -234,19 +327,61 @@ public class BattleMgr
     /// </summary>
     public enum BattleState : int
     {
+        /// <summary>
+        /// 加载战斗界面
+        /// </summary>
         Loading = 0,
+        /// <summary>
+        /// 加载完成等待数据
+        /// </summary>
         Ready,
+        /// <summary>
+        /// 我方回合开始
+        /// </summary>
         MyRoundStart,
+        /// <summary>
+        /// 我方抽牌
+        /// </summary>
         MyDrawCard,
+        /// <summary>
+        /// 我方回合
+        /// </summary>
         MyRound,
+        /// <summary>
+        /// 我方战斗UI表现卡牌的使用
+        /// </summary>
         MyUsingCard,
+        /// <summary>
+        /// 我方回合结束
+        /// </summary>
         MyRoundEnd,
+        /// <summary>
+        /// 敌方回合开始
+        /// </summary>
         OppRoundStart,
+        /// <summary>
+        /// 敌方抽牌
+        /// </summary>
         OppDrawCard,
+        /// <summary>
+        /// 敌方回合
+        /// </summary>
         OppRound,
+        /// <summary>
+        /// 敌方卡牌使用表现
+        /// </summary>
         OppUsingCard,
+        /// <summary>
+        /// 敌方回合结束
+        /// </summary>
         OppRoundEnd,
+        /// <summary>
+        /// 战斗结束，胜利
+        /// </summary>
         BattleEnd_Win,
+        /// <summary>
+        /// 战斗结束，失败
+        /// </summary>
         BattleEnd_Lose,
     }
 }
