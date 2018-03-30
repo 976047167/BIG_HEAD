@@ -51,6 +51,10 @@ public class UIBattleForm : UIFormBase
         myPlayerViews.UpdateInfo(Game.DataManager.MyPlayerData);
         oppPlayerViews.UpdateInfo(Game.DataManager.OppPlayerData);
     }
+    public void UpdateBuffIcons()
+    {
+
+    }
     public void WinBattle()
     {
         resultInfo.SetActive(true);
