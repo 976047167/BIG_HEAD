@@ -64,7 +64,7 @@ public class UIBattleForm : UIFormBase
     public void LoseBattle()
     {
         resultInfo.SetActive(true);
-        lblResultInfo.text = "Lose!";
+        lblResultInfo.text = "LOSE!";
         lblResultInfo.color = new Color32(150, 150, 150, 255);
     }
     /// <summary>
@@ -153,6 +153,8 @@ public class UIBattleForm : UIFormBase
         /// </summary>
         public UILabel CemeteryCount;
         public UIGrid BuffGrid;
+        public GameObject BuffIconTemplete;
+        Dictionary<BattleBuffData, GameObject> BuffIcons = new Dictionary<BattleBuffData, GameObject>();
 
         public void GetUIController(Transform transInfo)
         {
@@ -168,6 +170,7 @@ public class UIBattleForm : UIFormBase
             EquipGrid = transInfo.Find("EquipGrid").GetComponent<UIGrid>();
             CemeteryCount = transInfo.Find("Cemetery/CardCount").GetComponent<UILabel>();
             BuffGrid = transInfo.Find("BuffGrid").GetComponent<UIGrid>();
+            BuffIconTemplete = BuffGrid.transform.Find("buff").gameObject;
         }
 
         public void UpdateInfo(BattlePlayerData playerData)
@@ -185,7 +188,24 @@ public class UIBattleForm : UIFormBase
             MP_Progress.fillAmount = (float)playerData.AP / playerData.MaxAP;
             CardCount.text = playerData.CardList.Count.ToString();
             CemeteryCount.text = playerData.UsedCardList.Count.ToString();
+            for (int i = 0; i < playerData.BuffList.Count; i++)
+            {
+                BattleBuffData buffData = playerData.BuffList[i];
+                if (!BuffIcons.ContainsKey(buffData))
+                {
+
+                }
+            }
         }
+        void SetBuffUI()
+        {
+
+        }
+        //public void AddBuff(BattleBuffData buffData)
+        //{
+
+        //}
+
     }
     class PlayerInfo
     {
