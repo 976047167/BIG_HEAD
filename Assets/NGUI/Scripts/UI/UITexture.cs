@@ -367,7 +367,7 @@ public class UITexture : UIBasicSprite
     }
     public void Load(string path)
     {
-        if (mainTexture != null && path.Substring(path.LastIndexOf('/')) == mainTexture.name)
+        if (mainTexture != null && path.Substring(path.LastIndexOf('/') + 1) == mainTexture.name)
         {
             return;
         }

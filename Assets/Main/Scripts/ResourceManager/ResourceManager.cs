@@ -11,7 +11,7 @@ public class ResourceManager
     public static void Load<T>(string path, object arg, Action<string, object, T> callback) where T : Object
     {
         T obj = Resources.Load<T>(path);
-        if (callback!=null)
+        if (callback != null)
         {
             callback(path, arg, obj);
         }
@@ -19,7 +19,8 @@ public class ResourceManager
 
     public static void LoadTexture(string path, object arg, Action<string, object, Texture2D> callback)
     {
-        Load(path, arg, callback);
+
+        Load("UITexture/" + path, arg, callback);
     }
 
 

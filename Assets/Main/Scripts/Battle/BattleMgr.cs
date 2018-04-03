@@ -103,7 +103,7 @@ public class BattleMgr
                 break;
             case BattleState.OppRound:
                 //开启AI
-                State++;
+                StartMonsterAI(Game.DataManager.OppPlayerData);
                 break;
             case BattleState.OppUsingCard:
                 State++;
@@ -179,6 +179,7 @@ public class BattleMgr
             case BattleState.MyUsingCard:
                 break;
             case BattleState.MyRoundEnd:
+                battleForm.ClearUsedCards();
                 break;
             case BattleState.OppRoundStart:
                 break;
@@ -189,6 +190,7 @@ public class BattleMgr
             case BattleState.OppUsingCard:
                 break;
             case BattleState.OppRoundEnd:
+                battleForm.ClearUsedCards();
                 break;
             case BattleState.BattleEnd_Win:
                 break;
@@ -231,6 +233,11 @@ public class BattleMgr
             battleForm.AddHandCard(card);
         }
     }
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="playerData"></param>
+    /// <param name="actionTime">当前使用特效的时机</param>
     public void ApplyPlayerBuffs(BattlePlayerData playerData, int actionTime)
     {
         List<BattleBuffData> removeList = new List<BattleBuffData>();
@@ -256,6 +263,7 @@ public class BattleMgr
     /// <param name="cardData"></param>
     public void ApplyCardEffect(BattleCardData cardData)
     {
+        cardData.Owner.UsedCardList.Add(cardData);
         cardData.Owner.AP -= cardData.Data.Spending;
         for (int i = 0; i < cardData.Data.ActionTypes.Count; i++)
         {
@@ -314,6 +322,17 @@ public class BattleMgr
                 break;
         }
     }
+
+    BattlePlayerAI monsterAI;
+    void StartMonsterAI(BattlePlayerData playerData)
+    {
+        if (monsterAI == null)
+        {
+            monsterAI = new BattlePlayerAI(playerData);
+        }
+        monsterAI.StartAI();
+    }
+
 
     public class CardAction
     {

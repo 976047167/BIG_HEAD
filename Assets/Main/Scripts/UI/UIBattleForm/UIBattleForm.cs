@@ -79,6 +79,10 @@ public class UIBattleForm : UIFormBase
     {
         Game.UI.CloseForm<UIBattleForm>();
     }
+    public void ClearUsedCards()
+    {
+        m_UsedCardsGrid.GetChildList().ForEach((t) => Destroy(t.gameObject));
+    }
     /// <summary>
     /// 添加卡牌至手牌，要做成列表，显示抽牌动画
     /// </summary>
@@ -154,7 +158,7 @@ public class UIBattleForm : UIFormBase
         public UILabel CemeteryCount;
         public UIGrid BuffGrid;
         public GameObject BuffIconTemplete;
-        Dictionary<BattleBuffData, GameObject> BuffIcons = new Dictionary<BattleBuffData, GameObject>();
+        Dictionary<int, GameObject> BuffIcons = new Dictionary<int, GameObject>();
 
         public void GetUIController(Transform transInfo)
         {
@@ -188,13 +192,25 @@ public class UIBattleForm : UIFormBase
             MP_Progress.fillAmount = (float)playerData.AP / playerData.MaxAP;
             CardCount.text = playerData.CardList.Count.ToString();
             CemeteryCount.text = playerData.UsedCardList.Count.ToString();
+            foreach (var item in BuffIcons)
+            {
+                item.Value.SetActive(false);
+            }
             for (int i = 0; i < playerData.BuffList.Count; i++)
             {
                 BattleBuffData buffData = playerData.BuffList[i];
-                if (!BuffIcons.ContainsKey(buffData))
+                GameObject buffIcon;
+                if (!BuffIcons.ContainsKey(buffData.BuffId))
                 {
+                    buffIcon = Instantiate(BuffIconTemplete, BuffGrid.transform);
+                    BuffIcons.Add(buffData.BuffId, buffIcon);
+                    buffIcon.GetComponent<UITexture>().Load(buffData.Data.Icon);
 
                 }
+                else
+                    buffIcon = BuffIcons[buffData.BuffId];
+                buffIcon.SetActive(true);
+                buffIcon.transform.Find("Label").GetComponent<UILabel>().text = buffData.Time.ToString();
             }
         }
         void SetBuffUI()

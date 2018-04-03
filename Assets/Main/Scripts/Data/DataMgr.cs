@@ -39,7 +39,7 @@ public class DataMgr
         MyPlayerData.AP = MyPlayerData.MaxAP = 1;
         MyPlayerData.Level = 1;
         MyPlayerData.SkillId = 0;
-        MyPlayerData.HeadIcon = "UITexture/Head/npc_009";
+        MyPlayerData.HeadIcon = "Head/npc_009";
         MyPlayerData.CardList.Clear();
         MyPlayerData.CardList.Add(new BattleCardData(1, MyPlayerData));
         MyPlayerData.CardList.Add(new BattleCardData(1, MyPlayerData));
