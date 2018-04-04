@@ -8,6 +8,9 @@ public class BattleMgr
     UIBattleForm battleForm;
     public BattleState State { get; private set; }
     public bool CanUseCard { get; private set; }
+
+    public BattlePlayer MyPlayer { get; private set; }
+    public BattlePlayer OppPlayer { get; private set; }
     /// <summary>
     /// 开始战斗
     /// </summary>
@@ -16,21 +19,19 @@ public class BattleMgr
         State = BattleState.Loading;
         Debug.LogError("StartBattle => " + monsterId);
         Game.DataManager.SetOppData(monsterId);
-        SetMyBattleCardList();
-        SetOppBattleCardList();
+
+        MyPlayer = new BattlePlayer(Game.DataManager.MyPlayerData);
+        OppPlayer = new BattlePlayer(Game.DataManager.OppPlayerData);
+        OppPlayer.StartAI();
         Game.UI.OpenForm<UIBattleForm>();
     }
-    void SetMyBattleCardList()
+    public void StopBattle()
     {
-        Game.DataManager.MyPlayerData.CurrentCardList = new List<BattleCardData>(Game.DataManager.MyPlayerData.CardList);
-        Game.DataManager.MyPlayerData.AP = 0;
-        Game.DataManager.MyPlayerData.MaxAP = 0;
-    }
-    void SetOppBattleCardList()
-    {
-        Game.DataManager.OppPlayerData.CurrentCardList = new List<BattleCardData>(Game.DataManager.OppPlayerData.CardList);
-        Game.DataManager.OppPlayerData.AP = 0;
-        Game.DataManager.OppPlayerData.MaxAP = 0;
+        Game.UI.CloseForm<UIBattleForm>();
+        OppPlayer.StopAI();
+        MyPlayer = null;
+        OppPlayer = null;
+        State = BattleState.None;
     }
     /// <summary>
     /// UI加载完毕，准备开始游戏
@@ -103,7 +104,7 @@ public class BattleMgr
                 break;
             case BattleState.OppRound:
                 //开启AI
-                StartMonsterAI(Game.DataManager.OppPlayerData);
+                OppPlayer.UpdateAI();
                 break;
             case BattleState.OppUsingCard:
                 State++;
@@ -214,6 +215,10 @@ public class BattleMgr
             State = BattleState.OppRoundEnd;
         }
     }
+    public void UseCard(BattleCardData battleCardData)
+    {
+        battleForm.UseCard(battleCardData);
+    }
     /// <summary>
     /// 触发buff的时机  1回合开始,2回合结束,3受到伤害,4发起伤害
     /// </summary>
@@ -323,21 +328,14 @@ public class BattleMgr
         }
     }
 
-    BattlePlayerAI monsterAI;
-    void StartMonsterAI(BattlePlayerData playerData)
-    {
-        if (monsterAI == null)
-        {
-            monsterAI = new BattlePlayerAI(playerData);
-        }
-        monsterAI.StartAI();
-    }
+
 
 
     public class CardAction
     {
         public int ActionId;
         public int ActionArg;
+        public int ActionTime;
         public BattleCardData CardData;
     }
 
@@ -346,10 +344,11 @@ public class BattleMgr
     /// </summary>
     public enum BattleState : int
     {
+        None = 0,
         /// <summary>
         /// 加载战斗界面
         /// </summary>
-        Loading = 0,
+        Loading,
         /// <summary>
         /// 加载完成等待数据
         /// </summary>

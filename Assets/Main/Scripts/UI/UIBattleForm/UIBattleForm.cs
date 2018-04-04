@@ -21,6 +21,8 @@ public class UIBattleForm : UIFormBase
     [SerializeField]
     private UILabel lblResultInfo;
 
+    Dictionary<BattleCardData, UIBattleCard> dicBattleCard = new Dictionary<BattleCardData, UIBattleCard>();
+
     public UIPanel MovingPanel { get; private set; }
 
 
@@ -87,20 +89,24 @@ public class UIBattleForm : UIFormBase
     /// 添加卡牌至手牌，要做成列表，显示抽牌动画
     /// </summary>
     /// <param name="cardId"></param>
-    public void AddHandCard(BattleCardData card)
+    public void AddHandCard(BattleCardData cardData)
     {
-        if (card.Owner == Game.DataManager.MyPlayerData)
+        if (cardData.Owner == Game.DataManager.MyPlayerData)
         {
             GameObject newCard = GameObject.Instantiate(m_BattleCardTemplate, m_MyCardsGrid.transform);
             newCard.SetActive(true);
-            newCard.GetComponent<UIBattleCard>().SetData(card, this);
+            UIBattleCard battleCard = newCard.GetComponent<UIBattleCard>();
+            battleCard.SetData(cardData, this);
+            dicBattleCard.Add(cardData, battleCard);
             m_MyCardsGrid.Reposition();
         }
         else
         {
             GameObject newCard = GameObject.Instantiate(m_BattleCardTemplate, m_OppCardsGrid.transform);
             newCard.SetActive(true);
-            newCard.GetComponent<UIBattleCard>().SetData(card, this);
+            UIBattleCard battleCard = newCard.GetComponent<UIBattleCard>();
+            battleCard.SetData(cardData, this);
+            dicBattleCard.Add(cardData, battleCard);
             m_OppCardsGrid.Reposition();
         }
 
@@ -113,12 +119,25 @@ public class UIBattleForm : UIFormBase
     {
 
     }
-
     /// <summary>
     /// 使用卡牌
     /// </summary>
     /// <param name="battleCard"></param>
-    public void UseCard(UIBattleCard battleCard)
+    public void UseCard(BattleCardData battleCardData)
+    {
+        if (dicBattleCard.ContainsKey(battleCardData))
+        {
+            dicBattleCard[battleCardData].UseCard();
+        }
+        else
+        {
+            Debug.LogError("不存在");
+        }
+
+
+    }
+
+    public void ApplyUseCard(UIBattleCard battleCard)
     {
         StartCoroutine(CoroutineUseCard(battleCard));
     }
