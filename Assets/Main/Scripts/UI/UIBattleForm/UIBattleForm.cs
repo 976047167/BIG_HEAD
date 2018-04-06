@@ -21,6 +21,8 @@ public class UIBattleForm : UIFormBase
     [SerializeField]
     private UILabel lblResultInfo;
 
+    Dictionary<BattleCardData, UIBattleCard> dicBattleCard = new Dictionary<BattleCardData, UIBattleCard>();
+
     public UIPanel MovingPanel { get; private set; }
 
 
@@ -51,6 +53,10 @@ public class UIBattleForm : UIFormBase
         myPlayerViews.UpdateInfo(Game.DataManager.MyPlayerData);
         oppPlayerViews.UpdateInfo(Game.DataManager.OppPlayerData);
     }
+    public void UpdateBuffIcons()
+    {
+
+    }
     public void WinBattle()
     {
         resultInfo.SetActive(true);
@@ -60,7 +66,7 @@ public class UIBattleForm : UIFormBase
     public void LoseBattle()
     {
         resultInfo.SetActive(true);
-        lblResultInfo.text = "Lose!";
+        lblResultInfo.text = "LOSE!";
         lblResultInfo.color = new Color32(150, 150, 150, 255);
     }
     /// <summary>
@@ -75,24 +81,32 @@ public class UIBattleForm : UIFormBase
     {
         Game.UI.CloseForm<UIBattleForm>();
     }
+    public void ClearUsedCards()
+    {
+        m_UsedCardsGrid.GetChildList().ForEach((t) => Destroy(t.gameObject));
+    }
     /// <summary>
     /// 添加卡牌至手牌，要做成列表，显示抽牌动画
     /// </summary>
     /// <param name="cardId"></param>
-    public void AddHandCard(BattleCardData card)
+    public void AddHandCard(BattleCardData cardData)
     {
-        if (card.Owner == Game.DataManager.MyPlayerData)
+        if (cardData.Owner == Game.DataManager.MyPlayerData)
         {
             GameObject newCard = GameObject.Instantiate(m_BattleCardTemplate, m_MyCardsGrid.transform);
             newCard.SetActive(true);
-            newCard.GetComponent<UIBattleCard>().SetData(card, this);
+            UIBattleCard battleCard = newCard.GetComponent<UIBattleCard>();
+            battleCard.SetData(cardData, this);
+            dicBattleCard.Add(cardData, battleCard);
             m_MyCardsGrid.Reposition();
         }
         else
         {
             GameObject newCard = GameObject.Instantiate(m_BattleCardTemplate, m_OppCardsGrid.transform);
             newCard.SetActive(true);
-            newCard.GetComponent<UIBattleCard>().SetData(card, this);
+            UIBattleCard battleCard = newCard.GetComponent<UIBattleCard>();
+            battleCard.SetData(cardData, this);
+            dicBattleCard.Add(cardData, battleCard);
             m_OppCardsGrid.Reposition();
         }
 
@@ -105,12 +119,25 @@ public class UIBattleForm : UIFormBase
     {
 
     }
-
     /// <summary>
     /// 使用卡牌
     /// </summary>
     /// <param name="battleCard"></param>
-    public void UseCard(UIBattleCard battleCard)
+    public void UseCard(BattleCardData battleCardData)
+    {
+        if (dicBattleCard.ContainsKey(battleCardData))
+        {
+            dicBattleCard[battleCardData].UseCard();
+        }
+        else
+        {
+            Debug.LogError("不存在");
+        }
+
+
+    }
+
+    public void ApplyUseCard(UIBattleCard battleCard)
     {
         StartCoroutine(CoroutineUseCard(battleCard));
     }
@@ -149,6 +176,8 @@ public class UIBattleForm : UIFormBase
         /// </summary>
         public UILabel CemeteryCount;
         public UIGrid BuffGrid;
+        public GameObject BuffIconTemplete;
+        Dictionary<int, GameObject> BuffIcons = new Dictionary<int, GameObject>();
 
         public void GetUIController(Transform transInfo)
         {
@@ -164,6 +193,7 @@ public class UIBattleForm : UIFormBase
             EquipGrid = transInfo.Find("EquipGrid").GetComponent<UIGrid>();
             CemeteryCount = transInfo.Find("Cemetery/CardCount").GetComponent<UILabel>();
             BuffGrid = transInfo.Find("BuffGrid").GetComponent<UIGrid>();
+            BuffIconTemplete = BuffGrid.transform.Find("buff").gameObject;
         }
 
         public void UpdateInfo(BattlePlayerData playerData)
@@ -181,7 +211,36 @@ public class UIBattleForm : UIFormBase
             MP_Progress.fillAmount = (float)playerData.AP / playerData.MaxAP;
             CardCount.text = playerData.CardList.Count.ToString();
             CemeteryCount.text = playerData.UsedCardList.Count.ToString();
+            foreach (var item in BuffIcons)
+            {
+                item.Value.SetActive(false);
+            }
+            for (int i = 0; i < playerData.BuffList.Count; i++)
+            {
+                BattleBuffData buffData = playerData.BuffList[i];
+                GameObject buffIcon;
+                if (!BuffIcons.ContainsKey(buffData.BuffId))
+                {
+                    buffIcon = Instantiate(BuffIconTemplete, BuffGrid.transform);
+                    BuffIcons.Add(buffData.BuffId, buffIcon);
+                    buffIcon.GetComponent<UITexture>().Load(buffData.Data.Icon);
+
+                }
+                else
+                    buffIcon = BuffIcons[buffData.BuffId];
+                buffIcon.SetActive(true);
+                buffIcon.transform.Find("Label").GetComponent<UILabel>().text = buffData.Time.ToString();
+            }
         }
+        void SetBuffUI()
+        {
+
+        }
+        //public void AddBuff(BattleBuffData buffData)
+        //{
+
+        //}
+
     }
     class PlayerInfo
     {

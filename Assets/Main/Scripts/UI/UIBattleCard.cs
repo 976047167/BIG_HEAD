@@ -157,7 +157,8 @@ public class UIBattleCard : MonoBehaviour
             {
                 if (hits[i].collider.name == "UsedCards")
                 {
-                    m_Used = UseCard();
+                    UseCard();
+                        
                 }
             }
         }
@@ -263,7 +264,7 @@ public class UIBattleCard : MonoBehaviour
 
         }
     }
-    protected bool UseCard()
+    public bool UseCard()
     {
         //判断使用条件，不允许返回false
         Debug.Log("释放卡牌: " + cardData.Data.Name);
@@ -272,7 +273,7 @@ public class UIBattleCard : MonoBehaviour
             return false;
         }
         cacheCardPos = cacheChildCardTrans.position;
-        cacheForm.UseCard(this);
+        cacheForm.ApplyUseCard(this);
         m_Used = true;
         return true;
     }

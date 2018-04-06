@@ -272,6 +272,11 @@ namespace AppSettings
         public string Desc { get; private set;}
         
         /// <summary>
+        /// Buff图标
+        /// </summary>
+        public string Icon { get; private set;}
+        
+        /// <summary>
         /// Buff默认持续时间
         /// </summary>
         public int Time { get; private set;}
@@ -302,10 +307,11 @@ namespace AppSettings
             Id = row.Get_int(row.Values[0], ""); 
             Name = row.Get_string (row.Values[1], ""); 
             Desc = row.Get_string(row.Values[2], ""); 
-            Time = row.Get_int(row.Values[3], ""); 
-            ActionTimes = row.Get_List_int(row.Values[4], ""); 
-            ActionTypes = row.Get_List_int(row.Values[5], ""); 
-            ActionPrarms = row.Get_List_int(row.Values[6], ""); 
+            Icon = row.Get_string(row.Values[3], ""); 
+            Time = row.Get_int(row.Values[4], ""); 
+            ActionTimes = row.Get_List_int(row.Values[5], ""); 
+            ActionTypes = row.Get_List_int(row.Values[6], ""); 
+            ActionPrarms = row.Get_List_int(row.Values[7], ""); 
         }
 
         /// <summary>
