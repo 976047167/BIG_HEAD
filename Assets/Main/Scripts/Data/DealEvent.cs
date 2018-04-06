@@ -62,6 +62,7 @@ public class DealEvent
                         {
                             Game.DataManager.MyPlayerData.EquipList.Remove(i);
                             done = true;
+                            break;
                         }
                     }
                     if (done == false)
@@ -100,7 +101,7 @@ public class DealEvent
                 for (int j = 0; j < tmpEvent.CostNum; j++)
                 {
                     Game.DataManager.MyPlayerData.EquipList.Add(new BattleCardData(tmpEvent.ItemId, Game.DataManager.MyPlayerData));
-
+          
                 }
                 break;
 

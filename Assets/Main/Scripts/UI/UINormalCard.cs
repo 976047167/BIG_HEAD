@@ -22,19 +22,29 @@ public class UINormalCard : MonoBehaviour
     private UILabel m_lblAttack;
     [SerializeField]
     private UILabel m_lblAttackCount;
-    public Transform Parent;
-    private Transform m_Parent;
-    public UIGrid Grid;
+    private deck_or_kaku _deck_or_Kaku;
+    public deck_or_kaku DeckOrKaku {
+        set {
+            _deck_or_Kaku = value;
+            gameObject.GetComponent<UIDragScrollView>().enabled = value == deck_or_kaku.deck;
+        }
 
+        get { return _deck_or_Kaku; }
+    }
+
+    public enum deck_or_kaku : int {
+        deck,
+        kaku
+    };
     Vector3 offsetPos;
     [HideInInspector]
     public Transform cacheChildCardTrans;
     Vector3 cacheCardPos;
-
-    BattleCardData cardData;
+    WND_Kaku cacheForm;
+    public  BattleCardData cardData;
     protected void Start()
     {
-        m_Parent = transform.parent;
+        cacheChildCardTrans = transform.GetChild(0);
     }
 
 
@@ -49,21 +59,23 @@ public class UINormalCard : MonoBehaviour
             //Physics
 
             //transform.position = UICamera.mainCamera.ScreenToWorldPoint(UICamera.lastWorldPosition);
-            transform.position = UICamera.lastWorldPosition + offsetPos;
+            cacheChildCardTrans.position = UICamera.lastWorldPosition + offsetPos;
         }
     }
 
  
     protected void OnDragStart()
     {
-        Vector2 delta = UICamera.currentTouch.totalDelta;
-        if (Mathf.Abs(delta.x) < Mathf.Abs(delta.y)) return;
+        if (DeckOrKaku == deck_or_kaku.deck)
+        {
+           
+        }
         Debug.Log("OnDragStart ：" + name);
         m_Draging = true;
-        transform.parent = Parent;
-        Grid.repositionNow = true;
         offsetPos = transform.position - UICamera.lastWorldPosition;
-       
+        cacheChildCardTrans.SetParent(cacheForm.MovingPanel.transform, true);
+        RefreshDepth(cacheChildCardTrans);
+
     }
     protected void OnDrag(Vector2 delta)
     {
@@ -83,70 +95,114 @@ public class UINormalCard : MonoBehaviour
 
         Debug.Log("OnDragEnd ：" + name);
         m_Draging = false;
+        cacheChildCardTrans.SetParent(transform, true);
+        RefreshDepth();
         Ray ray = UICamera.mainCamera.ScreenPointToRay(UICamera.lastEventPosition);
         RaycastHit[] hits = Physics.RaycastAll(ray, 20f, 1 << 8);
         if (hits.Length > 0)
         {
             for (int i = 0; i < hits.Length; i++)
             {
-                if (hits[i].collider.name == "UsedCards")
+                if (hits[i].collider.name == "bgKaku" && DeckOrKaku == deck_or_kaku.deck)
                 {
-                 
+                    cacheChildCardTrans.transform.localPosition = Vector3.zero;
 
+                    cacheForm.MoveCardFromToKaku(this);
+                    RefreshDepth();
+                    return;
+                }
+                else if (hits[i].collider.name == "bgDeck" && DeckOrKaku == deck_or_kaku.kaku)
+                {
+                    cacheChildCardTrans.transform.localPosition = Vector3.zero;
+
+                    cacheForm.MoveKakuFromToDeck(this);
+                    RefreshDepth();
+                    return;
                 }
             }
         }
-        if (m_Moved == false)
-        {
-            transform.parent = m_Parent;
-            transform.localPosition = Vector3.zero;
-        }
+        cacheChildCardTrans.transform.localPosition = Vector3.zero;
+
     }
     protected void OnDrop(GameObject go)
     {
         //Debug.Log("OnDrop ：" + name);
     }
-    public void SetData(BattleCardData card)
+    public void SetData(BattleCardData card, WND_Kaku form)
     {
-        cardData = card;
-        m_TexIcon.mainTexture = Resources.Load<Texture>(cardData.Data.Icon);
-        m_lblName.text = cardData.Data.Name;
-        if (cardData.Data.Type != 0)
-        {
-            m_lblAttack.text = "";
-            m_lblAttackCount.text = "";
-        }
-        for (int i = 0; i < cardData.Data.ActionTypes.Count; i++)
-        {
-            switch ((BattleActionType)cardData.Data.ActionTypes[i])
-            {
-                case BattleActionType.None:
-                    break;
-                case BattleActionType.AddBuff:
-                    break;
-                case BattleActionType.Attack:
-                    if (cardData.Data.Type == 0)
-                    {
-                        m_lblAttack.text = "攻击";
-                        m_lblAttackCount.text = cardData.Data.ActionParams[i].ToString();
-                    }
-                    break;
-                case BattleActionType.RecoverHP:
-                    break;
-                case BattleActionType.RecoverMP:
-                    break;
-                case BattleActionType.DrawCard:
-                    break;
-                default:
-                    break;
-            }
-        }
-        m_lblExpand.text = "";
-        m_lblExpandCount.text = cardData.Data.Spending.ToString();
 
+        cardData = card;
+        cacheForm = form;
+        if (card.Owner == Game.DataManager.MyPlayerData)
+        {
+            m_TexIcon.mainTexture = Resources.Load<Texture>(cardData.Data.Icon);
+            m_lblName.text = cardData.Data.Name;
+            if (cardData.Data.Type != 0)
+            {
+                m_lblAttack.text = "";
+                m_lblAttackCount.text = "";
+            }
+            for (int i = 0; i < cardData.Data.ActionTypes.Count; i++)
+            {
+                switch ((BattleActionType)cardData.Data.ActionTypes[i])
+                {
+                    case BattleActionType.None:
+                        break;
+                    case BattleActionType.AddBuff:
+                        break;
+                    case BattleActionType.Attack:
+                        if (cardData.Data.Type == 0)
+                        {
+                            m_lblAttack.text = "攻击";
+                            m_lblAttackCount.text = cardData.Data.ActionParams[i].ToString();
+                        }
+                        break;
+                    case BattleActionType.RecoverHP:
+                        break;
+                    case BattleActionType.RecoverMP:
+                        break;
+                    case BattleActionType.DrawCard:
+                        break;
+                    default:
+                        break;
+                }
+            }
+            m_lblExpand.text = "";
+            m_lblExpandCount.text = cardData.Data.Spending.ToString();
+        }
+        else
+        {
+            m_TexIcon.gameObject.SetActive(false);
+            m_lblName.gameObject.SetActive(false);
+            m_lblExpand.gameObject.SetActive(false);
+            m_lblExpandCount.gameObject.SetActive(false);
+            m_lblAttack.gameObject.SetActive(false);
+            m_lblAttackCount.gameObject.SetActive(false);
+        }
+        UIEventListener.Get(gameObject).onClick = (GameObject a) =>
+        {
+            UIModule.Instance.OpenForm<WND_ShowCard>(cardData.CardId);
+
+
+        };
 
     }
+    public void RefreshDepth()
+    {
+        RefreshDepth(transform);
+    }
+    public void RefreshDepth(Transform trans)
+    {
+        UIWidget[] widgets = trans.GetComponentsInChildren<UIWidget>(true);
+        foreach (var item in widgets)
+        {
+            if (item.enabled)
+            {
+                item.Refresh();
+            }
 
+        }
+    }
 
     //public void RevertCardPos()
     //{
