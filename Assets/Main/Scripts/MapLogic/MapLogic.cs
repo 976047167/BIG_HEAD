@@ -22,6 +22,7 @@ public class MapLogic : MonoBehaviour
         MakeMap();
         MakePlayer();
         Game.UI.OpenForm<UIMapInfo>();
+        Game.UI.OpenForm<UIMenu>();
     }
 
     // Update is called once per frame
