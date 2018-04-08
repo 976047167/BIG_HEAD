@@ -158,7 +158,7 @@ public class UIBattleCard : MonoBehaviour
                 if (hits[i].collider.name == "UsedCards")
                 {
                     UseCard();
-                        
+
                 }
             }
         }
@@ -199,42 +199,43 @@ public class UIBattleCard : MonoBehaviour
     {
         cardData = card;
         cacheForm = form;
+        m_TexIcon.mainTexture = Resources.Load<Texture>(cardData.Data.Icon);
+        m_lblName.text = cardData.Data.Name;
+        if (cardData.Data.Type != 0)
+        {
+            m_lblAttack.text = "";
+            m_lblAttackCount.text = "";
+        }
+        for (int i = 0; i < cardData.Data.ActionTypes.Count; i++)
+        {
+            switch ((BattleActionType)cardData.Data.ActionTypes[i])
+            {
+                case BattleActionType.None:
+                    break;
+                case BattleActionType.AddBuff:
+                    break;
+                case BattleActionType.Attack:
+                    if (cardData.Data.Type == 0)
+                    {
+                        m_lblAttack.text = "攻击";
+                        m_lblAttackCount.text = cardData.Data.ActionParams[i].ToString();
+                    }
+                    break;
+                case BattleActionType.RecoverHP:
+                    break;
+                case BattleActionType.RecoverMP:
+                    break;
+                case BattleActionType.DrawCard:
+                    break;
+                default:
+                    break;
+            }
+        }
+        m_lblExpand.text = "";
+        m_lblExpandCount.text = cardData.Data.Spending.ToString();
         if (card.Owner == Game.DataManager.MyPlayerData)
         {
-            m_TexIcon.mainTexture = Resources.Load<Texture>(cardData.Data.Icon);
-            m_lblName.text = cardData.Data.Name;
-            if (cardData.Data.Type != 0)
-            {
-                m_lblAttack.text = "";
-                m_lblAttackCount.text = "";
-            }
-            for (int i = 0; i < cardData.Data.ActionTypes.Count; i++)
-            {
-                switch ((BattleActionType)cardData.Data.ActionTypes[i])
-                {
-                    case BattleActionType.None:
-                        break;
-                    case BattleActionType.AddBuff:
-                        break;
-                    case BattleActionType.Attack:
-                        if (cardData.Data.Type == 0)
-                        {
-                            m_lblAttack.text = "攻击";
-                            m_lblAttackCount.text = cardData.Data.ActionParams[i].ToString();
-                        }
-                        break;
-                    case BattleActionType.RecoverHP:
-                        break;
-                    case BattleActionType.RecoverMP:
-                        break;
-                    case BattleActionType.DrawCard:
-                        break;
-                    default:
-                        break;
-                }
-            }
-            m_lblExpand.text = "";
-            m_lblExpandCount.text = cardData.Data.Spending.ToString();
+
         }
         else
         {
@@ -275,6 +276,15 @@ public class UIBattleCard : MonoBehaviour
         cacheCardPos = cacheChildCardTrans.position;
         cacheForm.ApplyUseCard(this);
         m_Used = true;
+        if (cardData.Owner != Game.DataManager.MyPlayerData)
+        {
+            m_TexIcon.gameObject.SetActive(true);
+            m_lblName.gameObject.SetActive(true);
+            m_lblExpand.gameObject.SetActive(true);
+            m_lblExpandCount.gameObject.SetActive(true);
+            m_lblAttack.gameObject.SetActive(true);
+            m_lblAttackCount.gameObject.SetActive(true);
+        }
         return true;
     }
 

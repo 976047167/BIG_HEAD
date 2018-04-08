@@ -39,7 +39,7 @@ public class BattlePlayer
         {
             return;
         }
-        playerAI.StopAI();
+        playerAI.UpdateAI();
     }
     public void StopAI()
     {

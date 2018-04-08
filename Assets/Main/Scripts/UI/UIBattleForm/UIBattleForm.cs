@@ -83,7 +83,7 @@ public class UIBattleForm : UIFormBase
     }
     public void ClearUsedCards()
     {
-        m_UsedCardsGrid.GetChildList().ForEach((t) => Destroy(t.gameObject));
+        m_UsedCardsGrid.GetChildList().ForEach((t) => t.gameObject.SetActive(false));
     }
     /// <summary>
     /// 添加卡牌至手牌，要做成列表，显示抽牌动画
@@ -111,6 +111,8 @@ public class UIBattleForm : UIFormBase
         }
 
     }
+
+
     /// <summary>
     /// 添加卡牌到牌库
     /// </summary>
@@ -149,6 +151,7 @@ public class UIBattleForm : UIFormBase
         //m_MyCardsGrid.repositionNow = true;
         m_UsedCardsGrid.Reposition();
         m_MyCardsGrid.Reposition();
+        m_OppCardsGrid.Reposition();
         battleCard.cacheChildCardTrans.position = cachePos;
         yield return null;
         TweenPosition.Begin(battleCard.cacheChildCardTrans.gameObject, 0.5f, Vector3.zero, false);

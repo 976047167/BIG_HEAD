@@ -191,7 +191,7 @@ public class BattleMgr
             case BattleState.OppUsingCard:
                 break;
             case BattleState.OppRoundEnd:
-                battleForm.ClearUsedCards();
+                //battleForm.ClearUsedCards();
                 break;
             case BattleState.BattleEnd_Win:
                 break;
