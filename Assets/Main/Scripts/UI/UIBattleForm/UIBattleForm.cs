@@ -40,6 +40,8 @@ public class UIBattleForm : UIFormBase
         Game.BattleManager.ReadyStart(this);
         UIEventListener.Get(transform.Find("btnRoundEnd").gameObject).onClick = OnClick_RoundEnd;
         UIEventListener.Get(transform.Find("ResultInfo/mask").gameObject).onClick = Onclick_CloseUI;
+
+        StartCoroutine(CoroutineUseCard());
     }
     // Update is called once per frame
     void Update()
@@ -83,7 +85,7 @@ public class UIBattleForm : UIFormBase
     }
     public void ClearUsedCards()
     {
-        m_UsedCardsGrid.GetChildList().ForEach((t) => Destroy(t.gameObject));
+        m_UsedCardsGrid.GetChildList().ForEach((t) => t.gameObject.SetActive(false));
     }
     /// <summary>
     /// 添加卡牌至手牌，要做成列表，显示抽牌动画
@@ -91,26 +93,11 @@ public class UIBattleForm : UIFormBase
     /// <param name="cardId"></param>
     public void AddHandCard(BattleCardData cardData)
     {
-        if (cardData.Owner == Game.DataManager.MyPlayerData)
-        {
-            GameObject newCard = GameObject.Instantiate(m_BattleCardTemplate, m_MyCardsGrid.transform);
-            newCard.SetActive(true);
-            UIBattleCard battleCard = newCard.GetComponent<UIBattleCard>();
-            battleCard.SetData(cardData, this);
-            dicBattleCard.Add(cardData, battleCard);
-            m_MyCardsGrid.Reposition();
-        }
-        else
-        {
-            GameObject newCard = GameObject.Instantiate(m_BattleCardTemplate, m_OppCardsGrid.transform);
-            newCard.SetActive(true);
-            UIBattleCard battleCard = newCard.GetComponent<UIBattleCard>();
-            battleCard.SetData(cardData, this);
-            dicBattleCard.Add(cardData, battleCard);
-            m_OppCardsGrid.Reposition();
-        }
+        uiActions.Enqueue(new UIAction(UIActionType.DrawCard, cardData));
 
     }
+
+
     /// <summary>
     /// 添加卡牌到牌库
     /// </summary>
@@ -125,39 +112,106 @@ public class UIBattleForm : UIFormBase
     /// <param name="battleCard"></param>
     public void UseCard(BattleCardData battleCardData)
     {
-        if (dicBattleCard.ContainsKey(battleCardData))
-        {
-            dicBattleCard[battleCardData].UseCard();
-        }
-        else
-        {
-            Debug.LogError("不存在");
-        }
+        uiActions.Enqueue(new UIAction(UIActionType.UseCard, battleCardData));
 
 
     }
 
+    Queue<UIAction> uiActions = new Queue<UIAction>();
     public void ApplyUseCard(UIBattleCard battleCard)
     {
-        StartCoroutine(CoroutineUseCard(battleCard));
+        
     }
-    IEnumerator CoroutineUseCard(UIBattleCard battleCard)
+    IEnumerator CoroutineUseCard()
     {
-        Vector3 cachePos = battleCard.cacheChildCardTrans.position;
-        battleCard.transform.SetParent(m_UsedCardsGrid.transform, false);
-        //m_UsedCardsGrid.repositionNow = true;
-        //m_MyCardsGrid.repositionNow = true;
-        m_UsedCardsGrid.Reposition();
-        m_MyCardsGrid.Reposition();
-        battleCard.cacheChildCardTrans.position = cachePos;
-        yield return null;
-        TweenPosition.Begin(battleCard.cacheChildCardTrans.gameObject, 0.5f, Vector3.zero, false);
-        yield return null;
-        battleCard.ApplyUseEffect();
-        yield return new WaitForSeconds(0.5f);
-        battleCard.RefreshDepth();
-    }
+        while (true)
+        {
+            if (uiActions.Count > 0)
+            {
+                UIAction action = uiActions.Dequeue();
+                BattleCardData cardData = action.CardData;
+                UIBattleCard battleCard = null;
+                switch (action.ActionType)
+                {
+                    case UIActionType.None:
+                        break;
+                    case UIActionType.DrawCard:
+                        cardData = action.CardData;
+                        if (cardData.Owner == Game.DataManager.MyPlayerData)
+                        {
+                            GameObject newCard = GameObject.Instantiate(m_BattleCardTemplate, m_MyCardsGrid.transform);
+                            newCard.SetActive(true);
+                            battleCard = newCard.GetComponent<UIBattleCard>();
+                            battleCard.SetData(cardData, this);
+                            dicBattleCard.Add(cardData, battleCard);
+                            m_MyCardsGrid.Reposition();
+                        }
+                        else
+                        {
+                            GameObject newCard = GameObject.Instantiate(m_BattleCardTemplate, m_OppCardsGrid.transform);
+                            newCard.SetActive(true);
+                            battleCard = newCard.GetComponent<UIBattleCard>();
+                            battleCard.SetData(cardData, this);
+                            dicBattleCard.Add(cardData, battleCard);
+                            m_OppCardsGrid.Reposition();
+                        }
+                        yield return new WaitForSeconds(0.5f);
+                        break;
+                    case UIActionType.UseCard:
+                        if (dicBattleCard.ContainsKey(cardData))
+                        {
+                            //dicBattleCard[cardData].UseCard();
+                            battleCard = dicBattleCard[action.CardData];
+                            battleCard.UseCard();
+                            Vector3 cachePos = battleCard.cacheChildCardTrans.position;
+                            battleCard.transform.SetParent(m_UsedCardsGrid.transform, false);
+                            //m_UsedCardsGrid.repositionNow = true;
+                            //m_MyCardsGrid.repositionNow = true;
+                            m_UsedCardsGrid.Reposition();
+                            m_MyCardsGrid.Reposition();
 
+                            battleCard.cacheChildCardTrans.position = cachePos;
+                            yield return null;
+                            TweenPosition.Begin(battleCard.cacheChildCardTrans.gameObject, 0.5f, Vector3.zero, false);
+                            //yield return null;
+                            //battleCard.ApplyUseEffect();
+                            yield return new WaitForSeconds(0.5f);
+                            m_OppCardsGrid.Reposition();
+                            battleCard.RefreshDepth();
+                            yield return null;
+                        }
+                        else
+                        {
+                            Debug.LogError("不存在");
+                            
+                        }
+                        break;
+                    default:
+                        break;
+                }
+
+            }
+            else
+                yield return null;
+        }
+
+    }
+    class UIAction
+    {
+        public UIActionType ActionType { get; private set; }
+        public BattleCardData CardData { get; private set; }
+        public UIAction(UIActionType type, BattleCardData data)
+        {
+            ActionType = type;
+            CardData = data;
+        }
+    }
+    enum UIActionType
+    {
+        None = 0,
+        DrawCard,
+        UseCard,
+    }
     [System.Serializable]
     class PlayerInfoViews
     {
