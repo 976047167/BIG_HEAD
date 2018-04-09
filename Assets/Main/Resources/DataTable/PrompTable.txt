@@ -1,0 +1,4 @@
+Id	ImagePath	Name	Describe	Arg
+int	string	string	string	
+1	Skill/skill_xiangyu_4	流血	每回合掉{0}血，剩余{1}回合。	
+2	Skill/skill_yasewang_1	回血	每回合回{0}血，剩余{1}回合。	
