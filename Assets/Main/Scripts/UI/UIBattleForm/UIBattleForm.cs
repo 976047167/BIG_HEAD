@@ -93,24 +93,7 @@ public class UIBattleForm : UIFormBase
     /// <param name="cardId"></param>
     public void AddHandCard(BattleCardData cardData)
     {
-        if (cardData.Owner == Game.DataManager.MyPlayerData)
-        {
-            GameObject newCard = GameObject.Instantiate(m_BattleCardTemplate, m_MyCardsGrid.transform);
-            newCard.SetActive(true);
-            UIBattleCard battleCard = newCard.GetComponent<UIBattleCard>();
-            battleCard.SetData(cardData, this);
-            dicBattleCard.Add(cardData, battleCard);
-            m_MyCardsGrid.Reposition();
-        }
-        else
-        {
-            GameObject newCard = GameObject.Instantiate(m_BattleCardTemplate, m_OppCardsGrid.transform);
-            newCard.SetActive(true);
-            UIBattleCard battleCard = newCard.GetComponent<UIBattleCard>();
-            battleCard.SetData(cardData, this);
-            dicBattleCard.Add(cardData, battleCard);
-            m_OppCardsGrid.Reposition();
-        }
+        uiActions.Enqueue(new UIAction(UIActionType.DrawCard, cardData));
 
     }
 
@@ -129,54 +112,79 @@ public class UIBattleForm : UIFormBase
     /// <param name="battleCard"></param>
     public void UseCard(BattleCardData battleCardData)
     {
-        if (dicBattleCard.ContainsKey(battleCardData))
-        {
-            dicBattleCard[battleCardData].UseCard();
-        }
-        else
-        {
-            Debug.LogError("不存在");
-        }
+        uiActions.Enqueue(new UIAction(UIActionType.UseCard, battleCardData));
 
 
     }
 
-    Queue<UIAction> usingCards = new Queue<UIAction>();
+    Queue<UIAction> uiActions = new Queue<UIAction>();
     public void ApplyUseCard(UIBattleCard battleCard)
     {
-        usingCards.Enqueue(new UIAction(UIActionType.UseCard, battleCard.CardData));
+        
     }
     IEnumerator CoroutineUseCard()
     {
         while (true)
         {
-            if (usingCards.Count > 0)
+            if (uiActions.Count > 0)
             {
-                UIAction action = usingCards.Dequeue();
+                UIAction action = uiActions.Dequeue();
+                BattleCardData cardData = action.CardData;
+                UIBattleCard battleCard = null;
                 switch (action.ActionType)
                 {
                     case UIActionType.None:
                         break;
                     case UIActionType.DrawCard:
+                        cardData = action.CardData;
+                        if (cardData.Owner == Game.DataManager.MyPlayerData)
+                        {
+                            GameObject newCard = GameObject.Instantiate(m_BattleCardTemplate, m_MyCardsGrid.transform);
+                            newCard.SetActive(true);
+                            battleCard = newCard.GetComponent<UIBattleCard>();
+                            battleCard.SetData(cardData, this);
+                            dicBattleCard.Add(cardData, battleCard);
+                            m_MyCardsGrid.Reposition();
+                        }
+                        else
+                        {
+                            GameObject newCard = GameObject.Instantiate(m_BattleCardTemplate, m_OppCardsGrid.transform);
+                            newCard.SetActive(true);
+                            battleCard = newCard.GetComponent<UIBattleCard>();
+                            battleCard.SetData(cardData, this);
+                            dicBattleCard.Add(cardData, battleCard);
+                            m_OppCardsGrid.Reposition();
+                        }
+                        yield return new WaitForSeconds(0.5f);
                         break;
                     case UIActionType.UseCard:
-                        UIBattleCard battleCard = dicBattleCard[action.CardData];
-                        Vector3 cachePos = battleCard.cacheChildCardTrans.position;
-                        battleCard.transform.SetParent(m_UsedCardsGrid.transform, false);
-                        //m_UsedCardsGrid.repositionNow = true;
-                        //m_MyCardsGrid.repositionNow = true;
-                        m_UsedCardsGrid.Reposition();
-                        m_MyCardsGrid.Reposition();
+                        if (dicBattleCard.ContainsKey(cardData))
+                        {
+                            //dicBattleCard[cardData].UseCard();
+                            battleCard = dicBattleCard[action.CardData];
+                            battleCard.UseCard();
+                            Vector3 cachePos = battleCard.cacheChildCardTrans.position;
+                            battleCard.transform.SetParent(m_UsedCardsGrid.transform, false);
+                            //m_UsedCardsGrid.repositionNow = true;
+                            //m_MyCardsGrid.repositionNow = true;
+                            m_UsedCardsGrid.Reposition();
+                            m_MyCardsGrid.Reposition();
 
-                        battleCard.cacheChildCardTrans.position = cachePos;
-                        yield return null;
-                        TweenPosition.Begin(battleCard.cacheChildCardTrans.gameObject, 0.5f, Vector3.zero, false);
-                        //yield return null;
-                        //battleCard.ApplyUseEffect();
-                        yield return new WaitForSeconds(0.5f);
-                        m_OppCardsGrid.Reposition();
-                        battleCard.RefreshDepth();
-                        yield return null;
+                            battleCard.cacheChildCardTrans.position = cachePos;
+                            yield return null;
+                            TweenPosition.Begin(battleCard.cacheChildCardTrans.gameObject, 0.5f, Vector3.zero, false);
+                            //yield return null;
+                            //battleCard.ApplyUseEffect();
+                            yield return new WaitForSeconds(0.5f);
+                            m_OppCardsGrid.Reposition();
+                            battleCard.RefreshDepth();
+                            yield return null;
+                        }
+                        else
+                        {
+                            Debug.LogError("不存在");
+                            
+                        }
                         break;
                     default:
                         break;
