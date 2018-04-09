@@ -40,6 +40,8 @@ public class UIBattleForm : UIFormBase
         Game.BattleManager.ReadyStart(this);
         UIEventListener.Get(transform.Find("btnRoundEnd").gameObject).onClick = OnClick_RoundEnd;
         UIEventListener.Get(transform.Find("ResultInfo/mask").gameObject).onClick = Onclick_CloseUI;
+
+        StartCoroutine(CoroutineUseCard());
     }
     // Update is called once per frame
     void Update()
@@ -139,28 +141,69 @@ public class UIBattleForm : UIFormBase
 
     }
 
+    Queue<UIAction> usingCards = new Queue<UIAction>();
     public void ApplyUseCard(UIBattleCard battleCard)
     {
-        StartCoroutine(CoroutineUseCard(battleCard));
+        usingCards.Enqueue(new UIAction(UIActionType.UseCard, battleCard.CardData));
     }
-    IEnumerator CoroutineUseCard(UIBattleCard battleCard)
+    IEnumerator CoroutineUseCard()
     {
-        Vector3 cachePos = battleCard.cacheChildCardTrans.position;
-        battleCard.transform.SetParent(m_UsedCardsGrid.transform, false);
-        //m_UsedCardsGrid.repositionNow = true;
-        //m_MyCardsGrid.repositionNow = true;
-        m_UsedCardsGrid.Reposition();
-        m_MyCardsGrid.Reposition();
-        m_OppCardsGrid.Reposition();
-        battleCard.cacheChildCardTrans.position = cachePos;
-        yield return null;
-        TweenPosition.Begin(battleCard.cacheChildCardTrans.gameObject, 0.5f, Vector3.zero, false);
-        yield return null;
-        battleCard.ApplyUseEffect();
-        yield return new WaitForSeconds(0.5f);
-        battleCard.RefreshDepth();
-    }
+        while (true)
+        {
+            if (usingCards.Count > 0)
+            {
+                UIAction action = usingCards.Dequeue();
+                switch (action.ActionType)
+                {
+                    case UIActionType.None:
+                        break;
+                    case UIActionType.DrawCard:
+                        break;
+                    case UIActionType.UseCard:
+                        UIBattleCard battleCard = dicBattleCard[action.CardData];
+                        Vector3 cachePos = battleCard.cacheChildCardTrans.position;
+                        battleCard.transform.SetParent(m_UsedCardsGrid.transform, false);
+                        //m_UsedCardsGrid.repositionNow = true;
+                        //m_MyCardsGrid.repositionNow = true;
+                        m_UsedCardsGrid.Reposition();
+                        m_MyCardsGrid.Reposition();
 
+                        battleCard.cacheChildCardTrans.position = cachePos;
+                        yield return null;
+                        TweenPosition.Begin(battleCard.cacheChildCardTrans.gameObject, 0.5f, Vector3.zero, false);
+                        //yield return null;
+                        //battleCard.ApplyUseEffect();
+                        yield return new WaitForSeconds(0.5f);
+                        m_OppCardsGrid.Reposition();
+                        battleCard.RefreshDepth();
+                        yield return null;
+                        break;
+                    default:
+                        break;
+                }
+
+            }
+            else
+                yield return null;
+        }
+
+    }
+    class UIAction
+    {
+        public UIActionType ActionType { get; private set; }
+        public BattleCardData CardData { get; private set; }
+        public UIAction(UIActionType type, BattleCardData data)
+        {
+            ActionType = type;
+            CardData = data;
+        }
+    }
+    enum UIActionType
+    {
+        None = 0,
+        DrawCard,
+        UseCard,
+    }
     [System.Serializable]
     class PlayerInfoViews
     {

@@ -215,9 +215,15 @@ public class BattleMgr
             State = BattleState.OppRoundEnd;
         }
     }
-    public void UseCard(BattleCardData battleCardData)
+    public bool UseCard(BattleCardData battleCardData)
     {
-        battleForm.UseCard(battleCardData);
+        if (battleCardData.Data.Spending <= battleCardData.Owner.AP)
+        {
+            ApplyCardEffect(battleCardData);
+            battleForm.UseCard(battleCardData);
+            return true;
+        }
+        return false;
     }
     /// <summary>
     /// 触发buff的时机  1回合开始,2回合结束,3受到伤害,4发起伤害

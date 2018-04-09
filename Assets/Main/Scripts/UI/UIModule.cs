@@ -25,7 +25,7 @@ public class UIModule
     }
 
     Dictionary<Type, UIFormBase> DicOpenedUIForm = new Dictionary<Type, UIFormBase>();
-
+    static int baseDepth = 0;
     public void OpenForm<T>(object userdata = null) where T : UIFormBase
     {
         if (DicOpenedUIForm.ContainsKey(typeof(T)) && DicOpenedUIForm[typeof(T)] != null)
@@ -50,6 +50,14 @@ public class UIModule
         form.transform.localScale = Vector3.one;
         form.transform.localEulerAngles = Vector3.zero;
         form.SetActive(true);
+        UIPanel[] panels = form.transform.GetComponentsInChildren<UIPanel>(true);
+        List<UIPanel> sortedPanels = new List<UIPanel>(panels);
+        sortedPanels.Sort((p1, p2) => p1.depth.CompareTo(p2.depth));
+        for (int i = 0; i < sortedPanels.Count; i++)
+        {
+            sortedPanels[i].depth = baseDepth + i;
+        }
+        baseDepth += panels.Length;
         T script = form.GetComponent<T>();
         if (script == null)
         {
