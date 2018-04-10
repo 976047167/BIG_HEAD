@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class BattleMgr
 {
+    public const int MAX_HAND_CARD_COUNT = 7;
 
     UIBattleForm battleForm;
     public BattleState State { get; private set; }
@@ -219,8 +220,10 @@ public class BattleMgr
     {
         if (battleCardData.Data.Spending <= battleCardData.Owner.AP)
         {
-            ApplyCardEffect(battleCardData);
+            battleCardData.Owner.HandCardList.Remove(battleCardData);
             battleForm.UseCard(battleCardData);
+            ApplyCardEffect(battleCardData);
+
             return true;
         }
         return false;
@@ -232,11 +235,20 @@ public class BattleMgr
     /// <param name="count"></param>
     public void DrawCard(BattlePlayerData playerData, int count = 1)
     {
+        
         for (int i = 0; i < count; i++)
         {
+            if (playerData.HandCardList.Count >= MAX_HAND_CARD_COUNT)
+            {
+                return;
+            }
             if (playerData.CurrentCardList.Count <= 0)
             {
-                playerData.CurrentCardList = new List<BattleCardData>(playerData.CardList);
+                for (int j = 0; j < playerData.CardList.Count; j++)
+                {
+                    playerData.CurrentCardList.Add(new BattleCardData(playerData.CardList[j].Data.Id, playerData.CardList[j].Owner));
+                }
+                //playerData.CurrentCardList = new List<BattleCardData>(playerData.CardList);
             }
             BattleCardData card = playerData.CurrentCardList[playerData.CurrentCardList.Count - 1];
             playerData.CurrentCardList.RemoveAt(playerData.CurrentCardList.Count - 1);

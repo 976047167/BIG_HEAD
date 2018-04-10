@@ -120,7 +120,7 @@ public class UIBattleForm : UIFormBase
     Queue<UIAction> uiActions = new Queue<UIAction>();
     public void ApplyUseCard(UIBattleCard battleCard)
     {
-        
+
     }
     IEnumerator CoroutineUseCard()
     {
@@ -163,6 +163,7 @@ public class UIBattleForm : UIFormBase
                             //dicBattleCard[cardData].UseCard();
                             battleCard = dicBattleCard[action.CardData];
                             battleCard.UseCard();
+                            //yield return new WaitForSeconds(0.5f);
                             Vector3 cachePos = battleCard.cacheChildCardTrans.position;
                             battleCard.transform.SetParent(m_UsedCardsGrid.transform, false);
                             //m_UsedCardsGrid.repositionNow = true;
@@ -183,7 +184,7 @@ public class UIBattleForm : UIFormBase
                         else
                         {
                             Debug.LogError("不存在");
-                            
+
                         }
                         break;
                     default:
