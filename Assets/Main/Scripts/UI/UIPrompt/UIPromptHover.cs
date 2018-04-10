@@ -5,7 +5,7 @@ using UnityEngine;
 public class UIPromptHover : MonoBehaviour {
 
     // Use this for initialization
-    public int PrompId;
+    public int PromptId;
     private GameObject PromptBox;
     private GameObject instance;
     private void Awake()
@@ -17,6 +17,11 @@ public class UIPromptHover : MonoBehaviour {
 		
 	}
     
+    static public void AddPrompt(GameObject obj, int promptid)
+    {
+        obj.AddComponent<UIPromptHover>();
+        obj.GetComponent<UIPromptHover>().PromptId = promptid;
+    }
 
 	// Update is called once per frame
 	void Update () {
@@ -44,7 +49,7 @@ public class UIPromptHover : MonoBehaviour {
         instance.transform.localPosition = new Vector3(0,100,0);
         instance.transform.localScale = new Vector3(1, 1, 1);
         instance.SetActive(true);
-        instance.GetComponent<UIPromptBox>().SetData(PrompId);
+        instance.GetComponent<UIPromptBox>().SetData(PromptId);
     }
 
 }
