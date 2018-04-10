@@ -12,6 +12,7 @@ public class WND_Kaku : UIFormBase {
     private float _gridPosY;
     private float _cellHeight;
     private UIPanel KakuPanel;
+    private GameObject btnBack;
     void Awake()
     {
         deckGrid = transform.Find("bgDeck/ScrollView/Grid").GetComponent<UIGrid>();
@@ -25,6 +26,8 @@ public class WND_Kaku : UIFormBase {
         _downClick = transform.Find("bgKaku/Panel/down").gameObject;
         UIEventListener.Get(_upClick).onClick = UpClick;
         UIEventListener.Get(_downClick).onClick = DownClick;
+        btnBack = transform.Find("btnBack").gameObject;
+        UIEventListener.Get(btnBack).onClick = BackClick;
 
     }
     protected override void OnInit(object userdata)
@@ -149,5 +152,10 @@ public class WND_Kaku : UIFormBase {
         pos.y += _cellHeight * 2;
         kakuGrid.transform.localPosition = pos;
         
+    }
+    private void BackClick(GameObject btn)
+    {
+        print("BackClick");
+        Destroy(gameObject);
     }
 }
