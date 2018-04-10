@@ -165,7 +165,7 @@ public class UIBattleCard : MonoBehaviour
                 if (hits[i].collider.name == "UsedCards")
                 {
                     //UseCard();
-                    Game.BattleManager.UseCard(CardData);
+                    m_Used = Game.BattleManager.UseCard(CardData);
                 }
             }
         }
@@ -240,11 +240,7 @@ public class UIBattleCard : MonoBehaviour
         }
         m_lblExpand.text = "";
         m_lblExpandCount.text = CardData.Data.Spending.ToString();
-        if (card.Owner == Game.DataManager.MyPlayerData)
-        {
-
-        }
-        else
+        if (card.Owner != Game.DataManager.MyPlayerData)
         {
             m_TexIcon.gameObject.SetActive(false);
             m_lblName.gameObject.SetActive(false);
@@ -253,8 +249,6 @@ public class UIBattleCard : MonoBehaviour
             m_lblAttack.gameObject.SetActive(false);
             m_lblAttackCount.gameObject.SetActive(false);
         }
-
-
     }
     public void RefreshDepth()
     {
@@ -276,10 +270,10 @@ public class UIBattleCard : MonoBehaviour
     {
         //判断使用条件，不允许返回false
         Debug.Log("释放卡牌: " + CardData.Data.Name);
-        if (CardData.Owner.AP < CardData.Data.Spending)
-        {
-            return false;
-        }
+        //if (CardData.Owner.AP < CardData.Data.Spending)
+        //{
+        //    return false;
+        //}
         cacheCardPos = cacheChildCardTrans.position;
         cacheForm.ApplyUseCard(this);
         m_Used = true;

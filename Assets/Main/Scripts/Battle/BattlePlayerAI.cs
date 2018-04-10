@@ -28,8 +28,8 @@ public class BattlePlayerAI
         {
             if (playerData.Data.HandCardList[i].Data.Spending <= playerData.Data.AP)
             {
-                Game.BattleManager.UseCard(playerData.Data.HandCardList[i]);
                 Debug.LogError("自动使用:" + playerData.Data.HandCardList[i].Data.Name);
+                Game.BattleManager.UseCard(playerData.Data.HandCardList[i]);
                 count--;
                 i--;
             }
