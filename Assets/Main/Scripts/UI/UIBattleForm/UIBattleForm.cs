@@ -29,8 +29,8 @@ public class UIBattleForm : UIFormBase
     // Use this for initialization
     void Start()
     {
-        myPlayerViews = new PlayerInfoViews();
-        oppPlayerViews = new PlayerInfoViews();
+        myPlayerViews = new PlayerInfoViews(Game.DataManager.MyPlayerData);
+        oppPlayerViews = new PlayerInfoViews(Game.DataManager.MyPlayerData);
         myPlayerViews.GetUIController(transform.Find("BattleInfo/MeInfo"));
         oppPlayerViews.GetUIController(transform.Find("BattleInfo/OppInfo"));
         resultInfo = transform.Find("ResultInfo").gameObject;
@@ -52,8 +52,8 @@ public class UIBattleForm : UIFormBase
 
     public void UpdateInfo()
     {
-        myPlayerViews.UpdateInfo(Game.DataManager.MyPlayerData);
-        oppPlayerViews.UpdateInfo(Game.DataManager.OppPlayerData);
+        myPlayerViews.UpdateInfo();
+        oppPlayerViews.UpdateInfo();
     }
     public void UpdateBuffIcons()
     {
@@ -187,7 +187,7 @@ public class UIBattleForm : UIFormBase
 
                         }
                         break;
-                        
+
                     default:
                         break;
                 }
@@ -198,8 +198,8 @@ public class UIBattleForm : UIFormBase
         }
 
     }
-    
-    
+
+
     [System.Serializable]
     class PlayerInfoViews
     {
