@@ -187,6 +187,7 @@ public class UIBattleForm : UIFormBase
 
                         }
                         break;
+                        
                     default:
                         break;
                 }
@@ -197,22 +198,8 @@ public class UIBattleForm : UIFormBase
         }
 
     }
-    class UIAction
-    {
-        public UIActionType ActionType { get; private set; }
-        public BattleCardData CardData { get; private set; }
-        public UIAction(UIActionType type, BattleCardData data)
-        {
-            ActionType = type;
-            CardData = data;
-        }
-    }
-    enum UIActionType
-    {
-        None = 0,
-        DrawCard,
-        UseCard,
-    }
+    
+    
     [System.Serializable]
     class PlayerInfoViews
     {
@@ -233,7 +220,16 @@ public class UIBattleForm : UIFormBase
         public UIGrid BuffGrid;
         public GameObject BuffIconTemplete;
         Dictionary<int, GameObject> BuffIcons = new Dictionary<int, GameObject>();
+        BattlePlayerData cachePlayerData = new BattlePlayerData();
+        BattlePlayerData bindPlayerData;
+        public PlayerInfoViews(BattlePlayerData playerData)
+        {
+            bindPlayerData = playerData;
+            cachePlayerData.AP = playerData.AP;
+            cachePlayerData.BuffList = null;
+            cachePlayerData.CardList = null;
 
+        }
         public void GetUIController(Transform transInfo)
         {
             HeadIcon = transInfo.Find("HeadIcon").GetComponent<UITexture>();
@@ -250,29 +246,28 @@ public class UIBattleForm : UIFormBase
             BuffGrid = transInfo.Find("BuffGrid").GetComponent<UIGrid>();
             BuffIconTemplete = BuffGrid.transform.Find("buff").gameObject;
         }
-
-        public void UpdateInfo(BattlePlayerData playerData)
+        public void UpdateInfo()
         {
-            if (HeadIcon.mainTexture == null || HeadIcon.mainTexture.name != playerData.HeadIcon)
+            if (HeadIcon.mainTexture == null || HeadIcon.mainTexture.name != cachePlayerData.HeadIcon)
             {
-                HeadIcon.Load(playerData.HeadIcon);
+                HeadIcon.Load(cachePlayerData.HeadIcon);
             }
-            Level.text = playerData.Level.ToString();
-            HP_Progress.fillAmount = (float)playerData.HP / playerData.MaxHP;
-            HP.text = playerData.HP.ToString();
-            MaxHP.text = playerData.MaxHP.ToString();
-            MP.text = playerData.AP.ToString();
-            MaxMP.text = playerData.MaxAP.ToString();
-            MP_Progress.fillAmount = (float)playerData.AP / playerData.MaxAP;
-            CardCount.text = playerData.CardList.Count.ToString();
-            CemeteryCount.text = playerData.UsedCardList.Count.ToString();
+            Level.text = cachePlayerData.Level.ToString();
+            HP_Progress.fillAmount = (float)cachePlayerData.HP / cachePlayerData.MaxHP;
+            HP.text = cachePlayerData.HP.ToString();
+            MaxHP.text = cachePlayerData.MaxHP.ToString();
+            MP.text = cachePlayerData.AP.ToString();
+            MaxMP.text = cachePlayerData.MaxAP.ToString();
+            MP_Progress.fillAmount = (float)cachePlayerData.AP / cachePlayerData.MaxAP;
+            CardCount.text = cachePlayerData.CardList.Count.ToString();
+            CemeteryCount.text = cachePlayerData.UsedCardList.Count.ToString();
             foreach (var item in BuffIcons)
             {
                 item.Value.SetActive(false);
             }
-            for (int i = 0; i < playerData.BuffList.Count; i++)
+            for (int i = 0; i < cachePlayerData.BuffList.Count; i++)
             {
-                BattleBuffData buffData = playerData.BuffList[i];
+                BattleBuffData buffData = cachePlayerData.BuffList[i];
                 GameObject buffIcon;
                 if (!BuffIcons.ContainsKey(buffData.BuffId))
                 {
