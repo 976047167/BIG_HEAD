@@ -203,78 +203,83 @@ public class UIBattleForm : UIFormBase
     [System.Serializable]
     class PlayerInfoViews
     {
-        public UILabel HP;
-        public UILabel MaxHP;
-        public UISprite HP_Progress;
-        public UILabel MP;
-        public UILabel MaxMP;
-        public UISprite MP_Progress;
-        public UILabel Level;
-        public UITexture HeadIcon;
-        public UILabel CardCount;
-        public UIGrid EquipGrid;
+        public UILabel lblHP;
+        public UILabel lblMaxHP;
+        public UISprite spHP_Progress;
+        public UILabel lblMP;
+        public UILabel lblMaxMP;
+        public UISprite spMP_Progress;
+        public UILabel lblLevel;
+        public UITexture utHeadIcon;
+        public UILabel lblCardCount;
+        public UIGrid gridEquipGrid;
         /// <summary>
         /// 墓地
         /// </summary>
-        public UILabel CemeteryCount;
-        public UIGrid BuffGrid;
-        public GameObject BuffIconTemplete;
+        public UILabel lblCemeteryCount;
+        public UIGrid gridBuffGrid;
+        public GameObject goBuffIconTemplete;
         Dictionary<int, GameObject> BuffIcons = new Dictionary<int, GameObject>();
-        BattlePlayerData cachePlayerData = new BattlePlayerData();
+        int HP = 0;
+        int MaxHP = 0;
+        int AP = 0;
+        int MaxAP = 0;
+        int Level = 0;
+        int CardCount = 0;
+        int CemeteryCount = 0;
+        List<BattleBuffData> Buffs = new List<BattleBuffData>();
+
         BattlePlayerData bindPlayerData;
         public PlayerInfoViews(BattlePlayerData playerData)
         {
             bindPlayerData = playerData;
-            cachePlayerData.AP = playerData.AP;
-            cachePlayerData.BuffList = null;
-            cachePlayerData.CardList = null;
+
 
         }
         public void GetUIController(Transform transInfo)
         {
-            HeadIcon = transInfo.Find("HeadIcon").GetComponent<UITexture>();
-            Level = transInfo.Find("lblLevel").GetComponent<UILabel>();
-            HP_Progress = transInfo.Find("progressBlood").GetComponent<UISprite>();
-            HP = transInfo.Find("progressBlood/HP").GetComponent<UILabel>();
-            MaxHP = transInfo.Find("progressBlood/MaxHP").GetComponent<UILabel>();
-            MP_Progress = transInfo.Find("progressMP").GetComponent<UISprite>();
-            MP = transInfo.Find("progressMP/MP").GetComponent<UILabel>();
-            MaxMP = transInfo.Find("progressMP/MaxMP").GetComponent<UILabel>();
-            CardCount = transInfo.Find("CardCount/CardCount").GetComponent<UILabel>();
-            EquipGrid = transInfo.Find("EquipGrid").GetComponent<UIGrid>();
-            CemeteryCount = transInfo.Find("Cemetery/CardCount").GetComponent<UILabel>();
-            BuffGrid = transInfo.Find("BuffGrid").GetComponent<UIGrid>();
-            BuffIconTemplete = BuffGrid.transform.Find("buff").gameObject;
+            utHeadIcon = transInfo.Find("HeadIcon").GetComponent<UITexture>();
+            lblLevel = transInfo.Find("lblLevel").GetComponent<UILabel>();
+            spHP_Progress = transInfo.Find("progressBlood").GetComponent<UISprite>();
+            lblHP = transInfo.Find("progressBlood/HP").GetComponent<UILabel>();
+            lblMaxHP = transInfo.Find("progressBlood/MaxHP").GetComponent<UILabel>();
+            spMP_Progress = transInfo.Find("progressMP").GetComponent<UISprite>();
+            lblMP = transInfo.Find("progressMP/MP").GetComponent<UILabel>();
+            lblMaxMP = transInfo.Find("progressMP/MaxMP").GetComponent<UILabel>();
+            lblCardCount = transInfo.Find("CardCount/CardCount").GetComponent<UILabel>();
+            gridEquipGrid = transInfo.Find("EquipGrid").GetComponent<UIGrid>();
+            lblCemeteryCount = transInfo.Find("Cemetery/CardCount").GetComponent<UILabel>();
+            gridBuffGrid = transInfo.Find("BuffGrid").GetComponent<UIGrid>();
+            goBuffIconTemplete = gridBuffGrid.transform.Find("buff").gameObject;
         }
         public void UpdateInfo()
         {
-            if (HeadIcon.mainTexture == null || HeadIcon.mainTexture.name != cachePlayerData.HeadIcon)
+            if (utHeadIcon.mainTexture == null || utHeadIcon.mainTexture.name != bindPlayerData.HeadIcon)
             {
-                HeadIcon.Load(cachePlayerData.HeadIcon);
+                utHeadIcon.Load(bindPlayerData.HeadIcon);
             }
-            Level.text = cachePlayerData.Level.ToString();
-            HP_Progress.fillAmount = (float)cachePlayerData.HP / cachePlayerData.MaxHP;
-            HP.text = cachePlayerData.HP.ToString();
-            MaxHP.text = cachePlayerData.MaxHP.ToString();
-            MP.text = cachePlayerData.AP.ToString();
-            MaxMP.text = cachePlayerData.MaxAP.ToString();
-            MP_Progress.fillAmount = (float)cachePlayerData.AP / cachePlayerData.MaxAP;
-            CardCount.text = cachePlayerData.CardList.Count.ToString();
-            CemeteryCount.text = cachePlayerData.UsedCardList.Count.ToString();
+            lblLevel.text = Level.ToString();
+            spHP_Progress.fillAmount = (float)HP / MaxHP;
+            lblHP.text = HP.ToString();
+            lblMaxHP.text = MaxHP.ToString();
+            lblMP.text = AP.ToString();
+            lblMaxMP.text = MaxAP.ToString();
+            spMP_Progress.fillAmount = (float)AP / MaxAP;
+            lblCardCount.text = CardCount.ToString();
+            lblCemeteryCount.text = CemeteryCount.ToString();
             foreach (var item in BuffIcons)
             {
                 item.Value.SetActive(false);
             }
-            for (int i = 0; i < cachePlayerData.BuffList.Count; i++)
+            for (int i = 0; i < Buffs.Count; i++)
             {
-                BattleBuffData buffData = cachePlayerData.BuffList[i];
+                BattleBuffData buffData = Buffs[i];
                 GameObject buffIcon;
                 if (!BuffIcons.ContainsKey(buffData.BuffId))
                 {
-                    buffIcon = Instantiate(BuffIconTemplete, BuffGrid.transform);
+                    buffIcon = Instantiate(goBuffIconTemplete, gridBuffGrid.transform);
                     BuffIcons.Add(buffData.BuffId, buffIcon);
                     buffIcon.GetComponent<UITexture>().Load(buffData.Data.Icon);
-
                 }
                 else
                     buffIcon = BuffIcons[buffData.BuffId];
