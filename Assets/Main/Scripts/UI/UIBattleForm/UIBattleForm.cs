@@ -220,14 +220,7 @@ public class UIBattleForm : UIFormBase
         public UIGrid gridBuffGrid;
         public GameObject goBuffIconTemplete;
         Dictionary<int, GameObject> BuffIcons = new Dictionary<int, GameObject>();
-        int HP = 0;
-        int MaxHP = 0;
-        int AP = 0;
-        int MaxAP = 0;
-        int Level = 0;
-        int CardCount = 0;
-        int CemeteryCount = 0;
-        List<BattleBuffData> Buffs = new List<BattleBuffData>();
+        UIPlayerInfo playerInfo=new UIPlayerInfo();
 
         BattlePlayerData bindPlayerData;
         public PlayerInfoViews(BattlePlayerData playerData)
@@ -258,22 +251,22 @@ public class UIBattleForm : UIFormBase
             {
                 utHeadIcon.Load(bindPlayerData.HeadIcon);
             }
-            lblLevel.text = Level.ToString();
-            spHP_Progress.fillAmount = (float)HP / MaxHP;
-            lblHP.text = HP.ToString();
-            lblMaxHP.text = MaxHP.ToString();
-            lblMP.text = AP.ToString();
-            lblMaxMP.text = MaxAP.ToString();
-            spMP_Progress.fillAmount = (float)AP / MaxAP;
-            lblCardCount.text = CardCount.ToString();
-            lblCemeteryCount.text = CemeteryCount.ToString();
+            lblLevel.text = playerInfo.Level.ToString();
+            spHP_Progress.fillAmount = (float)playerInfo.HP / playerInfo.MaxHP;
+            lblHP.text = playerInfo.HP.ToString();
+            lblMaxHP.text = playerInfo.MaxHP.ToString();
+            lblMP.text = playerInfo.AP.ToString();
+            lblMaxMP.text = playerInfo.MaxAP.ToString();
+            spMP_Progress.fillAmount = (float)playerInfo.AP / playerInfo.MaxAP;
+            lblCardCount.text = playerInfo.CardCount.ToString();
+            lblCemeteryCount.text = playerInfo.CemeteryCount.ToString();
             foreach (var item in BuffIcons)
             {
                 item.Value.SetActive(false);
             }
-            for (int i = 0; i < Buffs.Count; i++)
+            for (int i = 0; i < playerInfo.Buffs.Count; i++)
             {
-                BattleBuffData buffData = Buffs[i];
+                BattleBuffData buffData = playerInfo.Buffs[i];
                 GameObject buffIcon;
                 if (!BuffIcons.ContainsKey(buffData.BuffId))
                 {
@@ -297,19 +290,16 @@ public class UIBattleForm : UIFormBase
         //}
 
     }
-    class PlayerInfo
+    public class UIPlayerInfo
     {
         public int HP = 0;
         public int MaxHP = 0;
-        public int MP = 0;
-        public int MaxMP = 0;
-        public int Level = 1;
-        public string HeadIcon = "";
-        public List<CardInfo> CardList = new List<CardInfo>();
+        public int AP = 0;
+        public int MaxAP = 0;
+        public int Level = 0;
+        public int CardCount = 0;
+        public int CemeteryCount = 0;
+        public List<BattleBuffData> Buffs = new List<BattleBuffData>();
     }
 
-    class CardInfo
-    {
-
-    }
 }
