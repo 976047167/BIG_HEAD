@@ -25,6 +25,30 @@ public class UIBattleForm : UIFormBase
 
     public UIPanel MovingPanel { get; private set; }
 
+    public UIGrid MyCardsGrid
+    {
+        get
+        {
+            return m_MyCardsGrid;
+        }
+    }
+
+    public UIGrid UsedCardsGrid
+    {
+        get
+        {
+            return m_UsedCardsGrid;
+        }
+    }
+
+    public UIGrid OppCardsGrid
+    {
+        get
+        {
+            return m_OppCardsGrid;
+        }
+    }
+
 
     // Use this for initialization
     void Start()
@@ -106,15 +130,36 @@ public class UIBattleForm : UIFormBase
     {
 
     }
+    public UIBattleCard CreateBattleCard(BattleCardData cardData,UIGrid parentGrid)
+    {
+        GameObject newCard = GameObject.Instantiate(m_BattleCardTemplate, parentGrid.transform);
+        newCard.SetActive(true);
+        UIBattleCard battleCard = newCard.GetComponent<UIBattleCard>();
+        battleCard.SetData(cardData, this);
+        dicBattleCard.Add(cardData, battleCard);
+        parentGrid.Reposition();
+        return battleCard;
+    }
+    public UIBattleCard GetUIBattleCard(BattleCardData cardData)
+    {
+        if (dicBattleCard.ContainsKey(cardData))
+        {
+            return dicBattleCard[cardData];
+        }
+        return null;
+    }
+    public void AddUIAction(UIAction uiAction)
+    {
+        uiActions.Enqueue(uiAction);
+    }
     /// <summary>
     /// 使用卡牌
     /// </summary>
     /// <param name="battleCard"></param>
     public void UseCard(BattleCardData battleCardData)
     {
-        uiActions.Enqueue(new UIAction(UIActionType.UseCard, battleCardData));
-
-
+        UIAction action = new UIAction_UseCard(battleCardData);
+        uiActions.Enqueue(action);
     }
 
     Queue<UIAction> uiActions = new Queue<UIAction>();

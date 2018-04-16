@@ -14,9 +14,11 @@ public enum UIActionType
 }
 public abstract class UIAction
 {
+    protected UIBattleForm battleForm;
     public UIActionType ActionType { get; protected set; }
     public UIAction(UIActionType type)
     {
+        this.battleForm = Game.BattleManager.BattleForm;
         ActionType = type;
     }
     public abstract IEnumerator Excute();
@@ -25,28 +27,55 @@ public abstract class UIAction
 }
 public class UIAction_DrawCard : UIAction
 {
-    public BattleCardData CardData { get; private set; }
-    public UIAction_DrawCard(UIActionType type, BattleCardData data) : base(type)
-    {
-        ActionType = type;
-        CardData = data;
 
+
+    public BattleCardData CardData { get; private set; }
+
+    public UIAction_DrawCard(BattleCardData data) : base(UIActionType.DrawCard)
+    {
+        CardData = data;
     }
 
+    public override IEnumerator Excute()
+    {
+        yield return null;
+        if (CardData.Owner == Game.DataManager.MyPlayerData)
+        {
+            battleForm.CreateBattleCard(CardData, battleForm.MyCardsGrid);
+        }
+        else
+        {
+            battleForm.CreateBattleCard(CardData, battleForm.OppCardsGrid);
+        }
+        yield return new WaitForSeconds(0.5f);
+    }
+}
+
+public class UIAction_Damage : UIAction
+{
+    public BattlePlayerData Target { get; private set; }
+    public int Damage { get; private set; }
+    public UIAction_Damage(BattlePlayerData target, int hpDamage) : base(UIActionType.HpDamage)
+    {
+        Target = target;
+        Damage = hpDamage;
+    }
     public override IEnumerator Excute()
     {
         yield return null;
     }
 }
 
-public class UIAction_Damage : UIAction
+public class UIAction_UseCard : UIAction
 {
-    public UIAction_Damage(UIActionType type, BattleCardData data) : base(type)
+    public BattleCardData CardData { get; private set; }
+    public UIAction_UseCard(BattleCardData cardData) : base(UIActionType.UseCard)
     {
-
+        CardData = cardData;
     }
+
     public override IEnumerator Excute()
     {
-        yield return null;
+        throw new System.NotImplementedException();
     }
 }

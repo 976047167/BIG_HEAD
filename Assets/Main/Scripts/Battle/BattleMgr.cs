@@ -12,6 +12,15 @@ public class BattleMgr
 
     public BattlePlayer MyPlayer { get; private set; }
     public BattlePlayer OppPlayer { get; private set; }
+
+    public UIBattleForm BattleForm
+    {
+        get
+        {
+            return battleForm;
+        }
+    }
+
     /// <summary>
     /// 开始战斗
     /// </summary>
