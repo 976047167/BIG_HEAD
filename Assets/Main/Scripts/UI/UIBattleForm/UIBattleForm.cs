@@ -25,12 +25,36 @@ public class UIBattleForm : UIFormBase
 
     public UIPanel MovingPanel { get; private set; }
 
+    public UIGrid MyCardsGrid
+    {
+        get
+        {
+            return m_MyCardsGrid;
+        }
+    }
+
+    public UIGrid UsedCardsGrid
+    {
+        get
+        {
+            return m_UsedCardsGrid;
+        }
+    }
+
+    public UIGrid OppCardsGrid
+    {
+        get
+        {
+            return m_OppCardsGrid;
+        }
+    }
+
 
     // Use this for initialization
     void Start()
     {
-        myPlayerViews = new PlayerInfoViews();
-        oppPlayerViews = new PlayerInfoViews();
+        myPlayerViews = new PlayerInfoViews(Game.DataManager.MyPlayerData);
+        oppPlayerViews = new PlayerInfoViews(Game.DataManager.MyPlayerData);
         myPlayerViews.GetUIController(transform.Find("BattleInfo/MeInfo"));
         oppPlayerViews.GetUIController(transform.Find("BattleInfo/OppInfo"));
         resultInfo = transform.Find("ResultInfo").gameObject;
@@ -52,8 +76,8 @@ public class UIBattleForm : UIFormBase
 
     public void UpdateInfo()
     {
-        myPlayerViews.UpdateInfo(Game.DataManager.MyPlayerData);
-        oppPlayerViews.UpdateInfo(Game.DataManager.OppPlayerData);
+        myPlayerViews.UpdateInfo();
+        oppPlayerViews.UpdateInfo();
     }
     public void UpdateBuffIcons()
     {
@@ -106,15 +130,36 @@ public class UIBattleForm : UIFormBase
     {
 
     }
+    public UIBattleCard CreateBattleCard(BattleCardData cardData,UIGrid parentGrid)
+    {
+        GameObject newCard = GameObject.Instantiate(m_BattleCardTemplate, parentGrid.transform);
+        newCard.SetActive(true);
+        UIBattleCard battleCard = newCard.GetComponent<UIBattleCard>();
+        battleCard.SetData(cardData, this);
+        dicBattleCard.Add(cardData, battleCard);
+        parentGrid.Reposition();
+        return battleCard;
+    }
+    public UIBattleCard GetUIBattleCard(BattleCardData cardData)
+    {
+        if (dicBattleCard.ContainsKey(cardData))
+        {
+            return dicBattleCard[cardData];
+        }
+        return null;
+    }
+    public void AddUIAction(UIAction uiAction)
+    {
+        uiActions.Enqueue(uiAction);
+    }
     /// <summary>
     /// 使用卡牌
     /// </summary>
     /// <param name="battleCard"></param>
     public void UseCard(BattleCardData battleCardData)
     {
-        uiActions.Enqueue(new UIAction(UIActionType.UseCard, battleCardData));
-
-
+        UIAction action = new UIAction_UseCard(battleCardData);
+        uiActions.Enqueue(action);
     }
 
     Queue<UIAction> uiActions = new Queue<UIAction>();
@@ -187,6 +232,7 @@ public class UIBattleForm : UIFormBase
 
                         }
                         break;
+
                     default:
                         break;
                 }
@@ -197,89 +243,81 @@ public class UIBattleForm : UIFormBase
         }
 
     }
-    class UIAction
-    {
-        public UIActionType ActionType { get; private set; }
-        public BattleCardData CardData { get; private set; }
-        public UIAction(UIActionType type, BattleCardData data)
-        {
-            ActionType = type;
-            CardData = data;
-        }
-    }
-    enum UIActionType
-    {
-        None = 0,
-        DrawCard,
-        UseCard,
-    }
+
+
     [System.Serializable]
     class PlayerInfoViews
     {
-        public UILabel HP;
-        public UILabel MaxHP;
-        public UISprite HP_Progress;
-        public UILabel MP;
-        public UILabel MaxMP;
-        public UISprite MP_Progress;
-        public UILabel Level;
-        public UITexture HeadIcon;
-        public UILabel CardCount;
-        public UIGrid EquipGrid;
+        public UILabel lblHP;
+        public UILabel lblMaxHP;
+        public UISprite spHP_Progress;
+        public UILabel lblMP;
+        public UILabel lblMaxMP;
+        public UISprite spMP_Progress;
+        public UILabel lblLevel;
+        public UITexture utHeadIcon;
+        public UILabel lblCardCount;
+        public UIGrid gridEquipGrid;
         /// <summary>
         /// 墓地
         /// </summary>
-        public UILabel CemeteryCount;
-        public UIGrid BuffGrid;
-        public GameObject BuffIconTemplete;
+        public UILabel lblCemeteryCount;
+        public UIGrid gridBuffGrid;
+        public GameObject goBuffIconTemplete;
         Dictionary<int, GameObject> BuffIcons = new Dictionary<int, GameObject>();
+        UIPlayerInfo playerInfo=new UIPlayerInfo();
 
+        BattlePlayerData bindPlayerData;
+        public PlayerInfoViews(BattlePlayerData playerData)
+        {
+            bindPlayerData = playerData;
+
+
+        }
         public void GetUIController(Transform transInfo)
         {
-            HeadIcon = transInfo.Find("HeadIcon").GetComponent<UITexture>();
-            Level = transInfo.Find("lblLevel").GetComponent<UILabel>();
-            HP_Progress = transInfo.Find("progressBlood").GetComponent<UISprite>();
-            HP = transInfo.Find("progressBlood/HP").GetComponent<UILabel>();
-            MaxHP = transInfo.Find("progressBlood/MaxHP").GetComponent<UILabel>();
-            MP_Progress = transInfo.Find("progressMP").GetComponent<UISprite>();
-            MP = transInfo.Find("progressMP/MP").GetComponent<UILabel>();
-            MaxMP = transInfo.Find("progressMP/MaxMP").GetComponent<UILabel>();
-            CardCount = transInfo.Find("CardCount/CardCount").GetComponent<UILabel>();
-            EquipGrid = transInfo.Find("EquipGrid").GetComponent<UIGrid>();
-            CemeteryCount = transInfo.Find("Cemetery/CardCount").GetComponent<UILabel>();
-            BuffGrid = transInfo.Find("BuffGrid").GetComponent<UIGrid>();
-            BuffIconTemplete = BuffGrid.transform.Find("buff").gameObject;
+            utHeadIcon = transInfo.Find("HeadIcon").GetComponent<UITexture>();
+            lblLevel = transInfo.Find("lblLevel").GetComponent<UILabel>();
+            spHP_Progress = transInfo.Find("progressBlood").GetComponent<UISprite>();
+            lblHP = transInfo.Find("progressBlood/HP").GetComponent<UILabel>();
+            lblMaxHP = transInfo.Find("progressBlood/MaxHP").GetComponent<UILabel>();
+            spMP_Progress = transInfo.Find("progressMP").GetComponent<UISprite>();
+            lblMP = transInfo.Find("progressMP/MP").GetComponent<UILabel>();
+            lblMaxMP = transInfo.Find("progressMP/MaxMP").GetComponent<UILabel>();
+            lblCardCount = transInfo.Find("CardCount/CardCount").GetComponent<UILabel>();
+            gridEquipGrid = transInfo.Find("EquipGrid").GetComponent<UIGrid>();
+            lblCemeteryCount = transInfo.Find("Cemetery/CardCount").GetComponent<UILabel>();
+            gridBuffGrid = transInfo.Find("BuffGrid").GetComponent<UIGrid>();
+            goBuffIconTemplete = gridBuffGrid.transform.Find("buff").gameObject;
         }
-
-        public void UpdateInfo(BattlePlayerData playerData)
+        public void UpdateInfo()
         {
-            if (HeadIcon.mainTexture == null || HeadIcon.mainTexture.name != playerData.HeadIcon)
+            if (utHeadIcon.mainTexture == null || utHeadIcon.mainTexture.name != bindPlayerData.HeadIcon)
             {
-                HeadIcon.Load(playerData.HeadIcon);
+                utHeadIcon.Load(bindPlayerData.HeadIcon);
             }
-            Level.text = playerData.Level.ToString();
-            HP_Progress.fillAmount = (float)playerData.HP / playerData.MaxHP;
-            HP.text = playerData.HP.ToString();
-            MaxHP.text = playerData.MaxHP.ToString();
-            MP.text = playerData.AP.ToString();
-            MaxMP.text = playerData.MaxAP.ToString();
-            MP_Progress.fillAmount = (float)playerData.AP / playerData.MaxAP;
-            CardCount.text = playerData.CardList.Count.ToString();
-            CemeteryCount.text = playerData.UsedCardList.Count.ToString();
+            lblLevel.text = playerInfo.Level.ToString();
+            spHP_Progress.fillAmount = (float)playerInfo.HP / playerInfo.MaxHP;
+            lblHP.text = playerInfo.HP.ToString();
+            lblMaxHP.text = playerInfo.MaxHP.ToString();
+            lblMP.text = playerInfo.AP.ToString();
+            lblMaxMP.text = playerInfo.MaxAP.ToString();
+            spMP_Progress.fillAmount = (float)playerInfo.AP / playerInfo.MaxAP;
+            lblCardCount.text = playerInfo.CardCount.ToString();
+            lblCemeteryCount.text = playerInfo.CemeteryCount.ToString();
             foreach (var item in BuffIcons)
             {
                 item.Value.SetActive(false);
             }
-            for (int i = 0; i < playerData.BuffList.Count; i++)
+            for (int i = 0; i < playerInfo.Buffs.Count; i++)
             {
-                BattleBuffData buffData = playerData.BuffList[i];
+                BattleBuffData buffData = playerInfo.Buffs[i];
                 GameObject buffIcon;
                 if (!BuffIcons.ContainsKey(buffData.BuffId))
                 {
-                    buffIcon = Instantiate(BuffIconTemplete, BuffGrid.transform);
+                    buffIcon = Instantiate(goBuffIconTemplete, gridBuffGrid.transform);
                     BuffIcons.Add(buffData.BuffId, buffIcon);
                     buffIcon.GetComponent<UITexture>().Load(buffData.Data.Icon);
-
                 }
                 else
                     buffIcon = BuffIcons[buffData.BuffId];
@@ -297,19 +335,16 @@ public class UIBattleForm : UIFormBase
         //}
 
     }
-    class PlayerInfo
+    public class UIPlayerInfo
     {
         public int HP = 0;
         public int MaxHP = 0;
-        public int MP = 0;
-        public int MaxMP = 0;
-        public int Level = 1;
-        public string HeadIcon = "";
-        public List<CardInfo> CardList = new List<CardInfo>();
+        public int AP = 0;
+        public int MaxAP = 0;
+        public int Level = 0;
+        public int CardCount = 0;
+        public int CemeteryCount = 0;
+        public List<BattleBuffData> Buffs = new List<BattleBuffData>();
     }
 
-    class CardInfo
-    {
-
-    }
 }
