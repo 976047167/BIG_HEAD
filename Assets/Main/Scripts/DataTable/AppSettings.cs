@@ -2145,7 +2145,7 @@ namespace AppSettings
         /// <summary>
         /// 奖励物品
         /// </summary>
-        public list<int> EventList { get; private set;}
+        public List<int> EventList { get; private set;}
         
 
         internal RewardTableSetting(TableFileRow row)
@@ -2157,7 +2157,7 @@ namespace AppSettings
         { 
             Id = row.Get_int(row.Values[0], ""); 
             Text = row.Get_string(row.Values[1], ""); 
-            EventList = row.Get_list_int(row.Values[2], ""); 
+            EventList = row.Get_List_int(row.Values[2], ""); 
         }
 
         /// <summary>
