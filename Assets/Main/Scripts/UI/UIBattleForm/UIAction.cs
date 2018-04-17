@@ -14,11 +14,11 @@ public enum UIActionType
 }
 public abstract class UIAction
 {
-    protected UIBattleForm battleForm;
+    protected UIBattleForm BattleForm;
     public UIActionType ActionType { get; protected set; }
     public UIAction(UIActionType type)
     {
-        this.battleForm = Game.BattleManager.BattleForm;
+        this.BattleForm = Game.BattleManager.BattleForm;
         ActionType = type;
     }
     public abstract IEnumerator Excute();
@@ -41,11 +41,11 @@ public class UIAction_DrawCard : UIAction
         yield return null;
         if (CardData.Owner == Game.DataManager.MyPlayerData)
         {
-            battleForm.CreateBattleCard(CardData, battleForm.MyCardsGrid);
+            BattleForm.CreateBattleCard(CardData, BattleForm.MyCardsGrid);
         }
         else
         {
-            battleForm.CreateBattleCard(CardData, battleForm.OppCardsGrid);
+            BattleForm.CreateBattleCard(CardData, BattleForm.OppCardsGrid);
         }
         yield return new WaitForSeconds(0.5f);
     }
@@ -62,7 +62,7 @@ public class UIAction_Damage : UIAction
     }
     public override IEnumerator Excute()
     {
-        yield return null;
+        yield return BattleForm.GetPlayerInfoViewByPlayerData(Target).SetHpDamage(Damage);
     }
 }
 
@@ -76,6 +76,23 @@ public class UIAction_UseCard : UIAction
 
     public override IEnumerator Excute()
     {
-        throw new System.NotImplementedException();
+        UIBattleCard battleCard = BattleForm.GetUIBattleCard(CardData);
+        if (battleCard == null)
+        {
+            yield return null;
+        }
+        battleCard.UseCard();
+        Vector3 cachePos = battleCard.cacheChildCardTrans.position;
+        battleCard.transform.SetParent(BattleForm.UsedCardsGrid.transform, false);
+        BattleForm.UsedCardsGrid.Reposition();
+        BattleForm.MyCardsGrid.Reposition();
+
+        battleCard.cacheChildCardTrans.position = cachePos;
+        yield return null;
+        TweenPosition.Begin(battleCard.cacheChildCardTrans.gameObject, 0.5f, Vector3.zero, false);
+        yield return new WaitForSeconds(0.5f);
+        BattleForm.OppCardsGrid.Reposition();
+        battleCard.RefreshDepth();
+        yield return null;
     }
 }

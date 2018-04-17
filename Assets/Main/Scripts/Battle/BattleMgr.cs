@@ -230,7 +230,7 @@ public class BattleMgr
         if (battleCardData.Data.Spending <= battleCardData.Owner.AP)
         {
             battleCardData.Owner.HandCardList.Remove(battleCardData);
-            battleForm.UseCard(battleCardData);
+            battleForm.AddUIAction(new UIAction_UseCard(battleCardData));
             ApplyCardEffect(battleCardData);
 
             return true;
@@ -244,7 +244,7 @@ public class BattleMgr
     /// <param name="count"></param>
     public void DrawCard(BattlePlayerData playerData, int count = 1)
     {
-        
+
         for (int i = 0; i < count; i++)
         {
             if (playerData.HandCardList.Count >= MAX_HAND_CARD_COUNT)
@@ -262,7 +262,7 @@ public class BattleMgr
             BattleCardData card = playerData.CurrentCardList[playerData.CurrentCardList.Count - 1];
             playerData.CurrentCardList.RemoveAt(playerData.CurrentCardList.Count - 1);
             card.Owner.HandCardList.Add(card);
-            battleForm.AddHandCard(card);
+            battleForm.AddUIAction(new UIAction_DrawCard(card));
         }
     }
     /// <summary>

@@ -266,6 +266,10 @@ public class UIBattleCard : MonoBehaviour
 
         }
     }
+    /// <summary>
+    /// 使用卡牌的表现
+    /// </summary>
+    /// <returns></returns>
     public bool UseCard()
     {
         //判断使用条件，不允许返回false
