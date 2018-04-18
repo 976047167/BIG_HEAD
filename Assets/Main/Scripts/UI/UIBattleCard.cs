@@ -279,7 +279,6 @@ public class UIBattleCard : MonoBehaviour
         //    return false;
         //}
         cacheCardPos = cacheChildCardTrans.position;
-        cacheForm.ApplyUseCard(this);
         m_Used = true;
         if (CardData.Owner != Game.DataManager.MyPlayerData)
         {

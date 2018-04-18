@@ -146,10 +146,6 @@ public class UIBattleForm : UIFormBase
     }
 
     Queue<UIAction> uiActions = new Queue<UIAction>();
-    public void ApplyUseCard(UIBattleCard battleCard)
-    {
-
-    }
     IEnumerator CoroutineUseCard()
     {
         while (true)
@@ -253,8 +249,17 @@ public class UIBattleForm : UIFormBase
         public PlayerInfoViews(BattlePlayerData playerData)
         {
             bindPlayerData = playerData;
+            InitData();
 
-
+        }
+        void InitData()
+        {
+            this.playerInfo.HP = bindPlayerData.HP;
+            this.playerInfo.MaxHP = bindPlayerData.MaxHP;
+            this.playerInfo.AP = bindPlayerData.AP;
+            this.playerInfo.MaxAP = bindPlayerData.MaxAP;
+            this.playerInfo.CardCount = bindPlayerData.CurrentCardList.Count;
+            this.playerInfo.CemeteryCount = bindPlayerData.UsedCardList.Count;
         }
         public void GetUIController(Transform transInfo)
         {
@@ -292,21 +297,53 @@ public class UIBattleForm : UIFormBase
         public IEnumerator SetHpDamage(int damage)
         {
             Color orginColor = lblHP.color;
-            if (damage >= 0)
-            {
-                lblHP.color = Color.red;
-            }
-            else
-            {
-                lblHP.color = Color.green;
-            }
+            lblHP.color = Color.red;
             yield return null;
             TweenScale.Begin(lblHP.gameObject, 0.15f, new Vector3(1.2f, 1.2f, 1.2f));
             yield return new WaitForSeconds(0.15f);
             playerInfo.HP -= damage;
+            if (playerInfo.HP<=0)
+            {
+                if (bindPlayerData==Game.DataManager.MyPlayerData)
+                {
+                    Game.BattleManager.BattleForm.LoseBattle();
+                }
+                else
+                {
+                    Game.BattleManager.BattleForm.WinBattle();
+                }
+            }
             TweenScale.Begin(lblHP.gameObject, 0.15f, Vector3.one);
             yield return new WaitForSeconds(0.15f);
             lblHP.color = orginColor;
+        }
+        public IEnumerator SetHpRecover(int hp)
+        {
+            Color orginColor = lblHP.color;
+            lblHP.color = Color.green;
+            yield return null;
+            TweenScale.Begin(lblHP.gameObject, 0.15f, new Vector3(1.2f, 1.2f, 1.2f));
+            yield return new WaitForSeconds(0.15f);
+            playerInfo.HP += hp;
+            if (playerInfo.HP>=playerInfo.MaxHP)
+            {
+                playerInfo.HP = playerInfo.MaxHP;
+            }
+            TweenScale.Begin(lblHP.gameObject, 0.15f, Vector3.one);
+            yield return new WaitForSeconds(0.15f);
+            lblHP.color = orginColor;
+        }
+        public IEnumerator SpendAp(int ap)
+        {
+            Color orginColor = lblMP.color;
+            lblMP.color = Color.green;
+            yield return null;
+            TweenScale.Begin(lblMP.gameObject, 0.15f, new Vector3(1.2f, 1.2f, 1.2f));
+            yield return new WaitForSeconds(0.15f);
+            playerInfo.AP -= ap;
+            TweenScale.Begin(lblMP.gameObject, 0.15f, Vector3.one);
+            yield return new WaitForSeconds(0.15f);
+            lblMP.color = orginColor;
         }
         void SetBuffUI()
         {
@@ -345,6 +382,22 @@ public class UIBattleForm : UIFormBase
         public void AddBuff(BattleBuffData buffData)
         {
             playerInfo.Buffs.Add(buffData);
+        }
+        public void DrawCard()
+        {
+            playerInfo.CardCount--;
+            if (playerInfo.CardCount <= 0)
+            {
+                playerInfo.CardCount = bindPlayerData.CurrentCardList.Count;
+            }
+        }
+        public void UseCard()
+        {
+            playerInfo.CemeteryCount++;
+        }
+        public void RoundStart()
+        {
+            playerInfo.AP = playerInfo.MaxAP = bindPlayerData.MaxAP;
         }
 
     }

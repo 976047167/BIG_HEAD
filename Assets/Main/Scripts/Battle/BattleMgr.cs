@@ -124,10 +124,10 @@ public class BattleMgr
                 State = BattleState.MyRoundStart;
                 break;
             case BattleState.BattleEnd_Win:
-                battleForm.WinBattle();
+                //battleForm.WinBattle();
                 break;
             case BattleState.BattleEnd_Lose:
-                battleForm.LoseBattle();
+                //battleForm.LoseBattle();
                 break;
             default:
                 break;
@@ -190,7 +190,8 @@ public class BattleMgr
             case BattleState.MyUsingCard:
                 break;
             case BattleState.MyRoundEnd:
-                battleForm.ClearUsedCards();
+                //battleForm.ClearUsedCards();
+                battleForm.AddUIAction(new UIAction_RoundEnd(MyPlayer.Data));
                 break;
             case BattleState.OppRoundStart:
                 break;
@@ -231,6 +232,7 @@ public class BattleMgr
         {
             battleCardData.Owner.HandCardList.Remove(battleCardData);
             battleForm.AddUIAction(new UIAction_UseCard(battleCardData));
+            battleForm.AddUIAction(new UIAction_ApSpend(battleCardData.Owner, battleCardData.Data.Spending));
             ApplyCardEffect(battleCardData);
 
             return true;
@@ -302,7 +304,7 @@ public class BattleMgr
             ApplyAction(cardData.Data.ActionTypes[i], cardData.Data.ActionParams[i], cardData, cardData.Owner, null);
         }
     }
-    public void ApplyAction(int actionType, int actionArg, BattleCardData cardData, BattlePlayerData owner, BattlePlayerData target)
+    void ApplyAction(int actionType, int actionArg, BattleCardData cardData, BattlePlayerData owner, BattlePlayerData target)
     {
         if (target == null)
         {
@@ -326,27 +328,33 @@ public class BattleMgr
                 }
                 if (added == false)
                 {
-                    target.BuffList.Add(new BattleBuffData(actionArg, 0, cardData, owner, target));
+                    BattleBuffData buffData = new BattleBuffData(actionArg, 0, cardData, owner, target);
+                    target.BuffList.Add(buffData);
+                    battleForm.AddUIAction(new UIAction_AddBuff(buffData));
                 }
                 break;
             case BattleActionType.Attack:
                 if (owner == Game.DataManager.MyPlayerData)
                 {
                     Game.DataManager.OppPlayerData.HP -= actionArg;
+                    battleForm.AddUIAction(new UIAction_HPDamage(Game.DataManager.OppPlayerData, actionArg));
                 }
                 else if (owner == Game.DataManager.OppPlayerData)
                 {
                     Game.DataManager.MyPlayerData.HP -= actionArg;
+                    battleForm.AddUIAction(new UIAction_HPDamage(Game.DataManager.MyPlayerData, actionArg));
                 }
+
                 break;
             case BattleActionType.RecoverHP:
                 target.HP += actionArg;
                 target.HP = target.HP > target.MaxHP ? target.MaxHP : target.HP;
+                battleForm.AddUIAction(new UIAction_HpRecover(target, -actionArg));
                 break;
             case BattleActionType.RecoverMP:
                 break;
             case BattleActionType.DrawCard:
-                Game.BattleManager.DrawCard(owner, actionArg);
+                DrawCard(owner, actionArg);
                 break;
             case BattleActionType.AddEuipment:
                 break;

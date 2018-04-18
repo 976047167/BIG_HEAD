@@ -11,6 +11,8 @@ public enum UIActionType
     ApSpend,
     HpRecover,
     AddBuff,
+    RoundStart,
+    RoundEnd,
 }
 public abstract class UIAction
 {
@@ -27,8 +29,6 @@ public abstract class UIAction
 }
 public class UIAction_DrawCard : UIAction
 {
-
-
     public BattleCardData CardData { get; private set; }
 
     public UIAction_DrawCard(BattleCardData data) : base(UIActionType.DrawCard)
@@ -47,15 +47,16 @@ public class UIAction_DrawCard : UIAction
         {
             BattleForm.CreateBattleCard(CardData, BattleForm.OppCardsGrid);
         }
+        BattleForm.GetPlayerInfoViewByPlayerData(CardData.Owner).DrawCard();
         yield return new WaitForSeconds(0.5f);
     }
 }
 
-public class UIAction_Damage : UIAction
+public class UIAction_HPDamage : UIAction
 {
     public BattlePlayerData Target { get; private set; }
     public int Damage { get; private set; }
-    public UIAction_Damage(BattlePlayerData target, int hpDamage) : base(UIActionType.HpDamage)
+    public UIAction_HPDamage(BattlePlayerData target, int hpDamage) : base(UIActionType.HpDamage)
     {
         Target = target;
         Damage = hpDamage;
@@ -65,7 +66,20 @@ public class UIAction_Damage : UIAction
         yield return BattleForm.GetPlayerInfoViewByPlayerData(Target).SetHpDamage(Damage);
     }
 }
-
+public class UIAction_HpRecover : UIAction
+{
+    public BattlePlayerData Target { get; private set; }
+    public int HpRecover { get; private set; }
+    public UIAction_HpRecover(BattlePlayerData target, int hpRecover) : base(UIActionType.HpDamage)
+    {
+        Target = target;
+        HpRecover = hpRecover;
+    }
+    public override IEnumerator Excute()
+    {
+        yield return BattleForm.GetPlayerInfoViewByPlayerData(Target).SetHpRecover(HpRecover);
+    }
+}
 public class UIAction_UseCard : UIAction
 {
     public BattleCardData CardData { get; private set; }
@@ -90,9 +104,68 @@ public class UIAction_UseCard : UIAction
         battleCard.cacheChildCardTrans.position = cachePos;
         yield return null;
         TweenPosition.Begin(battleCard.cacheChildCardTrans.gameObject, 0.5f, Vector3.zero, false);
+        BattleForm.GetPlayerInfoViewByPlayerData(CardData.Owner).UseCard();
         yield return new WaitForSeconds(0.5f);
         BattleForm.OppCardsGrid.Reposition();
         battleCard.RefreshDepth();
+        yield return null;
+    }
+}
+public class UIAction_AddBuff : UIAction
+{
+    public BattleBuffData BuffData { get; private set; }
+    public UIAction_AddBuff(BattleBuffData buffData) : base(UIActionType.AddBuff)
+    {
+        BuffData = buffData;
+    }
+
+    public override IEnumerator Excute()
+    {
+        BattleForm.GetPlayerInfoViewByPlayerData(BuffData.TargetPlayerData).AddBuff(BuffData);
+        yield return null;
+    }
+}
+public class UIAction_ApSpend : UIAction
+{
+    public BattlePlayerData PlayerData { get; private set; }
+    public int SpentAp { get; private set; }
+    public UIAction_ApSpend(BattlePlayerData playerData, int spentAp) : base(UIActionType.ApSpend)
+    {
+        PlayerData = playerData;
+        SpentAp = spentAp;
+    }
+
+    public override IEnumerator Excute()
+    {
+        BattleForm.GetPlayerInfoViewByPlayerData(PlayerData).SpendAp(SpentAp);
+        yield return null;
+    }
+}
+public class UIAction_RoundStart : UIAction
+{
+    public BattlePlayerData PlayerData { get; private set; }
+    public UIAction_RoundStart(BattlePlayerData playerData) : base(UIActionType.RoundStart)
+    {
+        PlayerData = playerData;
+    }
+
+    public override IEnumerator Excute()
+    {
+        BattleForm.GetPlayerInfoViewByPlayerData(PlayerData).RoundStart();
+        yield return null;
+    }
+}
+public class UIAction_RoundEnd : UIAction
+{
+    public BattlePlayerData PlayerData { get; private set; }
+    public UIAction_RoundEnd(BattlePlayerData playerData) : base(UIActionType.RoundEnd)
+    {
+        PlayerData = playerData;
+    }
+
+    public override IEnumerator Excute()
+    {
+        BattleForm.ClearUsedCards();
         yield return null;
     }
 }
