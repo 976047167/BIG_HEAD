@@ -1,0 +1,4 @@
+Id	Text	EventList
+int	string	List<int>
+1	[FF0000]圣者遗物      X1[-]\n[00FF00]恶魔刀锋      X1[-]\n[FFFF00]撒旦邪力      X1[-]	
+2	[FF0000]治疗药膏      X1[-]\n[00FF00]净化药水      X1[-]\n[FFFF00]铁树枝干      X1[-]	

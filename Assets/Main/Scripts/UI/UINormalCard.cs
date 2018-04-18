@@ -181,7 +181,7 @@ public class UINormalCard : MonoBehaviour
         }
         UIEventListener.Get(gameObject).onClick = (GameObject a) =>
         {
-            UIModule.Instance.OpenForm<WND_ShowCard>(cardData.CardId);
+            UIModule.Instance.OpenForm<WND_ShowCard>(cardData.Data.Id);
 
 
         };

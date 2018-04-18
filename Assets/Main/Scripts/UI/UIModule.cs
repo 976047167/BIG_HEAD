@@ -95,6 +95,7 @@ public class UIModule
         {typeof(WND_ShowCard),new UIConfig("Prefabs/UIForm/WND_ShowCard") },
         {typeof(WND_Kaku),new UIConfig("Prefabs/UIForm/WND_Kaku") },
         {typeof(UIMenu),new UIConfig("Prefabs/UIForm/WND_Menu") },
+        {typeof(WND_Reward),new UIConfig("Prefabs/UIForm/WND_Reward") },
     };
     public bool SetUICamera(UIModelCameraHelper uiCameraHelper)
     {
