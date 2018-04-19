@@ -182,6 +182,7 @@ public class BattleMgr
             case BattleState.Ready:
                 break;
             case BattleState.MyRoundStart:
+                battleForm.AddUIAction(new UIAction_RoundStart(MyPlayer.Data));
                 break;
             case BattleState.MyDrawCard:
                 break;
@@ -194,6 +195,7 @@ public class BattleMgr
                 battleForm.AddUIAction(new UIAction_RoundEnd(MyPlayer.Data));
                 break;
             case BattleState.OppRoundStart:
+                battleForm.AddUIAction(new UIAction_RoundStart(OppPlayer.Data));
                 break;
             case BattleState.OppDrawCard:
                 break;
@@ -202,6 +204,7 @@ public class BattleMgr
             case BattleState.OppUsingCard:
                 break;
             case BattleState.OppRoundEnd:
+                battleForm.AddUIAction(new UIAction_RoundEnd(OppPlayer.Data));
                 //battleForm.ClearUsedCards();
                 break;
             case BattleState.BattleEnd_Win:
@@ -349,7 +352,7 @@ public class BattleMgr
             case BattleActionType.RecoverHP:
                 target.HP += actionArg;
                 target.HP = target.HP > target.MaxHP ? target.MaxHP : target.HP;
-                battleForm.AddUIAction(new UIAction_HpRecover(target, -actionArg));
+                battleForm.AddUIAction(new UIAction_HpRecover(target, actionArg));
                 break;
             case BattleActionType.RecoverMP:
                 break;

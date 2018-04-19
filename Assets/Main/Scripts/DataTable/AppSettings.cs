@@ -515,9 +515,14 @@ namespace AppSettings
         public string Desc { get; private set;}
         
         /// <summary>
-        /// 卡牌类型(攻击0,装备1,法术2)
+        /// 卡牌类型(攻击0,装备1,法术2,消耗品)
         /// </summary>
         public int Type { get; private set;}
+        
+        /// <summary>
+        /// 卡牌品质(白绿蓝紫橙)0开始
+        /// </summary>
+        public int Quality { get; private set;}
         
         /// <summary>
         /// 魔法开销
@@ -556,11 +561,12 @@ namespace AppSettings
             Name = row.Get_string (row.Values[1], ""); 
             Desc = row.Get_string(row.Values[2], ""); 
             Type = row.Get_int(row.Values[3], ""); 
-            Spending = row.Get_int(row.Values[4], ""); 
-            Icon = row.Get_string(row.Values[5], ""); 
-            Price = row.Get_int(row.Values[6], ""); 
-            ActionTypes = row.Get_List_int(row.Values[7], ""); 
-            ActionParams = row.Get_List_int(row.Values[8], ""); 
+            Quality = row.Get_int(row.Values[4], ""); 
+            Spending = row.Get_int(row.Values[5], ""); 
+            Icon = row.Get_string(row.Values[6], ""); 
+            Price = row.Get_int(row.Values[7], ""); 
+            ActionTypes = row.Get_List_int(row.Values[8], ""); 
+            ActionParams = row.Get_List_int(row.Values[9], ""); 
         }
 
         /// <summary>
@@ -831,6 +837,11 @@ namespace AppSettings
         /// </summary>
         public int DialogId { get; private set;}
         
+        /// <summary>
+        /// 奖励
+        /// </summary>
+        public int RewardId { get; private set;}
+        
 
         internal BattleMonsterTableSetting(TableFileRow row)
         {
@@ -856,6 +867,7 @@ namespace AppSettings
             BuffParams = row.Get_List_int(row.Values[14], ""); 
             EquipIds = row.Get_List_int(row.Values[15], ""); 
             DialogId = row.Get_int(row.Values[16], ""); 
+            RewardId = row.Get_int(row.Values[17], ""); 
         }
 
         /// <summary>
@@ -2143,6 +2155,21 @@ namespace AppSettings
         public string Text { get; private set;}
         
         /// <summary>
+        /// 金币
+        /// </summary>
+        public int gold { get; private set;}
+        
+        /// <summary>
+        /// 钻石
+        /// </summary>
+        public int diamond { get; private set;}
+        
+        /// <summary>
+        /// 经验
+        /// </summary>
+        public int exp { get; private set;}
+        
+        /// <summary>
         /// 奖励物品
         /// </summary>
         public List<int> EventList { get; private set;}
@@ -2157,7 +2184,10 @@ namespace AppSettings
         { 
             Id = row.Get_int(row.Values[0], ""); 
             Text = row.Get_string(row.Values[1], ""); 
-            EventList = row.Get_List_int(row.Values[2], ""); 
+            gold = row.Get_int(row.Values[2], ""); 
+            diamond = row.Get_int(row.Values[3], ""); 
+            exp = row.Get_int(row.Values[4], ""); 
+            EventList = row.Get_List_int(row.Values[5], ""); 
         }
 
         /// <summary>

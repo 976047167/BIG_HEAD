@@ -104,7 +104,7 @@ public class UIAction_UseCard : UIAction
         battleCard.cacheChildCardTrans.position = cachePos;
         yield return null;
         TweenPosition.Begin(battleCard.cacheChildCardTrans.gameObject, 0.5f, Vector3.zero, false);
-        BattleForm.GetPlayerInfoViewByPlayerData(CardData.Owner).UseCard();
+        BattleForm.GetPlayerInfoViewByPlayerData(CardData.Owner).UseCard(battleCard.CardData);
         yield return new WaitForSeconds(0.5f);
         BattleForm.OppCardsGrid.Reposition();
         battleCard.RefreshDepth();

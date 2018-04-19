@@ -54,7 +54,7 @@ public class UIBattleForm : UIFormBase
     void Start()
     {
         myPlayerViews = new PlayerInfoViews(Game.DataManager.MyPlayerData);
-        oppPlayerViews = new PlayerInfoViews(Game.DataManager.MyPlayerData);
+        oppPlayerViews = new PlayerInfoViews(Game.DataManager.OppPlayerData);
         myPlayerViews.GetUIController(transform.Find("BattleInfo/MeInfo"));
         oppPlayerViews.GetUIController(transform.Find("BattleInfo/OppInfo"));
         resultInfo = transform.Find("ResultInfo").gameObject;
@@ -302,9 +302,9 @@ public class UIBattleForm : UIFormBase
             TweenScale.Begin(lblHP.gameObject, 0.15f, new Vector3(1.2f, 1.2f, 1.2f));
             yield return new WaitForSeconds(0.15f);
             playerInfo.HP -= damage;
-            if (playerInfo.HP<=0)
+            if (playerInfo.HP <= 0)
             {
-                if (bindPlayerData==Game.DataManager.MyPlayerData)
+                if (bindPlayerData == Game.DataManager.MyPlayerData)
                 {
                     Game.BattleManager.BattleForm.LoseBattle();
                 }
@@ -325,7 +325,7 @@ public class UIBattleForm : UIFormBase
             TweenScale.Begin(lblHP.gameObject, 0.15f, new Vector3(1.2f, 1.2f, 1.2f));
             yield return new WaitForSeconds(0.15f);
             playerInfo.HP += hp;
-            if (playerInfo.HP>=playerInfo.MaxHP)
+            if (playerInfo.HP >= playerInfo.MaxHP)
             {
                 playerInfo.HP = playerInfo.MaxHP;
             }
@@ -391,9 +391,10 @@ public class UIBattleForm : UIFormBase
                 playerInfo.CardCount = bindPlayerData.CurrentCardList.Count;
             }
         }
-        public void UseCard()
+        public void UseCard(BattleCardData cardData)
         {
             playerInfo.CemeteryCount++;
+            playerInfo.AP -= cardData.Data.Spending;
         }
         public void RoundStart()
         {
