@@ -265,7 +265,7 @@ public class BattleMgr
                 //playerData.CurrentCardList = new List<BattleCardData>(playerData.CardList);
             }
             BattleCardData card = playerData.CurrentCardList[playerData.CurrentCardList.Count - 1];
-            playerData.CurrentCardList.RemoveAt(playerData.CurrentCardList.Count - 1);
+            playerData.CurrentCardList.Remove(card);
             card.Owner.HandCardList.Add(card);
             battleForm.AddUIAction(new UIAction_DrawCard(card));
         }

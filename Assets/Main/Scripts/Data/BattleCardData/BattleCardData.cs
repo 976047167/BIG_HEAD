@@ -13,6 +13,10 @@ public class BattleCardData
     public BattleCardData(int cardId, BattlePlayerData owner)
     {
         uniqueId++;
+        if (uniqueId >= int.MaxValue)
+        {
+            uniqueId = int.MinValue;
+        }
         CardId = uniqueId;
         Data = BattleCardTableSettings.Get(cardId);
         if (Data == null)
