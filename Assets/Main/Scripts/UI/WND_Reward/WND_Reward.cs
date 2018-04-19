@@ -14,7 +14,7 @@ public class WND_Reward : UIFormBase
         btnCommond = transform.Find("bg/frame/btnCommond").gameObject;
         grid = transform.Find("bg/frame/scrollView/Grid").GetComponent<UIGrid>();
         UIEventListener.Get(btnCommond).onClick = exitClick;
-        OnInit(1);
+       
     }
 
     // Update is called once per frame
