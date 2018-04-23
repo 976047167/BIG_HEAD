@@ -14,7 +14,7 @@ public class WND_Reward : UIFormBase
         btnCommond = transform.Find("bg/frame/btnCommond").gameObject;
         grid = transform.Find("bg/frame/scrollView/Grid").GetComponent<UIGrid>();
         UIEventListener.Get(btnCommond).onClick = exitClick;
-       
+       // OnInit(1);
     }
 
     // Update is called once per frame
@@ -95,7 +95,12 @@ public class WND_Reward : UIFormBase
             }
 
             item.GetComponent<UILabel>().gradientBottom = color;
-
+            UIEventListener.Get(item).onClick = (GameObject obj) => {
+                UIModule.Instance.OpenForm<WND_ShowCard>(card);
+            };
+            UITexture icon = item.transform.Find("texReward").GetComponent<UITexture>();
+            icon.gameObject.SetActive(true);
+            icon.mainTexture = Resources.Load(cardData.Icon) as Texture2D;
             item.transform.parent = grid.transform;
             item.transform.localPosition = new Vector3();
             item.transform.localScale = new Vector3(1, 1, 1);
@@ -107,4 +112,5 @@ public class WND_Reward : UIFormBase
     {
         Destroy(gameObject);
     }
+
 }
