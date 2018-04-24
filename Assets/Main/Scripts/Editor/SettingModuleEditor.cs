@@ -173,7 +173,7 @@ namespace KEngine.Editor
                 Debug.LogError("Need to KEngineConfig: SettingSourcePath");
                 return;
             }
-            var compilePath = "Assets/Main/Resources/DataTable";
+            var compilePath = "Assets/Main/BundleEditor/DataTable";
             if (string.IsNullOrEmpty(compilePath))
             {
                 Debug.LogError("Need to KEngineConfig: SettingCompiledPath");

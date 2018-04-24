@@ -131,7 +131,7 @@ namespace KEngine.Modules
 
         private static string GetFileSystemPath(string path)
         {
-            var compilePath = "Assets/Main/Resources/DataTable/";
+            var compilePath = "Assets/Main/BundleEditor/DataTable/";
             var resPath = Path.Combine(compilePath, path);
             return resPath;
         }

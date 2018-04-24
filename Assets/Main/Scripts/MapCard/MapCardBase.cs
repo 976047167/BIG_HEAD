@@ -3,22 +3,34 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using DG;
-//using System;
+using System.Reflection;
+using Type = System.Type;
 /// <summary>
 /// 地图上的那些背景地形卡牌，山河之类的
 /// </summary>
-public class MapCardBase : MonoBehaviour
+[System.Serializable]
+public class MapCardBase
 {
-    public GameObject prefab;
     public TextMeshPro infoBoard;
     public int X { get { return Pos.X; } set { Pos.X = value; } }
     public int Y { get { return Pos.Y; } set { Pos.Y = value; } }
+    public GameObject gameObject { protected set; get; }
+    public Transform transform { protected set; get; }
+    public Transform parent { get; protected set; }
     public MapCardPos Pos;
     public CardState state = CardState.None;
+    public bool Active { get; private set; }
 
+    public MapCardBase()
+    {
+        Active = true;
+    }
     public void Destory()
     {
         GameObject.Destroy(gameObject);
+        gameObject = null;
+        transform = null;
+        parent = null;
     }
 
     static string[] MapCardName = {
@@ -30,40 +42,72 @@ public class MapCardBase : MonoBehaviour
     static string MapCardDoor = "MapCardDoor";
     static string MapCardPlayer = "MapCardPlayer";
 
-    public static MapCardBase CreateMapCard<T>() where T : MapCardBase
+    public static MapCardBase CreateMapCard<T>() where T : MapCardBase, new()
     {
         //Debug.LogError("Prefabs/MapCard/" + typeof(T).ToString());
-        GameObject prefab = Resources.Load<GameObject>("Prefabs/MapCard/" + typeof(T).ToString());
-        GameObject go = Instantiate(prefab);
-        MapCardBase mapCard = go.GetComponent<T>();
+
+        MapCardBase mapCard = new T();
+
+        ResourceManager.Load<GameObject>("Prefabs/MapCard/" + typeof(T).ToString(), mapCard, LoadAssetScuess, LoadAssetFailed);
+
+        //GameObject prefab = Resources.Load<GameObject>("Prefabs/MapCard/" + typeof(T).ToString());
+        //GameObject go = GameObject.Instantiate(prefab);
+        //MapCardBase mapCard = go.GetComponent<T>();
         return mapCard;
     }
 
     public static MapCardBase GetRandomMapCard()
     {
         string cardType = MapCardName[Random.Range(0, MapCardName.Length)];
-        return Instantiate(Resources.Load<MapCardBase>("Prefabs/MapCard/MapCardMonster"));
-        //return Instantiate(Resources.Load<MapCardBase>("Prefabs/MapCard/" + cardType));
+        Type type = Type.GetType("MapCardMonster");
+
+        return CreateMapCard<MapCardMonster>();
+        //return Instantiate(Resources.Load<MapCardBase>("Prefabs/MapCard/" + "MapCardMonster"));
     }
 
-
-
-    // Use this for initialization
-    protected virtual void Start()
+    static void LoadAssetScuess(string path, object args, GameObject go)
     {
+        MapCardBase mapCard = args as MapCardBase;
+        go.AddComponent<MapCardHelper>().MapCardData = mapCard;
+        mapCard.Init(go);
 
     }
-
-    // Update is called once per frame
-    protected virtual void Update()
+    static void LoadAssetFailed(string path, object args)
     {
-
+        Debug.LogError("Load [" + path + "] Failed!");
+        ResourceManager.Load<GameObject>(path, args, LoadAssetScuess, LoadAssetFailed);
     }
+    public void SetActive(bool active)
+    {
+        Active = active;
+        if (gameObject != null)
+        {
+            gameObject.SetActive(active);
+        }
+    }
+    public void SetParent(Transform parent, bool worldPositionStays)
+    {
+        if (this.parent != parent)
+        {
+            this.parent = parent;
+        }
+        if (gameObject != null)
+        {
+            transform.SetParent(parent, worldPositionStays);
+        }
+    }
+
     /// <summary>
     /// 初始化
     /// </summary>
-    public void Init()
+    public bool Init(GameObject go)
     {
+        gameObject = go;
+        if (gameObject == null)
+        {
+            return false;
+        }
+        gameObject.SetActive(Active);
         transform.position = new Vector3((X - 2) * 2f, 0.1f, (Y - 2) * 2f);
         if (state == CardState.Behind)
         {
@@ -75,6 +119,7 @@ public class MapCardBase : MonoBehaviour
         }
         UIEventListener.Get(transform.Find("Card").gameObject).onClick = OnClick;
         OnInit();
+        return true;
     }
 
     public virtual void OnInit()
@@ -84,7 +129,7 @@ public class MapCardBase : MonoBehaviour
 
     void OnClick(GameObject go)
     {
-        Debug.LogError(name + "  " + Pos.X + ":" + Pos.Y);
+        Debug.LogError(gameObject.name + "  " + Pos.X + ":" + Pos.Y);
         MapLogic.Instance.OnClickMapCard(this);
 
     }
@@ -212,4 +257,9 @@ public struct MapCardPos
         X = x;
         Y = y;
     }
+}
+
+public class MapCardHelper : MonoBehaviour
+{
+    public MapCardBase MapCardData;
 }

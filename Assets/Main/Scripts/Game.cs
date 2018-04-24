@@ -14,6 +14,7 @@ public class Game : MonoBehaviour
         dataMgr = new DataMgr();
         battleMgr = new BattleMgr();
         uiModule = UIModule.Instance;
+        ResourceManager.Init();
     }
 
     private void Start()
@@ -23,14 +24,19 @@ public class Game : MonoBehaviour
 
     private void Update()
     {
-
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+#if !UNITY_EDITOR
+            Application.Quit();
+#endif
+        }
     }
 
     void StartGame()
     {
         dataMgr.OnInit();
         SceneManager.LoadScene("Main");
-        
+
     }
 
     #region Game Module Managers

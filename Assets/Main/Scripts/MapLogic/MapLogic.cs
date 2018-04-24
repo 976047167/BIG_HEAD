@@ -58,7 +58,6 @@ public class MapLogic : MonoBehaviour
 
                 maplist[mapCards[i].X, mapCards[i].Y] = mapCards[i];
                 mapCards[i].state = MapCardBase.CardState.Behind;
-                mapCards[i].Init();
                 mapCards[i].gameObject.SetActive(true);
                 mapCards[i].transform.SetParent(transform);
                 continue;
@@ -72,23 +71,14 @@ public class MapLogic : MonoBehaviour
                 i--;
                 continue;
             }
-            //try
-            //{
             pos = poss[count];
-            //}
-            //catch (System.Exception ex)
-            //{
-            //    Debug.LogError(pos.X + "  " + pos.Y + "  " + count);
-            //    throw;
-            //}
             mapCards.Add(MapCardBase.GetRandomMapCard());
             mapCards[i].X = pos.X;
             mapCards[i].Y = pos.Y;
             maplist[mapCards[i].X, mapCards[i].Y] = mapCards[i];
             mapCards[i].state = MapCardBase.CardState.Behind;
-            mapCards[i].Init();
             mapCards[i].gameObject.SetActive(true);
-            mapCards[i].transform.SetParent(transform);
+            mapCards[i].SetParent(transform, true);
         }
     }
 
