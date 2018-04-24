@@ -39,13 +39,19 @@ public class UIModule
             Debug.LogError("The UI[" + typeof(T).ToString() + "] is not configed!");
             return;
         }
-        GameObject uiForm = Resources.Load<GameObject>(config.PrefabName);
+        ResourceManager.Load<GameObject>(config.PrefabName, LoadFormSuccess, LoadFormFailed, typeof(T), userdata);
+
+    }
+    void LoadFormSuccess(string path, object[] userData, GameObject uiForm)
+    {
+        UIConfig config = DicUIConfig[(userData[0] as Type)];
         if (uiForm == null)
         {
             Debug.LogError("The UI prefab[" + config.PrefabName + "] is not exist!");
             return;
         }
-        GameObject form = GameObject.Instantiate<GameObject>(uiForm, UICamera.mainCamera.transform);
+        GameObject form = uiForm;
+        form.transform.SetParent(uiCamera);
         form.transform.localPosition = Vector3.zero;
         form.transform.localScale = Vector3.one;
         form.transform.localEulerAngles = Vector3.zero;
@@ -58,17 +64,20 @@ public class UIModule
             sortedPanels[i].depth = baseDepth + i;
         }
         baseDepth += panels.Length;
-        T script = form.GetComponent<T>();
+        UIFormBase script = form.GetComponent((userData[0] as Type)) as UIFormBase;
         if (script == null)
         {
-            Debug.LogError("The UI need a script[" + typeof(T).ToString() + "]!");
+            Debug.LogError("The UI need a script[" + typeof(UIFormBase).ToString() + "]!");
             GameObject.Destroy(form);
             return;
         }
-        DicOpenedUIForm[typeof(T)] = script;
-        script.Init(userdata);
+        DicOpenedUIForm[(userData[0] as Type)] = script;
+        script.Init(userData[1]);
     }
-
+    void LoadFormFailed(string path, object[] userData)
+    {
+        Debug.LogError("Open UIForm " + userData[0] + " Failed!");
+    }
     public T GetForm<T>() where T : UIFormBase
     {
         return DicOpenedUIForm[typeof(T)] as T;

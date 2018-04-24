@@ -373,7 +373,7 @@ public class UITexture : UIBasicSprite
         }
         ResourceManager.LoadTexture(path, null, LoadCallback);
     }
-    void LoadCallback(string path, object args, Texture2D texture)
+    void LoadCallback(string path, object[] args, Texture2D texture)
     {
         mainTexture = texture;
     }

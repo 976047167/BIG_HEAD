@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 using Object = UnityEngine.Object;
+#if UNITY_EDITOR || !DEBUG_BUNDLE
+using UnityEditor;
+#endif
 /// <summary>
 /// 资源加载类
 /// </summary>
@@ -19,7 +22,7 @@ public class ResourceManager
         }
     }
     //Dictionary<string,GameObject> 
-    public static void Load<T>(string path, object arg, Action<string, object, T> callback, Action<string, object> failure) where T : Object
+    public static void Load<T>(string path, Action<string, object[], T> callback, Action<string, object[]> failure, params object[] userData) where T : Object
     {
         //T obj = Resources.Load<T>(path);
         //if (callback != null)
@@ -34,24 +37,15 @@ public class ResourceManager
             assetLoader = new AssetLoader(path);
             dicAssetLoader.Add(path, assetLoader);
         }
-        assetLoader.AddLoadRequest(new LoadRequest<T>(callback, failure));
+        assetLoader.AddLoadRequest(new LoadRequest<T>(callback, failure, userData));
         helper.StartCoroutine(assetLoader.Load());
 
     }
 
-    public static void LoadTexture(string path, object arg, Action<string, object, Texture2D> callback)
+    public static void LoadTexture(string path, object userData, Action<string, object[], Texture2D> callback)
     {
 
-        Load<Texture2D>("UITexture/" + path, arg, callback, null);
-    }
-
-    static void LoadSuccess(AssetLoader loader)
-    {
-
-    }
-    static void LoadFailed(AssetLoader loader)
-    {
-
+        Load<Texture2D>("UITexture/" + path, callback, null, userData);
     }
 }
 public abstract class LoadRequest
@@ -61,21 +55,32 @@ public abstract class LoadRequest
 }
 public class LoadRequest<T> : LoadRequest where T : Object
 {
-    Action<string, object, T> callback;
-    Action<string, object> failure;
-    public LoadRequest(Action<string, object, T> callback, Action<string, object> failure)
+    Action<string, object[], T> callback;
+    Action<string, object[]> failure;
+    object[] userData;
+    public LoadRequest(Action<string, object[], T> callback, Action<string, object[]> failure, params object[] userData)
     {
+        this.userData = userData;
         this.callback = callback;
         this.failure = failure;
     }
     public override void LoadFailed(AssetLoader loader)
     {
-        throw new NotImplementedException();
+        failure(loader.AssetPath, userData);
     }
 
     public override void LoadSuccess(AssetLoader loader)
     {
-        throw new NotImplementedException();
+        T prefab = loader.GetAsset<T>();
+        if (prefab != null)
+        {
+            T obj = Object.Instantiate(prefab);
+            callback(loader.AssetPath, userData, obj);
+            //callback(loader.AssetPath, userData, prefab);
+            return;
+        }
+        Debug.LogError("Cannot Find this type asset at " + loader.FullPath + "! [" + typeof(T).ToString() + "]");
+        failure(loader.AssetPath, userData);
     }
 }
 
@@ -94,8 +99,8 @@ public class AssetLoader
     public AssetLoader(string assetPath)
     {
         AssetPath = assetPath;
-#if UNITY_EDITOR
-        FullPath = GetRemotePath(Application.dataPath+"Main/BundleEditor", AssetPath);
+#if UNITY_EDITOR || !DEBUG_BUNDLE
+        FullPath = "Assets/Main/BundleEditor/" + AssetPath + ".prefab";
 #else
         FullPath = GetRemotePath(Application.streamingAssetsPath, AssetPath);
 #endif
@@ -126,6 +131,20 @@ public class AssetLoader
             yield break;
         }
         LoadState = AssetLoadState.Start;
+#if UNITY_EDITOR || !DEBUG_BUNDLE
+        UnityEngine.Object asset = AssetDatabase.LoadMainAssetAtPath(FullPath);
+        if (asset == null)
+        {
+            Debug.LogError("Get asset failure!+ " + FullPath);
+            LoadState = AssetLoadState.LoadFail;
+            while (requests.Count > 0)
+            {
+                requests.Dequeue().LoadFailed(this);
+            }
+            yield break;
+        }
+        assets = new Object[] { asset };
+#else
         www = new WWW(FullPath);
         LoadState = AssetLoadState.Loading;
         yield return www;
@@ -157,6 +176,7 @@ public class AssetLoader
             yield return null;
         }
         assets = bundleRequest.allAssets;
+#endif
         LoadState = AssetLoadState.Loaded;
         while (requests.Count > 0)
         {

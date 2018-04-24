@@ -57,9 +57,9 @@ public class MapLogic : MonoBehaviour
                 mapCards[i].Y = Random.Range(0, 5);
 
                 maplist[mapCards[i].X, mapCards[i].Y] = mapCards[i];
-                mapCards[i].state = MapCardBase.CardState.Behind;
-                mapCards[i].gameObject.SetActive(true);
-                mapCards[i].transform.SetParent(transform);
+                mapCards[i].State = MapCardBase.CardState.Behind;
+                mapCards[i].SetActive(true);
+                mapCards[i].SetParent(transform, true);
                 continue;
             }
             MapCardPos pos = mapCards[Random.Range(0, i)].Pos;
@@ -76,21 +76,25 @@ public class MapLogic : MonoBehaviour
             mapCards[i].X = pos.X;
             mapCards[i].Y = pos.Y;
             maplist[mapCards[i].X, mapCards[i].Y] = mapCards[i];
-            mapCards[i].state = MapCardBase.CardState.Behind;
-            mapCards[i].gameObject.SetActive(true);
+            mapCards[i].State = MapCardBase.CardState.Behind;
+            mapCards[i].SetActive(true);
             mapCards[i].SetParent(transform, true);
         }
     }
 
     void MakePlayer()
     {
-        GameObject prefab = Resources.Load<GameObject>("Prefabs/Character/Player/Player");
-        playerGo = Instantiate<GameObject>(prefab);
+        ResourceManager.Load<GameObject>("Prefabs/Character/Player/Player", LoadPlayerSuccess,
+            (str, obj) => { Debug.LogError("Load player Failed!"); }
+            );
+    }
+    void LoadPlayerSuccess(string path, object[] userData, GameObject go)
+    {
+        playerGo = go;
         MapCardBase mapcard = mapCards[Random.Range(0, mapCards.Count)];
         currentPos = mapcard.Pos;
         playerGo.transform.position = GetTransfromByPos(currentPos);
-        mapcard.SetState(MapCardBase.CardState.Front);
-        //Debug.LogError(currentPos.X + "   " + currentPos.Y);
+        mapcard.State = MapCardBase.CardState.Front;
     }
 
     public void OnClickMapCard(MapCardBase mapCard)
@@ -110,7 +114,7 @@ public class MapLogic : MonoBehaviour
         MapCardBase mapcard = maplist[pos.X, pos.Y];
         if (mapcard != null)
         {
-            mapcard.SetState(MapCardBase.CardState.Front);
+            mapcard.State = MapCardBase.CardState.Front;
             mapcard.OnPlayerEnter();
         }
     }

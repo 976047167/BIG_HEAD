@@ -12,18 +12,41 @@ using Type = System.Type;
 public class MapCardBase
 {
     public TextMeshPro infoBoard;
-    public int X { get { return Pos.X; } set { Pos.X = value; } }
-    public int Y { get { return Pos.Y; } set { Pos.Y = value; } }
+    public int X { get { return Pos.X; } set { Pos.X = value; RefreshPos(); } }
+    public int Y { get { return Pos.Y; } set { Pos.Y = value; RefreshPos(); } }
     public GameObject gameObject { protected set; get; }
     public Transform transform { protected set; get; }
     public Transform parent { get; protected set; }
     public MapCardPos Pos;
-    public CardState state = CardState.None;
+    private CardState state;
     public bool Active { get; private set; }
+
+    public CardState State
+    {
+        get
+        {
+            return state;
+        }
+
+        set
+        {
+            if ((int)value < 10)
+            {
+                return;
+            }
+            if (state == value)
+            {
+                return;
+            }
+            ChangeState(state, value);
+            state = value;
+        }
+    }
 
     public MapCardBase()
     {
         Active = true;
+        state = CardState.None;
     }
     public void Destory()
     {
@@ -44,15 +67,11 @@ public class MapCardBase
 
     public static MapCardBase CreateMapCard<T>() where T : MapCardBase, new()
     {
-        //Debug.LogError("Prefabs/MapCard/" + typeof(T).ToString());
 
         MapCardBase mapCard = new T();
 
-        ResourceManager.Load<GameObject>("Prefabs/MapCard/" + typeof(T).ToString(), mapCard, LoadAssetScuess, LoadAssetFailed);
+        ResourceManager.Load<GameObject>("Prefabs/MapCard/" + typeof(T).ToString(), LoadAssetScuess, LoadAssetFailed, mapCard);
 
-        //GameObject prefab = Resources.Load<GameObject>("Prefabs/MapCard/" + typeof(T).ToString());
-        //GameObject go = GameObject.Instantiate(prefab);
-        //MapCardBase mapCard = go.GetComponent<T>();
         return mapCard;
     }
 
@@ -65,17 +84,17 @@ public class MapCardBase
         //return Instantiate(Resources.Load<MapCardBase>("Prefabs/MapCard/" + "MapCardMonster"));
     }
 
-    static void LoadAssetScuess(string path, object args, GameObject go)
+    static void LoadAssetScuess(string path, object[] args, GameObject go)
     {
-        MapCardBase mapCard = args as MapCardBase;
+        MapCardBase mapCard = args[0] as MapCardBase;
         go.AddComponent<MapCardHelper>().MapCardData = mapCard;
         mapCard.Init(go);
 
     }
-    static void LoadAssetFailed(string path, object args)
+    static void LoadAssetFailed(string path, object[] args)
     {
         Debug.LogError("Load [" + path + "] Failed!");
-        ResourceManager.Load<GameObject>(path, args, LoadAssetScuess, LoadAssetFailed);
+        //ResourceManager.Load<GameObject>(path, args, LoadAssetScuess, LoadAssetFailed);
     }
     public void SetActive(bool active)
     {
@@ -85,7 +104,7 @@ public class MapCardBase
             gameObject.SetActive(active);
         }
     }
-    public void SetParent(Transform parent, bool worldPositionStays)
+    public void SetParent(Transform parent, bool worldPositionStays = true)
     {
         if (this.parent != parent)
         {
@@ -107,21 +126,53 @@ public class MapCardBase
         {
             return false;
         }
+        transform = gameObject.transform;
         gameObject.SetActive(Active);
-        transform.position = new Vector3((X - 2) * 2f, 0.1f, (Y - 2) * 2f);
-        if (state == CardState.Behind)
-        {
-            transform.localEulerAngles = new Vector3(0f, 0f, 180f);
-        }
-        else if (state == CardState.Front)
-        {
-            transform.localEulerAngles = new Vector3(0f, 0f, 0f);
-        }
+        RefreshPos();
+        RefreshState();
         UIEventListener.Get(transform.Find("Card").gameObject).onClick = OnClick;
         OnInit();
         return true;
     }
 
+    void RefreshPos()
+    {
+        if (gameObject == null)
+        {
+            return;
+        }
+        transform.position = new Vector3((X - 2) * 2f, 0.1f, (Y - 2) * 2f);
+    }
+    /// <summary>
+    /// 刷新当前状态
+    /// </summary>
+    protected virtual void RefreshState()
+    {
+        if (gameObject == null)
+        {
+            return;
+        }
+        switch (state)
+        {
+            case CardState.Behind:
+                TweenRotation.Begin(gameObject, 0.5f, transform.localRotation * Quaternion.Euler(0f, 0f, 180f));
+                break;
+            case CardState.Front:
+                TweenRotation.Begin(gameObject, 0.5f, transform.localRotation * Quaternion.Euler(0f, 0f, 0f));
+                break;
+            default:
+                break;
+        }
+    }
+    /// <summary>
+    /// 状态发生改变
+    /// </summary>
+    /// <param name="oldState"></param>
+    /// <param name="newState"></param>
+    protected virtual void ChangeState(CardState oldState, CardState newState)
+    {
+        RefreshState();
+    }
     public virtual void OnInit()
     {
 
@@ -208,29 +259,7 @@ public class MapCardBase
 
     }
     #endregion
-    public virtual void SetState(CardState newState)
-    {
-        if ((int)newState < 10)
-        {
-            return;
-        }
-        if (state == newState)
-        {
-            return;
-        }
-        state = newState;
-        switch (newState)
-        {
-            case CardState.Behind:
-                TweenRotation.Begin(gameObject, 0.5f, transform.localRotation * Quaternion.Euler(0f, 0f, 0f));
-                break;
-            case CardState.Front:
-                TweenRotation.Begin(gameObject, 0.5f, transform.localRotation * Quaternion.Euler(0f, 0f, 180f));
-                break;
-            default:
-                break;
-        }
-    }
+    
 
 
     public enum CardState
