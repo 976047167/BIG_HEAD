@@ -70,7 +70,7 @@ public class MapCardBase
 
         MapCardBase mapCard = new T();
 
-        ResourceManager.Load<GameObject>("Prefabs/MapCard/" + typeof(T).ToString(), LoadAssetScuess, LoadAssetFailed, mapCard);
+        ResourceManager.LoadGameObject("MapCard/" + typeof(T).ToString(), LoadAssetScuess, LoadAssetFailed, mapCard);
 
         return mapCard;
     }
@@ -180,7 +180,7 @@ public class MapCardBase
 
     void OnClick(GameObject go)
     {
-        Debug.LogError(gameObject.name + "  " + Pos.X + ":" + Pos.Y);
+        Debug.Log(gameObject.name + "  " + Pos.X + ":" + Pos.Y);
         MapLogic.Instance.OnClickMapCard(this);
 
     }
@@ -288,7 +288,3 @@ public struct MapCardPos
     }
 }
 
-public class MapCardHelper : MonoBehaviour
-{
-    public MapCardBase MapCardData;
-}

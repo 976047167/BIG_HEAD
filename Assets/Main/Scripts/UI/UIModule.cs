@@ -39,7 +39,7 @@ public class UIModule
             Debug.LogError("The UI[" + typeof(T).ToString() + "] is not configed!");
             return;
         }
-        ResourceManager.Load<GameObject>(config.PrefabName, LoadFormSuccess, LoadFormFailed, typeof(T), userdata);
+        ResourceManager.LoadGameObject(config.PrefabName, LoadFormSuccess, LoadFormFailed, typeof(T), userdata);
 
     }
     void LoadFormSuccess(string path, object[] userData, GameObject uiForm)
@@ -97,14 +97,14 @@ public class UIModule
 
     static Dictionary<Type, UIConfig> DicUIConfig = new Dictionary<Type, UIConfig>()
     {
-        {typeof(UIBattleForm),new UIConfig("Prefabs/UIForm/WND_BattleForm") },
-        {typeof(UIMapInfo),new UIConfig("Prefabs/UIForm/WND_MapInfo") },
-        {typeof(WND_Dialog),new UIConfig("Prefabs/UIForm/WND_Dialog") },
-        {typeof(WND_Bag),new UIConfig("Prefabs/UIForm/WND_Bag") },
-        {typeof(WND_ShowCard),new UIConfig("Prefabs/UIForm/WND_ShowCard") },
-        {typeof(WND_Kaku),new UIConfig("Prefabs/UIForm/WND_Kaku") },
-        {typeof(UIMenu),new UIConfig("Prefabs/UIForm/WND_Menu") },
-        {typeof(WND_Reward),new UIConfig("Prefabs/UIForm/WND_Reward") },
+        {typeof(UIBattleForm),new UIConfig("UIForm/WND_BattleForm") },
+        {typeof(UIMapInfo),new UIConfig("UIForm/WND_MapInfo") },
+        {typeof(WND_Dialog),new UIConfig("UIForm/WND_Dialog") },
+        {typeof(WND_Bag),new UIConfig("UIForm/WND_Bag") },
+        {typeof(WND_ShowCard),new UIConfig("UIForm/WND_ShowCard") },
+        {typeof(WND_Kaku),new UIConfig("UIForm/WND_Kaku") },
+        {typeof(UIMenu),new UIConfig("UIForm/WND_Menu") },
+        {typeof(WND_Reward),new UIConfig("UIForm/WND_Reward") },
     };
     public bool SetUICamera(UIModelCameraHelper uiCameraHelper)
     {

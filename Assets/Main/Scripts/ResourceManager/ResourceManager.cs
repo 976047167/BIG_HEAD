@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using KEngine.Modules;
 using Object = UnityEngine.Object;
-#if UNITY_EDITOR || !DEBUG_BUNDLE
+using System.Reflection;
+#if UNITY_EDITOR
 using UnityEditor;
 #endif
 /// <summary>
@@ -12,23 +14,76 @@ using UnityEditor;
 public class ResourceManager
 {
     static ResourceManagerHelper helper;
+    public static bool EditorMode { private set; get; }
 
     static Dictionary<string, AssetLoader> dicAssetLoader = new Dictionary<string, AssetLoader>();
-    public static void Init()
+    public static void Init(bool isEditorMode = false)
     {
+#if UNITY_EDITOR
+        EditorMode = isEditorMode;
+#endif
         if (helper == null)
         {
             helper = new GameObject().AddComponent<ResourceManagerHelper>();
         }
+        if (EditorMode)
+        {
+            SettingModule.CustomLoadSetting = LoadSettingFromCache;
+        }
     }
-    //Dictionary<string,GameObject> 
-    public static void Load<T>(string path, Action<string, object[], T> callback, Action<string, object[]> failure, params object[] userData) where T : Object
+    //缓存表格数据
+    static Dictionary<string, byte[]> TableCache = new Dictionary<string, byte[]>();
+
+    static byte[] LoadSettingFromCache(string path)
     {
-        //T obj = Resources.Load<T>(path);
-        //if (callback != null)
-        //{
-        //    callback(path, arg, obj);
-        //}
+        if (TableCache.ContainsKey(path))
+        {
+            return TableCache[path];
+        }
+        return new byte[0];
+    }
+
+    public void PreloadDataTables()
+    {
+        Type baseType = typeof(TableML.TableRowFieldParser);
+        Type[] types = Assembly.GetExecutingAssembly().GetExportedTypes();
+        List<Type> subTypes = new List<Type>();
+        List<string> tableNames = new List<string>();
+        Type type = null;
+        for (int i = 0; i < types.Length; i++)
+        {
+            type = types[i];
+            if (type.IsSubclassOf(baseType))
+            {
+                subTypes.Add(type);
+            }
+        }
+        for (int i = 0; i < subTypes.Count; i++)
+        {
+            type = subTypes[i];
+            var p = type.GetProperties(BindingFlags.Static | BindingFlags.Public);
+
+            //foreach (var item in p)
+            //{
+            //    Console.WriteLine("Name: {0}", item.Name);
+            //}
+
+            //foreach (FieldInfo field in type.GetFields())
+            //{
+            //    Console.WriteLine("Field: {0}, Value:{1}", field.Name, field.GetValue(obj));
+            //}
+        }
+    }
+    /// <summary>
+    /// 给过来的直接是prefab 
+    /// </summary>
+    /// <typeparam name="T">类型</typeparam>
+    /// <param name="path">资源相对路径</param>
+    /// <param name="callback">加载成功的回调，成功了拿到的是Prefab</param>
+    /// <param name="failure">失败的通知</param>
+    /// <param name="userData">用户自定义数据数组</param>
+    static void Load<T>(string path, Action<string, object[], T> callback, Action<string, object[]> failure, params object[] userData) where T : Object
+    {
         AssetLoader assetLoader;
         if (dicAssetLoader.ContainsKey(path))
             assetLoader = dicAssetLoader[path];
@@ -42,10 +97,24 @@ public class ResourceManager
 
     }
 
-    public static void LoadTexture(string path, object userData, Action<string, object[], Texture2D> callback)
+    public static void LoadTexture(string path, Action<string, object[], Texture2D> callback, Action<string, object[]> failure, params object[] userData)
     {
-
-        Load<Texture2D>("UITexture/" + path, callback, null, userData);
+        Load<Texture2D>("UITexture/" + path + ".png", callback, failure, userData);
+    }
+    public static void LoadGameObject(string path, Action<string, object[], GameObject> callback, Action<string, object[]> failure, params object[] userData)
+    {
+        Load<GameObject>("Prefabs/" + path + ".prefab", (str, args, go) => callback(str, args, GameObject.Instantiate(go)), failure, userData);
+    }
+    public static void LoadDataTable(string path, Action<string, object[], TextAsset> callback, Action<string, object[]> failure, params object[] userData)
+    {
+        Load<TextAsset>("DataTable/" + path + ".txt", callback, failure, userData);
+    }
+    /// <summary>
+    /// 场景需要专门去处理，暂不管
+    /// </summary>
+    public static void LoadScene(string path, Action<string, object[], TextAsset> callback, Action<string, object[]> failure, params object[] userData)
+    {
+        //Load<Scene>
     }
 }
 public abstract class LoadRequest
@@ -66,7 +135,10 @@ public class LoadRequest<T> : LoadRequest where T : Object
     }
     public override void LoadFailed(AssetLoader loader)
     {
-        failure(loader.AssetPath, userData);
+        if (failure != null)
+        {
+            failure(loader.AssetPath, userData);
+        }
     }
 
     public override void LoadSuccess(AssetLoader loader)
@@ -74,13 +146,17 @@ public class LoadRequest<T> : LoadRequest where T : Object
         T prefab = loader.GetAsset<T>();
         if (prefab != null)
         {
-            T obj = Object.Instantiate(prefab);
-            callback(loader.AssetPath, userData, obj);
-            //callback(loader.AssetPath, userData, prefab);
+            if (callback != null)
+            {
+                callback(loader.AssetPath, userData, prefab);
+            }
             return;
         }
         Debug.LogError("Cannot Find this type asset at " + loader.FullPath + "! [" + typeof(T).ToString() + "]");
-        failure(loader.AssetPath, userData);
+        if (failure != null)
+        {
+            failure(loader.AssetPath, userData);
+        }
     }
 }
 
@@ -99,11 +175,10 @@ public class AssetLoader
     public AssetLoader(string assetPath)
     {
         AssetPath = assetPath;
-#if UNITY_EDITOR || !DEBUG_BUNDLE
-        FullPath = "Assets/Main/BundleEditor/" + AssetPath + ".prefab";
-#else
-        FullPath = GetRemotePath(Application.streamingAssetsPath, AssetPath);
-#endif
+        if (ResourceManager.EditorMode)
+            FullPath = "Assets/Main/BundleEditor/" + AssetPath;
+        else
+            FullPath = GetRemotePath(Application.streamingAssetsPath, AssetPath);
 
         LoadState = AssetLoadState.None;
     }
@@ -131,52 +206,57 @@ public class AssetLoader
             yield break;
         }
         LoadState = AssetLoadState.Start;
-#if UNITY_EDITOR || !DEBUG_BUNDLE
-        UnityEngine.Object asset = AssetDatabase.LoadMainAssetAtPath(FullPath);
-        if (asset == null)
+#if UNITY_EDITOR
+        if (ResourceManager.EditorMode)
         {
-            Debug.LogError("Get asset failure!+ " + FullPath);
-            LoadState = AssetLoadState.LoadFail;
-            while (requests.Count > 0)
+            UnityEngine.Object asset = AssetDatabase.LoadMainAssetAtPath(FullPath);
+            if (asset == null)
             {
-                requests.Dequeue().LoadFailed(this);
+                Debug.LogError("Get asset failure!+ " + FullPath);
+                LoadState = AssetLoadState.LoadFail;
+                while (requests.Count > 0)
+                {
+                    requests.Dequeue().LoadFailed(this);
+                }
+                yield break;
             }
-            yield break;
+            assets = new Object[] { asset };
         }
-        assets = new Object[] { asset };
-#else
-        www = new WWW(FullPath);
-        LoadState = AssetLoadState.Loading;
-        yield return www;
-        if (!string.IsNullOrEmpty(www.error))
-        {
-            Debug.LogError("Download asset failure!+ " + www.url);
-            LoadState = AssetLoadState.LoadFail;
-            while (requests.Count > 0)
-            {
-                requests.Dequeue().LoadFailed(this);
-            }
-            yield break;
-        }
-        assetBundle = www.assetBundle;
-        if (assetBundle == null)
-        {
-            Debug.LogError("Get asset failure!+ " + www.url);
-            LoadState = AssetLoadState.LoadFail;
-            while (requests.Count > 0)
-            {
-                requests.Dequeue().LoadFailed(this);
-            }
-            yield break;
-        }
-        //加载场景使用
-        AssetBundleRequest bundleRequest = www.assetBundle.LoadAllAssetsAsync();
-        while (bundleRequest.isDone == false)
-        {
-            yield return null;
-        }
-        assets = bundleRequest.allAssets;
+        else
 #endif
+        {
+            www = new WWW(FullPath);
+            LoadState = AssetLoadState.Loading;
+            yield return www;
+            if (!string.IsNullOrEmpty(www.error))
+            {
+                Debug.LogError("Download asset failure!+ " + www.url);
+                LoadState = AssetLoadState.LoadFail;
+                while (requests.Count > 0)
+                {
+                    requests.Dequeue().LoadFailed(this);
+                }
+                yield break;
+            }
+            assetBundle = www.assetBundle;
+            if (assetBundle == null)
+            {
+                Debug.LogError("Get asset failure!+ " + www.url);
+                LoadState = AssetLoadState.LoadFail;
+                while (requests.Count > 0)
+                {
+                    requests.Dequeue().LoadFailed(this);
+                }
+                yield break;
+            }
+            //加载场景使用
+            AssetBundleRequest bundleRequest = www.assetBundle.LoadAllAssetsAsync();
+            while (bundleRequest.isDone == false)
+            {
+                yield return null;
+            }
+            assets = bundleRequest.allAssets;
+        }
         LoadState = AssetLoadState.Loaded;
         while (requests.Count > 0)
         {
@@ -261,11 +341,3 @@ public enum AssetLoadState
     Realsed,
 }
 
-public class ResourceManagerHelper : MonoBehaviour
-{
-    private void Start()
-    {
-        DontDestroyOnLoad(gameObject);
-        name = "[ResourceManagerHelper]";
-    }
-}

@@ -162,7 +162,7 @@ public class UIBattleCard : MonoBehaviour
         {
             for (int i = 0; i < hits.Length; i++)
             {
-                if (hits[i].collider.name == "UsedCards")
+                if (hits[i].collider.name == "UsedCardBG")
                 {
                     //UseCard();
                     m_Used = Game.BattleManager.UseCard(CardData);
@@ -206,7 +206,7 @@ public class UIBattleCard : MonoBehaviour
     {
         CardData = card;
         cacheForm = form;
-        m_TexIcon.mainTexture = Resources.Load<Texture>(CardData.Data.Icon);
+        m_TexIcon.Load(card.Data.Icon);
         m_lblName.text = CardData.Data.Name;
         if (CardData.Data.Type != 0)
         {

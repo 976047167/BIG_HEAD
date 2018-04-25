@@ -27,7 +27,7 @@ public class BattleMgr
     public void StartBattle(int monsterId)
     {
         State = BattleState.Loading;
-        Debug.LogError("StartBattle => " + monsterId);
+        Debug.Log("StartBattle => " + monsterId);
         Game.DataManager.SetOppData(monsterId);
 
         MyPlayer = new BattlePlayer(Game.DataManager.MyPlayerData);

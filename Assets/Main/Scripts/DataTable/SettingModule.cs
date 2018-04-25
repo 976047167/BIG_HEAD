@@ -78,7 +78,7 @@ namespace KEngine.Modules
         /// <summary>
         /// Singleton
         /// </summary>
-        private static SettingModule _instance;
+        protected static SettingModule _instance;
 
         /// <summary>
         /// Quick method to get TableFile from instance
@@ -89,7 +89,9 @@ namespace KEngine.Modules
         public static TableFile Get(string path, bool useCache = true)
         {
             if (_instance == null)
+            {
                 _instance = new SettingModule();
+            }
             return _instance.GetTableFile(path, useCache);
         }
 
@@ -112,7 +114,7 @@ namespace KEngine.Modules
         public static byte[] DefaultLoadSetting(string path)
         {
             byte[] fileContent;
-                fileContent = LoadSettingFromFile(path);
+            fileContent = LoadSettingFromFile(path);
             return fileContent;
         }
 

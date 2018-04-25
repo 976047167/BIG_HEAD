@@ -6,15 +6,18 @@ using UnityEngine.SceneManagement;
 
 public class Game : MonoBehaviour
 {
-
+    public bool BundleEditorMode = true;
 
     private void Awake()
     {
         DontDestroyOnLoad(gameObject);
+        //资源第一优先级初始化
+        ResourceManager.Init(BundleEditorMode);
+
         dataMgr = new DataMgr();
         battleMgr = new BattleMgr();
         uiModule = UIModule.Instance;
-        ResourceManager.Init();
+
     }
 
     private void Start()

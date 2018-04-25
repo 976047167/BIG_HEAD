@@ -118,7 +118,7 @@ namespace KUnityEditorTools
         private static System.Action<BuildTarget, string> _OnPostBuildPlayerEvent;
         public static System.Action<BuildTarget, string> OnPostBuildPlayerEvent
         {
-            get { return _OnPostBuildPlayerEvent;}
+            get { return _OnPostBuildPlayerEvent; }
             set
             {
                 _OnPostBuildPlayerEvent = value;
@@ -136,7 +136,7 @@ namespace KUnityEditorTools
             }
             set
             {
-                _onSaveSceneEvent= value;
+                _onSaveSceneEvent = value;
             }
         }
 
@@ -276,7 +276,11 @@ namespace KUnityEditorTools
                 {
                     //scenePath = Path.GetDirectoryName(path);
                     //sceneName = Path.GetFileNameWithoutExtension(path);
-                    KUnityEditorEventCatcher._onSaveSceneEvent();
+                    if (KUnityEditorEventCatcher._onSaveSceneEvent != null)
+                    {
+                        KUnityEditorEventCatcher._onSaveSceneEvent();
+                    }
+
                 }
             }
 

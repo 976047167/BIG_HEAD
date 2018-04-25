@@ -84,7 +84,7 @@ public class MapLogic : MonoBehaviour
 
     void MakePlayer()
     {
-        ResourceManager.Load<GameObject>("Prefabs/Character/Player/Player", LoadPlayerSuccess,
+        ResourceManager.LoadGameObject("Character/Player/Player", LoadPlayerSuccess,
             (str, obj) => { Debug.LogError("Load player Failed!"); }
             );
     }
