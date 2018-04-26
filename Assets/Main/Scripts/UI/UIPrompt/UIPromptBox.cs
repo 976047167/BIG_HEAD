@@ -26,7 +26,7 @@ public class UIPromptBox : MonoBehaviour {
     public void  SetData(int id)
     {
        PromptTableSetting prompt =   PromptTableSettings.Get(id);
-       icon.mainTexture   = Resources.Load(prompt.ImagePath) as Texture2D;
+       icon.Load(prompt.ImagePath) ;
         describe.text = prompt.Describe;
     }
 }

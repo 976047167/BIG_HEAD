@@ -20,7 +20,8 @@ public class WND_Kaku : UIFormBase {
         KakuPanel = transform.Find("bgKaku/Panel").GetComponent<UIPanel>();
         _gridPosY = kakuGrid.transform.localPosition.y;
         _cellHeight = kakuGrid.cellHeight;
-        battleCard = Resources.Load("Prefabs/Card/NormalCard") as GameObject;
+        //battleCard = Resources.Load("Prefabs/Card/NormalCard") as GameObject;
+        ResourceManager.LoadGameObject("Card/NormalCard", (str, obj,go) =>{ battleCard = go; },(str, obj) =>{ });
         MovingPanel = transform.Find("MovingPanel").GetComponent<UIPanel>();
         _upClick = transform.Find("bgKaku/Panel/up").gameObject;
         _downClick = transform.Find("bgKaku/Panel/down").gameObject;

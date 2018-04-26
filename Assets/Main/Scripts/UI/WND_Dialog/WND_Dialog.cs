@@ -98,7 +98,7 @@ public class WND_Dialog : UIFormBase
         else
         {
             imgHead.gameObject.SetActive(true);
-            imgHead.mainTexture = Resources.Load(path) as Texture2D;
+            imgHead.Load(path);
         }
            
 

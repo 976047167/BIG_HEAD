@@ -34,7 +34,7 @@ public class WND_ShowCard : UIFormBase
     private void InitCard(int id)
     {
         BattleCardTableSetting card =  BattleCardTableSettings.Get(id);
-        icon.mainTexture = Resources.Load(card.Icon) as Texture2D;
+        icon.Load(card.Icon);
         labName.text = card.Name;
         spending.text = ""+ card.Spending;
         describle.text = card.Desc; 

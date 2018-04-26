@@ -135,7 +135,7 @@ public class UINormalCard : MonoBehaviour
         cacheForm = form;
         if (card.Owner == Game.DataManager.MyPlayerData)
         {
-            m_TexIcon.mainTexture = Resources.Load<Texture>(cardData.Data.Icon);
+            m_TexIcon.Load(cardData.Data.Icon);
             m_lblName.text = cardData.Data.Name;
             if (cardData.Data.Type != 0)
             {

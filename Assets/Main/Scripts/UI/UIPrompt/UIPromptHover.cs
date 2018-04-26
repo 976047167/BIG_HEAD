@@ -10,7 +10,9 @@ public class UIPromptHover : MonoBehaviour {
     private GameObject instance;
     private void Awake()
     {
-        PromptBox = Resources.Load("Prefabs/PromptBox/PromptBox") as GameObject;
+
+        //PromptBox = Resources.Load("Prefabs/PromptBox/PromptBox") as GameObject;
+        ResourceManager.LoadGameObject("UIForm/PromptBox",(str,obj,go)=>{ PromptBox = go; },(str,obj)=> { });
     }
 
     void Start () {
