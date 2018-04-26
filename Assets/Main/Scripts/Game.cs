@@ -11,20 +11,26 @@ public class Game : MonoBehaviour
     private void Awake()
     {
         DontDestroyOnLoad(gameObject);
+    }
+    
+    private void Start()
+    {
+        StartCoroutine(Init());
+        
+    }
+    IEnumerator Init()
+    {
         //资源第一优先级初始化
         ResourceManager.Init(BundleEditorMode);
-
+        while (ResourceManager.TablePreloaded == false)
+        {
+            yield return null;
+        }
         dataMgr = new DataMgr();
         battleMgr = new BattleMgr();
         uiModule = UIModule.Instance;
-
-    }
-
-    private void Start()
-    {
         StartGame();
     }
-
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.Escape))

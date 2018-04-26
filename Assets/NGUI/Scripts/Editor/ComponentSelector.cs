@@ -99,9 +99,13 @@ public class ComponentSelector : ScriptableWizard
 				for (int i = 0; i < comp.mObjects.Length; ++i)
 				{
 					Object obj = comp.mObjects[i];
-					if (obj.name == "Arial") continue;
+					//if (obj.name == "Arial") continue;
 					string path = AssetDatabase.GetAssetPath(obj);
-					if (string.IsNullOrEmpty(path)) comp.mObjects[i] = null;
+                    if (!path.StartsWith("Assets"))
+                    {
+                        comp.mObjects[i] = null;
+                    }
+                    if (string.IsNullOrEmpty(path)) comp.mObjects[i] = null;
 				}
 			}
 
