@@ -28,6 +28,7 @@ public class DataMgr
     public BattlePlayerData MyPlayerData { get; private set; }
     public BattlePlayerData OppPlayerData { get; private set; }
     public List<BattleCardData> Kaku = new List<BattleCardData>();
+    public int MonsterId;
     /// <summary>
     /// 游戏启动时初始化
     /// </summary>
@@ -74,6 +75,7 @@ public class DataMgr
             Debug.LogError("怪物表格配置错误");
             return;
         }
+        MonsterId = monsterId;
         OppPlayerData = new BattlePlayerData();
         OppPlayerData.HP = monster.HP;
         OppPlayerData.MaxHP = monster.MaxHp;

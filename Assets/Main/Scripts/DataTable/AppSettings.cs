@@ -840,7 +840,7 @@ namespace AppSettings
         /// <summary>
         /// 奖励
         /// </summary>
-        public int RewardId { get; private set;}
+        public List<int> RewardIds { get; private set;}
         
 
         internal BattleMonsterTableSetting(TableFileRow row)
@@ -867,7 +867,7 @@ namespace AppSettings
             BuffParams = row.Get_List_int(row.Values[14], ""); 
             EquipIds = row.Get_List_int(row.Values[15], ""); 
             DialogId = row.Get_int(row.Values[16], ""); 
-            RewardId = row.Get_int(row.Values[17], ""); 
+            RewardIds = row.Get_List_int(row.Values[17], ""); 
         }
 
         /// <summary>

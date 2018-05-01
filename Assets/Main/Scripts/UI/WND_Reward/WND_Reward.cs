@@ -21,7 +21,12 @@ public class WND_Reward : UIFormBase
     protected override void OnInit(object userdata)
     {
         base.OnInit(userdata);
-        int rewardId =(int) userdata;
+        int monsterId =(int) userdata;
+        BattleMonsterTableSetting monster = BattleMonsterTableSettings.Get(monsterId);
+        List<int> rewardList = monster.RewardIds;
+
+        int rewardId = rewardList[ Random.Range(1, rewardList.Count + 1)];
+
         RewardTableSetting reward = RewardTableSettings.Get(rewardId);
 
 
