@@ -1,0 +1,16 @@
+ManifestFileVersion: 0
+CRC: 160127909
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: 3bfc71e2137194e41e40952cfaa0a849
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: c1642440719609290a7e09a50a7286f4
+HashAppended: 0
+ClassTypes:
+- Class: 28
+  Script: {instanceID: 0}
+Assets:
+- Assets/Main/BundleEditor/UITexture/Skill/skill_sibada_4.png
+Dependencies: []

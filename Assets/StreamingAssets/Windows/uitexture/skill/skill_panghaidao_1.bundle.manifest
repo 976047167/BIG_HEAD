@@ -1,0 +1,16 @@
+ManifestFileVersion: 0
+CRC: 1218816119
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: a1d6e07b568fec698772abf8866111cf
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: c1642440719609290a7e09a50a7286f4
+HashAppended: 0
+ClassTypes:
+- Class: 28
+  Script: {instanceID: 0}
+Assets:
+- Assets/Main/BundleEditor/UITexture/Skill/skill_panghaidao_1.png
+Dependencies: []

@@ -1,0 +1,16 @@
+ManifestFileVersion: 0
+CRC: 4041852176
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: 9b6c1dd0f7595e1b136ce4b3ebc3d4fd
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: c1642440719609290a7e09a50a7286f4
+HashAppended: 0
+ClassTypes:
+- Class: 28
+  Script: {instanceID: 0}
+Assets:
+- Assets/Main/BundleEditor/UITexture/Skill/skill_jinke_2.png
+Dependencies: []

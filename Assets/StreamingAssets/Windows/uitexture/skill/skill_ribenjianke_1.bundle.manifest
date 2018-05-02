@@ -1,0 +1,16 @@
+ManifestFileVersion: 0
+CRC: 1627944790
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: cbf33ec794de40bcfb7d4e30e014925f
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: c1642440719609290a7e09a50a7286f4
+HashAppended: 0
+ClassTypes:
+- Class: 28
+  Script: {instanceID: 0}
+Assets:
+- Assets/Main/BundleEditor/UITexture/Skill/skill_ribenjianke_1.png
+Dependencies: []

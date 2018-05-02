@@ -70,7 +70,7 @@ public class MapCardBase
 
         MapCardBase mapCard = new T();
 
-        ResourceManager.LoadGameObject("MapCard/" + typeof(T).ToString(), LoadAssetScuess, LoadAssetFailed, mapCard);
+        ResourceManager.LoadGameObject("MapCard/" + typeof(T).ToString(), LoadAssetSuccessess, LoadAssetFailed, mapCard);
 
         return mapCard;
     }
@@ -84,7 +84,7 @@ public class MapCardBase
         //return Instantiate(Resources.Load<MapCardBase>("Prefabs/MapCard/" + "MapCardMonster"));
     }
 
-    static void LoadAssetScuess(string path, object[] args, GameObject go)
+    static void LoadAssetSuccessess(string path, object[] args, GameObject go)
     {
         MapCardBase mapCard = args[0] as MapCardBase;
         go.AddComponent<MapCardHelper>().MapCardData = mapCard;
@@ -104,7 +104,7 @@ public class MapCardBase
             gameObject.SetActive(active);
         }
     }
-    public void SetParent(Transform parent, bool worldPositionStays = true)
+    public void SetParent(Transform parent)
     {
         if (this.parent != parent)
         {
@@ -112,7 +112,7 @@ public class MapCardBase
         }
         if (gameObject != null)
         {
-            transform.SetParent(parent, worldPositionStays);
+            transform.SetParent(parent);
         }
     }
 
@@ -128,6 +128,7 @@ public class MapCardBase
         }
         transform = gameObject.transform;
         gameObject.SetActive(Active);
+        transform.SetParent(parent);
         RefreshPos();
         RefreshState();
         UIEventListener.Get(transform.Find("Card").gameObject).onClick = OnClick;
@@ -148,17 +149,13 @@ public class MapCardBase
     /// </summary>
     protected virtual void RefreshState()
     {
-        if (gameObject == null)
-        {
-            return;
-        }
         switch (state)
         {
             case CardState.Behind:
-                TweenRotation.Begin(gameObject, 0.5f, transform.localRotation * Quaternion.Euler(0f, 0f, 180f));
+                transform.localEulerAngles = new Vector3(0f, 0f, 180f);
                 break;
             case CardState.Front:
-                TweenRotation.Begin(gameObject, 0.5f, transform.localRotation * Quaternion.Euler(0f, 0f, 0f));
+                transform.localEulerAngles = new Vector3(0f, 0f, 0f);
                 break;
             default:
                 break;
@@ -171,7 +168,21 @@ public class MapCardBase
     /// <param name="newState"></param>
     protected virtual void ChangeState(CardState oldState, CardState newState)
     {
-        RefreshState();
+        if (gameObject == null)
+        {
+            return;
+        }
+        switch (state)
+        {
+            case CardState.Behind:
+                TweenRotation.Begin(gameObject, 0.5f, transform.localRotation * Quaternion.Euler(0f, 0f, 180f));
+                break;
+            case CardState.Front:
+                TweenRotation.Begin(gameObject, 0.5f, transform.localRotation * Quaternion.Euler(0f, 0f, 180f));
+                break;
+            default:
+                break;
+        }
     }
     public virtual void OnInit()
     {
@@ -259,7 +270,7 @@ public class MapCardBase
 
     }
     #endregion
-    
+
 
 
     public enum CardState

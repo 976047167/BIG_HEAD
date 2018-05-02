@@ -1,0 +1,16 @@
+ManifestFileVersion: 0
+CRC: 659225081
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: debb48552c3ac3690fdd08f678917c04
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: c1642440719609290a7e09a50a7286f4
+HashAppended: 0
+ClassTypes:
+- Class: 28
+  Script: {instanceID: 0}
+Assets:
+- Assets/Main/BundleEditor/UITexture/Equip/177.png
+Dependencies: []

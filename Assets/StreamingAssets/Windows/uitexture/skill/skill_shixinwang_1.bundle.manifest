@@ -1,0 +1,16 @@
+ManifestFileVersion: 0
+CRC: 705817942
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: b5e22667b008ee7ca7f39f23533f79ec
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: c1642440719609290a7e09a50a7286f4
+HashAppended: 0
+ClassTypes:
+- Class: 28
+  Script: {instanceID: 0}
+Assets:
+- Assets/Main/BundleEditor/UITexture/Skill/skill_shixinwang_1.png
+Dependencies: []

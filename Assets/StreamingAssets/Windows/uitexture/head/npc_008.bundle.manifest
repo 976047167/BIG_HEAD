@@ -1,0 +1,16 @@
+ManifestFileVersion: 0
+CRC: 1691254852
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: 4532d3103ffba47929b815510f38eda5
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: c1642440719609290a7e09a50a7286f4
+HashAppended: 0
+ClassTypes:
+- Class: 28
+  Script: {instanceID: 0}
+Assets:
+- Assets/Main/BundleEditor/UITexture/Head/npc_008.png
+Dependencies: []

@@ -39,6 +39,7 @@ namespace KEngine.Modules
     public class SettingModule : SettingModuleBase
     {
         public delegate byte[] LoadSettingFuncDelegate(string filePath);
+        public delegate string LoadSettingFuncStringDelegate(string filePath);
         public delegate byte[] SettingBytesFilterDelegate(byte[] bytes);
 
         /// <summary>
@@ -50,6 +51,7 @@ namespace KEngine.Modules
         /// Override the default load file strategy
         /// </summary>
         public static LoadSettingFuncDelegate CustomLoadSetting;
+        public static LoadSettingFuncStringDelegate CustomLoadSettingString;
 
         private static readonly bool IsEditor;
         static SettingModule()
@@ -102,6 +104,10 @@ namespace KEngine.Modules
         /// <returns></returns>
         protected override string LoadSetting(string path)
         {
+            if (CustomLoadSettingString!=null)
+            {
+                return CustomLoadSettingString(path);
+            }
             byte[] fileContent = CustomLoadSetting != null ? CustomLoadSetting(path) : DefaultLoadSetting(path);
             return Encoding.UTF8.GetString(fileContent);
         }

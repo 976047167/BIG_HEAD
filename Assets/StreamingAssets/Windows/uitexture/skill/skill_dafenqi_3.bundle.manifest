@@ -1,0 +1,16 @@
+ManifestFileVersion: 0
+CRC: 2413898811
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: 554e3824568fbdf7820aad57d488a1ea
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: c1642440719609290a7e09a50a7286f4
+HashAppended: 0
+ClassTypes:
+- Class: 28
+  Script: {instanceID: 0}
+Assets:
+- Assets/Main/BundleEditor/UITexture/Skill/skill_dafenqi_3.png
+Dependencies: []

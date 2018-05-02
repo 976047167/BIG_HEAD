@@ -1,0 +1,16 @@
+ManifestFileVersion: 0
+CRC: 3085701158
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: 4fb03c70b667df482978af3240886a07
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: c1642440719609290a7e09a50a7286f4
+HashAppended: 0
+ClassTypes:
+- Class: 28
+  Script: {instanceID: 0}
+Assets:
+- Assets/Main/BundleEditor/UITexture/Skill/skill_meilin_1.png
+Dependencies: []

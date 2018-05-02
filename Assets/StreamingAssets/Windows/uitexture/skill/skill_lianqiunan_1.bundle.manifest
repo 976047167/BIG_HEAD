@@ -1,0 +1,16 @@
+ManifestFileVersion: 0
+CRC: 3831810352
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: 04b55f064eb50c80b9992c3fa239b842
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: c1642440719609290a7e09a50a7286f4
+HashAppended: 0
+ClassTypes:
+- Class: 28
+  Script: {instanceID: 0}
+Assets:
+- Assets/Main/BundleEditor/UITexture/Skill/skill_lianqiunan_1.png
+Dependencies: []

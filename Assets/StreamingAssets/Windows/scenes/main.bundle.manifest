@@ -1,0 +1,19 @@
+ManifestFileVersion: 0
+CRC: 1980587897
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: 4f5995d88cedd12f8156d29a6fd3c1fc
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: 31d6cfe0d16ae931b73c59d7e0c089c0
+HashAppended: 0
+ClassTypes: []
+Assets:
+- Assets/Main/BundleEditor/Scenes/Main.unity
+Dependencies:
+- E:/UnityProject/BigHead/Assets/SteamingAssets/Windows/prefabs/building/map/plane.bundle
+- E:/UnityProject/BigHead/Assets/SteamingAssets/Windows/prefabs/character/player/player.bundle
+- E:/UnityProject/BigHead/Assets/SteamingAssets/Windows/prefabs/mapcard/mapcard.bundle
+- E:/UnityProject/BigHead/Assets/SteamingAssets/Windows/prefabs/mapcard/mapcarddoor.bundle
+- E:/UnityProject/BigHead/Assets/SteamingAssets/Windows/prefabs/ui root.bundle

@@ -59,7 +59,7 @@ public class MapLogic : MonoBehaviour
                 maplist[mapCards[i].X, mapCards[i].Y] = mapCards[i];
                 mapCards[i].State = MapCardBase.CardState.Behind;
                 mapCards[i].SetActive(true);
-                mapCards[i].SetParent(transform, true);
+                mapCards[i].SetParent(transform);
                 continue;
             }
             MapCardPos pos = mapCards[Random.Range(0, i)].Pos;
@@ -78,7 +78,7 @@ public class MapLogic : MonoBehaviour
             maplist[mapCards[i].X, mapCards[i].Y] = mapCards[i];
             mapCards[i].State = MapCardBase.CardState.Behind;
             mapCards[i].SetActive(true);
-            mapCards[i].SetParent(transform, true);
+            mapCards[i].SetParent(transform);
         }
     }
 

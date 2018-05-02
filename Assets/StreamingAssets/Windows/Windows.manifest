@@ -1,0 +1,1195 @@
+ManifestFileVersion: 0
+CRC: 3593178951
+AssetBundleManifest:
+  AssetBundleInfos:
+    Info_0:
+      Name: datatable/battlebufftable.bundle
+      Dependencies: {}
+    Info_1:
+      Name: datatable/battlecardtable.bundle
+      Dependencies: {}
+    Info_2:
+      Name: datatable/battlemonstertable.bundle
+      Dependencies: {}
+    Info_3:
+      Name: datatable/boxtable.bundle
+      Dependencies: {}
+    Info_4:
+      Name: datatable/dialogtable.bundle
+      Dependencies: {}
+    Info_5:
+      Name: datatable/eventtable.bundle
+      Dependencies: {}
+    Info_6:
+      Name: datatable/npctable.bundle
+      Dependencies: {}
+    Info_7:
+      Name: datatable/prompttable.bundle
+      Dependencies: {}
+    Info_8:
+      Name: datatable/rewardtable.bundle
+      Dependencies: {}
+    Info_9:
+      Name: datatable/shoptable.bundle
+      Dependencies: {}
+    Info_10:
+      Name: prefabs/building/map/plane.bundle
+      Dependencies: {}
+    Info_11:
+      Name: prefabs/card/battlecard.bundle
+      Dependencies:
+        Dependency_0: uitexture/equip/1.bundle
+    Info_12:
+      Name: prefabs/card/normalcard.bundle
+      Dependencies:
+        Dependency_0: uitexture/equip/1.bundle
+    Info_13:
+      Name: prefabs/character/player/player.bundle
+      Dependencies: {}
+    Info_14:
+      Name: prefabs/mapcard/mapcard.bundle
+      Dependencies: {}
+    Info_15:
+      Name: prefabs/mapcard/mapcardbox.bundle
+      Dependencies: {}
+    Info_16:
+      Name: prefabs/mapcard/mapcarddoor.bundle
+      Dependencies: {}
+    Info_17:
+      Name: prefabs/mapcard/mapcardmonster.bundle
+      Dependencies: {}
+    Info_18:
+      Name: prefabs/mapcard/mapcardnpc.bundle
+      Dependencies: {}
+    Info_19:
+      Name: prefabs/mapcard/mapcardshop.bundle
+      Dependencies: {}
+    Info_20:
+      Name: prefabs/uiatlas/btn.bundle
+      Dependencies: {}
+    Info_21:
+      Name: prefabs/uiatlas/frame.bundle
+      Dependencies: {}
+    Info_22:
+      Name: prefabs/uiatlas/logo.bundle
+      Dependencies: {}
+    Info_23:
+      Name: prefabs/uiform/promptbox.bundle
+      Dependencies: {}
+    Info_24:
+      Name: prefabs/uiform/wnd_bag.bundle
+      Dependencies:
+        Dependency_0: prefabs/uiatlas/frame.bundle
+    Info_25:
+      Name: prefabs/uiform/wnd_battleform.bundle
+      Dependencies:
+        Dependency_0: prefabs/uiatlas/frame.bundle
+        Dependency_1: uitexture/equip/1.bundle
+        Dependency_2: uitexture/head/hero_021.bundle
+        Dependency_3: uitexture/head/npc_009.bundle
+    Info_26:
+      Name: prefabs/uiform/wnd_conversation.bundle
+      Dependencies:
+        Dependency_0: prefabs/uiatlas/frame.bundle
+        Dependency_1: uitexture/bg.bundle
+    Info_27:
+      Name: prefabs/uiform/wnd_dialog.bundle
+      Dependencies:
+        Dependency_0: prefabs/uiatlas/frame.bundle
+        Dependency_1: uitexture/head/hero_007.bundle
+    Info_28:
+      Name: prefabs/uiform/wnd_dice.bundle
+      Dependencies:
+        Dependency_0: prefabs/uiatlas/frame.bundle
+        Dependency_1: uitexture/bg.bundle
+    Info_29:
+      Name: prefabs/uiform/wnd_kaku.bundle
+      Dependencies:
+        Dependency_0: prefabs/uiatlas/frame.bundle
+    Info_30:
+      Name: prefabs/uiform/wnd_mapinfo.bundle
+      Dependencies: {}
+    Info_31:
+      Name: prefabs/uiform/wnd_menu.bundle
+      Dependencies: {}
+    Info_32:
+      Name: prefabs/uiform/wnd_reward.bundle
+      Dependencies:
+        Dependency_0: prefabs/uiatlas/frame.bundle
+    Info_33:
+      Name: prefabs/uiform/wnd_showcard.bundle
+      Dependencies:
+        Dependency_0: uitexture/equip/1.bundle
+    Info_34:
+      Name: prefabs/uiform/wnd_start.bundle
+      Dependencies:
+        Dependency_0: prefabs/uiatlas/btn.bundle
+        Dependency_1: prefabs/uiatlas/logo.bundle
+        Dependency_2: uitexture/bg.bundle
+    Info_35:
+      Name: prefabs/ui root.bundle
+      Dependencies: {}
+    Info_36:
+      Name: scenes/main.bundle
+      Dependencies:
+        Dependency_0: prefabs/building/map/plane.bundle
+        Dependency_1: prefabs/character/player/player.bundle
+        Dependency_2: prefabs/mapcard/mapcard.bundle
+        Dependency_3: prefabs/mapcard/mapcarddoor.bundle
+        Dependency_4: prefabs/ui root.bundle
+    Info_37:
+      Name: uitexture/equip/1.bundle
+      Dependencies: {}
+    Info_38:
+      Name: uitexture/equip/10.bundle
+      Dependencies: {}
+    Info_39:
+      Name: uitexture/equip/100.bundle
+      Dependencies: {}
+    Info_40:
+      Name: uitexture/equip/101.bundle
+      Dependencies: {}
+    Info_41:
+      Name: uitexture/equip/102.bundle
+      Dependencies: {}
+    Info_42:
+      Name: uitexture/equip/103.bundle
+      Dependencies: {}
+    Info_43:
+      Name: uitexture/equip/104.bundle
+      Dependencies: {}
+    Info_44:
+      Name: uitexture/equip/105.bundle
+      Dependencies: {}
+    Info_45:
+      Name: uitexture/equip/106.bundle
+      Dependencies: {}
+    Info_46:
+      Name: uitexture/equip/107.bundle
+      Dependencies: {}
+    Info_47:
+      Name: uitexture/equip/108.bundle
+      Dependencies: {}
+    Info_48:
+      Name: uitexture/equip/109.bundle
+      Dependencies: {}
+    Info_49:
+      Name: uitexture/equip/11.bundle
+      Dependencies: {}
+    Info_50:
+      Name: uitexture/equip/110.bundle
+      Dependencies: {}
+    Info_51:
+      Name: uitexture/equip/111.bundle
+      Dependencies: {}
+    Info_52:
+      Name: uitexture/equip/112.bundle
+      Dependencies: {}
+    Info_53:
+      Name: uitexture/equip/113.bundle
+      Dependencies: {}
+    Info_54:
+      Name: uitexture/equip/114.bundle
+      Dependencies: {}
+    Info_55:
+      Name: uitexture/equip/115.bundle
+      Dependencies: {}
+    Info_56:
+      Name: uitexture/equip/116.bundle
+      Dependencies: {}
+    Info_57:
+      Name: uitexture/equip/117.bundle
+      Dependencies: {}
+    Info_58:
+      Name: uitexture/equip/118.bundle
+      Dependencies: {}
+    Info_59:
+      Name: uitexture/equip/119.bundle
+      Dependencies: {}
+    Info_60:
+      Name: uitexture/equip/12.bundle
+      Dependencies: {}
+    Info_61:
+      Name: uitexture/equip/120.bundle
+      Dependencies: {}
+    Info_62:
+      Name: uitexture/equip/121.bundle
+      Dependencies: {}
+    Info_63:
+      Name: uitexture/equip/122.bundle
+      Dependencies: {}
+    Info_64:
+      Name: uitexture/equip/123.bundle
+      Dependencies: {}
+    Info_65:
+      Name: uitexture/equip/124.bundle
+      Dependencies: {}
+    Info_66:
+      Name: uitexture/equip/125.bundle
+      Dependencies: {}
+    Info_67:
+      Name: uitexture/equip/126.bundle
+      Dependencies: {}
+    Info_68:
+      Name: uitexture/equip/127.bundle
+      Dependencies: {}
+    Info_69:
+      Name: uitexture/equip/128.bundle
+      Dependencies: {}
+    Info_70:
+      Name: uitexture/equip/129.bundle
+      Dependencies: {}
+    Info_71:
+      Name: uitexture/equip/13.bundle
+      Dependencies: {}
+    Info_72:
+      Name: uitexture/equip/130.bundle
+      Dependencies: {}
+    Info_73:
+      Name: uitexture/equip/131.bundle
+      Dependencies: {}
+    Info_74:
+      Name: uitexture/equip/132.bundle
+      Dependencies: {}
+    Info_75:
+      Name: uitexture/equip/133.bundle
+      Dependencies: {}
+    Info_76:
+      Name: uitexture/equip/134.bundle
+      Dependencies: {}
+    Info_77:
+      Name: uitexture/equip/135.bundle
+      Dependencies: {}
+    Info_78:
+      Name: uitexture/equip/136.bundle
+      Dependencies: {}
+    Info_79:
+      Name: uitexture/equip/137.bundle
+      Dependencies: {}
+    Info_80:
+      Name: uitexture/equip/138.bundle
+      Dependencies: {}
+    Info_81:
+      Name: uitexture/equip/139.bundle
+      Dependencies: {}
+    Info_82:
+      Name: uitexture/equip/14.bundle
+      Dependencies: {}
+    Info_83:
+      Name: uitexture/equip/140.bundle
+      Dependencies: {}
+    Info_84:
+      Name: uitexture/equip/141.bundle
+      Dependencies: {}
+    Info_85:
+      Name: uitexture/equip/142.bundle
+      Dependencies: {}
+    Info_86:
+      Name: uitexture/equip/143.bundle
+      Dependencies: {}
+    Info_87:
+      Name: uitexture/equip/144.bundle
+      Dependencies: {}
+    Info_88:
+      Name: uitexture/equip/145.bundle
+      Dependencies: {}
+    Info_89:
+      Name: uitexture/equip/146.bundle
+      Dependencies: {}
+    Info_90:
+      Name: uitexture/equip/147.bundle
+      Dependencies: {}
+    Info_91:
+      Name: uitexture/equip/148.bundle
+      Dependencies: {}
+    Info_92:
+      Name: uitexture/equip/149.bundle
+      Dependencies: {}
+    Info_93:
+      Name: uitexture/equip/15.bundle
+      Dependencies: {}
+    Info_94:
+      Name: uitexture/equip/150.bundle
+      Dependencies: {}
+    Info_95:
+      Name: uitexture/equip/151.bundle
+      Dependencies: {}
+    Info_96:
+      Name: uitexture/equip/152.bundle
+      Dependencies: {}
+    Info_97:
+      Name: uitexture/equip/153.bundle
+      Dependencies: {}
+    Info_98:
+      Name: uitexture/equip/154.bundle
+      Dependencies: {}
+    Info_99:
+      Name: uitexture/equip/155.bundle
+      Dependencies: {}
+    Info_100:
+      Name: uitexture/equip/156.bundle
+      Dependencies: {}
+    Info_101:
+      Name: uitexture/equip/157.bundle
+      Dependencies: {}
+    Info_102:
+      Name: uitexture/equip/158.bundle
+      Dependencies: {}
+    Info_103:
+      Name: uitexture/equip/159.bundle
+      Dependencies: {}
+    Info_104:
+      Name: uitexture/equip/16.bundle
+      Dependencies: {}
+    Info_105:
+      Name: uitexture/equip/160.bundle
+      Dependencies: {}
+    Info_106:
+      Name: uitexture/equip/161.bundle
+      Dependencies: {}
+    Info_107:
+      Name: uitexture/equip/162.bundle
+      Dependencies: {}
+    Info_108:
+      Name: uitexture/equip/163.bundle
+      Dependencies: {}
+    Info_109:
+      Name: uitexture/equip/164.bundle
+      Dependencies: {}
+    Info_110:
+      Name: uitexture/equip/165.bundle
+      Dependencies: {}
+    Info_111:
+      Name: uitexture/equip/166.bundle
+      Dependencies: {}
+    Info_112:
+      Name: uitexture/equip/167.bundle
+      Dependencies: {}
+    Info_113:
+      Name: uitexture/equip/168.bundle
+      Dependencies: {}
+    Info_114:
+      Name: uitexture/equip/169.bundle
+      Dependencies: {}
+    Info_115:
+      Name: uitexture/equip/17.bundle
+      Dependencies: {}
+    Info_116:
+      Name: uitexture/equip/170.bundle
+      Dependencies: {}
+    Info_117:
+      Name: uitexture/equip/171.bundle
+      Dependencies: {}
+    Info_118:
+      Name: uitexture/equip/172.bundle
+      Dependencies: {}
+    Info_119:
+      Name: uitexture/equip/173.bundle
+      Dependencies: {}
+    Info_120:
+      Name: uitexture/equip/174.bundle
+      Dependencies: {}
+    Info_121:
+      Name: uitexture/equip/175.bundle
+      Dependencies: {}
+    Info_122:
+      Name: uitexture/equip/176.bundle
+      Dependencies: {}
+    Info_123:
+      Name: uitexture/equip/177.bundle
+      Dependencies: {}
+    Info_124:
+      Name: uitexture/equip/178.bundle
+      Dependencies: {}
+    Info_125:
+      Name: uitexture/equip/179.bundle
+      Dependencies: {}
+    Info_126:
+      Name: uitexture/equip/18.bundle
+      Dependencies: {}
+    Info_127:
+      Name: uitexture/equip/180.bundle
+      Dependencies: {}
+    Info_128:
+      Name: uitexture/equip/181.bundle
+      Dependencies: {}
+    Info_129:
+      Name: uitexture/equip/182.bundle
+      Dependencies: {}
+    Info_130:
+      Name: uitexture/equip/183.bundle
+      Dependencies: {}
+    Info_131:
+      Name: uitexture/equip/184.bundle
+      Dependencies: {}
+    Info_132:
+      Name: uitexture/equip/185.bundle
+      Dependencies: {}
+    Info_133:
+      Name: uitexture/equip/186.bundle
+      Dependencies: {}
+    Info_134:
+      Name: uitexture/equip/187.bundle
+      Dependencies: {}
+    Info_135:
+      Name: uitexture/equip/188.bundle
+      Dependencies: {}
+    Info_136:
+      Name: uitexture/equip/189.bundle
+      Dependencies: {}
+    Info_137:
+      Name: uitexture/equip/19.bundle
+      Dependencies: {}
+    Info_138:
+      Name: uitexture/equip/190.bundle
+      Dependencies: {}
+    Info_139:
+      Name: uitexture/equip/191.bundle
+      Dependencies: {}
+    Info_140:
+      Name: uitexture/equip/192.bundle
+      Dependencies: {}
+    Info_141:
+      Name: uitexture/equip/193.bundle
+      Dependencies: {}
+    Info_142:
+      Name: uitexture/equip/194.bundle
+      Dependencies: {}
+    Info_143:
+      Name: uitexture/equip/195.bundle
+      Dependencies: {}
+    Info_144:
+      Name: uitexture/equip/196.bundle
+      Dependencies: {}
+    Info_145:
+      Name: uitexture/equip/197.bundle
+      Dependencies: {}
+    Info_146:
+      Name: uitexture/equip/198.bundle
+      Dependencies: {}
+    Info_147:
+      Name: uitexture/equip/199.bundle
+      Dependencies: {}
+    Info_148:
+      Name: uitexture/equip/2.bundle
+      Dependencies: {}
+    Info_149:
+      Name: uitexture/equip/20.bundle
+      Dependencies: {}
+    Info_150:
+      Name: uitexture/equip/200.bundle
+      Dependencies: {}
+    Info_151:
+      Name: uitexture/equip/201.bundle
+      Dependencies: {}
+    Info_152:
+      Name: uitexture/equip/202.bundle
+      Dependencies: {}
+    Info_153:
+      Name: uitexture/equip/203.bundle
+      Dependencies: {}
+    Info_154:
+      Name: uitexture/equip/204.bundle
+      Dependencies: {}
+    Info_155:
+      Name: uitexture/equip/205.bundle
+      Dependencies: {}
+    Info_156:
+      Name: uitexture/equip/206.bundle
+      Dependencies: {}
+    Info_157:
+      Name: uitexture/equip/207.bundle
+      Dependencies: {}
+    Info_158:
+      Name: uitexture/equip/208.bundle
+      Dependencies: {}
+    Info_159:
+      Name: uitexture/equip/209.bundle
+      Dependencies: {}
+    Info_160:
+      Name: uitexture/equip/21.bundle
+      Dependencies: {}
+    Info_161:
+      Name: uitexture/equip/210.bundle
+      Dependencies: {}
+    Info_162:
+      Name: uitexture/equip/211.bundle
+      Dependencies: {}
+    Info_163:
+      Name: uitexture/equip/22.bundle
+      Dependencies: {}
+    Info_164:
+      Name: uitexture/equip/222.bundle
+      Dependencies: {}
+    Info_165:
+      Name: uitexture/equip/223.bundle
+      Dependencies: {}
+    Info_166:
+      Name: uitexture/equip/224.bundle
+      Dependencies: {}
+    Info_167:
+      Name: uitexture/equip/225.bundle
+      Dependencies: {}
+    Info_168:
+      Name: uitexture/equip/226.bundle
+      Dependencies: {}
+    Info_169:
+      Name: uitexture/equip/23.bundle
+      Dependencies: {}
+    Info_170:
+      Name: uitexture/equip/24.bundle
+      Dependencies: {}
+    Info_171:
+      Name: uitexture/equip/25.bundle
+      Dependencies: {}
+    Info_172:
+      Name: uitexture/equip/26.bundle
+      Dependencies: {}
+    Info_173:
+      Name: uitexture/equip/27.bundle
+      Dependencies: {}
+    Info_174:
+      Name: uitexture/equip/28.bundle
+      Dependencies: {}
+    Info_175:
+      Name: uitexture/equip/29.bundle
+      Dependencies: {}
+    Info_176:
+      Name: uitexture/equip/3.bundle
+      Dependencies: {}
+    Info_177:
+      Name: uitexture/equip/30.bundle
+      Dependencies: {}
+    Info_178:
+      Name: uitexture/equip/31.bundle
+      Dependencies: {}
+    Info_179:
+      Name: uitexture/equip/32.bundle
+      Dependencies: {}
+    Info_180:
+      Name: uitexture/equip/33.bundle
+      Dependencies: {}
+    Info_181:
+      Name: uitexture/equip/34.bundle
+      Dependencies: {}
+    Info_182:
+      Name: uitexture/equip/35.bundle
+      Dependencies: {}
+    Info_183:
+      Name: uitexture/equip/36.bundle
+      Dependencies: {}
+    Info_184:
+      Name: uitexture/equip/37.bundle
+      Dependencies: {}
+    Info_185:
+      Name: uitexture/equip/38.bundle
+      Dependencies: {}
+    Info_186:
+      Name: uitexture/equip/39.bundle
+      Dependencies: {}
+    Info_187:
+      Name: uitexture/equip/4.bundle
+      Dependencies: {}
+    Info_188:
+      Name: uitexture/equip/40.bundle
+      Dependencies: {}
+    Info_189:
+      Name: uitexture/equip/41.bundle
+      Dependencies: {}
+    Info_190:
+      Name: uitexture/equip/416.bundle
+      Dependencies: {}
+    Info_191:
+      Name: uitexture/equip/42.bundle
+      Dependencies: {}
+    Info_192:
+      Name: uitexture/equip/43.bundle
+      Dependencies: {}
+    Info_193:
+      Name: uitexture/equip/44.bundle
+      Dependencies: {}
+    Info_194:
+      Name: uitexture/equip/45.bundle
+      Dependencies: {}
+    Info_195:
+      Name: uitexture/equip/46.bundle
+      Dependencies: {}
+    Info_196:
+      Name: uitexture/equip/47.bundle
+      Dependencies: {}
+    Info_197:
+      Name: uitexture/equip/48.bundle
+      Dependencies: {}
+    Info_198:
+      Name: uitexture/equip/49.bundle
+      Dependencies: {}
+    Info_199:
+      Name: uitexture/equip/5.bundle
+      Dependencies: {}
+    Info_200:
+      Name: uitexture/equip/50.bundle
+      Dependencies: {}
+    Info_201:
+      Name: uitexture/equip/51.bundle
+      Dependencies: {}
+    Info_202:
+      Name: uitexture/equip/52.bundle
+      Dependencies: {}
+    Info_203:
+      Name: uitexture/equip/53.bundle
+      Dependencies: {}
+    Info_204:
+      Name: uitexture/equip/54.bundle
+      Dependencies: {}
+    Info_205:
+      Name: uitexture/equip/55.bundle
+      Dependencies: {}
+    Info_206:
+      Name: uitexture/equip/56.bundle
+      Dependencies: {}
+    Info_207:
+      Name: uitexture/equip/57.bundle
+      Dependencies: {}
+    Info_208:
+      Name: uitexture/equip/58.bundle
+      Dependencies: {}
+    Info_209:
+      Name: uitexture/equip/59.bundle
+      Dependencies: {}
+    Info_210:
+      Name: uitexture/equip/6.bundle
+      Dependencies: {}
+    Info_211:
+      Name: uitexture/equip/60.bundle
+      Dependencies: {}
+    Info_212:
+      Name: uitexture/equip/61.bundle
+      Dependencies: {}
+    Info_213:
+      Name: uitexture/equip/62.bundle
+      Dependencies: {}
+    Info_214:
+      Name: uitexture/equip/63.bundle
+      Dependencies: {}
+    Info_215:
+      Name: uitexture/equip/64.bundle
+      Dependencies: {}
+    Info_216:
+      Name: uitexture/equip/65.bundle
+      Dependencies: {}
+    Info_217:
+      Name: uitexture/equip/66.bundle
+      Dependencies: {}
+    Info_218:
+      Name: uitexture/equip/67.bundle
+      Dependencies: {}
+    Info_219:
+      Name: uitexture/equip/68.bundle
+      Dependencies: {}
+    Info_220:
+      Name: uitexture/equip/69.bundle
+      Dependencies: {}
+    Info_221:
+      Name: uitexture/equip/7.bundle
+      Dependencies: {}
+    Info_222:
+      Name: uitexture/equip/70.bundle
+      Dependencies: {}
+    Info_223:
+      Name: uitexture/equip/71.bundle
+      Dependencies: {}
+    Info_224:
+      Name: uitexture/equip/72.bundle
+      Dependencies: {}
+    Info_225:
+      Name: uitexture/equip/73.bundle
+      Dependencies: {}
+    Info_226:
+      Name: uitexture/equip/74.bundle
+      Dependencies: {}
+    Info_227:
+      Name: uitexture/equip/75.bundle
+      Dependencies: {}
+    Info_228:
+      Name: uitexture/equip/76.bundle
+      Dependencies: {}
+    Info_229:
+      Name: uitexture/equip/77.bundle
+      Dependencies: {}
+    Info_230:
+      Name: uitexture/equip/78.bundle
+      Dependencies: {}
+    Info_231:
+      Name: uitexture/equip/79.bundle
+      Dependencies: {}
+    Info_232:
+      Name: uitexture/equip/8.bundle
+      Dependencies: {}
+    Info_233:
+      Name: uitexture/equip/80.bundle
+      Dependencies: {}
+    Info_234:
+      Name: uitexture/equip/81.bundle
+      Dependencies: {}
+    Info_235:
+      Name: uitexture/equip/82.bundle
+      Dependencies: {}
+    Info_236:
+      Name: uitexture/equip/83.bundle
+      Dependencies: {}
+    Info_237:
+      Name: uitexture/equip/84.bundle
+      Dependencies: {}
+    Info_238:
+      Name: uitexture/equip/85.bundle
+      Dependencies: {}
+    Info_239:
+      Name: uitexture/equip/86.bundle
+      Dependencies: {}
+    Info_240:
+      Name: uitexture/equip/87.bundle
+      Dependencies: {}
+    Info_241:
+      Name: uitexture/equip/88.bundle
+      Dependencies: {}
+    Info_242:
+      Name: uitexture/equip/89.bundle
+      Dependencies: {}
+    Info_243:
+      Name: uitexture/equip/9.bundle
+      Dependencies: {}
+    Info_244:
+      Name: uitexture/equip/90.bundle
+      Dependencies: {}
+    Info_245:
+      Name: uitexture/equip/91.bundle
+      Dependencies: {}
+    Info_246:
+      Name: uitexture/equip/92.bundle
+      Dependencies: {}
+    Info_247:
+      Name: uitexture/equip/93.bundle
+      Dependencies: {}
+    Info_248:
+      Name: uitexture/equip/94.bundle
+      Dependencies: {}
+    Info_249:
+      Name: uitexture/equip/95.bundle
+      Dependencies: {}
+    Info_250:
+      Name: uitexture/equip/96.bundle
+      Dependencies: {}
+    Info_251:
+      Name: uitexture/equip/97.bundle
+      Dependencies: {}
+    Info_252:
+      Name: uitexture/equip/98.bundle
+      Dependencies: {}
+    Info_253:
+      Name: uitexture/equip/99.bundle
+      Dependencies: {}
+    Info_254:
+      Name: uitexture/head/hero00_1.bundle
+      Dependencies: {}
+    Info_255:
+      Name: uitexture/head/hero00_2.bundle
+      Dependencies: {}
+    Info_256:
+      Name: uitexture/head/hero_003.bundle
+      Dependencies: {}
+    Info_257:
+      Name: uitexture/head/hero_004.bundle
+      Dependencies: {}
+    Info_258:
+      Name: uitexture/head/hero_005.bundle
+      Dependencies: {}
+    Info_259:
+      Name: uitexture/head/hero_006.bundle
+      Dependencies: {}
+    Info_260:
+      Name: uitexture/head/hero_007.bundle
+      Dependencies: {}
+    Info_261:
+      Name: uitexture/head/hero_008.bundle
+      Dependencies: {}
+    Info_262:
+      Name: uitexture/head/hero_009.bundle
+      Dependencies: {}
+    Info_263:
+      Name: uitexture/head/hero_010.bundle
+      Dependencies: {}
+    Info_264:
+      Name: uitexture/head/hero_011.bundle
+      Dependencies: {}
+    Info_265:
+      Name: uitexture/head/hero_012.bundle
+      Dependencies: {}
+    Info_266:
+      Name: uitexture/head/hero_013.bundle
+      Dependencies: {}
+    Info_267:
+      Name: uitexture/head/hero_014.bundle
+      Dependencies: {}
+    Info_268:
+      Name: uitexture/head/hero_015.bundle
+      Dependencies: {}
+    Info_269:
+      Name: uitexture/head/hero_016.bundle
+      Dependencies: {}
+    Info_270:
+      Name: uitexture/head/hero_017.bundle
+      Dependencies: {}
+    Info_271:
+      Name: uitexture/head/hero_018.bundle
+      Dependencies: {}
+    Info_272:
+      Name: uitexture/head/hero_019.bundle
+      Dependencies: {}
+    Info_273:
+      Name: uitexture/head/hero_020.bundle
+      Dependencies: {}
+    Info_274:
+      Name: uitexture/head/hero_021.bundle
+      Dependencies: {}
+    Info_275:
+      Name: uitexture/head/hero_022.bundle
+      Dependencies: {}
+    Info_276:
+      Name: uitexture/head/hero_023.bundle
+      Dependencies: {}
+    Info_277:
+      Name: uitexture/head/hero_024.bundle
+      Dependencies: {}
+    Info_278:
+      Name: uitexture/head/hero_025.bundle
+      Dependencies: {}
+    Info_279:
+      Name: uitexture/head/hero_026.bundle
+      Dependencies: {}
+    Info_280:
+      Name: uitexture/head/hero_027.bundle
+      Dependencies: {}
+    Info_281:
+      Name: uitexture/head/hero_028.bundle
+      Dependencies: {}
+    Info_282:
+      Name: uitexture/head/hero_029.bundle
+      Dependencies: {}
+    Info_283:
+      Name: uitexture/head/hero_030.bundle
+      Dependencies: {}
+    Info_284:
+      Name: uitexture/head/hero_031.bundle
+      Dependencies: {}
+    Info_285:
+      Name: uitexture/head/hero_032.bundle
+      Dependencies: {}
+    Info_286:
+      Name: uitexture/head/hero_033.bundle
+      Dependencies: {}
+    Info_287:
+      Name: uitexture/head/monster_001.bundle
+      Dependencies: {}
+    Info_288:
+      Name: uitexture/head/npc_001.bundle
+      Dependencies: {}
+    Info_289:
+      Name: uitexture/head/npc_002.bundle
+      Dependencies: {}
+    Info_290:
+      Name: uitexture/head/npc_003.bundle
+      Dependencies: {}
+    Info_291:
+      Name: uitexture/head/npc_004.bundle
+      Dependencies: {}
+    Info_292:
+      Name: uitexture/head/npc_005.bundle
+      Dependencies: {}
+    Info_293:
+      Name: uitexture/head/npc_006.bundle
+      Dependencies: {}
+    Info_294:
+      Name: uitexture/head/npc_007.bundle
+      Dependencies: {}
+    Info_295:
+      Name: uitexture/head/npc_008.bundle
+      Dependencies: {}
+    Info_296:
+      Name: uitexture/head/npc_009.bundle
+      Dependencies: {}
+    Info_297:
+      Name: uitexture/head/npc_010.bundle
+      Dependencies: {}
+    Info_298:
+      Name: uitexture/head/player_001.bundle
+      Dependencies: {}
+    Info_299:
+      Name: uitexture/head/system_001.bundle
+      Dependencies: {}
+    Info_300:
+      Name: uitexture/skill/skill_bianzinv_1.bundle
+      Dependencies: {}
+    Info_301:
+      Name: uitexture/skill/skill_bianzinv_2.bundle
+      Dependencies: {}
+    Info_302:
+      Name: uitexture/skill/skill_bianzinv_3.bundle
+      Dependencies: {}
+    Info_303:
+      Name: uitexture/skill/skill_bianzinv_4.bundle
+      Dependencies: {}
+    Info_304:
+      Name: uitexture/skill/skill_bianzinv_combo.bundle
+      Dependencies: {}
+    Info_305:
+      Name: uitexture/skill/skill_common_evade.bundle
+      Dependencies: {}
+    Info_306:
+      Name: uitexture/skill/skill_dafenqi_1.bundle
+      Dependencies: {}
+    Info_307:
+      Name: uitexture/skill/skill_dafenqi_2.bundle
+      Dependencies: {}
+    Info_308:
+      Name: uitexture/skill/skill_dafenqi_3.bundle
+      Dependencies: {}
+    Info_309:
+      Name: uitexture/skill/skill_dafenqi_4.bundle
+      Dependencies: {}
+    Info_310:
+      Name: uitexture/skill/skill_dafenqi_combo.bundle
+      Dependencies: {}
+    Info_311:
+      Name: uitexture/skill/skill_heihuzi_1.bundle
+      Dependencies: {}
+    Info_312:
+      Name: uitexture/skill/skill_heihuzi_2.bundle
+      Dependencies: {}
+    Info_313:
+      Name: uitexture/skill/skill_heihuzi_3.bundle
+      Dependencies: {}
+    Info_314:
+      Name: uitexture/skill/skill_heihuzi_4.bundle
+      Dependencies: {}
+    Info_315:
+      Name: uitexture/skill/skill_heihuzi_combo.bundle
+      Dependencies: {}
+    Info_316:
+      Name: uitexture/skill/skill_jinke_1.bundle
+      Dependencies: {}
+    Info_317:
+      Name: uitexture/skill/skill_jinke_2.bundle
+      Dependencies: {}
+    Info_318:
+      Name: uitexture/skill/skill_jinke_3.bundle
+      Dependencies: {}
+    Info_319:
+      Name: uitexture/skill/skill_jinke_4.bundle
+      Dependencies: {}
+    Info_320:
+      Name: uitexture/skill/skill_jinke_combo.bundle
+      Dependencies: {}
+    Info_321:
+      Name: uitexture/skill/skill_katelinna_1.bundle
+      Dependencies: {}
+    Info_322:
+      Name: uitexture/skill/skill_katelinna_2.bundle
+      Dependencies: {}
+    Info_323:
+      Name: uitexture/skill/skill_katelinna_3.bundle
+      Dependencies: {}
+    Info_324:
+      Name: uitexture/skill/skill_katelinna_4.bundle
+      Dependencies: {}
+    Info_325:
+      Name: uitexture/skill/skill_katelinna_combo.bundle
+      Dependencies: {}
+    Info_326:
+      Name: uitexture/skill/skill_lianqiunan_1.bundle
+      Dependencies: {}
+    Info_327:
+      Name: uitexture/skill/skill_lianqiunan_2.bundle
+      Dependencies: {}
+    Info_328:
+      Name: uitexture/skill/skill_lianqiunan_3.bundle
+      Dependencies: {}
+    Info_329:
+      Name: uitexture/skill/skill_lianqiunan_4.bundle
+      Dependencies: {}
+    Info_330:
+      Name: uitexture/skill/skill_lianqiunan_combo.bundle
+      Dependencies: {}
+    Info_331:
+      Name: uitexture/skill/skill_meilin_1.bundle
+      Dependencies: {}
+    Info_332:
+      Name: uitexture/skill/skill_meilin_2.bundle
+      Dependencies: {}
+    Info_333:
+      Name: uitexture/skill/skill_meilin_3.bundle
+      Dependencies: {}
+    Info_334:
+      Name: uitexture/skill/skill_meilin_4.bundle
+      Dependencies: {}
+    Info_335:
+      Name: uitexture/skill/skill_meilin_combo.bundle
+      Dependencies: {}
+    Info_336:
+      Name: uitexture/skill/skill_panghaidao_1.bundle
+      Dependencies: {}
+    Info_337:
+      Name: uitexture/skill/skill_panghaidao_2.bundle
+      Dependencies: {}
+    Info_338:
+      Name: uitexture/skill/skill_panghaidao_3.bundle
+      Dependencies: {}
+    Info_339:
+      Name: uitexture/skill/skill_panghaidao_4.bundle
+      Dependencies: {}
+    Info_340:
+      Name: uitexture/skill/skill_panghaidao_combo.bundle
+      Dependencies: {}
+    Info_341:
+      Name: uitexture/skill/skill_pendunan_1.bundle
+      Dependencies: {}
+    Info_342:
+      Name: uitexture/skill/skill_pendunan_2.bundle
+      Dependencies: {}
+    Info_343:
+      Name: uitexture/skill/skill_pendunan_3.bundle
+      Dependencies: {}
+    Info_344:
+      Name: uitexture/skill/skill_pendunan_4.bundle
+      Dependencies: {}
+    Info_345:
+      Name: uitexture/skill/skill_pendunan_combo.bundle
+      Dependencies: {}
+    Info_346:
+      Name: uitexture/skill/skill_ribenjianke_1.bundle
+      Dependencies: {}
+    Info_347:
+      Name: uitexture/skill/skill_ribenjianke_2.bundle
+      Dependencies: {}
+    Info_348:
+      Name: uitexture/skill/skill_ribenjianke_3.bundle
+      Dependencies: {}
+    Info_349:
+      Name: uitexture/skill/skill_ribenjianke_4.bundle
+      Dependencies: {}
+    Info_350:
+      Name: uitexture/skill/skill_ribenjianke_combo.bundle
+      Dependencies: {}
+    Info_351:
+      Name: uitexture/skill/skill_shixinwang_1.bundle
+      Dependencies: {}
+    Info_352:
+      Name: uitexture/skill/skill_shixinwang_2.bundle
+      Dependencies: {}
+    Info_353:
+      Name: uitexture/skill/skill_shixinwang_3.bundle
+      Dependencies: {}
+    Info_354:
+      Name: uitexture/skill/skill_shixinwang_4.bundle
+      Dependencies: {}
+    Info_355:
+      Name: uitexture/skill/skill_shixinwang_combo.bundle
+      Dependencies: {}
+    Info_356:
+      Name: uitexture/skill/skill_sibada_1.bundle
+      Dependencies: {}
+    Info_357:
+      Name: uitexture/skill/skill_sibada_2.bundle
+      Dependencies: {}
+    Info_358:
+      Name: uitexture/skill/skill_sibada_3.bundle
+      Dependencies: {}
+    Info_359:
+      Name: uitexture/skill/skill_sibada_4.bundle
+      Dependencies: {}
+    Info_360:
+      Name: uitexture/skill/skill_sibada_combo.bundle
+      Dependencies: {}
+    Info_361:
+      Name: uitexture/skill/skill_xiangyu_1.bundle
+      Dependencies: {}
+    Info_362:
+      Name: uitexture/skill/skill_xiangyu_2.bundle
+      Dependencies: {}
+    Info_363:
+      Name: uitexture/skill/skill_xiangyu_3.bundle
+      Dependencies: {}
+    Info_364:
+      Name: uitexture/skill/skill_xiangyu_4.bundle
+      Dependencies: {}
+    Info_365:
+      Name: uitexture/skill/skill_xiangyu_combo.bundle
+      Dependencies: {}
+    Info_366:
+      Name: uitexture/skill/skill_xiangyu_combo_switch.bundle
+      Dependencies: {}
+    Info_367:
+      Name: uitexture/skill/skill_xiaoluoli_1.bundle
+      Dependencies: {}
+    Info_368:
+      Name: uitexture/skill/skill_xiaoluoli_2.bundle
+      Dependencies: {}
+    Info_369:
+      Name: uitexture/skill/skill_xiaoluoli_3.bundle
+      Dependencies: {}
+    Info_370:
+      Name: uitexture/skill/skill_xiaoluoli_4.bundle
+      Dependencies: {}
+    Info_371:
+      Name: uitexture/skill/skill_xiaoluoli_combo.bundle
+      Dependencies: {}
+    Info_372:
+      Name: uitexture/skill/skill_yasewang_1.bundle
+      Dependencies: {}
+    Info_373:
+      Name: uitexture/skill/skill_yasewang_2.bundle
+      Dependencies: {}
+    Info_374:
+      Name: uitexture/skill/skill_yasewang_3.bundle
+      Dependencies: {}
+    Info_375:
+      Name: uitexture/skill/skill_yasewang_4.bundle
+      Dependencies: {}
+    Info_376:
+      Name: uitexture/skill/skill_yasewang_combo.bundle
+      Dependencies: {}
+    Info_377:
+      Name: uitexture/skill/skill_yuchenglong_1.bundle
+      Dependencies: {}
+    Info_378:
+      Name: uitexture/skill/skill_yuchenglong_2.bundle
+      Dependencies: {}
+    Info_379:
+      Name: uitexture/skill/skill_yuchenglong_3.bundle
+      Dependencies: {}
+    Info_380:
+      Name: uitexture/skill/skill_yuchenglong_4.bundle
+      Dependencies: {}
+    Info_381:
+      Name: uitexture/skill/skill_yuchenglong_combo.bundle
+      Dependencies: {}
+    Info_382:
+      Name: uitexture/skill/skill_yuefei_1.bundle
+      Dependencies: {}
+    Info_383:
+      Name: uitexture/skill/skill_yuefei_2.bundle
+      Dependencies: {}
+    Info_384:
+      Name: uitexture/skill/skill_yuefei_3.bundle
+      Dependencies: {}
+    Info_385:
+      Name: uitexture/skill/skill_yuefei_4.bundle
+      Dependencies: {}
+    Info_386:
+      Name: uitexture/skill/skill_yuefei_combo.bundle
+      Dependencies: {}
+    Info_387:
+      Name: uitexture/bg.bundle
+      Dependencies: {}
+    Info_388:
+      Name: uitexture/pass1.bundle
+      Dependencies: {}

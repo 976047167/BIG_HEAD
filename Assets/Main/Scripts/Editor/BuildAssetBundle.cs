@@ -19,7 +19,7 @@ public class BuildAssetBundleEditor : MonoBehaviour
 
 
     public static string sourcePath = Application.dataPath + "/Main/BundleEditor";
-    const string AssetBundlesOutputPath = "Assets/OutPut";
+    const string AssetBundlesOutputPath = "Assets/StreamingAssets";
     [MenuItem("Tools/AssetBundle/Build AssetBundle %&B")]
     static void BuildAssetBundle()
     {
@@ -41,8 +41,30 @@ public class BuildAssetBundleEditor : MonoBehaviour
         Debug.Log("打包完成");
     }
 
+    [MenuItem("Tools/AssetBundle/Build ")]
+    static void BuildBundle()
+    {
 
+        string outputPath = Path.Combine(AssetBundlesOutputPath, Platform.GetPlatformFolder(EditorUserBuildSettings.activeBuildTarget));
+        if (!Directory.Exists(outputPath))
+        {
+            Directory.CreateDirectory(outputPath);
+        }
 
+        //根据BuildSetting里面所激活的平台进行打包 设置过AssetBundleName的都会进行打包  
+        BuildPipeline.BuildAssetBundles(outputPath, BuildAssetBundleOptions.ChunkBasedCompression, EditorUserBuildSettings.activeBuildTarget);
+
+        AssetDatabase.Refresh();
+
+        Debug.Log("打包完成");
+    }
+    [MenuItem("Tools/AssetBundle/Set AssetBundlesName")]
+    static void SetAssetBundlesName()
+    {
+        ClearAssetBundlesName();
+
+        Pack(sourcePath);
+    }
     /// <summary>  
     /// 清除之前设置过的AssetBundleName，避免产生不必要的资源也打包  
     /// 之前说过，只要设置了AssetBundleName的，都会进行打包，不论在什么目录下  
@@ -97,7 +119,10 @@ public class BuildAssetBundleEditor : MonoBehaviour
         Debug.Log("file source : " + source + "\n" + _assetPath);
         //依赖项咱不单独打包
         AssetImporter assetImporter = AssetImporter.GetAtPath(_assetPath);
-        assetImporter.assetBundleName = source.Substring(sourcePath.Length + 1);
+        string bundleName = source.Substring(sourcePath.Length + 1);
+        bundleName = bundleName.Substring(0, bundleName.LastIndexOf(".")) + ResourceManager.BUNDLE_SUFFIX;
+        assetImporter.assetBundleName = bundleName;
+        //assetImporter.SaveAndReimport();
         //自动获取依赖项并给其资源设置AssetBundleName  
         //string[] dps = AssetDatabase.GetDependencies(_assetPath);
         //foreach (var dp in dps)
@@ -152,7 +177,7 @@ public class Platform
             case BuildTarget.Android:
                 return "Android";
             case BuildTarget.iOS:
-                return "IOS";
+                return "iOS";
             case BuildTarget.StandaloneWindows:
             case BuildTarget.StandaloneWindows64:
                 return "Windows";

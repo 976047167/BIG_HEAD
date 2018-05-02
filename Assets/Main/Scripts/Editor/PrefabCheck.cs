@@ -29,7 +29,7 @@ public class PrefabCheck : MonoBehaviour
                 if (obj != null)
                 {
                     GameObject instance = Instantiate(obj);
-                    UILabel[] labels = instance.GetComponentsInChildren<UILabel>();
+                    UILabel[] labels = instance.GetComponentsInChildren<UILabel>(true);
                     foreach (UILabel label in labels)
                     {
                         //if (label.trueTypeFont != null && label.trueTypeFont.name.Contains("Lucida"))
@@ -44,11 +44,10 @@ public class PrefabCheck : MonoBehaviour
                         //}
                         if (label.trueTypeFont != null && !AssetDatabase.GetAssetPath(label.trueTypeFont).StartsWith("Assets"))
                         {
-                            Debug.LogError(label.trueTypeFont.name + "==>" + AssetDatabase.GetAssetPath(label.trueTypeFont));
-                            if (label.trueTypeFont.name == "Arial")
+                            if (label.trueTypeFont.name == "Arial" || label.trueTypeFont.name.Contains("Lucida"))
                             {
                                 label.trueTypeFont = AssetDatabase.LoadAssetAtPath<Font>("Assets/Main/SourceResource/Fonts/Arial.ttf");
-                                Debug.LogError(AssetDatabase.LoadAssetAtPath<Font>("Assets/Main/SourceResource/Fonts/Arial.ttf").name);
+                                //Debug.LogError(AssetDatabase.LoadAssetAtPath<Font>("Assets/Main/SourceResource/Fonts/Arial.ttf").name);
                                 dirty = true;
 
                             }
@@ -59,6 +58,7 @@ public class PrefabCheck : MonoBehaviour
                     {
                         Debug.LogError("Replay Arial : " + path.Substring(path.IndexOf("Assets")));
                         PrefabUtility.ReplacePrefab(instance, obj, ReplacePrefabOptions.ConnectToPrefab);
+                        //Debug.LogError(label.trueTypeFont.name + "==>" + AssetDatabase.GetAssetPath(label.trueTypeFont));
                     }
 
                     DestroyImmediate(instance);

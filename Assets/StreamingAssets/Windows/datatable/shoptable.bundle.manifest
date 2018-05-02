@@ -1,0 +1,16 @@
+ManifestFileVersion: 0
+CRC: 2909703693
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: cb61b87ac707c57335190e745da8ef15
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: 1033bf7ddfd4c6d43e7a6382c0a0a61a
+HashAppended: 0
+ClassTypes:
+- Class: 49
+  Script: {instanceID: 0}
+Assets:
+- Assets/Main/BundleEditor/DataTable/ShopTable.txt
+Dependencies: []

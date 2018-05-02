@@ -30,7 +30,7 @@ public class ResourceManager
         }
         //if (!EditorMode)
         {
-            SettingModule.CustomLoadSetting = LoadSettingFromCache;
+            SettingModule.CustomLoadSettingString = LoadSettingFromCache;
             TablePreloaded = false;
             PreloadDataTables();
         }
@@ -38,15 +38,15 @@ public class ResourceManager
     public static bool TablePreloaded { get; private set; }
     static int TableCount;
     //缓存表格数据
-    static Dictionary<string, byte[]> TableCache = new Dictionary<string, byte[]>();
+    static Dictionary<string, string> TableCache = new Dictionary<string, string>();
 
-    static byte[] LoadSettingFromCache(string path)
+    static string LoadSettingFromCache(string path)
     {
         if (TableCache.ContainsKey(path))
         {
             return TableCache[path];
         }
-        return new byte[0];
+        return string.Empty;
     }
 
     public static void PreloadDataTables()
@@ -119,19 +119,20 @@ public class ResourceManager
     {
         Load<GameObject>("Prefabs/" + path + (EditorMode ? ".prefab" : BUNDLE_SUFFIX), AssetType.UnityAsset, (str, args, go) => callback(str, args, GameObject.Instantiate(go)), failure, userData);
     }
-    public static void LoadDataTable(string path, Action<string, object[], byte[]> callback, Action<string, object[]> failure, params object[] userData)
+    public static void LoadDataTable(string path, Action<string, object[], string> callback, Action<string, object[]> failure, params object[] userData)
     {
         path = "DataTable/" + path + (EditorMode ? ".txt" : BUNDLE_SUFFIX);
-        AssetLoader assetLoader;
-        if (dicAssetLoader.ContainsKey(path))
-            assetLoader = dicAssetLoader[path];
-        else
-        {
-            assetLoader = new AssetLoader(path, AssetType.Byte);
-            dicAssetLoader.Add(path, assetLoader);
-        }
-        assetLoader.AddLoadRequest(new LoadRequestBytes(callback, failure, userData));
-        helper.StartCoroutine(assetLoader.Load());
+        Load<TextAsset>(path, AssetType.UnityAsset, (str, userdata, ta) => { callback(str, userData, ta.text); }, failure, userData);
+        //AssetLoader assetLoader;
+        //if (dicAssetLoader.ContainsKey(path))
+        //    assetLoader = dicAssetLoader[path];
+        //else
+        //{
+        //    assetLoader = new AssetLoader(path, AssetType.Byte);
+        //    dicAssetLoader.Add(path, assetLoader);
+        //}
+        //assetLoader.AddLoadRequest(new LoadRequestBytes(callback, failure, userData));
+        //helper.StartCoroutine(assetLoader.Load());
     }
     /// <summary>
     /// 场景需要专门去处理，暂不管
@@ -154,6 +155,28 @@ public class ResourceManager
         }
         assetLoader.AddLoadRequest(new LoadRequestScene(callback, failure, userData));
         helper.StartCoroutine(assetLoader.Load());
+    }
+    public static string GetPlatformName()
+    {
+        switch (Application.platform)
+        {
+            case RuntimePlatform.OSXEditor:
+            case RuntimePlatform.OSXPlayer:
+            case RuntimePlatform.OSXDashboardPlayer:
+                return "OSX";
+            case RuntimePlatform.WindowsPlayer:
+            case RuntimePlatform.WindowsEditor:
+                return "Windows";
+            case RuntimePlatform.IPhonePlayer:
+                return "iOS";
+            case RuntimePlatform.Android:
+                return "Android";
+            case RuntimePlatform.LinuxPlayer:
+            case RuntimePlatform.LinuxEditor:
+                return "Linux";
+            default:
+                return "";
+        }
     }
 }
 public interface ILoadRequest
@@ -275,7 +298,7 @@ public class AssetLoader
         if (ResourceManager.EditorMode)
             FullPath = "Assets/Main/BundleEditor/" + AssetPath;
         else
-            FullPath = GetRemotePath(Application.streamingAssetsPath, AssetPath);
+            FullPath = GetRemotePath(Application.streamingAssetsPath, ResourceManager.GetPlatformName().ToLower(), AssetPath.ToLower());
 
         LoadState = AssetLoadState.None;
     }
@@ -346,7 +369,7 @@ public class AssetLoader
             yield return www;
             if (!string.IsNullOrEmpty(www.error))
             {
-                Debug.LogError("Download asset failure!+ " + www.url);
+                Debug.LogError("Download asset failure!+ " + www.url + "\n" + www.error);
                 LoadState = AssetLoadState.LoadFail;
                 while (requests.Count > 0)
                 {
@@ -470,7 +493,6 @@ public class AssetLoader
         {
             return null;
         }
-
         return combinePath.Contains("://") ? combinePath : ("file:///" + combinePath).Replace("file:////", "file:///");
     }
 }

@@ -1,0 +1,16 @@
+ManifestFileVersion: 0
+CRC: 2264177636
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: 49d34db1f0b8c507328b86e9cb17564f
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: c1642440719609290a7e09a50a7286f4
+HashAppended: 0
+ClassTypes:
+- Class: 28
+  Script: {instanceID: 0}
+Assets:
+- Assets/Main/BundleEditor/UITexture/Skill/skill_heihuzi_combo.png
+Dependencies: []

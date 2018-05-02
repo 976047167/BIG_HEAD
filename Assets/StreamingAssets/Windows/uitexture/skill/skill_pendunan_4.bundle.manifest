@@ -1,0 +1,16 @@
+ManifestFileVersion: 0
+CRC: 531965757
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: b3dd75e0282be78df453eea3cd5e6f01
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: c1642440719609290a7e09a50a7286f4
+HashAppended: 0
+ClassTypes:
+- Class: 28
+  Script: {instanceID: 0}
+Assets:
+- Assets/Main/BundleEditor/UITexture/Skill/skill_pendunan_4.png
+Dependencies: []

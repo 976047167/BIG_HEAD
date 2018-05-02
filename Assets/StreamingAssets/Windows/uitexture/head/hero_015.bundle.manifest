@@ -1,0 +1,16 @@
+ManifestFileVersion: 0
+CRC: 4168115835
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: 15eb33339d0dc93ec4b2ae851714c28c
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: c1642440719609290a7e09a50a7286f4
+HashAppended: 0
+ClassTypes:
+- Class: 28
+  Script: {instanceID: 0}
+Assets:
+- Assets/Main/BundleEditor/UITexture/Head/hero_015.png
+Dependencies: []

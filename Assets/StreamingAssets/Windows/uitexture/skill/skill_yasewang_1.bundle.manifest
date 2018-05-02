@@ -1,0 +1,16 @@
+ManifestFileVersion: 0
+CRC: 134752358
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: 7661f27ad86cc9083897cf61d78d116d
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: c1642440719609290a7e09a50a7286f4
+HashAppended: 0
+ClassTypes:
+- Class: 28
+  Script: {instanceID: 0}
+Assets:
+- Assets/Main/BundleEditor/UITexture/Skill/skill_yasewang_1.png
+Dependencies: []

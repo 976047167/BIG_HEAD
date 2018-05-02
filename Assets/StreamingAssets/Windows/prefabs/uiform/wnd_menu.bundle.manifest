@@ -1,0 +1,40 @@
+ManifestFileVersion: 0
+CRC: 4214983497
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: 17798b41ba983f6e4f571fdfc036a19c
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: efe94c61f6af6d76945ebd1e41470393
+HashAppended: 0
+ClassTypes:
+- Class: 1
+  Script: {instanceID: 0}
+- Class: 4
+  Script: {instanceID: 0}
+- Class: 21
+  Script: {instanceID: 0}
+- Class: 28
+  Script: {instanceID: 0}
+- Class: 48
+  Script: {instanceID: 0}
+- Class: 65
+  Script: {instanceID: 0}
+- Class: 114
+  Script: {fileID: 11500000, guid: ae942c9068183dc40a9d01f648273726, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: e9d0b5f3bbe925a408bd595c79d0bf63, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 03f55378f7d0ae84ab204f1a019bd922, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 4d0c51bb0b6e93049af5e88f93826e3b, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 1b3dc54f924693f41b5cbecb267e647a, type: 3}
+- Class: 115
+  Script: {instanceID: 0}
+- Class: 128
+  Script: {instanceID: 0}
+Assets:
+- Assets/Main/BundleEditor/Prefabs/UIForm/WND_Menu.prefab
+Dependencies: []

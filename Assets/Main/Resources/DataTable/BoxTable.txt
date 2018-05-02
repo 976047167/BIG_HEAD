@@ -1,3 +1,0 @@
-Id	DialogId
-int	int
-1	35

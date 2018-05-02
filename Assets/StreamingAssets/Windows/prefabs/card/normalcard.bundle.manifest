@@ -1,0 +1,43 @@
+ManifestFileVersion: 0
+CRC: 1732687808
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: 081cb60f0b96310f5aeb3475b558a7a9
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: 04e03f2631c6a194daaa1cb2662a89ce
+HashAppended: 0
+ClassTypes:
+- Class: 1
+  Script: {instanceID: 0}
+- Class: 4
+  Script: {instanceID: 0}
+- Class: 21
+  Script: {instanceID: 0}
+- Class: 28
+  Script: {instanceID: 0}
+- Class: 48
+  Script: {instanceID: 0}
+- Class: 65
+  Script: {instanceID: 0}
+- Class: 114
+  Script: {fileID: 11500000, guid: 2705b751397dc854099e5aa83728a7a7, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: e9d0b5f3bbe925a408bd595c79d0bf63, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: d5c5ca47aa5c01740810b7c66662099f, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: f02842fa4878db54f9587ff4de7d9f2d, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 4d0c51bb0b6e93049af5e88f93826e3b, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 1b3dc54f924693f41b5cbecb267e647a, type: 3}
+- Class: 115
+  Script: {instanceID: 0}
+- Class: 128
+  Script: {instanceID: 0}
+Assets:
+- Assets/Main/BundleEditor/Prefabs/Card/NormalCard.prefab
+Dependencies:
+- E:/UnityProject/BigHead/Assets/SteamingAssets/Windows/uitexture/equip/1.bundle
