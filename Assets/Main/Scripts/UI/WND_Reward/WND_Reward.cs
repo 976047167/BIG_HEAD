@@ -9,23 +9,24 @@ public class WND_Reward : UIFormBase
     private GameObject btnCommond;
     private UIGrid grid;
     // Use this for initialization
-    void Awake () {
+    void Awake()
+    {
         labRewardText = transform.Find("bg/frame/labReward").GetComponent<UILabel>();
         btnCommond = transform.Find("bg/frame/btnCommond").gameObject;
         grid = transform.Find("bg/frame/scrollView/Grid").GetComponent<UIGrid>();
         UIEventListener.Get(btnCommond).onClick = exitClick;
-       // OnInit(1);
+        // OnInit(1);
     }
 
     // Update is called once per frame
     protected override void OnInit(object userdata)
     {
         base.OnInit(userdata);
-        int monsterId =(int) userdata;
+        int monsterId = (int)userdata;
         BattleMonsterTableSetting monster = BattleMonsterTableSettings.Get(monsterId);
         List<int> rewardList = monster.RewardIds;
 
-        int rewardId = rewardList[ Random.Range(1, rewardList.Count + 1)];
+        int rewardId = rewardList[Random.Range(0, rewardList.Count)];
 
         RewardTableSetting reward = RewardTableSettings.Get(rewardId);
 
@@ -74,7 +75,7 @@ public class WND_Reward : UIFormBase
             GameObject item = Instantiate(labRewardText.gameObject);
 
 
-            BattleCardTableSetting cardData =  BattleCardTableSettings.Get(card);
+            BattleCardTableSetting cardData = BattleCardTableSettings.Get(card);
             if (cardData == null) continue;
 
             item.GetComponent<UILabel>().text = cardData.Name;
@@ -100,7 +101,8 @@ public class WND_Reward : UIFormBase
             }
 
             item.GetComponent<UILabel>().gradientBottom = color;
-            UIEventListener.Get(item).onClick = (GameObject obj) => {
+            UIEventListener.Get(item).onClick = (GameObject obj) =>
+            {
                 UIModule.Instance.OpenForm<WND_ShowCard>(card);
             };
             UITexture icon = item.transform.Find("texReward").GetComponent<UITexture>();

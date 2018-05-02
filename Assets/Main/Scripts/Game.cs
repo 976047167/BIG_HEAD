@@ -21,11 +21,7 @@ public class Game : MonoBehaviour
     IEnumerator Init()
     {
         //资源第一优先级初始化
-        ResourceManager.Init(BundleEditorMode);
-        while (ResourceManager.TablePreloaded == false)
-        {
-            yield return null;
-        }
+        yield return ResourceManager.Init(BundleEditorMode);
         dataMgr = new DataMgr();
         battleMgr = new BattleMgr();
         uiModule = UIModule.Instance;

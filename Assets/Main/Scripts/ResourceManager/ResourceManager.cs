@@ -18,8 +18,9 @@ public class ResourceManager
     public static bool EditorMode { private set; get; }
 
     public const string BUNDLE_SUFFIX = ".bundle";
-    static Dictionary<string, AssetLoader> dicAssetLoader = new Dictionary<string, AssetLoader>();
-    public static void Init(bool isEditorMode = false)
+
+    public static AssetBundleManifest BundleManifest { get; private set; }
+    public static IEnumerator Init(bool isEditorMode = false)
     {
 #if UNITY_EDITOR
         EditorMode = isEditorMode;
@@ -28,11 +29,23 @@ public class ResourceManager
         {
             helper = new GameObject().AddComponent<ResourceManagerHelper>();
         }
+        if (!EditorMode)
+        {
+            LoadBundleManifest();
+            while (BundleManifest == null)
+            {
+                yield return null;
+            }
+        }
         //if (!EditorMode)
         {
             SettingModule.CustomLoadSettingString = LoadSettingFromCache;
             TablePreloaded = false;
             PreloadDataTables();
+        }
+        while (!TablePreloaded)
+        {
+            yield return null;
         }
     }
     public static bool TablePreloaded { get; private set; }
@@ -96,14 +109,7 @@ public class ResourceManager
     /// <param name="userData">用户自定义数据数组</param>
     static void Load<T>(string path, AssetType assetType, Action<string, object[], T> callback, Action<string, object[]> failure, params object[] userData) where T : Object
     {
-        AssetLoader assetLoader;
-        if (dicAssetLoader.ContainsKey(path))
-            assetLoader = dicAssetLoader[path];
-        else
-        {
-            assetLoader = new AssetLoader(path, assetType);
-            dicAssetLoader.Add(path, assetLoader);
-        }
+        AssetLoader assetLoader=AssetLoader.Get(path, AssetType.UnityAsset);
         if (assetType == AssetType.UnityAsset)
         {
             assetLoader.AddLoadRequest(new LoadRequest<T>(callback, failure, userData));
@@ -134,6 +140,7 @@ public class ResourceManager
         //assetLoader.AddLoadRequest(new LoadRequestBytes(callback, failure, userData));
         //helper.StartCoroutine(assetLoader.Load());
     }
+
     /// <summary>
     /// 场景需要专门去处理，暂不管
     /// </summary>
@@ -145,16 +152,21 @@ public class ResourceManager
         }
 
         path = "Scenes/" + path + (EditorMode ? ".scene" : BUNDLE_SUFFIX);
-        AssetLoader assetLoader;
-        if (dicAssetLoader.ContainsKey(path))
-            assetLoader = dicAssetLoader[path];
-        else
-        {
-            assetLoader = new AssetLoader(path, AssetType.Scene);
-            dicAssetLoader.Add(path, assetLoader);
-        }
+        AssetLoader assetLoader = AssetLoader.Get(path, AssetType.Scene);
         assetLoader.AddLoadRequest(new LoadRequestScene(callback, failure, userData));
         helper.StartCoroutine(assetLoader.Load());
+    }
+    public static void LoadBundleManifest()
+    {
+        Load<AssetBundleManifest>(GetPlatformName(), AssetType.UnityAsset,
+            (path, userData, bundleManifest) =>
+            {
+                BundleManifest = bundleManifest;
+            },
+            (path, userdata) =>
+            {
+
+            }, null);
     }
     public static string GetPlatformName()
     {
@@ -238,11 +250,16 @@ public class LoadRequestScene : ILoadRequest
         }
     }
 }
+/// <summary>
+/// 加载unity资源是需要先加载依赖资源
+/// </summary>
+/// <typeparam name="T"></typeparam>
 public class LoadRequest<T> : ILoadRequest where T : Object
 {
     protected Action<string, object[], T> callback;
     protected Action<string, object[]> failure;
     protected object[] userData;
+
     public LoadRequest(Action<string, object[], T> callback, Action<string, object[]> failure, params object[] userData)
     {
         this.userData = userData;
@@ -278,6 +295,7 @@ public class LoadRequest<T> : ILoadRequest where T : Object
 
 public class AssetLoader
 {
+    static Dictionary<string, AssetLoader> dicAssetLoader = new Dictionary<string, AssetLoader>();
     public string AssetPath { get; private set; }
     public AssetType AssetType { get; private set; }
     public string FullPath { get; private set; }
@@ -286,19 +304,47 @@ public class AssetLoader
     public WWW www { get; private set; }
     public float progress { get; private set; }
 
+    public static Dictionary<string, AssetLoader> DicAssetLoader
+    {
+        get
+        {
+            return dicAssetLoader;
+        }
+
+        private set
+        {
+            dicAssetLoader = value;
+        }
+    }
+
+    protected Dictionary<string, AssetLoader> dicDependenceLoader;
+
     Queue<ILoadRequest> requests = new Queue<ILoadRequest>();
 
     protected Object[] assets;
     protected byte[] bytes;
     protected AssetBundleRequest assetBundleRequest;
-    public AssetLoader(string assetPath, AssetType assetType)
+    public static AssetLoader Get(string assetPath, AssetType assetType)
+    {
+        assetPath = assetPath.ToLower();
+        AssetLoader assetLoader;
+        if (dicAssetLoader.ContainsKey(assetPath))
+            assetLoader = dicAssetLoader[assetPath];
+        else
+        {
+            assetLoader = new AssetLoader(assetPath, assetType);
+            dicAssetLoader.Add(assetPath, assetLoader);
+        }
+        return assetLoader;
+    }
+    AssetLoader(string assetPath, AssetType assetType)
     {
         AssetPath = assetPath;
         this.AssetType = assetType;
         if (ResourceManager.EditorMode)
             FullPath = "Assets/Main/BundleEditor/" + AssetPath;
         else
-            FullPath = GetRemotePath(Application.streamingAssetsPath, ResourceManager.GetPlatformName().ToLower(), AssetPath.ToLower());
+            FullPath = GetRemotePath(Application.streamingAssetsPath, ResourceManager.GetPlatformName().ToLower(), AssetPath);
 
         LoadState = AssetLoadState.None;
     }
@@ -318,7 +364,7 @@ public class AssetLoader
             yield break;
         }
         //已经释放或加载失败，重新开始加载
-        if (LoadState != AssetLoadState.LoadFail || LoadState != AssetLoadState.Realsed)
+        if (LoadState != AssetLoadState.LoadFail || LoadState != AssetLoadState.Realsed || LoadState == AssetLoadState.LoadDenpendenceFail)
             LoadState = AssetLoadState.None;
         //已经开始加载
         if (LoadState != AssetLoadState.None)
@@ -364,49 +410,36 @@ public class AssetLoader
         else
 #endif
         {
-            www = new WWW(FullPath);
-            LoadState = AssetLoadState.Loading;
-            yield return www;
-            if (!string.IsNullOrEmpty(www.error))
+            if (ResourceManager.BundleManifest != null)
             {
-                Debug.LogError("Download asset failure!+ " + www.url + "\n" + www.error);
-                LoadState = AssetLoadState.LoadFail;
-                while (requests.Count > 0)
+                string[] denpendence = ResourceManager.BundleManifest.GetAllDependencies(AssetPath);
+                if (denpendence.Length > 0)
                 {
-                    requests.Dequeue().LoadFailed(this);
+                    LoadState = AssetLoadState.LoadDenpendence;
+                    dicDependenceLoader = new Dictionary<string, AssetLoader>(denpendence.Length);
+                    for (int i = 0; i < denpendence.Length; i++)
+                    {
+                        dicDependenceLoader.Add(denpendence[i], AssetLoader.Get(denpendence[i], AssetType.UnityAsset));
+                        dicDependenceLoader[denpendence[i]].AddLoadRequest(new LoadRequest<Object>(LoadDependenceSuccess, LoadDependenceFailed));
+                        yield return dicDependenceLoader[denpendence[i]].Load();
+                    }
                 }
-                yield break;
-            }
-            assetBundle = www.assetBundle;
-            if (assetBundle == null)
-            {
-                Debug.LogError("Get asset failure!+ " + www.url);
-                LoadState = AssetLoadState.LoadFail;
-                while (requests.Count > 0)
+                else
+                    LoadState = AssetLoadState.LoadDenpendenceSuccess;
+                while (LoadState < AssetLoadState.LoadDenpendenceSuccess)
                 {
-                    requests.Dequeue().LoadFailed(this);
-                }
-                yield break;
-            }
-            if (AssetType == AssetType.Byte)
-            {
-                bytes = www.bytes;
-            }
-            else if (AssetType == AssetType.UnityAsset)
-            {
-                assets = www.assetBundle.LoadAllAssets();
-            }
-            else if (AssetType == AssetType.Scene)
-            {
-                //加载场景使用
-                AssetBundleRequest bundleRequest = www.assetBundle.LoadAllAssetsAsync();
-                assetBundleRequest = bundleRequest;
-                bundleRequest.allowSceneActivation = false;
-                while (bundleRequest.isDone == false)
-                {
+                    if (LoadState == AssetLoadState.LoadDenpendenceFail)
+                    {
+                        while (requests.Count > 0)
+                        {
+                            requests.Dequeue().LoadFailed(this);
+                        }
+                        yield break;
+                    }
                     yield return null;
                 }
             }
+            yield return LoadSuccess();
         }
         LoadState = AssetLoadState.Loaded;
         while (requests.Count > 0)
@@ -414,11 +447,79 @@ public class AssetLoader
             requests.Dequeue().LoadSuccess(this);
         }
     }
+    public void LoadDependenceSuccess(string path, object[] userData, Object loader)
+    {
 
+        bool loadDenpendenceEnd = true;
+        foreach (var item in dicDependenceLoader)
+        {
+            if (item.Value.LoadState < AssetLoadState.Loaded)
+                loadDenpendenceEnd = false;
+        }
+        if (loadDenpendenceEnd)
+        {
+            LoadState = AssetLoadState.LoadDenpendenceSuccess;
+        }
+    }
+    public void LoadDependenceFailed(string path, object[] userData)
+    {
+        LoadState = AssetLoadState.LoadDenpendenceFail;
+    }
+
+    IEnumerator LoadSuccess()
+    {
+        www = new WWW(FullPath);
+        LoadState = AssetLoadState.Loading;
+        yield return www;
+        if (!string.IsNullOrEmpty(www.error))
+        {
+            Debug.LogError("Download asset failure!+ " + www.url + "\n" + www.error);
+            LoadState = AssetLoadState.LoadFail;
+            while (requests.Count > 0)
+            {
+                requests.Dequeue().LoadFailed(this);
+            }
+            yield break;
+        }
+        assetBundle = www.assetBundle;
+        if (assetBundle == null)
+        {
+            Debug.LogError("Get asset failure!+ " + www.url);
+            LoadState = AssetLoadState.LoadFail;
+            while (requests.Count > 0)
+            {
+                requests.Dequeue().LoadFailed(this);
+            }
+            yield break;
+        }
+        if (AssetType == AssetType.Byte)
+        {
+            bytes = www.bytes;
+        }
+        else if (AssetType == AssetType.UnityAsset)
+        {
+            assets = www.assetBundle.LoadAllAssets();
+        }
+        else if (AssetType == AssetType.Scene)
+        {
+            //加载场景使用
+            AssetBundleRequest bundleRequest = www.assetBundle.LoadAllAssetsAsync();
+            assetBundleRequest = bundleRequest;
+            bundleRequest.allowSceneActivation = false;
+            while (bundleRequest.isDone == false)
+            {
+                yield return null;
+            }
+        }
+    }
     public T GetAsset<T>() where T : Object
     {
         if (AssetType == AssetType.UnityAsset && LoadState == AssetLoadState.Loaded)
         {
+            if (typeof(T) == typeof(AssetBundle))
+            {
+                return assetBundle as T;
+            }
             for (int i = 0; i < assets.Length; i++)
             {
                 if (assets[i] is T)
@@ -500,6 +601,9 @@ public enum AssetLoadState
 {
     None = 0,
     Start,
+    LoadDenpendence,
+    LoadDenpendenceFail,
+    LoadDenpendenceSuccess,
     Loading,
     LoadFail,
     Loaded,
