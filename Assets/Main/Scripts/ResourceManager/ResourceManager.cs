@@ -109,7 +109,7 @@ public class ResourceManager
     /// <param name="userData">用户自定义数据数组</param>
     static void Load<T>(string path, AssetType assetType, Action<string, object[], T> callback, Action<string, object[]> failure, params object[] userData) where T : Object
     {
-        AssetLoader assetLoader=AssetLoader.Get(path, AssetType.UnityAsset);
+        AssetLoader assetLoader = AssetLoader.Get(path, AssetType.UnityAsset);
         if (assetType == AssetType.UnityAsset)
         {
             assetLoader.AddLoadRequest(new LoadRequest<T>(callback, failure, userData));
@@ -172,20 +172,38 @@ public class ResourceManager
     {
         switch (Application.platform)
         {
-            case RuntimePlatform.OSXEditor:
             case RuntimePlatform.OSXPlayer:
             case RuntimePlatform.OSXDashboardPlayer:
                 return "OSX";
             case RuntimePlatform.WindowsPlayer:
-            case RuntimePlatform.WindowsEditor:
                 return "Windows";
             case RuntimePlatform.IPhonePlayer:
                 return "iOS";
             case RuntimePlatform.Android:
                 return "Android";
             case RuntimePlatform.LinuxPlayer:
-            case RuntimePlatform.LinuxEditor:
                 return "Linux";
+#if UNITY_EDITOR
+            case RuntimePlatform.LinuxEditor:
+            case RuntimePlatform.WindowsEditor:
+            case RuntimePlatform.OSXEditor:
+                switch (EditorUserBuildSettings.activeBuildTarget)
+                {
+                    case BuildTarget.Android:
+                        return "Android";
+                    case BuildTarget.iOS:
+                        return "iOS";
+                    case BuildTarget.StandaloneWindows:
+                    case BuildTarget.StandaloneWindows64:
+                        return "Windows";
+                    case BuildTarget.StandaloneOSXIntel:
+                    case BuildTarget.StandaloneOSXIntel64:
+                    case BuildTarget.StandaloneOSXUniversal:
+                        return "OSX";
+                    default:
+                        return "";
+                }
+#endif
             default:
                 return "";
         }
@@ -439,7 +457,7 @@ public class AssetLoader
                     yield return null;
                 }
             }
-            yield return LoadSuccess();
+            yield return LoadDependenceSuccess();
         }
         LoadState = AssetLoadState.Loaded;
         while (requests.Count > 0)
@@ -466,11 +484,15 @@ public class AssetLoader
         LoadState = AssetLoadState.LoadDenpendenceFail;
     }
 
-    IEnumerator LoadSuccess()
+    IEnumerator LoadDependenceSuccess()
     {
         www = new WWW(FullPath);
         LoadState = AssetLoadState.Loading;
         yield return www;
+        while (!www.isDone)
+        {
+            yield return null;
+        }
         if (!string.IsNullOrEmpty(www.error))
         {
             Debug.LogError("Download asset failure!+ " + www.url + "\n" + www.error);

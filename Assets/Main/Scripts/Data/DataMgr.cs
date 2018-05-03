@@ -26,9 +26,7 @@ public class DataMgr
     public int Food;
     public int Coin;
     public BattlePlayerData MyPlayerData { get; private set; }
-    public BattlePlayerData OppPlayerData { get; private set; }
     public List<BattleCardData> Kaku = new List<BattleCardData>();
-    public int MonsterId;
     /// <summary>
     /// 游戏启动时初始化
     /// </summary>
@@ -67,28 +65,5 @@ public class DataMgr
         Food = 20;
         Coin = 20;
     }
-    public void SetOppData(int monsterId)
-    {
-        BattleMonsterTableSetting monster = BattleMonsterTableSettings.Get(monsterId);
-        if (monster == null)
-        {
-            Debug.LogError("怪物表格配置错误");
-            return;
-        }
-        MonsterId = monsterId;
-        OppPlayerData = new BattlePlayerData();
-        OppPlayerData.HP = monster.HP;
-        OppPlayerData.MaxHP = monster.MaxHp;
-        OppPlayerData.MP = monster.MP;
-        OppPlayerData.MaxMP = monster.MaxMP;
-        OppPlayerData.AP = monster.AP;
-        OppPlayerData.MaxAP = monster.MaxAP;
-        OppPlayerData.Level = monster.Level;
-        OppPlayerData.HeadIcon = monster.Icon;
-        for (int i = 0; i < monster.BattleCards.Count; i++)
-        {
-            OppPlayerData.CardList.Add(new BattleCardData(monster.BattleCards[i], OppPlayerData));
-        }
-        //TODO: Buff Equip
-    }
+    
 }

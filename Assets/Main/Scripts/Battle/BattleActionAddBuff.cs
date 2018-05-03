@@ -10,7 +10,7 @@ public class BattleActionAddBuff : BattleActionBase
     }
     public override void GameAction(int num)
     {
-        Game.DataManager.OppPlayerData.HP--;
+        Game.BattleManager.OppPlayerData.HP--;
     }
 
     

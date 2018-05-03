@@ -117,7 +117,8 @@ public class WND_Reward : UIFormBase
     }
     private void exitClick(GameObject obj)
     {
-        Destroy(gameObject);
+        Game.UI.CloseForm<UIBattleForm>();
+        Game.UI.CloseForm<WND_Reward>();
     }
 
 }

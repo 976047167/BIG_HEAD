@@ -15,7 +15,7 @@ public class BattlePlayer
         Data.CurrentCardList = new List<BattleCardData>(Data.CardList);
         Data.AP = 0;
         Data.MaxAP = 0;
-        IsMe = Data == Game.DataManager.MyPlayerData;
+        IsMe = Data == Game.BattleManager.MyPlayerData;
 
     }
     public void EndRound()

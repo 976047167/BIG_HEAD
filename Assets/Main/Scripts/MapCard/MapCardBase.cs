@@ -78,10 +78,15 @@ public class MapCardBase
     public static MapCardBase GetRandomMapCard()
     {
         string cardType = MapCardName[Random.Range(0, MapCardName.Length)];
-        Type type = Type.GetType("MapCardMonster");
-
-        return CreateMapCard<MapCardMonster>();
-        //return Instantiate(Resources.Load<MapCardBase>("Prefabs/MapCard/" + "MapCardMonster"));
+        if (Random.Range(0, 100) % 3 == 0)
+        {
+            cardType = "MapCardMonster";
+        }
+        //Type type = Type.GetType("MapCardMonster");
+        MapCardBase mapCard = Assembly.GetExecutingAssembly().CreateInstance(cardType) as MapCardBase;
+        ResourceManager.LoadGameObject("MapCard/" + cardType, LoadAssetSuccessess, LoadAssetFailed, mapCard);
+        //return CreateMapCard<MapCardMonster>();
+        return mapCard;
     }
 
     static void LoadAssetSuccessess(string path, object[] args, GameObject go)

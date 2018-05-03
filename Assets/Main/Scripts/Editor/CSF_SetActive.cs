@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
-public class CSF_SetActive : MonoBehaviour {
+public class CSF_SetActive : MonoBehaviour
+{
     /*
      下面是被指定的键（它们也可以组合起来使用）：
     %-CTRL 在Windows / CMD在OSX
@@ -14,7 +15,7 @@ public class CSF_SetActive : MonoBehaviour {
     HOME,END,PGUP,PDDN
     字母键不是key-sequence的一部分，要让字母键被添加到key-sequence中必须在前面加上下划线（例如：_g对应于快捷键”G”）。
     */
-    [MenuItem("Tools/CSF/SetActive %&Z")]
+    [MenuItem("Tools/CSF/SetActive %&Z", false, 999)]
     static void SeletEnable()
     {
         GameObject[] gos = Selection.gameObjects;

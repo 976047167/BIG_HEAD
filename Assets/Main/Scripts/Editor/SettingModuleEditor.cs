@@ -138,12 +138,12 @@ namespace KEngine.Editor
             }
         }
 
-        [MenuItem("KEngine/Settings/Force Compile Settings + Code")]
+        [MenuItem("Tools/Settings/Force Compile Settings + Code")]
         public static void CompileSettings()
         {
             DoCompileSettings(true);
         }
-        [MenuItem("KEngine/Settings/Quick Compile Settings")]
+        [MenuItem("Tools/Settings/Quick Compile Settings")]
         public static void QuickCompileSettings()
         {
             DoCompileSettings(false);

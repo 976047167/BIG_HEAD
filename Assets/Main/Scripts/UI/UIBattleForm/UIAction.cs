@@ -18,10 +18,19 @@ public abstract class UIAction
 {
     protected UIBattleForm BattleForm;
     public UIActionType ActionType { get; protected set; }
+    public List<UIAction> BindActionList { get; protected set; }
     public UIAction(UIActionType type)
     {
         this.BattleForm = Game.BattleManager.BattleForm;
         ActionType = type;
+    }
+    public void AddBindUIAction(UIAction childUIAction)
+    {
+        if (BindActionList==null)
+        {
+            BindActionList = new List<UIAction>(1);
+        }
+        BindActionList.Add(childUIAction);
     }
     public abstract IEnumerator Excute();
 
@@ -39,7 +48,7 @@ public class UIAction_DrawCard : UIAction
     public override IEnumerator Excute()
     {
         yield return null;
-        if (CardData.Owner == Game.DataManager.MyPlayerData)
+        if (CardData.Owner == Game.BattleManager.MyPlayerData)
         {
             BattleForm.CreateBattleCard(CardData, BattleForm.MyCardsGrid);
         }

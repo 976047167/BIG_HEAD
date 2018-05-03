@@ -20,14 +20,14 @@ public class BuildAssetBundleEditor : MonoBehaviour
 
     public static string sourcePath = Application.dataPath + "/Main/BundleEditor";
     const string AssetBundlesOutputPath = "Assets/StreamingAssets";
-    [MenuItem("Tools/AssetBundle/Build AssetBundle %&B")]
+    [MenuItem("Tools/AssetBundle/Build AssetBundle %&B", false, 20)]
     static void BuildAssetBundle()
     {
         ClearAssetBundlesName();
 
         Pack(sourcePath);
 
-        string outputPath = Path.Combine(AssetBundlesOutputPath, Platform.GetPlatformFolder(EditorUserBuildSettings.activeBuildTarget));
+        string outputPath = Path.Combine(AssetBundlesOutputPath, Platform.GetPlatformFolder(EditorUserBuildSettings.activeBuildTarget).ToLower());
         if (!Directory.Exists(outputPath))
         {
             Directory.CreateDirectory(outputPath);
@@ -45,7 +45,7 @@ public class BuildAssetBundleEditor : MonoBehaviour
     static void BuildBundle()
     {
 
-        string outputPath = Path.Combine(AssetBundlesOutputPath, Platform.GetPlatformFolder(EditorUserBuildSettings.activeBuildTarget));
+        string outputPath = Path.Combine(AssetBundlesOutputPath, Platform.GetPlatformFolder(EditorUserBuildSettings.activeBuildTarget).ToLower());
         if (!Directory.Exists(outputPath))
         {
             Directory.CreateDirectory(outputPath);

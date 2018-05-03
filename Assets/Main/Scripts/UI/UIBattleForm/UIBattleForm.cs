@@ -21,6 +21,8 @@ public class UIBattleForm : UIFormBase
     [SerializeField]
     private UILabel lblResultInfo;
 
+    int monsterId = 0;
+
     Dictionary<BattleCardData, UIBattleCard> dicBattleCard = new Dictionary<BattleCardData, UIBattleCard>();
 
     public UIPanel MovingPanel { get; private set; }
@@ -53,14 +55,15 @@ public class UIBattleForm : UIFormBase
     // Use this for initialization
     void Start()
     {
-        myPlayerViews = new PlayerInfoViews(Game.DataManager.MyPlayerData);
-        oppPlayerViews = new PlayerInfoViews(Game.DataManager.OppPlayerData);
+        myPlayerViews = new PlayerInfoViews(Game.BattleManager.MyPlayerData);
+        oppPlayerViews = new PlayerInfoViews(Game.BattleManager.OppPlayerData);
         myPlayerViews.GetUIController(transform.Find("BattleInfo/MeInfo"));
         oppPlayerViews.GetUIController(transform.Find("BattleInfo/OppInfo"));
         resultInfo = transform.Find("ResultInfo").gameObject;
         lblResultInfo = transform.Find("ResultInfo/result").GetComponent<UILabel>();
         MovingPanel = transform.Find("MovingPanel").GetComponent<UIPanel>();
         UpdateInfo();
+        monsterId = Game.BattleManager.MonsterId;
         Game.BattleManager.ReadyStart(this);
         UIEventListener.Get(transform.Find("btnRoundEnd").gameObject).onClick = OnClick_RoundEnd;
         UIEventListener.Get(transform.Find("ResultInfo/mask").gameObject).onClick = Onclick_CloseUI;
@@ -86,15 +89,20 @@ public class UIBattleForm : UIFormBase
     public void WinBattle()
     {
         resultInfo.SetActive(true);
-        lblResultInfo.text = "WIN!";
-        lblResultInfo.color = new Color32(255, 0, 0, 255);
-        UIModule.Instance.OpenForm<WND_Reward>(Game.DataManager.MonsterId);
+        resultInfo.transform.Find("bg").gameObject.SetActive(false);
+        lblResultInfo.gameObject.SetActive(false);
+        //lblResultInfo.text = "WIN!";
+        //lblResultInfo.color = new Color32(255, 0, 0, 255);
+        UIModule.Instance.OpenForm<WND_Reward>(monsterId);
     }
     public void LoseBattle()
     {
         resultInfo.SetActive(true);
+        resultInfo.transform.Find("bg").gameObject.SetActive(true);
+        lblResultInfo.gameObject.SetActive(true);
         lblResultInfo.text = "LOSE!";
         lblResultInfo.color = new Color32(150, 150, 150, 255);
+        Application.Quit();
     }
     /// <summary>
     /// 结束当前回合的按钮
@@ -154,6 +162,13 @@ public class UIBattleForm : UIFormBase
             if (uiActions.Count > 0)
             {
                 UIAction action = uiActions.Dequeue();
+                if (action.BindActionList != null)
+                {
+                    for (int i = 0; i < action.BindActionList.Count; i++)
+                    {
+                        StartCoroutine(action.BindActionList[i].Excute());
+                    }
+                }
                 yield return action.Excute();
                 //switch (action.ActionType)
                 //{
