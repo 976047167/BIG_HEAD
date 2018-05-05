@@ -84,7 +84,7 @@ public class WND_Dialog : UIFormBase
         if (Id == 0)
         {
             btnShowAll.SetActive(false);
-            Destroy(gameObject);
+            UIModule.Instance.CloseForm<WND_Dialog>();
             return;
         }
         preserntIndex = Id;
@@ -193,17 +193,17 @@ public class WND_Dialog : UIFormBase
                     ShowDialog(NextIds[2]);
                 }
                else
-                    Destroy(gameObject);
+                    UIModule.Instance.CloseForm<WND_Dialog>();
                 break;
             case DialogType.Battle:
                 if (MonsterId != 0)
                     Game.BattleManager.StartBattle(MonsterId);
-                Destroy(gameObject);
+                UIModule.Instance.CloseForm<WND_Dialog>();
                 break;
             default:
                 
                 print("Unknow type!");
-                Destroy(gameObject);
+                UIModule.Instance.CloseForm<WND_Dialog>();
                 break;
         }
         

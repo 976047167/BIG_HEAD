@@ -20,7 +20,7 @@ public class WND_ShowCard : UIFormBase
         damage = transform.Find("CardBg/DamageCount").GetComponent<UILabel>();
         describle = transform.Find("CardBg/Describle").GetComponent<UILabel>();
         UIEventListener.Get(btnDestroy).onClick = (GameObject a) => {
-            Destroy(gameObject);
+            UIModule.Instance.CloseForm<WND_ShowCard>();
 
         };
 

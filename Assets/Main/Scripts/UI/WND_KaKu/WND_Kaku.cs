@@ -27,7 +27,7 @@ public class WND_Kaku : UIFormBase {
         _downClick = transform.Find("bgKaku/Panel/down").gameObject;
         UIEventListener.Get(_upClick).onClick = UpClick;
         UIEventListener.Get(_downClick).onClick = DownClick;
-        btnBack = transform.Find("btnBack").gameObject;
+        btnBack = transform.Find("bgDeck/btnBack").gameObject;
         UIEventListener.Get(btnBack).onClick = BackClick;
 
     }
@@ -157,6 +157,7 @@ public class WND_Kaku : UIFormBase {
     private void BackClick(GameObject btn)
     {
         print("BackClick");
-        Destroy(gameObject);
+        UIModule.Instance.CloseForm<WND_Kaku>();
+     
     }
 }

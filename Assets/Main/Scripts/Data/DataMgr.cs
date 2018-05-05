@@ -33,6 +33,7 @@ public class DataMgr
     public void OnInit()
     {
         MyPlayerData = new BattlePlayerData();
+        MyPlayerData.Name = "player No.1";
         MyPlayerData.HP = MyPlayerData.MaxHP = 10;
         MyPlayerData.MP = MyPlayerData.MaxMP = 2;
         MyPlayerData.AP = MyPlayerData.MaxAP = 1;
