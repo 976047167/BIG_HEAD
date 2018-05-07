@@ -26,12 +26,27 @@ public class DataMgr
     public int Food;
     public int Coin;
     public BattlePlayerData MyPlayerData { get; private set; }
+    public AccountData AccountData;
+    public LocalCharacterData LocalCharacterData;
+
+
     public List<BattleCardData> Kaku = new List<BattleCardData>();
+
     /// <summary>
     /// 游戏启动时初始化
     /// </summary>
     public void OnInit()
     {
+        AccountData = new AccountData();
+        AccountData.Gold = 100;
+        AccountData.Diamonds = 100;
+        AccountData.Uid = 0x1;
+        LocalCharacterData = new LocalCharacterData();
+        LocalCharacterData.Name = "player No.1";
+
+
+
+
         MyPlayerData = new BattlePlayerData();
         MyPlayerData.Name = "player No.1";
         MyPlayerData.HP = MyPlayerData.MaxHP = 10;
