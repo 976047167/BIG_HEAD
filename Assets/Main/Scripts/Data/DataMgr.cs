@@ -26,8 +26,7 @@ public class DataMgr
     public int Food;
     public int Coin;
     public BattlePlayerData MyPlayerData { get; private set; }
-    public AccountData AccountData;
-    public LocalCharacterData LocalCharacterData;
+    public AccountData AccountData { get; private set; }
 
 
     public List<BattleCardData> Kaku = new List<BattleCardData>();
@@ -41,8 +40,6 @@ public class DataMgr
         AccountData.Gold = 100;
         AccountData.Diamonds = 100;
         AccountData.Uid = 0x1;
-        LocalCharacterData = new LocalCharacterData();
-        LocalCharacterData.Name = "player No.1";
 
 
 
@@ -81,5 +78,5 @@ public class DataMgr
         Food = 20;
         Coin = 20;
     }
-    
+
 }

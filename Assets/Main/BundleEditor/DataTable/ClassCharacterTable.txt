@@ -1,0 +1,3 @@
+Id	Name	Desc	ClassType	Icon	Image	MapSkillId	BattleSkillId	ChooseText
+int	string 	string	int	int	int	int	int	int
+1	战士	拥有强大力量的人类	1	0	0	0	0	0

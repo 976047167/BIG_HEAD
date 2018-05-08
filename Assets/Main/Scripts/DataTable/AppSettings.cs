@@ -52,6 +52,7 @@ namespace AppSettings
                         BattleCardTableSettings._instance,
                         BattleMonsterTableSettings._instance,
                         BoxTableSettings._instance,
+                        ClassCharacterTableSettings._instance,
                         DialogTableSettings._instance,
                         EventTableSettings._instance,
                         NpcTableSettings._instance,
@@ -530,6 +531,11 @@ namespace AppSettings
         public int Spending { get; private set;}
         
         /// <summary>
+        /// 职业限制0通用
+        /// </summary>
+        public int ClassLimit { get; private set;}
+        
+        /// <summary>
         /// 图标路径
         /// </summary>
         public string Icon { get; private set;}
@@ -563,10 +569,11 @@ namespace AppSettings
             Type = row.Get_int(row.Values[3], ""); 
             Quality = row.Get_int(row.Values[4], ""); 
             Spending = row.Get_int(row.Values[5], ""); 
-            Icon = row.Get_string(row.Values[6], ""); 
-            Price = row.Get_int(row.Values[7], ""); 
-            ActionTypes = row.Get_List_int(row.Values[8], ""); 
-            ActionParams = row.Get_List_int(row.Values[9], ""); 
+            ClassLimit = row.Get_int(row.Values[6], ""); 
+            Icon = row.Get_string(row.Values[7], ""); 
+            Price = row.Get_int(row.Values[8], ""); 
+            ActionTypes = row.Get_List_int(row.Values[9], ""); 
+            ActionParams = row.Get_List_int(row.Values[10], ""); 
         }
 
         /// <summary>
@@ -1073,6 +1080,253 @@ namespace AppSettings
         { 
             Id = row.Get_int(row.Values[0], ""); 
             DialogId = row.Get_int(row.Values[1], ""); 
+        }
+
+        /// <summary>
+        /// Get PrimaryKey from a table row
+        /// </summary>
+        /// <param name="row"></param>
+        /// <returns></returns>
+        public static int ParsePrimaryKey(TableFileRow row)
+        {
+            var primaryKey = row.Get_int(row.Values[0], "");
+            return primaryKey;
+        }
+	}
+
+	/// <summary>
+	/// Auto Generate for Tab File: "ClassCharacterTable.txt"
+    /// No use of generic and reflection, for better performance,  less IL code generating
+	/// </summary>>
+    public partial class ClassCharacterTableSettings : IReloadableSettings
+    {
+        /// <summary>
+        /// How many reload function load?
+        /// </summary>>
+        public static int ReloadCount { get; private set; }
+
+		public static readonly string[] TabFilePaths = 
+        {
+            "ClassCharacterTable.txt"
+        };
+        internal static ClassCharacterTableSettings _instance = new ClassCharacterTableSettings();
+        Dictionary<int, ClassCharacterTableSetting> _dict = new Dictionary<int, ClassCharacterTableSetting>();
+
+        /// <summary>
+        /// Trigger delegate when reload the Settings
+        /// </summary>>
+	    public static System.Action OnReload;
+
+        /// <summary>
+        /// Constructor, just reload(init)
+        /// When Unity Editor mode, will watch the file modification and auto reload
+        /// </summary>
+	    private ClassCharacterTableSettings()
+	    {
+        }
+
+        /// <summary>
+        /// Get the singleton
+        /// </summary>
+        /// <returns></returns>
+	    public static ClassCharacterTableSettings GetInstance()
+	    {
+            if (ReloadCount == 0)
+            {
+                _instance._ReloadAll(true);
+    #if UNITY_EDITOR
+                if (SettingModule.IsFileSystemMode)
+                {
+                    for (var j = 0; j < TabFilePaths.Length; j++)
+                    {
+                        var tabFilePath = TabFilePaths[j];
+                        SettingModule.WatchSetting(tabFilePath, (path) =>
+                        {
+                            if (path.Replace("\\", "/").EndsWith(path))
+                            {
+                                _instance.ReloadAll();
+                                Log.LogConsole_MultiThread("File Watcher! Reload success! -> " + path);
+                            }
+                        });
+                    }
+
+                }
+    #endif
+            }
+
+	        return _instance;
+	    }
+        
+        public int Count
+        {
+            get
+            {
+                return _dict.Count;
+            }
+        }
+
+        /// <summary>
+        /// Do reload the setting file: ClassCharacterTable, no exception when duplicate primary key
+        /// </summary>
+        public void ReloadAll()
+        {
+            _ReloadAll(false);
+        }
+
+        /// <summary>
+        /// Do reload the setting class : ClassCharacterTable, no exception when duplicate primary key, use custom string content
+        /// </summary>
+        public void ReloadAllWithString(string context)
+        {
+            _ReloadAll(false, context);
+        }
+
+        /// <summary>
+        /// Do reload the setting file: ClassCharacterTable
+        /// </summary>
+	    void _ReloadAll(bool throwWhenDuplicatePrimaryKey, string customContent = null)
+        {
+            for (var j = 0; j < TabFilePaths.Length; j++)
+            {
+                var tabFilePath = TabFilePaths[j];
+                TableFile tableFile;
+                if (customContent == null)
+                    tableFile = SettingModule.Get(tabFilePath, false);
+                else
+                    tableFile = TableFile.LoadFromString(customContent);
+
+                using (tableFile)
+                {
+                    foreach (var row in tableFile)
+                    {
+                        var pk = ClassCharacterTableSetting.ParsePrimaryKey(row);
+                        ClassCharacterTableSetting setting;
+                        if (!_dict.TryGetValue(pk, out setting))
+                        {
+                            setting = new ClassCharacterTableSetting(row);
+                            _dict[setting.Id] = setting;
+                        }
+                        else 
+                        {
+                            if (throwWhenDuplicatePrimaryKey) throw new System.Exception(string.Format("DuplicateKey, Class: {0}, File: {1}, Key: {2}", this.GetType().Name, tabFilePath, pk));
+                            else setting.Reload(row);
+                        }
+                    }
+                }
+            }
+
+	        if (OnReload != null)
+	        {
+	            OnReload();
+	        }
+
+            ReloadCount++;
+            Log.Info("Reload settings: {0}, Row Count: {1}, Reload Count: {2}", GetType(), Count, ReloadCount);
+        }
+
+	    /// <summary>
+        /// foreachable enumerable: ClassCharacterTable
+        /// </summary>
+        public static IEnumerable GetAll()
+        {
+            foreach (var row in GetInstance()._dict.Values)
+            {
+                yield return row;
+            }
+        }
+
+        /// <summary>
+        /// GetEnumerator for `MoveNext`: ClassCharacterTable
+        /// </summary> 
+	    public static IEnumerator GetEnumerator()
+	    {
+	        return GetInstance()._dict.Values.GetEnumerator();
+	    }
+         
+	    /// <summary>
+        /// Get class by primary key: ClassCharacterTable
+        /// </summary>
+        public static ClassCharacterTableSetting Get(int primaryKey)
+        {
+            ClassCharacterTableSetting setting;
+            if (GetInstance()._dict.TryGetValue(primaryKey, out setting)) return setting;
+            return null;
+        }
+
+        // ========= CustomExtraString begin ===========
+        
+        // ========= CustomExtraString end ===========
+    }
+
+	/// <summary>
+	/// Auto Generate for Tab File: "ClassCharacterTable.txt"
+    /// Singleton class for less memory use
+	/// </summary>
+	public partial class ClassCharacterTableSetting : TableRowFieldParser
+	{
+		
+        /// <summary>
+        /// #目录
+        /// </summary>
+        public int Id { get; private set;}
+        
+        /// <summary>
+        /// 文本
+        /// </summary>
+        public string  Name { get; private set;}
+        
+        /// <summary>
+        /// 卡牌描述
+        /// </summary>
+        public string Desc { get; private set;}
+        
+        /// <summary>
+        /// 当前职业
+        /// </summary>
+        public int ClassType { get; private set;}
+        
+        /// <summary>
+        /// 职业头像
+        /// </summary>
+        public int Icon { get; private set;}
+        
+        /// <summary>
+        /// 职业贴图
+        /// </summary>
+        public int Image { get; private set;}
+        
+        /// <summary>
+        /// 职业技能
+        /// </summary>
+        public int MapSkillId { get; private set;}
+        
+        /// <summary>
+        /// 战斗技能
+        /// </summary>
+        public int BattleSkillId { get; private set;}
+        
+        /// <summary>
+        /// 选择后对话
+        /// </summary>
+        public int ChooseText { get; private set;}
+        
+
+        internal ClassCharacterTableSetting(TableFileRow row)
+        {
+            Reload(row);
+        }
+
+        internal void Reload(TableFileRow row)
+        { 
+            Id = row.Get_int(row.Values[0], ""); 
+            Name = row.Get_string (row.Values[1], ""); 
+            Desc = row.Get_string(row.Values[2], ""); 
+            ClassType = row.Get_int(row.Values[3], ""); 
+            Icon = row.Get_int(row.Values[4], ""); 
+            Image = row.Get_int(row.Values[5], ""); 
+            MapSkillId = row.Get_int(row.Values[6], ""); 
+            BattleSkillId = row.Get_int(row.Values[7], ""); 
+            ChooseText = row.Get_int(row.Values[8], ""); 
         }
 
         /// <summary>
