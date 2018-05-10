@@ -1,0 +1,8 @@
+Id	Path
+int	string
+2	Equip/7
+3	Equip/15
+4	Equip/31
+5	Skill/skill_common_evade
+6	Skill/skill_yasewang_1
+7	Skill/skill_yuefei_2
