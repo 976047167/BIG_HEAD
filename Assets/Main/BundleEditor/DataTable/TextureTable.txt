@@ -1,5 +1,6 @@
 Id	Path
 int	string
+1	Equip/1
 2	Equip/7
 3	Equip/15
 4	Equip/31

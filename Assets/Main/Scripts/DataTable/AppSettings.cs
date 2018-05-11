@@ -1311,6 +1311,11 @@ namespace AppSettings
         /// </summary>
         public int ChooseText { get; private set;}
         
+        /// <summary>
+        /// 默认手牌
+        /// </summary>
+        public List<int> DefaultCardList { get; private set;}
+        
 
         internal ClassCharacterTableSetting(TableFileRow row)
         {
@@ -1328,6 +1333,7 @@ namespace AppSettings
             MapSkillId = row.Get_int(row.Values[6], ""); 
             BattleSkillId = row.Get_int(row.Values[7], ""); 
             ChooseText = row.Get_int(row.Values[8], ""); 
+            DefaultCardList = row.Get_List_int(row.Values[9], ""); 
         }
 
         /// <summary>
@@ -2834,12 +2840,12 @@ namespace AppSettings
 	{
 		
         /// <summary>
-        /// 1
+        /// #ID
         /// </summary>
         public int Id { get; private set;}
         
         /// <summary>
-        /// Equip/1
+        /// 路径
         /// </summary>
         public string Path { get; private set;}
         
