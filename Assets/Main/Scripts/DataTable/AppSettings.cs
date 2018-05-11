@@ -537,6 +537,11 @@ namespace AppSettings
         public int ClassLimit { get; private set;}
         
         /// <summary>
+        /// 套牌
+        /// </summary>
+        public int Group { get; private set;}
+        
+        /// <summary>
         /// 图标
         /// </summary>
         public int Icon { get; private set;}
@@ -571,10 +576,11 @@ namespace AppSettings
             Quality = row.Get_int(row.Values[4], ""); 
             Spending = row.Get_int(row.Values[5], ""); 
             ClassLimit = row.Get_int(row.Values[6], ""); 
-            Icon = row.Get_int(row.Values[7], ""); 
-            Price = row.Get_int(row.Values[8], ""); 
-            ActionTypes = row.Get_List_int(row.Values[9], ""); 
-            ActionParams = row.Get_List_int(row.Values[10], ""); 
+            Group = row.Get_int(row.Values[7], ""); 
+            Icon = row.Get_int(row.Values[8], ""); 
+            Price = row.Get_int(row.Values[9], ""); 
+            ActionTypes = row.Get_List_int(row.Values[10], ""); 
+            ActionParams = row.Get_List_int(row.Values[11], ""); 
         }
 
         /// <summary>

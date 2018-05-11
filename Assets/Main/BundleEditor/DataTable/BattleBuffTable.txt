@@ -2,3 +2,4 @@ Id	Name	Desc	Icon	Time	ActionTimes	ActionTypes	ActionPrarms
 int	string 	string	string	int	List<int>	List<int>	List<int>
 1	流血	进入了流血状态	Skill/skill_xiangyu_4	3	1	2	1
 2	回血	打绷带	Skill/skill_yasewang_1	3	2	3	1
+3	格挡	格挡	Skill/skill_yasewang_2	1	3	9	1
