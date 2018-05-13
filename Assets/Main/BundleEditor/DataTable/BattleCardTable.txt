@@ -1,9 +1,14 @@
-Id	Name	Desc	Type	Quality	Spending	ClassLimit	Icon	Price	ActionTypes	ActionParams
-int	string 	string	int	int	int	int	string	int	List<int>	List<int>
-1	攻击	轻轻的抚摸	0	0	0	0	Equip/1	5	2	1
-2	小攻击	扇一巴掌	0	1	1	0	Equip/7	5	2	2
-3	中攻击	揍一拳	0	2	2	0	Equip/15	5	2	3
-4	大攻击	踹一脚	0	3	3	1	Equip/31	5	2	4
-5	抽卡	摸一张	2	4	0	0	Skill/skill_common_evade	5	5	1
-6	回血	回血	2	4	1	0	Skill/skill_yasewang_1	5	3	4
-7	绷带	打绷带	2	3	0	0	Skill/skill_yuefei_2	5	1	2
+Id	Name	Desc	Type	Quality	Spending	ClassLimit	Group	Icon	Price	ActionTypes	ActionParams
+int	string 	string	int	int	int	int	int	int	int	List<int>	List<int>
+1	攻击	轻轻的抚摸	0	0	0	0	0	1	5	2	1
+2	小攻击	扇一巴掌	0	1	1	0	0	2	5	2	2
+3	中攻击	揍一拳	0	2	2	0	0	3	5	2	3
+4	大攻击	踹一脚	0	3	3	1	0	4	5	2	4
+5	抽卡	摸一张	2	4	0	0	0	5	5	5	1
+6	回血	回血	2	4	1	0	0	6	5	3	4
+7	绷带	打绷带	2	3	0	0	0	7	5	1	2
+10001	点剑式	造成4点伤害	0	1	0	1	1	1	5	2	4
+10002	撩剑式	造成2点伤害并移除对方1个BUFF	2	1	1	1	1	1	5	2,7	2,1
+10003	刺剑式	无视防御造成2点伤害	2	1	1	1	1	1	5	8	2
+10004	破剑式	抵挡下一次伤害	2	1	0	1	1	1	5	1	3
+10005	飞燕剑	造成3点伤害，本回合每使用一张剑式，则额外造成1点伤害	2	1	1	1	1	1	5	2,10	3,1

@@ -29,8 +29,7 @@ public class DataMgr
     public AccountData AccountData { get; private set; }
 
     public PlayerDetailData PlayerDetailData { get; private set; }
-    public List<BattleCardData> Kaku = new List<BattleCardData>();
-
+ 
     /// <summary>
     /// 游戏启动时初始化
     /// </summary>
@@ -64,17 +63,32 @@ public class DataMgr
         MyPlayerData.CardList.Add(new BattleCardData(5, MyPlayerData));
         MyPlayerData.CardList.Add(new BattleCardData(6, MyPlayerData));
         MyPlayerData.CardList.Add(new BattleCardData(7, MyPlayerData));
-        Kaku.Add(new BattleCardData(1, MyPlayerData));
-        Kaku.Add(new BattleCardData(3, MyPlayerData));
-        Kaku.Add(new BattleCardData(3, MyPlayerData));
-        Kaku.Add(new BattleCardData(3, MyPlayerData));
-        Kaku.Add(new BattleCardData(2, MyPlayerData));
-        Kaku.Add(new BattleCardData(4, MyPlayerData));
-        Kaku.Add(new BattleCardData(5, MyPlayerData));
-        Kaku.Add(new BattleCardData(6, MyPlayerData));
-        Kaku.Add(new BattleCardData(7, MyPlayerData));
-        Kaku.Add(new BattleCardData(7, MyPlayerData));
-        Kaku.Add(new BattleCardData(7, MyPlayerData));
+
+
+        PlayerDetailData = new PlayerDetailData();
+        PlayerDetailData.Kaku.Add(new NormalCard(1));
+        PlayerDetailData.Kaku.Add(new NormalCard(2));
+        PlayerDetailData.Kaku.Add(new NormalCard(2));
+        PlayerDetailData.Kaku.Add(new NormalCard(3));
+        PlayerDetailData.Kaku.Add(new NormalCard(3));
+        PlayerDetailData.Kaku.Add(new NormalCard(4));
+        PlayerDetailData.Kaku.Add(new NormalCard(4));
+        PlayerDetailData.Kaku.Add(new NormalCard(5));
+        PlayerDetailData.Kaku.Add(new NormalCard(5));
+        PlayerDetailData.Kaku.Add(new NormalCard(7));
+        PlayerDetailData.Kaku.Add(new NormalCard(7));
+        PlayerDetailData.decks.Add(new Deck("卡组1", ClassType.Warriop));
+
+
+
+
+
+
+
+
+
+
+
         Food = 20;
         Coin = 20;
     }

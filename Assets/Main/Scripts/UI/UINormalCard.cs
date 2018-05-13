@@ -41,7 +41,7 @@ public class UINormalCard : MonoBehaviour
     public Transform cacheChildCardTrans;
     Vector3 cacheCardPos;
     WND_Kaku cacheForm;
-    public  BattleCardData cardData;
+    public NormalCard cardData;
     protected void Start()
     {
         cacheChildCardTrans = transform.GetChild(0);
@@ -107,7 +107,7 @@ public class UINormalCard : MonoBehaviour
                 {
                     cacheChildCardTrans.transform.localPosition = Vector3.zero;
 
-                    cacheForm.MoveCardFromToKaku(this);
+                    cacheForm.MoveCardFromDeckToKaku(this);
                     RefreshDepth();
                     return;
                 }
@@ -115,7 +115,7 @@ public class UINormalCard : MonoBehaviour
                 {
                     cacheChildCardTrans.transform.localPosition = Vector3.zero;
 
-                    cacheForm.MoveKakuFromToDeck(this);
+                    cacheForm.MoveCardFromKakuToDeck(this);
                     RefreshDepth();
                     return;
                 }
@@ -128,33 +128,31 @@ public class UINormalCard : MonoBehaviour
     {
         //Debug.Log("OnDrop ：" + name);
     }
-    public void SetData(BattleCardData card, WND_Kaku form)
+    public void SetData(NormalCard card, WND_Kaku form)
     {
 
         cardData = card;
         cacheForm = form;
-        if (card.Owner == Game.DataManager.MyPlayerData)
-        {
-            m_TexIcon.Load(cardData.Data.Icon);
-            m_lblName.text = cardData.Data.Name;
-            if (cardData.Data.Type != 0)
+             m_TexIcon.Load(cardData.CardData.Icon);
+            m_lblName.text = cardData.CardData.Name;
+            if (cardData.CardData.Type != 0)
             {
                 m_lblAttack.text = "";
                 m_lblAttackCount.text = "";
             }
-            for (int i = 0; i < cardData.Data.ActionTypes.Count; i++)
+            for (int i = 0; i < cardData.CardData.ActionTypes.Count; i++)
             {
-                switch ((BattleActionType)cardData.Data.ActionTypes[i])
+                switch ((BattleActionType)cardData.CardData.ActionTypes[i])
                 {
                     case BattleActionType.None:
                         break;
                     case BattleActionType.AddBuff:
                         break;
                     case BattleActionType.Attack:
-                        if (cardData.Data.Type == 0)
+                        if (cardData.CardData.Type == 0)
                         {
                             m_lblAttack.text = "攻击";
-                            m_lblAttackCount.text = cardData.Data.ActionParams[i].ToString();
+                            m_lblAttackCount.text = cardData.CardData.ActionParams[i].ToString();
                         }
                         break;
                     case BattleActionType.RecoverHP:
@@ -168,20 +166,12 @@ public class UINormalCard : MonoBehaviour
                 }
             }
             m_lblExpand.text = "";
-            m_lblExpandCount.text = cardData.Data.Spending.ToString();
-        }
-        else
-        {
-            m_TexIcon.gameObject.SetActive(false);
-            m_lblName.gameObject.SetActive(false);
-            m_lblExpand.gameObject.SetActive(false);
-            m_lblExpandCount.gameObject.SetActive(false);
-            m_lblAttack.gameObject.SetActive(false);
-            m_lblAttackCount.gameObject.SetActive(false);
-        }
+            m_lblExpandCount.text = cardData.CardData.Spending.ToString();
+        
+
         UIEventListener.Get(gameObject).onClick = (GameObject a) =>
         {
-            UIModule.Instance.OpenForm<WND_ShowCard>(cardData.Data.Id);
+            UIModule.Instance.OpenForm<WND_ShowCard>(cardData.CardId);
 
 
         };

@@ -40,7 +40,7 @@ public class Deck {
     }
     private void AddNormalCard(NormalCard card)
     {
-        if (card.CardData.ClassLimit != (int)ClassType)
+        if (card.CardData.ClassLimit != (int)ClassType && card.CardData.ClassLimit !=  (int) ClassType.None)
         {
             Debug.LogError("加入卡组的卡职业不正确");
             return;

@@ -15,8 +15,9 @@ public class WND_Kaku : UIFormBase {
     private UIPanel KakuPanel;
     private GameObject btnExit;
     private GameObject  deckInstence;
-    private GameObject btnBack;
-
+    private bool isEditor;
+    private KaKu KaKu;
+    private List<Deck> DeckList;
 
 
     void Awake()
@@ -36,42 +37,54 @@ public class WND_Kaku : UIFormBase {
         btnExit = transform.Find("bgDeck/btnExit").gameObject;
         UIEventListener.Get(btnExit).onClick = ExitClick;
         deckInstence = transform.Find("bgDeck/deckInstence").gameObject;
-        UIEventListener.Get(btnBack).onClick = BackClick;
-
+      
+        
+        KaKu = Game.DataManager.PlayerDetailData.Kaku;
+        DeckList = Game.DataManager.PlayerDetailData.decks;
+        isEditor = false;
     }
     protected override void OnInit(object userdata)
     {
         base.OnInit(userdata);
-       // List<BattleCardData> deckCardList = Game.DataManager.MyPlayerData.CardList;
-     List<BattleCardData> KakuCardList = Game.DataManager.PlayerDetailData.CardList;
+       // List<BattleCardData> deckCardList = Game.DataManager.MyPlayerData.CardList; 
        // LoadDeckCard((List<BattleCardData>)deckCardList);
-        LoadKaKuCard(KakuCardList);
-        List<Deck> DeckList = Game.DataManager.PlayerDetailData.decks;
+        LoadKaKuCard(KaKu.cards);
+        
         LoadDeckList( DeckList);
     }
     private void LoadDeckList(List<Deck> DeckList)
-    {
-        foreach (var deck in DeckList)
+    { 
+        for(int i = 0; i < DeckList.Count; i++)
         {
+            Deck deck = DeckList[i];
             GameObject item = Instantiate(deckInstence);
             item.transform.Find("labName").GetComponent<UILabel>().text = deck.DeckName;
+            //    item.transform.Find("labClassType").GetComponent<UILabel>().text = deck.ClassType;
+            item.name = "" + i;
+            item.transform.SetParent (deckGrid.transform,false);
+            item.transform.localPosition = new Vector3();
+            item.transform.localScale = new Vector3(1, 1, 1);
+            UIEventListener.Get(item).onClick = deckClick;
+            GameObject btnBack = item.transform.Find("btnBack").gameObject;
+            UIEventListener.Get(btnBack).onClick = BackClick;
 
+            item.SetActive(true);
         }
         deckGrid.repositionNow = true;
     }
 
     //key为卡片id，value为卡片张数；
-    private void LoadDeckCard(List<BattleCardData> cardList)
+    private void LoadDeckCard(List<NormalCard> cardList)
     {
         foreach (var card in cardList)
         {
 
             GameObject item = Instantiate(Card);
-            int id = card.Data.Id;
+            int id = card.CardId;
             item.name = "Card" + id;
             item.GetComponent<UINormalCard>().SetData(card,this);
             item.GetComponent<UINormalCard>().DeckOrKaku = UINormalCard.deck_or_kaku.deck;
-            item.transform.parent = cardGrid.transform;
+            item.transform.SetParent(cardGrid.transform,false);
             item.transform.localPosition = new Vector3();
             item.transform.localScale = new Vector3(1, 1, 1);
             item.SetActive(true);
@@ -80,17 +93,20 @@ public class WND_Kaku : UIFormBase {
         cardGrid.repositionNow = true;
 
     }
-    private void LoadKaKuCard(List<BattleCardData> cardList)
+    private void LoadKaKuCard(List<NormalCard> cardList)
     {
+        foreach(var trans in kakuGrid.GetChildList()){
+            Destroy(trans.gameObject);
+        }
         foreach (var card in cardList)
         {
 
             GameObject item = Instantiate(Card);
-            int id = card.Data.Id;
+            int id = card.CardId;
             item.name = "Card" + id;
             item.GetComponent<UINormalCard>().SetData(card,this);
             item.GetComponent<UINormalCard>().DeckOrKaku = UINormalCard.deck_or_kaku.kaku;
-            item.transform.parent = kakuGrid.transform;
+            item.transform.SetParent(kakuGrid.transform,false);
             item.transform.localPosition = new Vector3();
             item.transform.localScale = new Vector3(1, 1, 1);
             item.SetActive(true);
@@ -99,8 +115,9 @@ public class WND_Kaku : UIFormBase {
         kakuGrid.repositionNow = true;
 
     }
-    public void MoveCardFromToKaku(UINormalCard card)
+    public void MoveCardFromDeckToKaku(UINormalCard card)
     {
+        /*
         foreach (BattleCardData i in Game.DataManager.MyPlayerData.CardList)
           {
               if (i.CardId == card.cardData.CardId)
@@ -109,7 +126,7 @@ public class WND_Kaku : UIFormBase {
                 break;
               }
           }
-          Game.DataManager.Kaku.Add(card.cardData);
+        Game.DataManager.Kaku.Add(card.cardData);*/
 
              /*  
           deckGrid.RemoveChild(card.transform);
@@ -133,8 +150,9 @@ public class WND_Kaku : UIFormBase {
 
 
     }
-    public void MoveKakuFromToDeck(UINormalCard card)
+    public void MoveCardFromKakuToDeck(UINormalCard card)
     {
+        /*
         foreach (BattleCardData i in Game.DataManager.Kaku)
         {
             if (i.CardId == card.cardData.CardId)
@@ -143,7 +161,8 @@ public class WND_Kaku : UIFormBase {
                 break;
             }
         }
-        Game.DataManager.MyPlayerData.CardList.Add(card.cardData);
+        */
+       // Game.DataManager.MyPlayerData.CardList.Add(card.cardData);
 
         card.transform.SetParent(cardGrid.transform, false);
         card.DeckOrKaku = UINormalCard.deck_or_kaku.deck;
@@ -177,9 +196,58 @@ public class WND_Kaku : UIFormBase {
     }
 
 
+    private void deckClick(GameObject obj)
+    {
+        if (!isEditor)
+        {
+            
+           
+            int deckIndex = 0;
+             int.TryParse(obj.name,out deckIndex)  ;
+            Deck deck = DeckList[deckIndex];
+            cardGrid.gameObject.SetActive(true);
+            LoadDeckCard(deck.cards);
+            LoadKaKuCard(KaKu.getClassTypeCards(deck.ClassType,true));
+            List<Transform> deckTransformList =  deckGrid.GetChildList();
+            foreach (Transform decktransform in deckTransformList)
+            {
+                if (decktransform.gameObject == obj)
+                    continue;
+                decktransform.gameObject.SetActive(false);
+            }
+            obj.transform.Find("btnBack").gameObject.SetActive(true);
+            obj.transform.Find("btnDelete").gameObject.SetActive(true);
+
+
+            deckGrid.repositionNow = true;
+
+            isEditor = true;
+        }
+    }
+
     private void BackClick(GameObject btn)
     {
-        
+        if (isEditor)
+        {
+            foreach (Transform decktransform in deckGrid.GetChildList())
+            {
+                decktransform.Find("btnBack").gameObject.SetActive(false);
+                decktransform.Find("btnDelete").gameObject.SetActive(false);
+                decktransform.gameObject.SetActive(true);
+            }
+            cardGrid.gameObject.SetActive(false);
+
+            deckGrid.repositionNow = true;
+            LoadKaKuCard(KaKu.cards);
+            SaveDeck();
+            isEditor = false;
+        }
+
+    }
+
+    private void SaveDeck()
+    {
+
     }
 
 

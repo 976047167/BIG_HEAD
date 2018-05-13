@@ -5,6 +5,7 @@
 
 using UnityEngine;
 using System.Collections.Generic;
+using AppSettings;
 
 /// <summary>
 /// If you don't have or don't wish to create an atlas, you can simply use this script to draw a texture.
@@ -365,6 +366,7 @@ public class UITexture : UIBasicSprite
         if (onPostFill != null)
             onPostFill(this, offset, verts, uvs, cols);
     }
+    [System.Obsolete("用表格配置")]
     public void Load(string path)
     {
         if (mainTexture != null && path.Substring(path.LastIndexOf('/') + 1) == mainTexture.name)
@@ -372,6 +374,21 @@ public class UITexture : UIBasicSprite
             return;
         }
         ResourceManager.LoadTexture(path, LoadCallback, LoadFailed);
+    }
+    protected int TextureId;
+    public void Load(int textureId)
+    {
+        if (mainTexture != null && TextureId == textureId)
+        {
+            return;
+        }
+        TextureTableSetting setting = TextureTableSettings.Get(textureId);
+        if (setting != null)
+        {
+            TextureId = textureId;
+            ResourceManager.LoadTexture(setting.Path, LoadCallback, LoadFailed);
+        }
+
     }
     void LoadCallback(string path, object[] args, Texture2D texture)
     {
