@@ -4,11 +4,11 @@ using System;
 using UnityEngine;
 using AppSettings;
 
-public class CardBase
+public class NormalCard
 {
     public int CardId { get; private set; }
-    BattleCardTableSetting CardData;
-    public CardBase(int id)
+    public BattleCardTableSetting CardData;
+    public NormalCard(int id)
     {
         BattleCardTableSetting cardData = BattleCardTableSettings.Get(id);
         if (cardData == null)

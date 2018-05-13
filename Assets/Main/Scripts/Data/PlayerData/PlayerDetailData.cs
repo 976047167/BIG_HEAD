@@ -18,6 +18,8 @@ public class PlayerDetailData : MonoBehaviour
     /// </summary>
     public List<BattleCardData> CardList = new List<BattleCardData>();
 
+    public List<Deck> decks = new List<Deck>(); 
+
     public Dictionary<ClassType, ClassData> DicAllClassData = new Dictionary<ClassType, ClassData>();
 }
 

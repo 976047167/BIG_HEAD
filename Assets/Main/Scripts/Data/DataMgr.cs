@@ -28,7 +28,7 @@ public class DataMgr
     public BattlePlayerData MyPlayerData { get; private set; }
     public AccountData AccountData { get; private set; }
 
-
+    public PlayerDetailData PlayerDetailData { get; private set; }
     public List<BattleCardData> Kaku = new List<BattleCardData>();
 
     /// <summary>
