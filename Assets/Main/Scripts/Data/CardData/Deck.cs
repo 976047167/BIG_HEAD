@@ -47,4 +47,27 @@ public class Deck {
         }
         cards.Add(card);
     }
+    public Deck CloneSelf()
+    {
+        Deck result = new Deck(DeckName, ClassType);
+        result.AddCards(cards);
+        return result;
+    }
+
+    public void RemoveCard(int cardId)
+    {
+        RemoveNormalCard( cardId);
+    }
+
+    private void RemoveNormalCard(int cardId)
+    {
+        foreach( var card in cards)
+        {
+            if (card.CardId == cardId)
+            {
+                cards.Remove(card);
+                break;
+            }
+        }
+    }
 }

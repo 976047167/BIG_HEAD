@@ -18,6 +18,8 @@ public class WND_Kaku : UIFormBase {
     private bool isEditor;
     private KaKu KaKu;
     private List<Deck> DeckList;
+    private Deck tempDeck;
+    private int editorDeckIndex;
 
 
     void Awake()
@@ -64,6 +66,7 @@ public class WND_Kaku : UIFormBase {
             item.transform.SetParent (deckGrid.transform,false);
             item.transform.localPosition = new Vector3();
             item.transform.localScale = new Vector3(1, 1, 1);
+            item.AddComponent<UIDragScrollView>();
             UIEventListener.Get(item).onClick = deckClick;
             GameObject btnBack = item.transform.Find("btnBack").gameObject;
             UIEventListener.Get(btnBack).onClick = BackClick;
@@ -76,6 +79,10 @@ public class WND_Kaku : UIFormBase {
     //key为卡片id，value为卡片张数；
     private void LoadDeckCard(List<NormalCard> cardList)
     {
+        foreach (var trans in cardGrid.GetChildList())
+        {
+            Destroy(trans.gameObject);
+        }
         foreach (var card in cardList)
         {
 
@@ -142,11 +149,16 @@ public class WND_Kaku : UIFormBase {
           item.transform.localScale = new Vector3(1, 1, 1);
           item.SetActive(true);
           deckGrid.repositionNow = true;*/
+          if (isEditor)
+        {
+            card.transform.SetParent(kakuGrid.transform, false);
+            card.DeckOrKaku = UINormalCard.deck_or_kaku.kaku;
+            kakuGrid.repositionNow = true;
+            cardGrid.repositionNow = true;
+            tempDeck.RemoveCard(card.cardData.CardId);
 
-        card.transform.SetParent(kakuGrid.transform,false);
-        card.DeckOrKaku = UINormalCard.deck_or_kaku.kaku;
-        kakuGrid.repositionNow = true;
-        cardGrid.repositionNow = true;
+        }
+
 
 
     }
@@ -163,11 +175,16 @@ public class WND_Kaku : UIFormBase {
         }
         */
        // Game.DataManager.MyPlayerData.CardList.Add(card.cardData);
+       if (isEditor)
+        {
+            card.transform.SetParent(cardGrid.transform, false);
+            card.DeckOrKaku = UINormalCard.deck_or_kaku.deck;
+            kakuGrid.repositionNow = true;
+            cardGrid.repositionNow = true;
+            tempDeck.AddCard(card.cardData.CardId);
 
-        card.transform.SetParent(cardGrid.transform, false);
-        card.DeckOrKaku = UINormalCard.deck_or_kaku.deck;
-        kakuGrid.repositionNow = true;
-        cardGrid.repositionNow = true;
+        }
+
 
 
     }
@@ -202,12 +219,12 @@ public class WND_Kaku : UIFormBase {
         {
             
            
-            int deckIndex = 0;
-             int.TryParse(obj.name,out deckIndex)  ;
-            Deck deck = DeckList[deckIndex];
+            
+             int.TryParse(obj.name,out editorDeckIndex)  ;
+            tempDeck = DeckList[editorDeckIndex].CloneSelf();
             cardGrid.gameObject.SetActive(true);
-            LoadDeckCard(deck.cards);
-            LoadKaKuCard(KaKu.getClassTypeCards(deck.ClassType,true));
+            LoadDeckCard(tempDeck.cards);
+            LoadKaKuCard(KaKu.getCardsWithDeck(tempDeck));
             List<Transform> deckTransformList =  deckGrid.GetChildList();
             foreach (Transform decktransform in deckTransformList)
             {
@@ -247,7 +264,7 @@ public class WND_Kaku : UIFormBase {
 
     private void SaveDeck()
     {
-
+        DeckList[editorDeckIndex] = tempDeck.CloneSelf();
     }
 
 

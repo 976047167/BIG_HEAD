@@ -29,12 +29,12 @@ public class KaKu {
     }
 
 
-    public List<NormalCard> getClassTypeCards(ClassType classType, bool includeNone)
+    public List<NormalCard> getClassTypeCards(ClassType classType, bool includeNone = false)
     {
         return getClassTypeCards((int) classType,includeNone);
     }
     //检索职业卡
-    public List<NormalCard> getClassTypeCards(int classType,bool includeNone)
+    public List<NormalCard> getClassTypeCards(int classType,bool includeNone = false)
 
     {
         if (classType == 0)
@@ -52,4 +52,28 @@ public class KaKu {
         return result;
 
     }
+
+    public List<NormalCard> getCardsWithDeck(Deck deck) { 
+
+
+        List<NormalCard> result =getClassTypeCards(deck.ClassType,true);
+        foreach (var deckCard in deck.cards)
+        {
+            for (int i = 0; i < result.Count;i++)
+            {
+                if (deckCard.CardId == result[i].CardId)
+                {
+                    result.RemoveAt(i);
+                    break;
+                }
+            }
+        }
+
+
+        return result;
+
+    }
+
+
+
 }
