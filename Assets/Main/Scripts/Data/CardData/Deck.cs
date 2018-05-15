@@ -7,14 +7,29 @@ public class Deck {
     public List<NormalCard> cards;
     public ClassType ClassType;
     public string DeckName;
+    public uint Uid;
 
-    public Deck(string name,ClassType classType)
+    public Deck(uint uid)
     {
-        DeckName = name;
-        ClassType = classType;
+        Uid = uid;
+        DeckName = "未命名";
+        ClassType = ClassType.Warriop;
         cards = new List<NormalCard>();
     }
+    //设置卡组名
+    public void SetDeckName(string newName)
+    {
+        DeckName = newName;
+    }
+    //设置卡组职业
+    public void SetClassType(ClassType newClassType)
+    {
+        cards.RemoveAll((card) => (
+            card.CardData.ClassLimit != (int)ClassType.None &&
+            card.CardData.ClassLimit != (int)newClassType)
+            );
 
+    }
     public void AddCard(NormalCard card)
     {
         AddNormalCard(card);
@@ -49,7 +64,9 @@ public class Deck {
     }
     public Deck CloneSelf()
     {
-        Deck result = new Deck(DeckName, ClassType);
+        Deck result = new Deck(Uid);
+        result.SetDeckName(DeckName);
+        result.SetClassType(ClassType);
         result.AddCards(cards);
         return result;
     }

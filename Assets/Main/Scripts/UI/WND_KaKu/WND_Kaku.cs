@@ -17,9 +17,9 @@ public class WND_Kaku : UIFormBase {
     private GameObject  deckInstence;
     private bool isEditor;
     private KaKu KaKu;
-    private List<Deck> DeckList;
+    private Dictionary<uint,Deck> Decks;
     private Deck tempDeck;
-    private int editorDeckIndex;
+    private uint editorDeckKey;
 
 
     void Awake()
@@ -42,7 +42,7 @@ public class WND_Kaku : UIFormBase {
       
         
         KaKu = Game.DataManager.PlayerDetailData.Kaku;
-        DeckList = Game.DataManager.PlayerDetailData.decks;
+        Decks = Game.DataManager.PlayerDetailData.Decks;
         isEditor = false;
     }
     protected override void OnInit(object userdata)
@@ -52,17 +52,16 @@ public class WND_Kaku : UIFormBase {
        // LoadDeckCard((List<BattleCardData>)deckCardList);
         LoadKaKuCard(KaKu.cards);
         
-        LoadDeckList( DeckList);
+        LoadDeckList(Decks);
     }
-    private void LoadDeckList(List<Deck> DeckList)
+    private void LoadDeckList(Dictionary<uint,Deck> Decks)
     { 
-        for(int i = 0; i < DeckList.Count; i++)
+        foreach(var deck in Decks)
         {
-            Deck deck = DeckList[i];
             GameObject item = Instantiate(deckInstence);
-            item.transform.Find("labName").GetComponent<UILabel>().text = deck.DeckName;
+            item.transform.Find("labName").GetComponent<UILabel>().text = deck.Value.DeckName;
             //    item.transform.Find("labClassType").GetComponent<UILabel>().text = deck.ClassType;
-            item.name = "" + i;
+            item.name = ""+ deck.Key;
             item.transform.SetParent (deckGrid.transform,false);
             item.transform.localPosition = new Vector3();
             item.transform.localScale = new Vector3(1, 1, 1);
@@ -217,14 +216,14 @@ public class WND_Kaku : UIFormBase {
     {
         if (!isEditor)
         {
-            
-           
-            
-             int.TryParse(obj.name,out editorDeckIndex)  ;
-            tempDeck = DeckList[editorDeckIndex].CloneSelf();
+
+
+
+            uint.TryParse(obj.name,out editorDeckKey);
+            tempDeck = Decks[editorDeckKey].CloneSelf();
             cardGrid.gameObject.SetActive(true);
             LoadDeckCard(tempDeck.cards);
-            LoadKaKuCard(KaKu.getCardsWithDeck(tempDeck));
+            LoadKaKuCard(KaKu.GetCardsWithDeck(tempDeck));
             List<Transform> deckTransformList =  deckGrid.GetChildList();
             foreach (Transform decktransform in deckTransformList)
             {
@@ -264,7 +263,7 @@ public class WND_Kaku : UIFormBase {
 
     private void SaveDeck()
     {
-        DeckList[editorDeckIndex] = tempDeck.CloneSelf();
+        Decks[editorDeckKey] = tempDeck.CloneSelf();
     }
 
 

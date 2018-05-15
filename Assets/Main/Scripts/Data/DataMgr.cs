@@ -77,9 +77,17 @@ public class DataMgr
         PlayerDetailData.Kaku.Add(new NormalCard(5));
         PlayerDetailData.Kaku.Add(new NormalCard(7));
         PlayerDetailData.Kaku.Add(new NormalCard(7));
-        PlayerDetailData.decks.Add(new Deck("卡组1", ClassType.Warriop));
 
 
+        uint uid = 124111315;
+        Deck tmpDeck = new Deck(uid);
+        tmpDeck.SetDeckName("卡组1");
+        tmpDeck.SetClassType(ClassType.Warriop);
+        tmpDeck.AddCard(1);
+        tmpDeck.AddCard(1);
+        tmpDeck.AddCard(2);
+        tmpDeck.AddCard(3);
+        PlayerDetailData.Decks.Add(uid, tmpDeck);
 
 
 
