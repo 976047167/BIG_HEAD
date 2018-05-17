@@ -12,7 +12,6 @@ public class WND_Kaku : UIFormBase {
     private GameObject _downClick;
     private float _gridPosY;
     private float _cellHeight;
-    private UIPanel KakuPanel;
     private GameObject btnExit;
     private GameObject  deckInstence;
     private bool isEditor;
@@ -24,11 +23,10 @@ public class WND_Kaku : UIFormBase {
 
     void Awake()
     {
-        deckGrid = transform.Find("bgDeck/ScrollViewDeck/Grid").GetComponent<UIGrid>();
+        deckGrid = transform.Find("ScrollViewDeck/Grid").GetComponent<UIGrid>();
         cardGrid = transform.Find("bgDeck/ScrollViewCard/Grid").GetComponent<UIGrid>();
-        kakuGrid = transform.Find("bgKaku/Panel/Grid").GetComponent<UIGrid>();
-        KakuPanel = transform.Find("bgKaku/Panel").GetComponent<UIPanel>();
-        _gridPosY = kakuGrid.transform.localPosition.y;
+        kakuGrid = transform.Find("bgKaku/ScrollViewKaku/Grid").GetComponent<UIGrid>();
+         _gridPosY = kakuGrid.transform.localPosition.y;
         _cellHeight = kakuGrid.cellHeight;
         ResourceManager.LoadGameObject("Card/NormalCard", (str, obj,go) =>{ Card = go; },(str, obj) =>{ });
         MovingPanel = transform.Find("MovingPanel").GetComponent<UIPanel>();
