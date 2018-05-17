@@ -32,13 +32,9 @@ public class WND_Kaku : UIFormBase {
         _cellHeight = kakuGrid.cellHeight;
         ResourceManager.LoadGameObject("Card/NormalCard", (str, obj,go) =>{ Card = go; },(str, obj) =>{ });
         MovingPanel = transform.Find("MovingPanel").GetComponent<UIPanel>();
-        _upClick = transform.Find("bgKaku/Panel/up").gameObject;
-        _downClick = transform.Find("bgKaku/Panel/down").gameObject;
-        UIEventListener.Get(_upClick).onClick = UpClick;
-        UIEventListener.Get(_downClick).onClick = DownClick;
-        btnExit = transform.Find("bgDeck/btnExit").gameObject;
+        btnExit = transform.Find("btnExit").gameObject;
         UIEventListener.Get(btnExit).onClick = ExitClick;
-        deckInstence = transform.Find("bgDeck/deckInstence").gameObject;
+        deckInstence = transform.Find("deckInstence").gameObject;
       
         
         KaKu = Game.DataManager.PlayerDetailData.Kaku;
@@ -53,6 +49,11 @@ public class WND_Kaku : UIFormBase {
         LoadKaKuCard(KaKu.cards);
         
         LoadDeckList(Decks);
+        if (userdata != null)
+            ChoseDeck((uint)userdata);
+
+
+
     }
     private void LoadDeckList(Dictionary<uint,Deck> Decks)
     { 
@@ -187,6 +188,7 @@ public class WND_Kaku : UIFormBase {
 
 
     }
+    /*
     private void UpClick(GameObject btn)
     {
 
@@ -211,6 +213,13 @@ public class WND_Kaku : UIFormBase {
         
     }
 
+    */
+
+    private void ChoseDeck(uint uid)
+    {
+        Deck deck = Decks[uid];
+        LoadDeckCard(deck.cards);
+    }
 
     private void deckClick(GameObject obj)
     {
