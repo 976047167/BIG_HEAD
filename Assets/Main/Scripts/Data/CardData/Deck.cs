@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Deck {
 
-    public List<NormalCard> cards;
+    public List<NormalCard> Cards;
     public ClassType ClassType;
     public string DeckName;
     public uint Uid;
@@ -14,7 +14,7 @@ public class Deck {
         Uid = uid;
         DeckName = "未命名";
         ClassType = ClassType.Warriop;
-        cards = new List<NormalCard>();
+        Cards = new List<NormalCard>();
     }
     //设置卡组名
     public void SetDeckName(string newName)
@@ -24,12 +24,31 @@ public class Deck {
     //设置卡组职业
     public void SetClassType(ClassType newClassType)
     {
-        cards.RemoveAll((card) => (
+        Cards.RemoveAll((card) => (
             card.CardData.ClassLimit != (int)ClassType.None &&
             card.CardData.ClassLimit != (int)newClassType)
             );
 
     }
+    public Dictionary<int, List<NormalCard>> GetDicCards()
+    {
+        return GetDicCards(Cards);
+    }
+
+    static public Dictionary<int, List<NormalCard>> GetDicCards(List<NormalCard> normalCards)
+    {
+        Dictionary<int, List<NormalCard>> cardsDic = new Dictionary<int, List<NormalCard>>();
+        foreach (var card in normalCards)
+        {
+            if (cardsDic[card.CardId] == null)
+            {
+                List<NormalCard> tempCards = normalCards.FindAll((tempCard) => (tempCard.CardId == card.CardId));
+                cardsDic.Add(card.CardId, tempCards);
+            }
+        }
+        return cardsDic;
+    }
+
     public void AddCard(NormalCard card)
     {
         AddNormalCard(card);
@@ -60,31 +79,25 @@ public class Deck {
             Debug.LogError("加入卡组的卡职业不正确");
             return;
         }
-        cards.Add(card);
+        Cards.Add(card);
     }
     public Deck CloneSelf()
     {
         Deck result = new Deck(Uid);
         result.SetDeckName(DeckName);
         result.SetClassType(ClassType);
-        result.AddCards(cards);
+        result.AddCards(Cards);
         return result;
     }
 
     public void RemoveCard(int cardId)
     {
-        RemoveNormalCard( cardId);
+        NormalCard card = Cards.Find(item => item.CardId == cardId);
+        RemoveCard(card);
+    }
+    public void RemoveCard(NormalCard card)
+    {
+        Cards.Remove(card);
     }
 
-    private void RemoveNormalCard(int cardId)
-    {
-        foreach( var card in cards)
-        {
-            if (card.CardId == cardId)
-            {
-                cards.Remove(card);
-                break;
-            }
-        }
-    }
 }

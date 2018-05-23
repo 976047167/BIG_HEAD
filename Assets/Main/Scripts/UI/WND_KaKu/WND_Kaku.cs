@@ -19,6 +19,8 @@ public class WND_Kaku : UIFormBase {
     private Dictionary<uint,Deck> Decks;
     private Deck tempDeck;
     private uint editorDeckKey;
+    private Vector3 offsetPos;
+    private GameObject dragObj;
 
 
     void Awake()
@@ -44,7 +46,7 @@ public class WND_Kaku : UIFormBase {
         base.OnInit(userdata);
        // List<BattleCardData> deckCardList = Game.DataManager.MyPlayerData.CardList; 
        // LoadDeckCard((List<BattleCardData>)deckCardList);
-        LoadKaKuCard(KaKu.Cards);
+        LoadKaKuCard(KaKu.GetDicCards());
         
         LoadDeckList(Decks);
         if (userdata != null)
@@ -98,19 +100,22 @@ public class WND_Kaku : UIFormBase {
         cardGrid.repositionNow = true;
 
     }
-    private void LoadKaKuCard(List<NormalCard> cardList)
+    private void LoadKaKuCard(Dictionary<int,List<NormalCard>> cardsDic)
     {
         foreach(var trans in kakuGrid.GetChildList()){
             Destroy(trans.gameObject);
         }
-        foreach (var card in cardList)
+        foreach (var cardList in cardsDic)
         {
 
             GameObject item = Instantiate(Card);
-            int id = card.CardId;
-            item.name = "Card" + id;
-            item.GetComponent<UINormalCard>().SetData(card,this);
-            item.GetComponent<UINormalCard>().DeckOrKaku = UINormalCard.deck_or_kaku.kaku;
+            int id = cardList.Key;
+            
+
+
+
+            UIEventListener.Get(item).onDragStart = OnCardDragStart;
+            UIEventListener.Get(item).onDrag = OnCardDrag;
             item.transform.SetParent(kakuGrid.transform,false);
             item.transform.localPosition = new Vector3();
             item.transform.localScale = new Vector3(1, 1, 1);
@@ -216,7 +221,7 @@ public class WND_Kaku : UIFormBase {
     private void ChoseDeck(uint uid)
     {
         Deck deck = Decks[uid];
-        LoadDeckCard(deck.cards);
+        LoadDeckCard(deck.Cards);
     }
 
     private void deckClick(GameObject obj)
@@ -229,8 +234,8 @@ public class WND_Kaku : UIFormBase {
             uint.TryParse(obj.name,out editorDeckKey);
             tempDeck = Decks[editorDeckKey].CloneSelf();
             cardGrid.gameObject.SetActive(true);
-            LoadDeckCard(tempDeck.cards);
-            LoadKaKuCard(KaKu.GetCardsWithDeck(tempDeck));
+            LoadDeckCard(tempDeck.Cards);
+            LoadKaKuCard(KaKu.GetDicCards( KaKu.GetCardsWithDeck(tempDeck)));
             List<Transform> deckTransformList =  deckGrid.GetChildList();
             foreach (Transform decktransform in deckTransformList)
             {
@@ -261,13 +266,53 @@ public class WND_Kaku : UIFormBase {
             cardGrid.gameObject.SetActive(false);
 
             deckGrid.repositionNow = true;
-            LoadKaKuCard(KaKu.Cards);
+            LoadKaKuCard(KaKu.GetDicCards());
             SaveDeck();
             isEditor = false;
         }
 
     }
 
+
+    private void OnCardDragStart(GameObject obj)
+    {
+        Debug.Log("OnDragStart ：" + obj.name);
+
+        offsetPos = transform.position - UICamera.lastWorldPosition;
+        if (offsetPos.y > offsetPos.y * 2)
+        {
+            dragObj = Instantiate(obj);
+            //dragObj.GetComponent<NormalCard>
+            RefreshDepth(dragObj.transform);
+        }
+        
+
+    }
+    protected void OnCardDrag(GameObject obj,Vector2 delta)
+    {
+        if ( UICamera.mainCamera != null)
+        {
+
+            dragObj.transform.position = UICamera.lastWorldPosition + offsetPos;
+        }
+    }
+
+    public void RefreshDepth()
+    {
+        RefreshDepth(transform);
+    }
+    public void RefreshDepth(Transform trans)
+    {
+        UIWidget[] widgets = trans.GetComponentsInChildren<UIWidget>(true);
+        foreach (var item in widgets)
+        {
+            if (item.enabled)
+            {
+                item.Refresh();
+            }
+
+        }
+    }
     private void SaveDeck()
     {
         Decks[editorDeckKey] = tempDeck.CloneSelf();
