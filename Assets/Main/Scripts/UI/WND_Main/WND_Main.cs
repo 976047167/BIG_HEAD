@@ -5,15 +5,46 @@ using UnityEngine;
 public class WND_Main : UIFormBase {
 
     private UILabel labName;
-
+    private GameObject btnKaKu;
+    private UILabel labLevel;
+    private UILabel labVipLevel;
+    private UILabel labCoin;
+    private UILabel labYuanBao;
+    private GameObject btnDungeon;
 
     // Use this for initialization
     private void Awake()
     {
         labName = transform.Find("background/spFrameHead/labName").GetComponent<UILabel>();
-
-
-
+        labLevel = transform.Find("background/spFrameHead/spLevel/labLevel").GetComponent<UILabel>();
+         labCoin = transform.Find("background/spFrameCoin/labCoin").GetComponent<UILabel>();
+        labYuanBao = transform.Find("background/spFrameYuanBao/spLevel/labYuanBao").GetComponent<UILabel>();
+        labVipLevel= transform.Find("background/spFrameHead/spVipLevel/labVipLevel").GetComponent<UILabel>();
+        btnKaKu = transform.Find("backgroound/btnKaKu").gameObject;
+        btnDungeon = transform.Find("backgroound/btnDungeon").gameObject;
+        UIEventListener.Get(btnKaKu).onClick = KakuClick;
+         UIEventListener.Get(btnDungeon).onClick = DungeonClick;
 
     }
+
+    private void Start()
+    {
+        labName.text = Game.DataManager.MyPlayerData.Name;
+        labLevel.text = "" + Game.DataManager.MyPlayerData.Level;
+        labVipLevel.text = "" + Game.DataManager.AccountData.VipLevel;
+        labYuanBao.text = "" + Game.DataManager.AccountData.Diamonds;
+        labCoin.text = "" + Game.DataManager.AccountData.Gold;
+
+    }
+
+    private void KakuClick(GameObject obj)
+    {
+        UIModule.Instance.OpenForm<WND_Kaku>();
+    }
+    private void DungeonClick(GameObject obj)
+    {
+        //UIModule.Instance.OpenForm<>
+    }
+
+
 }

@@ -44,7 +44,7 @@ public class WND_Kaku : UIFormBase {
         base.OnInit(userdata);
        // List<BattleCardData> deckCardList = Game.DataManager.MyPlayerData.CardList; 
        // LoadDeckCard((List<BattleCardData>)deckCardList);
-        LoadKaKuCard(KaKu.cards);
+        LoadKaKuCard(KaKu.Cards);
         
         LoadDeckList(Decks);
         if (userdata != null)
@@ -261,7 +261,7 @@ public class WND_Kaku : UIFormBase {
             cardGrid.gameObject.SetActive(false);
 
             deckGrid.repositionNow = true;
-            LoadKaKuCard(KaKu.cards);
+            LoadKaKuCard(KaKu.Cards);
             SaveDeck();
             isEditor = false;
         }

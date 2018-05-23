@@ -4,17 +4,33 @@ using UnityEngine;
 using AppSettings;
 
 public class KaKu {
-    public List<NormalCard> cards { get; private set; }
-
+    public List<NormalCard> Cards { get; private set; }
+ 
     public KaKu(){
-        cards = new List<NormalCard>();
+        Cards = new List<NormalCard>();
 
     }
 
+    public Dictionary<int, List<NormalCard>> GetDicCards()
+    {
+        return GetDicCards(Cards);
+    }
+    
+    static public Dictionary<int, List<NormalCard>> GetDicCards(List<NormalCard> normalCards)
+    {
+        Dictionary<int, List<NormalCard>> cardsDic = new Dictionary<int, List<NormalCard>>();
+        foreach (var card in normalCards)
+        {
+            if (cardsDic[card.CardId] == null)
+            {
+                List<NormalCard> tempCards = normalCards.FindAll((tempCard) =>(tempCard.CardId == card.CardId));
+                cardsDic.Add(card.CardId, tempCards);
+            } 
+        }
+        return cardsDic;
+    }
 
 
-
- 
     public void Add(int cardId)
     {
 
@@ -23,7 +39,7 @@ public class KaKu {
     }
     public void Add(NormalCard card)
     {
-        cards.Add(card);
+        Cards.Add(card);
     }
 
     public List<NormalCard> GetClassTypeCards(ClassType classType, bool includeNone = false)
@@ -35,18 +51,9 @@ public class KaKu {
 
     {
         if (classType == 0)
-            return cards;
+            return Cards;
+        return Cards.FindAll((card) => (card.CardData.ClassLimit == classType || includeNone && card.CardData.ClassLimit == 0));
 
-
-        List<NormalCard> result = new List<NormalCard>();
-        foreach (NormalCard card in cards)
-        {
-            if (card.CardData.ClassLimit == classType || includeNone && card.CardData.ClassLimit == 0)
-                result.Add(card);
-        }
-
-
-        return result;
 
     }
     //从卡库中剔除卡组的卡片
@@ -54,20 +61,8 @@ public class KaKu {
 
 
         List<NormalCard> result =GetClassTypeCards(deck.ClassType,true);
-        foreach (var deckCard in deck.cards)
-        {
-            for (int i = 0; i < result.Count;i++)
-            {
-                if (deckCard.CardId == result[i].CardId)
-                {
-                    result.RemoveAt(i);
-                    break;
-                }
-            }
-        }
-
-
-        return result;
+        return result.FindAll((card) => (deck.cards.Exists((item)=>(item == card)) == false));
+    
 
     }
 
