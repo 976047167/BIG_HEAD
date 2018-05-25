@@ -1,0 +1,5 @@
+Id	Name	Desc	Icon	Count	ActionTypes	ActionPrarms	ActionParams2
+int	string 	string	string	int	List<int>	List<int>	List<int>
+1	子母剑	每次造成攻击伤害时，额外再进行一次半数伤害的攻击，向下取整					
+2	回音筒	敌方对自己造成伤害时，有20%概率回应对方同等伤害					
+3	劫道刀	每次攻击有20%几率获取对方一张手牌					
