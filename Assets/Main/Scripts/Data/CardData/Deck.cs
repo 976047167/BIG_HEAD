@@ -90,14 +90,18 @@ public class Deck {
         return result;
     }
 
-    public void RemoveCard(int cardId)
+    public NormalCard RemoveCard(int cardId)
     {
         NormalCard card = Cards.Find(item => item.CardId == cardId);
-        RemoveCard(card);
+        return  RemoveCard(card);
     }
-    public void RemoveCard(NormalCard card)
+    public NormalCard RemoveCard(NormalCard card)
     {
-        Cards.Remove(card);
+        if (card == null)
+            return null;
+        if(Cards.Remove(card) == false)
+             return null;
+        return card;
     }
 
 }

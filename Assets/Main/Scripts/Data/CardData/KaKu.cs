@@ -61,7 +61,7 @@ public class KaKu {
 
 
         List<NormalCard> result =GetClassTypeCards(deck.ClassType,true);
-        return result.FindAll((card) => (deck.cards.Exists((item)=>(item == card)) == false));
+        return result.FindAll((card) => (deck.Cards.Exists((item)=>(item == card)) == false));
     
 
     }
