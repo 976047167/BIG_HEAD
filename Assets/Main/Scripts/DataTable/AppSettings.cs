@@ -50,6 +50,7 @@ namespace AppSettings
                     { 
                         BattleBuffTableSettings._instance,
                         BattleCardTableSettings._instance,
+                        BattleEquipTableSettings._instance,
                         BattleMonsterTableSettings._instance,
                         BoxTableSettings._instance,
                         ClassCharacterTableSettings._instance,
@@ -281,12 +282,27 @@ namespace AppSettings
         public string Icon { get; private set;}
         
         /// <summary>
+        /// 是否可以叠加
+        /// </summary>
+        public bool IsSuperposition { get; private set;}
+        
+        /// <summary>
+        /// 可叠加的最高层数
+        /// </summary>
+        public int MaxFloor { get; private set;}
+        
+        /// <summary>
+        /// 驱散等级
+        /// </summary>
+        public int DispelGrade { get; private set;}
+        
+        /// <summary>
         /// Buff默认持续时间
         /// </summary>
         public int Time { get; private set;}
         
         /// <summary>
-        /// Buff的效果触发时机(1回合开始,2回合结束,3受到伤害,4发起伤害)
+        /// Buff的效果触发时机
         /// </summary>
         public List<int> ActionTimes { get; private set;}
         
@@ -300,6 +316,11 @@ namespace AppSettings
         /// </summary>
         public List<int> ActionPrarms { get; private set;}
         
+        /// <summary>
+        /// 特效参数2
+        /// </summary>
+        public List<int> ActionParams2 { get; private set;}
+        
 
         internal BattleBuffTableSetting(TableFileRow row)
         {
@@ -312,10 +333,14 @@ namespace AppSettings
             Name = row.Get_string (row.Values[1], ""); 
             Desc = row.Get_string(row.Values[2], ""); 
             Icon = row.Get_string(row.Values[3], ""); 
-            Time = row.Get_int(row.Values[4], ""); 
-            ActionTimes = row.Get_List_int(row.Values[5], ""); 
-            ActionTypes = row.Get_List_int(row.Values[6], ""); 
-            ActionPrarms = row.Get_List_int(row.Values[7], ""); 
+            IsSuperposition = row.Get_bool(row.Values[4], ""); 
+            MaxFloor = row.Get_int(row.Values[5], ""); 
+            DispelGrade = row.Get_int(row.Values[6], ""); 
+            Time = row.Get_int(row.Values[7], ""); 
+            ActionTimes = row.Get_List_int(row.Values[8], ""); 
+            ActionTypes = row.Get_List_int(row.Values[9], ""); 
+            ActionPrarms = row.Get_List_int(row.Values[10], ""); 
+            ActionParams2 = row.Get_List_int(row.Values[11], ""); 
         }
 
         /// <summary>
@@ -517,7 +542,17 @@ namespace AppSettings
         public string Desc { get; private set;}
         
         /// <summary>
-        /// 卡牌类型(攻击0,装备1,法术2,消耗品)
+        /// 详细描述
+        /// </summary>
+        public string DetailDesc { get; private set;}
+        
+        /// <summary>
+        /// 额外描述
+        /// </summary>
+        public string ExtraDesc { get; private set;}
+        
+        /// <summary>
+        /// 卡牌类型(攻击0,装备1,法术2,消耗品3)
         /// </summary>
         public int Type { get; private set;}
         
@@ -537,14 +572,19 @@ namespace AppSettings
         public int ClassLimit { get; private set;}
         
         /// <summary>
-        /// 套牌
-        /// </summary>
-        public int Group { get; private set;}
-        
-        /// <summary>
         /// 图标
         /// </summary>
         public int Icon { get; private set;}
+        
+        /// <summary>
+        /// 卡片展示ID
+        /// </summary>
+        public int Show { get; private set;}
+        
+        /// <summary>
+        /// 卡片特效ID
+        /// </summary>
+        public int Effect { get; private set;}
         
         /// <summary>
         /// 购买开销
@@ -561,6 +601,11 @@ namespace AppSettings
         /// </summary>
         public List<int> ActionParams { get; private set;}
         
+        /// <summary>
+        /// 特效参数2
+        /// </summary>
+        public List<int> ActionParams2 { get; private set;}
+        
 
         internal BattleCardTableSetting(TableFileRow row)
         {
@@ -572,15 +617,260 @@ namespace AppSettings
             Id = row.Get_int(row.Values[0], ""); 
             Name = row.Get_string (row.Values[1], ""); 
             Desc = row.Get_string(row.Values[2], ""); 
-            Type = row.Get_int(row.Values[3], ""); 
-            Quality = row.Get_int(row.Values[4], ""); 
-            Spending = row.Get_int(row.Values[5], ""); 
-            ClassLimit = row.Get_int(row.Values[6], ""); 
-            Group = row.Get_int(row.Values[7], ""); 
-            Icon = row.Get_int(row.Values[8], ""); 
-            Price = row.Get_int(row.Values[9], ""); 
-            ActionTypes = row.Get_List_int(row.Values[10], ""); 
-            ActionParams = row.Get_List_int(row.Values[11], ""); 
+            DetailDesc = row.Get_string(row.Values[3], ""); 
+            ExtraDesc = row.Get_string(row.Values[4], ""); 
+            Type = row.Get_int(row.Values[5], ""); 
+            Quality = row.Get_int(row.Values[6], ""); 
+            Spending = row.Get_int(row.Values[7], ""); 
+            ClassLimit = row.Get_int(row.Values[8], ""); 
+            Icon = row.Get_int(row.Values[9], ""); 
+            Show = row.Get_int(row.Values[10], ""); 
+            Effect = row.Get_int(row.Values[11], ""); 
+            Price = row.Get_int(row.Values[12], ""); 
+            ActionTypes = row.Get_List_int(row.Values[13], ""); 
+            ActionParams = row.Get_List_int(row.Values[14], ""); 
+            ActionParams2 = row.Get_List_int(row.Values[15], ""); 
+        }
+
+        /// <summary>
+        /// Get PrimaryKey from a table row
+        /// </summary>
+        /// <param name="row"></param>
+        /// <returns></returns>
+        public static int ParsePrimaryKey(TableFileRow row)
+        {
+            var primaryKey = row.Get_int(row.Values[0], "");
+            return primaryKey;
+        }
+	}
+
+	/// <summary>
+	/// Auto Generate for Tab File: "BattleEquipTable.txt"
+    /// No use of generic and reflection, for better performance,  less IL code generating
+	/// </summary>>
+    public partial class BattleEquipTableSettings : IReloadableSettings
+    {
+        /// <summary>
+        /// How many reload function load?
+        /// </summary>>
+        public static int ReloadCount { get; private set; }
+
+		public static readonly string[] TabFilePaths = 
+        {
+            "BattleEquipTable.txt"
+        };
+        internal static BattleEquipTableSettings _instance = new BattleEquipTableSettings();
+        Dictionary<int, BattleEquipTableSetting> _dict = new Dictionary<int, BattleEquipTableSetting>();
+
+        /// <summary>
+        /// Trigger delegate when reload the Settings
+        /// </summary>>
+	    public static System.Action OnReload;
+
+        /// <summary>
+        /// Constructor, just reload(init)
+        /// When Unity Editor mode, will watch the file modification and auto reload
+        /// </summary>
+	    private BattleEquipTableSettings()
+	    {
+        }
+
+        /// <summary>
+        /// Get the singleton
+        /// </summary>
+        /// <returns></returns>
+	    public static BattleEquipTableSettings GetInstance()
+	    {
+            if (ReloadCount == 0)
+            {
+                _instance._ReloadAll(true);
+    #if UNITY_EDITOR
+                if (SettingModule.IsFileSystemMode)
+                {
+                    for (var j = 0; j < TabFilePaths.Length; j++)
+                    {
+                        var tabFilePath = TabFilePaths[j];
+                        SettingModule.WatchSetting(tabFilePath, (path) =>
+                        {
+                            if (path.Replace("\\", "/").EndsWith(path))
+                            {
+                                _instance.ReloadAll();
+                                Log.LogConsole_MultiThread("File Watcher! Reload success! -> " + path);
+                            }
+                        });
+                    }
+
+                }
+    #endif
+            }
+
+	        return _instance;
+	    }
+        
+        public int Count
+        {
+            get
+            {
+                return _dict.Count;
+            }
+        }
+
+        /// <summary>
+        /// Do reload the setting file: BattleEquipTable, no exception when duplicate primary key
+        /// </summary>
+        public void ReloadAll()
+        {
+            _ReloadAll(false);
+        }
+
+        /// <summary>
+        /// Do reload the setting class : BattleEquipTable, no exception when duplicate primary key, use custom string content
+        /// </summary>
+        public void ReloadAllWithString(string context)
+        {
+            _ReloadAll(false, context);
+        }
+
+        /// <summary>
+        /// Do reload the setting file: BattleEquipTable
+        /// </summary>
+	    void _ReloadAll(bool throwWhenDuplicatePrimaryKey, string customContent = null)
+        {
+            for (var j = 0; j < TabFilePaths.Length; j++)
+            {
+                var tabFilePath = TabFilePaths[j];
+                TableFile tableFile;
+                if (customContent == null)
+                    tableFile = SettingModule.Get(tabFilePath, false);
+                else
+                    tableFile = TableFile.LoadFromString(customContent);
+
+                using (tableFile)
+                {
+                    foreach (var row in tableFile)
+                    {
+                        var pk = BattleEquipTableSetting.ParsePrimaryKey(row);
+                        BattleEquipTableSetting setting;
+                        if (!_dict.TryGetValue(pk, out setting))
+                        {
+                            setting = new BattleEquipTableSetting(row);
+                            _dict[setting.Id] = setting;
+                        }
+                        else 
+                        {
+                            if (throwWhenDuplicatePrimaryKey) throw new System.Exception(string.Format("DuplicateKey, Class: {0}, File: {1}, Key: {2}", this.GetType().Name, tabFilePath, pk));
+                            else setting.Reload(row);
+                        }
+                    }
+                }
+            }
+
+	        if (OnReload != null)
+	        {
+	            OnReload();
+	        }
+
+            ReloadCount++;
+            Log.Info("Reload settings: {0}, Row Count: {1}, Reload Count: {2}", GetType(), Count, ReloadCount);
+        }
+
+	    /// <summary>
+        /// foreachable enumerable: BattleEquipTable
+        /// </summary>
+        public static IEnumerable GetAll()
+        {
+            foreach (var row in GetInstance()._dict.Values)
+            {
+                yield return row;
+            }
+        }
+
+        /// <summary>
+        /// GetEnumerator for `MoveNext`: BattleEquipTable
+        /// </summary> 
+	    public static IEnumerator GetEnumerator()
+	    {
+	        return GetInstance()._dict.Values.GetEnumerator();
+	    }
+         
+	    /// <summary>
+        /// Get class by primary key: BattleEquipTable
+        /// </summary>
+        public static BattleEquipTableSetting Get(int primaryKey)
+        {
+            BattleEquipTableSetting setting;
+            if (GetInstance()._dict.TryGetValue(primaryKey, out setting)) return setting;
+            return null;
+        }
+
+        // ========= CustomExtraString begin ===========
+        
+        // ========= CustomExtraString end ===========
+    }
+
+	/// <summary>
+	/// Auto Generate for Tab File: "BattleEquipTable.txt"
+    /// Singleton class for less memory use
+	/// </summary>
+	public partial class BattleEquipTableSetting : TableRowFieldParser
+	{
+		
+        /// <summary>
+        /// #目录
+        /// </summary>
+        public int Id { get; private set;}
+        
+        /// <summary>
+        /// 文本
+        /// </summary>
+        public string  Name { get; private set;}
+        
+        /// <summary>
+        /// 装备描述
+        /// </summary>
+        public string Desc { get; private set;}
+        
+        /// <summary>
+        /// 装备图标
+        /// </summary>
+        public string Icon { get; private set;}
+        
+        /// <summary>
+        /// 次数
+        /// </summary>
+        public int Count { get; private set;}
+        
+        /// <summary>
+        /// 装备的效果类型,BattleActionType
+        /// </summary>
+        public List<int> ActionTypes { get; private set;}
+        
+        /// <summary>
+        /// 特效参数
+        /// </summary>
+        public List<int> ActionPrarms { get; private set;}
+        
+        /// <summary>
+        /// 特效参数2
+        /// </summary>
+        public List<int> ActionParams2 { get; private set;}
+        
+
+        internal BattleEquipTableSetting(TableFileRow row)
+        {
+            Reload(row);
+        }
+
+        internal void Reload(TableFileRow row)
+        { 
+            Id = row.Get_int(row.Values[0], ""); 
+            Name = row.Get_string (row.Values[1], ""); 
+            Desc = row.Get_string(row.Values[2], ""); 
+            Icon = row.Get_string(row.Values[3], ""); 
+            Count = row.Get_int(row.Values[4], ""); 
+            ActionTypes = row.Get_List_int(row.Values[5], ""); 
+            ActionPrarms = row.Get_List_int(row.Values[6], ""); 
+            ActionParams2 = row.Get_List_int(row.Values[7], ""); 
         }
 
         /// <summary>

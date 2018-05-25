@@ -412,13 +412,7 @@ public class BattleMgr
 
 
 
-    public class CardAction
-    {
-        public int ActionId;
-        public int ActionArg;
-        public int ActionTime;
-        public BattleCardData CardData;
-    }
+    
 
     /// <summary>
     /// 回合开始 -> 抽卡阶段 -> 行动阶段（出牌） -> 行动结束-> 回合结束
