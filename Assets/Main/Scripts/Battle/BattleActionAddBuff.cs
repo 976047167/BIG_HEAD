@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class BattleActionAddBuff : BattleActionBase
 {
-    public override BattleActionType ActionId()
+    public BattleActionType ActionId()
     {
         return BattleActionType.AddBuff;
     }

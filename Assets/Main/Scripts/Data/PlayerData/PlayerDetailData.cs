@@ -18,7 +18,7 @@ public class PlayerDetailData : MonoBehaviour
     /// </summary>
     public List<BattleCardData> CardList = new List<BattleCardData>();
 
-    public Dictionary<uint,Deck> Decks = new Dictionary<uint, Deck>();
+    public List<Deck> Decks = new List<Deck>();
     public KaKu Kaku = new KaKu();
 
     public Dictionary<ClassType, ClassData> DicAllClassData = new Dictionary<ClassType, ClassData>();

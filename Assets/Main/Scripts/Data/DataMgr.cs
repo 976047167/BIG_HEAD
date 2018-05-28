@@ -87,7 +87,7 @@ public class DataMgr
         tmpDeck.AddCard(1);
         tmpDeck.AddCard(2);
         tmpDeck.AddCard(3);
-        PlayerDetailData.Decks.Add(uid, tmpDeck);
+        PlayerDetailData.Decks.Add(tmpDeck);
 
 
 

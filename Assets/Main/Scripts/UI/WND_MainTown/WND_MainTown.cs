@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class WND_Main : UIFormBase {
+public class WND_MainTown : UIFormBase {
 
     private UILabel labName;
     private GameObject btnKaKu;
