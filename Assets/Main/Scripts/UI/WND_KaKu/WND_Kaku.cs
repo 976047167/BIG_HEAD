@@ -58,6 +58,10 @@ public class WND_Kaku : UIFormBase
     }
     private void LoadDeckList(List<Deck> decks)
     {
+        foreach (var trans in deckGrid.GetChildList())
+        {
+            Destroy(trans.gameObject);
+        }
         foreach (var deck in decks)
         {
             GameObject item = Instantiate(deckInstence);
