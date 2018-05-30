@@ -6,7 +6,7 @@ public class BattleActionAddBuff : BattleActionBase
 {
     public BattleActionType ActionId = BattleActionType.AddBuff;
 
-    public override void GameAction(int num)
+    public override void Excute(int num)
     {
         Game.BattleManager.OppPlayerData.HP--;
     }
