@@ -20,6 +20,8 @@ public class WND_ChoseDeck : UIFormBase {
         classTypeInstence = transform.Find("bg/classTypeInstence").gameObject;
         classTypeGrid = transform.Find("bg/ScrollViewClassTypes/Grid").GetComponent<UIGrid>();
         deckGrid = transform.Find("bg/ScrollViewDecks/Grid").GetComponent<UIGrid>();
+        UIEventListener.Get(btnExit).onClick = ExitClick;
+        UIEventListener.Get(btnCommond).onClick = CommondClick;
     }
 
     private void Start()
@@ -93,18 +95,10 @@ public class WND_ChoseDeck : UIFormBase {
         deckGrid.repositionNow = true;
     }
 
+private void ExitClick (GameObject obj)
+{
+       print("ExitClick");
+        UIModule.Instance.CloseForm<WND_ChoseDeck>();
+}
 
-
-
-
-
-
-
-
-
-
-    // Update is called once per frame
-    void Update () {
-	
-	}
 }

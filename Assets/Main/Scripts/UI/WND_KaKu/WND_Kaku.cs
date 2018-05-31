@@ -38,8 +38,6 @@ public class WND_Kaku : UIFormBase
         btnExit = transform.Find("btnExit").gameObject;
         UIEventListener.Get(btnExit).onClick = ExitClick;
         deckInstence = transform.Find("deckInstence").gameObject;
-
-
         KaKu = Game.DataManager.PlayerDetailData.Kaku;
         Decks = Game.DataManager.PlayerDetailData.Decks;
         isEditor = false;
@@ -171,12 +169,31 @@ public class WND_Kaku : UIFormBase
             }
             cardFromKaKu.CardNum -= 1;
 
-            UINormalCard cardToDeck =  kakuGrid.transform.Find("" + cardId).GetComponent<UINormalCard>();
-            cardToDeck.gameObject.SetActive(true);
-            cardToDeck.CardNum += 1;
+            if (tempDeck.Cards.Find((item) => item.CardId == cardId) == null)
+            {
+
+                GameObject item = Instantiate(Card);
+                int id = cardId;
+                item.name = "Card" + id;
+                item.GetComponent<UINormalCard>().SetCard(id);
+                item.GetComponent<UINormalCard>().CardNum = 1;
+                item.transform.SetParent(cardGrid.transform, false);
+                item.transform.localPosition = new Vector3();
+                item.transform.localScale = new Vector3(1, 1, 1);
+                item.SetActive(true);
+                
+            }
+            else
+            {
+                UINormalCard cardToDeck =  kakuGrid.transform.Find("" + cardId).GetComponent<UINormalCard>();
+                cardToDeck.CardNum += 1;
+            }
+
+
             kakuGrid.repositionNow = true;
             cardGrid.repositionNow = true;
-            tempKaKuCardsDic[cardId].Add(tempDeck.RemoveCard(cardId));
+            tempDeck.Cards.Add(tempKaKuCardsDic[cardId][0]);
+            tempKaKuCardsDic[cardId].RemoveAt(0);
 
         }
 
