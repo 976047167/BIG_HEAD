@@ -105,6 +105,8 @@ public class UIModule
         {typeof(WND_Kaku),new UIConfig("UIForm/WND_Kaku") },
         {typeof(UIMenu),new UIConfig("UIForm/WND_Menu") },
         {typeof(WND_Reward),new UIConfig("UIForm/WND_Reward") },
+        {typeof(WND_MainTown),new UIConfig("UIForm/WND_MainTown") },
+        {typeof(WND_ChoseDeck),new UIConfig("UIForm/WND_ChoseDeck") },
     };
     public bool SetUICamera(UIModelCameraHelper uiCameraHelper)
     {

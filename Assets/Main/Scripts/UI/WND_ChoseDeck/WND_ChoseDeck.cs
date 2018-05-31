@@ -95,10 +95,13 @@ public class WND_ChoseDeck : UIFormBase {
         deckGrid.repositionNow = true;
     }
 
-private void ExitClick (GameObject obj)
-{
-       print("ExitClick");
-        UIModule.Instance.CloseForm<WND_ChoseDeck>();
-}
+    private void ExitClick (GameObject obj)
+    {
+           print("ExitClick");
+            UIModule.Instance.CloseForm<WND_ChoseDeck>();
+    }
+    private void CommondClick(GameObject obj)
+    {
 
+    }
 }

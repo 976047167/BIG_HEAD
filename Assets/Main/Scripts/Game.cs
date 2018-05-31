@@ -40,7 +40,7 @@ public class Game : MonoBehaviour
     void StartGame()
     {
         dataMgr.OnInit();
-        SceneManager.LoadScene("Main");
+        SceneManager.LoadScene("Init");
 
     }
 

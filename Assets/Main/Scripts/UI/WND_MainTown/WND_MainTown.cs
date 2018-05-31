@@ -17,11 +17,11 @@ public class WND_MainTown : UIFormBase {
     {
         labName = transform.Find("background/spFrameHead/labName").GetComponent<UILabel>();
         labLevel = transform.Find("background/spFrameHead/spLevel/labLevel").GetComponent<UILabel>();
-         labCoin = transform.Find("background/spFrameCoin/labCoin").GetComponent<UILabel>();
-        labYuanBao = transform.Find("background/spFrameYuanBao/spLevel/labYuanBao").GetComponent<UILabel>();
+         labCoin = transform.Find("background/spFrameCoin/labCoinNum").GetComponent<UILabel>();
+        labYuanBao = transform.Find("background/spFrameYuanBao/labYuanBaoNum").GetComponent<UILabel>();
         labVipLevel= transform.Find("background/spFrameHead/spVipLevel/labVipLevel").GetComponent<UILabel>();
-        btnKaKu = transform.Find("backgroound/btnKaKu").gameObject;
-        btnDungeon = transform.Find("backgroound/btnDungeon").gameObject;
+        btnKaKu = transform.Find("background/btnKaKu").gameObject;
+        btnDungeon = transform.Find("background/btnDungeon").gameObject;
         UIEventListener.Get(btnKaKu).onClick = KakuClick;
          UIEventListener.Get(btnDungeon).onClick = DungeonClick;
 
