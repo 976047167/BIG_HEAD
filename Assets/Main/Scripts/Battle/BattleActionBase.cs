@@ -1,6 +1,8 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Reflection;
 
 /// <summary>
 /// 游戏里面的每一种效果
@@ -13,13 +15,17 @@ public abstract class BattleActionBase
     private BattleCardData CardData;
     private BattlePlayer Owner;
     private BattlePlayer Target;
-    public BattleActionBase(int actionArg,int actionArg2,BattleCardData cardData,BattlePlayer owner,BattlePlayer target)
+
+    static Dictionary<BattleActionType, Type> dicActiuonType = new Dictionary<BattleActionType, Type>();
+    public static BattleActionBase Create(BattleActionType actionType, int actionArg,int actionArg2,BattleCardData cardData,BattlePlayer owner,BattlePlayer target)
     {
-        this.ActionArg = actionArg;
-        this.ActionArg2 = actionArg2;
-        this.CardData = cardData;
-        this.Owner = owner;
-        this.Target = target;
+        BattleActionBase battleAction = Activator.CreateInstance(dicActiuonType[actionType]) as BattleActionBase;
+        battleAction.ActionArg = actionArg;
+        battleAction.ActionArg2 = actionArg2;
+        battleAction.CardData = cardData;
+        battleAction.Owner = owner;
+        battleAction.Target = target;
+        return battleAction;
     }
     /// <summary>
     /// 效果的实现
@@ -28,17 +34,38 @@ public abstract class BattleActionBase
     public abstract void Excute();
     
 }
-public class CardActionAttack : BattleActionBase
+public class CardAction
 {
-    public CardActionAttack(int actionArg, int actionArg2, BattleCardData cardData, BattlePlayer owner, BattlePlayer target) : base(actionArg, actionArg2, cardData, owner, target)
+    public class CardActionAttack : BattleActionBase
     {
+        public CardActionAttack()
+        {
+        }
+
+        public BattleActionType ActionType { get { return BattleActionType.None; } }
+
+
+        public override void Excute()
+        {
+            throw new System.NotImplementedException();
+        }
+
+        
     }
-
-    public BattleActionType ActionType { get { return BattleActionType.None; } }
-
-
-    public override void Excute()
+    public class CardActionRemoveHp : BattleActionBase
     {
-        throw new System.NotImplementedException();
+        public CardActionRemoveHp()
+        {
+        }
+
+        public BattleActionType ActionType { get { return BattleActionType.AddBuff; } }
+
+
+        public override void Excute()
+        {
+            throw new System.NotImplementedException();
+        }
+
+
     }
 }
