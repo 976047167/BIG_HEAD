@@ -34,17 +34,38 @@ public abstract class BattleActionBase
     public abstract void Excute();
     
 }
-public class CardActionAttack : BattleActionBase
+public class CardAction
 {
-    public CardActionAttack()
+    public class CardActionAttack : BattleActionBase
     {
+        public CardActionAttack()
+        {
+        }
+
+        public BattleActionType ActionType { get { return BattleActionType.None; } }
+
+
+        public override void Excute()
+        {
+            throw new System.NotImplementedException();
+        }
+
+        
     }
-
-    public BattleActionType ActionType { get { return BattleActionType.None; } }
-
-
-    public override void Excute()
+    public class CardActionRemoveHp : BattleActionBase
     {
-        throw new System.NotImplementedException();
+        public CardActionRemoveHp()
+        {
+        }
+
+        public BattleActionType ActionType { get { return BattleActionType.AddBuff; } }
+
+
+        public override void Excute()
+        {
+            throw new System.NotImplementedException();
+        }
+
+
     }
 }
