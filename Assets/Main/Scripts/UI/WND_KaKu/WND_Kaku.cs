@@ -9,8 +9,7 @@ public class WND_Kaku : UIFormBase
     private GameObject Card;
     private UIGrid kakuGrid;
     public UIPanel MovingPanel;
-    private GameObject _upClick;
-    private GameObject _downClick;
+    private GameObject btnCreateDeck;
     private float _gridPosY;
     private float _cellHeight;
     private GameObject btnExit;
@@ -31,8 +30,8 @@ public class WND_Kaku : UIFormBase
         deckGrid = transform.Find("ScrollViewDeck/Grid").GetComponent<UIGrid>();
         cardGrid = transform.Find("bgDeck/ScrollViewCard/Grid").GetComponent<UIGrid>();
         kakuGrid = transform.Find("bgKaku/ScrollViewKaku/Grid").GetComponent<UIGrid>();
-        _gridPosY = kakuGrid.transform.localPosition.y;
-        _cellHeight = kakuGrid.cellHeight;
+        btnCreateDeck = deckGrid.transform.Find("btnCreateDeck").gameObject;
+        UIEventListener.Get(btnCreateDeck).onClick = CreateDeckClick;
         ResourceManager.LoadGameObject("Card/NormalCard", (str, obj, go) => { Card = go; }, (str, obj) => { });
         MovingPanel = transform.Find("MovingPanel").GetComponent<UIPanel>();
         btnExit = transform.Find("btnExit").gameObject;
@@ -48,8 +47,16 @@ public class WND_Kaku : UIFormBase
         // List<BattleCardData> deckCardList = Game.DataManager.MyPlayerData.CardList; 
         // LoadDeckCard((List<BattleCardData>)deckCardList);
         LoadKaKuCard(KaKu.GetDicCards());
-        
-        LoadDeckList(Decks.FindAll((deck) => deck.ClassType == (ClassType)userdata));
+        Deck usingDeck = Decks.Find((deck) =>deck.Uid ==   Game.DataManager.PlayerDetailData.UsingDeck);
+        if (usingDeck != null)
+        {
+            LoadDeckList(Decks.FindAll((deck) => deck.ClassType == usingDeck.ClassType));
+            ChoseDeck(usingDeck.Uid);
+        }
+         else
+        {
+            LoadDeckList(Decks.FindAll((deck) => deck.ClassType == ClassType.Warriop));
+        }
        
 
 
@@ -58,6 +65,8 @@ public class WND_Kaku : UIFormBase
     {
         foreach (var trans in deckGrid.GetChildList())
         {
+            if (trans == btnCreateDeck.transform)
+                continue;
             Destroy(trans.gameObject);
         }
         foreach (var deck in decks)
@@ -94,7 +103,7 @@ public class WND_Kaku : UIFormBase
             item.name = "Card" + id;
             item.GetComponent<UINormalCard>().SetCard(id);
             item.GetComponent<UINormalCard>().CardNum = cardList.Value.Count;
-
+            item.AddComponent<UIDragScrollView>();
             item.transform.SetParent(cardGrid.transform, false);
             item.transform.localPosition = new Vector3();
             item.transform.localScale = new Vector3(1, 1, 1);
@@ -119,7 +128,7 @@ public class WND_Kaku : UIFormBase
             item.GetComponent<UINormalCard>().SetCard(id);
             item.GetComponent<UINormalCard>().CardNum = cardList.Value.Count;
             item.name = "" + id;
-
+            item.AddComponent<UIDragScrollView>();
             UIEventListener.Get(item).onDragStart = OnCardDragStart;
             UIEventListener.Get(item).onDrag = OnCardDrag;
             UIEventListener.Get(item).onDragEnd = OnCardDragEnd;
@@ -314,6 +323,10 @@ public class WND_Kaku : UIFormBase
             }
 
         }
+    }
+    private void CreateDeckClick(GameObject obj)
+    {
+
     }
     private void SaveDeck()
     {

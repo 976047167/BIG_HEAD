@@ -21,7 +21,7 @@ public class KaKu {
         Dictionary<int, List<NormalCard>> cardsDic = new Dictionary<int, List<NormalCard>>();
         foreach (var card in normalCards)
         {
-            if (cardsDic[card.CardId] == null)
+            if (cardsDic.ContainsKey(card.CardId) == false)
             {
                 List<NormalCard> tempCards = normalCards.FindAll((tempCard) =>(tempCard.CardId == card.CardId));
                 cardsDic.Add(card.CardId, tempCards);

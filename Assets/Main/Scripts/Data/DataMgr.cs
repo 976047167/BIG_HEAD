@@ -89,6 +89,7 @@ public class DataMgr
         tmpDeck.AddCard(3);
         PlayerDetailData.Decks.Add(tmpDeck);
 
+        PlayerDetailData.UsingDeck = uid;
 
 
 

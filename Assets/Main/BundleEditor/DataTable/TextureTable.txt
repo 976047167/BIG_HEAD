@@ -7,3 +7,8 @@ int	string
 5	Skill/skill_common_evade
 6	Skill/skill_yasewang_1
 7	Skill/skill_yuefei_2
+8	ClassType/card_button_zhiye1
+9	ClassType/card_button_zhiye2
+10	ClassType/card_button_zhiye3
+11	ClassType/card_button_zhiye4
+12	ClassType/card_button_zhiye5

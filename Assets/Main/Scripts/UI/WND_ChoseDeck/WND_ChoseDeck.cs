@@ -11,6 +11,9 @@ public class WND_ChoseDeck : UIFormBase {
     private GameObject classTypeInstence;
     private UIGrid deckGrid;
     private UIGrid classTypeGrid;
+    private delegate void CallBack();
+    private CallBack callbackdelegate;
+    private uint chosingDeck = 0;
     // Use this for initialization
      void Awake()
     {
@@ -57,6 +60,19 @@ public class WND_ChoseDeck : UIFormBase {
         }
         classTypeGrid.repositionNow = true;
     }
+    protected override void OnInit(object userdata)
+    {
+        base.OnInit(userdata);
+        if (userdata != null)
+            switch ((int)userdata){
+
+                case 1:
+                    callbackdelegate = () => { UIModule.Instance.OpenForm<WND_Kaku>(); };
+                    break;
+            }
+
+
+    }
     private void OnClassTypeChose()
     {
        if( UIToggle.current.value == true)
@@ -65,6 +81,7 @@ public class WND_ChoseDeck : UIFormBase {
             int.TryParse(UIToggle.current.name, out classType);
             if (classType == 0)
                 return;
+            chosingDeck = 0;
             LoadDeckList(classType);
         }
     }
@@ -80,15 +97,12 @@ public class WND_ChoseDeck : UIFormBase {
         {
             GameObject item = Instantiate(deckInstence);
             item.transform.Find("labName").GetComponent<UILabel>().text = deck.DeckName;
-            //    item.transform.Find("labClassType").GetComponent<UILabel>().text = deck.ClassType;
-            item.name = "Deck" + deck.Uid;
+             item.name = "Deck" + deck.Uid;
             item.transform.SetParent(deckGrid.transform, false);
             item.transform.localPosition = new Vector3();
             item.transform.localScale = new Vector3(1, 1, 1);
             item.AddComponent<UIDragScrollView>();
-            UIEventListener.Get(item).onClick = (GameObject obj) => {
-              
-            };
+            EventDelegate.Add(item.GetComponent<UIToggle>().onChange, ()=>{ chosingDeck = deck.Uid; });
 
             item.SetActive(true);
         }
@@ -102,6 +116,18 @@ public class WND_ChoseDeck : UIFormBase {
     }
     private void CommondClick(GameObject obj)
     {
-
+        if (chosingDeck == 0)
+        {
+            Debug.Log("未选择卡组");
+            return;
+        }
+        else
+        {
+            Game.DataManager.PlayerDetailData.UsingDeck = chosingDeck;
+        }
+           
+        UIModule.Instance.CloseForm<WND_ChoseDeck>();
+        if (callbackdelegate != null)
+            callbackdelegate();
     }
 }

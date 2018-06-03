@@ -39,11 +39,11 @@ public class WND_MainTown : UIFormBase {
 
     private void KakuClick(GameObject obj)
     {
-        UIModule.Instance.OpenForm<WND_Kaku>();
+        UIModule.Instance.OpenForm<WND_ChoseDeck>(1);
     }
     private void DungeonClick(GameObject obj)
     {
-        //UIModule.Instance.OpenForm<>
+        UIModule.Instance.OpenForm<WND_ChoseDeck>();
     }
 
 
