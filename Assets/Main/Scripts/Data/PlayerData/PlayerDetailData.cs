@@ -21,6 +21,7 @@ public class PlayerDetailData : MonoBehaviour
     public List<Deck> Decks = new List<Deck>();
     public KaKu Kaku = new KaKu();
     public uint UsingDeck;
+    public int UsingCharacter;
     public Dictionary<ClassType, ClassData> DicAllClassData = new Dictionary<ClassType, ClassData>();
 }
 

@@ -43,7 +43,7 @@ public class WND_MainTown : UIFormBase {
     }
     private void DungeonClick(GameObject obj)
     {
-        UIModule.Instance.OpenForm<WND_ChoseDeck>();
+        UIModule.Instance.OpenForm<WND_ChoseDeck>(2);
     }
 
 

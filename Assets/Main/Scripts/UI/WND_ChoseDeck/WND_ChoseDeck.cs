@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System;
 using AppSettings;
+using UnityEngine.SceneManagement;
 using UnityEngine;
 
 public class WND_ChoseDeck : UIFormBase {
@@ -13,7 +14,9 @@ public class WND_ChoseDeck : UIFormBase {
     private UIGrid classTypeGrid;
     private delegate void CallBack();
     private CallBack callbackdelegate;
+    private int callBackInt;
     private uint chosingDeck = 0;
+    private int chosingClassCharacter;
     // Use this for initialization
      void Awake()
     {
@@ -43,10 +46,10 @@ public class WND_ChoseDeck : UIFormBase {
                     if (chararcter.ClassType == classType)
                     {
                         GameObject item = Instantiate(classTypeInstence);
-                        item.name = "" + classType;
+                        item.name = "" + chararcter.Id;
                         item.GetComponent<UITexture>().Load(chararcter.Image);
                         item.transform.Find("CheckMark").GetComponent<UITexture>().Load(chararcter.Image);
-                        EventDelegate.Add(item.GetComponent<UIToggle>().onChange, OnClassTypeChose);
+                        EventDelegate.Add(item.GetComponent<UIToggle>().onChange, OnClassCharacterChose);
                         item.transform.SetParent(classTypeGrid.transform, false);
                         item.transform.localPosition = new Vector3();
                         item.transform.localScale = new Vector3(1, 1, 1);
@@ -64,25 +67,22 @@ public class WND_ChoseDeck : UIFormBase {
     {
         base.OnInit(userdata);
         if (userdata != null)
-            switch ((int)userdata){
+            callBackInt = (int)userdata;
 
-                case 1:
-                    callbackdelegate = () => { UIModule.Instance.OpenForm<WND_Kaku>(); };
-                    break;
-            }
 
 
     }
-    private void OnClassTypeChose()
+    private void OnClassCharacterChose()
     {
        if( UIToggle.current.value == true)
         {
-            int classType = 0;
-            int.TryParse(UIToggle.current.name, out classType);
-            if (classType == 0)
+            int classCharacter = 0;
+            int.TryParse(UIToggle.current.name, out classCharacter);
+            if (classCharacter == 0)
                 return;
+            chosingClassCharacter = classCharacter;
             chosingDeck = 0;
-            LoadDeckList(classType);
+            LoadDeckList(ClassCharacterTableSettings.Get(classCharacter).ClassType);
         }
     }
     private void LoadDeckList(int classType)
@@ -102,7 +102,9 @@ public class WND_ChoseDeck : UIFormBase {
             item.transform.localPosition = new Vector3();
             item.transform.localScale = new Vector3(1, 1, 1);
             item.AddComponent<UIDragScrollView>();
-            EventDelegate.Add(item.GetComponent<UIToggle>().onChange, ()=>{ chosingDeck = deck.Uid; });
+            EventDelegate.Add(item.GetComponent<UIToggle>().onChange, ()=>{
+                if (UIToggle.current.value == true)
+                    chosingDeck = deck.Uid; });
 
             item.SetActive(true);
         }
@@ -119,15 +121,33 @@ public class WND_ChoseDeck : UIFormBase {
         if (chosingDeck == 0)
         {
             Debug.Log("未选择卡组");
-            return;
+            if (callBackInt == 2)
+                return;
         }
         else
         {
             Game.DataManager.PlayerDetailData.UsingDeck = chosingDeck;
         }
-           
+        
+        if (chosingClassCharacter == 0)
+        {
+            Debug.Log("未选择角色");
+        }
+        else
+        {
+            Game.DataManager.PlayerDetailData.UsingCharacter = chosingClassCharacter;
+        }
+
         UIModule.Instance.CloseForm<WND_ChoseDeck>();
-        if (callbackdelegate != null)
-            callbackdelegate();
+        switch (callBackInt)
+        {
+
+            case 1:
+               UIModule.Instance.OpenForm<WND_Kaku>();
+                break;
+            case 2:
+                 SceneManager.LoadScene("Main");
+                break;
+        }
     }
 }
