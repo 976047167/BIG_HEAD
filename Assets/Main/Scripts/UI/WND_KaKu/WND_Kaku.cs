@@ -252,18 +252,21 @@ public class WND_Kaku : UIFormBase
         Debug.Log("OnDragStart ：" + obj.name);
 
         offsetPos = transform.position - UICamera.lastWorldPosition;
-        if (offsetPos.y > offsetPos.y * 2)
+        if (offsetPos.y > offsetPos.x *10)
         {
             isDraging = true;
             dragObj = Instantiate(obj);
+            dragObj.transform.localPosition = obj.transform.localPosition;
             dragObj.GetComponent<UINormalCard>().CardNum = 1;
             obj.GetComponent<UIDragScrollView>().enabled = false;
-            //dragObj.GetComponent<NormalCard>
+            dragObj.transform.SetParent(MovingPanel.transform, true);
+            dragObj.transform.localScale = new Vector3(1, 1, 1);
             RefreshDepth(dragObj.transform);
         }
         else
         {
             isDraging = false;
+            obj.GetComponent<UIDragScrollView>().enabled = true;
         }
 
 
