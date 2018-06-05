@@ -25,7 +25,7 @@ public class UIMapInfo : UIFormBase
         labMp = transform.Find("headFrame/sliderMp/labMp").GetComponent<UILabel>();
         labGold = transform.Find("headFrame/gold/labgold").GetComponent<UILabel>();
         labFood = transform.Find("headFrame/food/labfood").GetComponent<UILabel>();
-        playerInfo = Game.DataManager.MyPlayerData;
+        playerInfo = Game.DataManager.MyPlayer.Data;
     }
 
     // Use this for initialization

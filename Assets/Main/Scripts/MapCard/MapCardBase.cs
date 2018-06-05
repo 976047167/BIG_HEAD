@@ -234,9 +234,9 @@ public class MapCardBase
             isFirstEnter = false;
         }
         Game.DataManager.Food--;
-        if (Game.DataManager.MyPlayerData.HP < Game.DataManager.MyPlayerData.MaxHP)
+        if (Game.DataManager.MyPlayer.Data.HP < Game.DataManager.MyPlayer.Data.MaxHP)
         {
-            Game.DataManager.MyPlayerData.HP++;
+            Game.DataManager.MyPlayer.Data.HP++;
         }
     }
     /// <summary>

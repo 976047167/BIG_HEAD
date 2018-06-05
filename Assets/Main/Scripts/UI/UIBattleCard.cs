@@ -99,7 +99,7 @@ public class UIBattleCard : MonoBehaviour
     }
     bool IsMine()
     {
-        if (CardData != null && CardData.Owner == Game.DataManager.MyPlayerData)
+        if (CardData != null && CardData.Owner == Game.DataManager.MyPlayer)
         {
             return true;
         }
@@ -240,7 +240,7 @@ public class UIBattleCard : MonoBehaviour
         }
         m_lblExpand.text = "";
         m_lblExpandCount.text = CardData.Data.Spending.ToString();
-        if (card.Owner != Game.DataManager.MyPlayerData)
+        if (card.Owner != Game.DataManager.MyPlayer)
         {
             m_TexIcon.gameObject.SetActive(false);
             m_lblName.gameObject.SetActive(false);
@@ -280,7 +280,7 @@ public class UIBattleCard : MonoBehaviour
         //}
         cacheCardPos = cacheChildCardTrans.position;
         m_Used = true;
-        if (CardData.Owner != Game.DataManager.MyPlayerData)
+        if (CardData.Owner != Game.DataManager.MyPlayer)
         {
             m_TexIcon.gameObject.SetActive(true);
             m_lblName.gameObject.SetActive(true);

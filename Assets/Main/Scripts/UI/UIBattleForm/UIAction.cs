@@ -48,7 +48,7 @@ public class UIAction_DrawCard : UIAction
     public override IEnumerator Excute()
     {
         yield return null;
-        if (CardData.Owner == Game.BattleManager.MyPlayerData)
+        if (CardData.Owner == Game.BattleManager.MyPlayer)
         {
             BattleForm.CreateBattleCard(CardData, BattleForm.MyCardsGrid);
         }
@@ -63,9 +63,9 @@ public class UIAction_DrawCard : UIAction
 
 public class UIAction_HPDamage : UIAction
 {
-    public BattlePlayerData Target { get; private set; }
+    public BattlePlayer Target { get; private set; }
     public int Damage { get; private set; }
-    public UIAction_HPDamage(BattlePlayerData target, int hpDamage) : base(UIActionType.HpDamage)
+    public UIAction_HPDamage(BattlePlayer target, int hpDamage) : base(UIActionType.HpDamage)
     {
         Target = target;
         Damage = hpDamage;
@@ -77,9 +77,9 @@ public class UIAction_HPDamage : UIAction
 }
 public class UIAction_HpRecover : UIAction
 {
-    public BattlePlayerData Target { get; private set; }
+    public BattlePlayer Target { get; private set; }
     public int HpRecover { get; private set; }
-    public UIAction_HpRecover(BattlePlayerData target, int hpRecover) : base(UIActionType.HpDamage)
+    public UIAction_HpRecover(BattlePlayer target, int hpRecover) : base(UIActionType.HpDamage)
     {
         Target = target;
         HpRecover = hpRecover;
@@ -136,31 +136,31 @@ public class UIAction_AddBuff : UIAction
 }
 public class UIAction_ApSpend : UIAction
 {
-    public BattlePlayerData PlayerData { get; private set; }
+    public BattlePlayer Player { get; private set; }
     public int SpentAp { get; private set; }
-    public UIAction_ApSpend(BattlePlayerData playerData, int spentAp) : base(UIActionType.ApSpend)
+    public UIAction_ApSpend(BattlePlayer player, int spentAp) : base(UIActionType.ApSpend)
     {
-        PlayerData = playerData;
+        Player = player;
         SpentAp = spentAp;
     }
 
     public override IEnumerator Excute()
     {
-        BattleForm.GetPlayerInfoViewByPlayerData(PlayerData).SpendAp(SpentAp);
+        BattleForm.GetPlayerInfoViewByPlayerData(Player).SpendAp(SpentAp);
         yield return null;
     }
 }
 public class UIAction_RoundStart : UIAction
 {
-    public BattlePlayerData PlayerData { get; private set; }
-    public UIAction_RoundStart(BattlePlayerData playerData) : base(UIActionType.RoundStart)
+    public BattlePlayer Player { get; private set; }
+    public UIAction_RoundStart(BattlePlayer playerData) : base(UIActionType.RoundStart)
     {
-        PlayerData = playerData;
+        Player = playerData;
     }
 
     public override IEnumerator Excute()
     {
-        BattleForm.GetPlayerInfoViewByPlayerData(PlayerData).RoundStart();
+        BattleForm.GetPlayerInfoViewByPlayerData(Player).RoundStart();
         yield return null;
     }
 }

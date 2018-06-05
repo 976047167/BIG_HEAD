@@ -25,7 +25,7 @@ public class DataMgr
     //}
     public int Food;
     public int Coin;
-    public BattlePlayerData MyPlayerData { get; private set; }
+    public BattlePlayer MyPlayer { get; private set; }
     public AccountData AccountData { get; private set; }
 
     public PlayerDetailData PlayerDetailData { get; private set; }
@@ -42,27 +42,6 @@ public class DataMgr
 
 
 
-
-        MyPlayerData = new BattlePlayerData();
-        MyPlayerData.Name = "player No.1";
-        MyPlayerData.HP = MyPlayerData.MaxHP = 10;
-        MyPlayerData.MP = MyPlayerData.MaxMP = 2;
-        MyPlayerData.AP = MyPlayerData.MaxAP = 1;
-        MyPlayerData.Level = 1;
-        MyPlayerData.SkillId = 0;
-        MyPlayerData.HeadIcon = "Head/npc_009";
-        MyPlayerData.CardList.Clear();
-        MyPlayerData.CardList.Add(new BattleCardData(1, MyPlayerData));
-        MyPlayerData.CardList.Add(new BattleCardData(1, MyPlayerData));
-        MyPlayerData.CardList.Add(new BattleCardData(1, MyPlayerData));
-        MyPlayerData.CardList.Add(new BattleCardData(1, MyPlayerData));
-        MyPlayerData.CardList.Add(new BattleCardData(2, MyPlayerData));
-        MyPlayerData.CardList.Add(new BattleCardData(2, MyPlayerData));
-        MyPlayerData.CardList.Add(new BattleCardData(3, MyPlayerData));
-        MyPlayerData.CardList.Add(new BattleCardData(4, MyPlayerData));
-        MyPlayerData.CardList.Add(new BattleCardData(5, MyPlayerData));
-        MyPlayerData.CardList.Add(new BattleCardData(6, MyPlayerData));
-        MyPlayerData.CardList.Add(new BattleCardData(7, MyPlayerData));
 
 
         PlayerDetailData = new PlayerDetailData();

@@ -7,10 +7,10 @@ public class BattleCardData
 {
     public int CardId { get; private set; }
     static int uniqueId = 0;
-    public BattlePlayerData Owner { get; private set; }
+    public BattlePlayer Owner { get; private set; }
 
     public BattleCardTableSetting Data { get; private set; }
-    public BattleCardData(int cardId, BattlePlayerData owner)
+    public BattleCardData(int cardId, BattlePlayer owner)
     {
         uniqueId++;
         if (uniqueId >= int.MaxValue)
