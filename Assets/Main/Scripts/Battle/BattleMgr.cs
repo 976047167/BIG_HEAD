@@ -33,8 +33,30 @@ public class BattleMgr
         Debug.Log("StartBattle => " + monsterId);
         MonsterId = monsterId;
         SetOppData(monsterId);
-        MyPlayerData = Game.DataManager.MyPlayerData;
+        
+        MyPlayerData = MyPlayer.Data;
+        MyPlayerData = new BattlePlayerData();
+        MyPlayerData.Name = "player No.1";
+        MyPlayerData.HP = MyPlayerData.MaxHP = 10;
+        MyPlayerData.MP = MyPlayerData.MaxMP = 2;
+        MyPlayerData.AP = MyPlayerData.MaxAP = 1;
+        MyPlayerData.Level = 1;
+        MyPlayerData.SkillId = 0;
+        MyPlayerData.HeadIcon = "Head/npc_009";
+        MyPlayerData.CardList.Clear();
+        MyPlayerData.CardList.Add(new BattleCardData(1, MyPlayer));
+        MyPlayerData.CardList.Add(new BattleCardData(1, MyPlayer));
+        MyPlayerData.CardList.Add(new BattleCardData(1, MyPlayer));
+        MyPlayerData.CardList.Add(new BattleCardData(1, MyPlayer));
+        MyPlayerData.CardList.Add(new BattleCardData(2, MyPlayer));
+        MyPlayerData.CardList.Add(new BattleCardData(2, MyPlayer));
+        MyPlayerData.CardList.Add(new BattleCardData(3, MyPlayer));
+        MyPlayerData.CardList.Add(new BattleCardData(4, MyPlayer));
+        MyPlayerData.CardList.Add(new BattleCardData(5, MyPlayer));
+        MyPlayerData.CardList.Add(new BattleCardData(6, MyPlayer));
+        MyPlayerData.CardList.Add(new BattleCardData(7, MyPlayer));
         MyPlayer = new BattlePlayer(MyPlayerData);
+
         OppPlayer = new BattlePlayer(OppPlayerData);
         OppPlayer.StartAI();
         Game.UI.OpenForm<UIBattleForm>();
@@ -70,7 +92,7 @@ public class BattleMgr
         OppPlayerData.HeadIcon = monster.Icon;
         for (int i = 0; i < monster.BattleCards.Count; i++)
         {
-            OppPlayerData.CardList.Add(new BattleCardData(monster.BattleCards[i], OppPlayerData));
+            OppPlayerData.CardList.Add(new BattleCardData(monster.BattleCards[i], OppPlayer));
         }
         //TODO: Buff Equip
     }
@@ -219,7 +241,7 @@ public class BattleMgr
             case BattleState.Ready:
                 break;
             case BattleState.MyRoundStart:
-                battleForm.AddUIAction(new UIAction_RoundStart(MyPlayer.Data));
+                battleForm.AddUIAction(new UIAction_RoundStart(MyPlayer));
                 break;
             case BattleState.MyDrawCard:
                 break;
@@ -232,7 +254,7 @@ public class BattleMgr
                 battleForm.AddUIAction(new UIAction_RoundEnd(MyPlayer.Data));
                 break;
             case BattleState.OppRoundStart:
-                battleForm.AddUIAction(new UIAction_RoundStart(OppPlayer.Data));
+                battleForm.AddUIAction(new UIAction_RoundStart(OppPlayer));
                 break;
             case BattleState.OppDrawCard:
                 break;
@@ -268,9 +290,9 @@ public class BattleMgr
     }
     public bool UseCard(BattleCardData battleCardData)
     {
-        if (battleCardData.Data.Spending <= battleCardData.Owner.AP)
+        if (battleCardData.Data.Spending <= battleCardData.Owner.Data.AP)
         {
-            battleCardData.Owner.HandCardList.Remove(battleCardData);
+            battleCardData.Owner.Data.HandCardList.Remove(battleCardData);
             UIAction_UseCard useCard = new UIAction_UseCard(battleCardData);
             useCard.AddBindUIAction(new UIAction_ApSpend(battleCardData.Owner, battleCardData.Data.Spending));
             battleForm.AddUIAction(useCard);
@@ -305,7 +327,7 @@ public class BattleMgr
             }
             BattleCardData card = playerData.CurrentCardList[Random.Range(0, playerData.CurrentCardList.Count)];
             playerData.CurrentCardList.Remove(card);
-            card.Owner.HandCardList.Add(card);
+            card.Owner.Data.HandCardList.Add(card);
             battleForm.AddUIAction(new UIAction_DrawCard(card));
         }
     }
@@ -323,7 +345,7 @@ public class BattleMgr
             {
                 if (buff.Data.ActionTimes[i] == actionTime)
                 {
-                    ApplyAction(buff.Data.ActionTypes[i], buff.Data.ActionPrarms[i], buff.CardData, playerData.Data, playerData.Data);
+                    ApplyAction(buff.Data.ActionTypes[i], buff.Data.ActionPrarms[i], buff.CardData, playerData, playerData);
                     buff.Time--;
                     if (buff.Time <= 0)
                     {
@@ -343,17 +365,21 @@ public class BattleMgr
     /// <param name="cardData"></param>
     public void ApplyCardEffect(BattleCardData cardData)
     {
-        cardData.Owner.UsedCardList.Add(cardData);
-        cardData.Owner.AP -= cardData.Data.Spending;
+        cardData.Owner.Data.UsedCardList.Add(cardData);
+        cardData.Owner.Data.AP -= cardData.Data.Spending;
         for (int i = 0; i < cardData.Data.ActionTypes.Count; i++)
         {
             ApplyAction(cardData.Data.ActionTypes[i], cardData.Data.ActionParams[i], cardData, cardData.Owner, null);
         }
     }
-    void ApplyAction(int actionType, int actionArg, BattleCardData cardData, BattlePlayerData owner, BattlePlayerData target)
+    void ApplyAction(int actionType, int actionArg, BattleCardData cardData, BattlePlayer owner, BattlePlayer target)
     {
         if (target == null)
         {
+            if (owner== OppPlayer)
+            {
+
+            }
             target = owner;
         }
         switch ((BattleActionType)actionType)
@@ -362,45 +388,45 @@ public class BattleMgr
                 break;
             case BattleActionType.AddBuff:
                 bool added = false;
-                for (int i = 0; i < target.BuffList.Count; i++)
+                for (int i = 0; i < target.Data.BuffList.Count; i++)
                 {
-                    if (actionArg == target.BuffList[i].BuffId)
+                    if (actionArg == target.Data.BuffList[i].BuffId)
                     {
                         added = true;
                         //刷新buff时间，不叠加
-                        target.BuffList[i].Time = AppSettings.BattleBuffTableSettings.Get(target.BuffList[i].BuffId).Time;
+                        target.Data.BuffList[i].Time = AppSettings.BattleBuffTableSettings.Get(target.Data.BuffList[i].BuffId).Time;
                         break;
                     }
                 }
                 if (added == false)
                 {
                     BattleBuffData buffData = new BattleBuffData(actionArg, 0, cardData, owner, target);
-                    target.BuffList.Add(buffData);
+                    target.Data.BuffList.Add(buffData);
                     battleForm.AddUIAction(new UIAction_AddBuff(buffData));
                 }
                 break;
             case BattleActionType.Attack:
-                if (owner == MyPlayerData)
+                if (owner == MyPlayer)
                 {
                     OppPlayerData.HP -= actionArg;
-                    battleForm.AddUIAction(new UIAction_HPDamage(OppPlayerData, actionArg));
+                    battleForm.AddUIAction(new UIAction_HPDamage(OppPlayer, actionArg));
                 }
-                else if (owner == OppPlayerData)
+                else if (owner == OppPlayer)
                 {
                     MyPlayerData.HP -= actionArg;
-                    battleForm.AddUIAction(new UIAction_HPDamage(MyPlayerData, actionArg));
+                    battleForm.AddUIAction(new UIAction_HPDamage(MyPlayer, actionArg));
                 }
 
                 break;
             case BattleActionType.RecoverHP:
-                target.HP += actionArg;
-                target.HP = target.HP > target.MaxHP ? target.MaxHP : target.HP;
+                target.Data.HP += actionArg;
+                target.Data.HP = target.Data.HP > target.Data.MaxHP ? target.Data.MaxHP : target.Data.HP;
                 battleForm.AddUIAction(new UIAction_HpRecover(target, actionArg));
                 break;
             case BattleActionType.RecoverMP:
                 break;
             case BattleActionType.DrawCard:
-                DrawCard(owner, actionArg);
+                DrawCard(owner.Data, actionArg);
                 break;
             case BattleActionType.AddEuipment:
                 break;

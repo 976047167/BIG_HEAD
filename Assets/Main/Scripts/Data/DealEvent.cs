@@ -28,10 +28,10 @@ public class DealEvent
             case EventType.Unknow:
                 break;
             case EventType.HP:
-                if (Game.DataManager.MyPlayerData.HP <= tmpEvent.CostNum)
+                if (Game.DataManager.MyPlayer.Data.HP <= tmpEvent.CostNum)
                     return 1;
                 else
-                    Game.DataManager.MyPlayerData.HP -= tmpEvent.CostNum;
+                    Game.DataManager.MyPlayer.Data.HP -= tmpEvent.CostNum;
                 break;
 
             case EventType.Food:
@@ -41,10 +41,10 @@ public class DealEvent
                     Game.DataManager.Food -= tmpEvent.CostNum;
                 break;
             case EventType.MP:
-                if (Game.DataManager.MyPlayerData.MP < tmpEvent.CostNum)
+                if (Game.DataManager.MyPlayer.Data.MP < tmpEvent.CostNum)
                     return 1;
                 else
-                    Game.DataManager.MyPlayerData.MP -= tmpEvent.CostNum;
+                    Game.DataManager.MyPlayer.Data.MP -= tmpEvent.CostNum;
                 break;
             case EventType.Coin:
                 if (Game.DataManager.Coin < tmpEvent.CostNum)
@@ -56,11 +56,11 @@ public class DealEvent
                 for (int j = 0; j < tmpEvent.CostNum; j++)
                 {
                     bool done = false;
-                    foreach (BattleCardData i in Game.DataManager.MyPlayerData.EquipList)
+                    foreach (BattleCardData i in Game.DataManager.MyPlayer.Data.EquipList)
                     {
                         if (i.CardId == tmpEvent.CostItemId)
                         {
-                            Game.DataManager.MyPlayerData.EquipList.Remove(i);
+                            Game.DataManager.MyPlayer.Data.EquipList.Remove(i);
                             done = true;
                             break;
                         }
@@ -81,18 +81,18 @@ public class DealEvent
                 break;
             case EventType.HP:
 
-                Game.DataManager.MyPlayerData.HP += tmpEvent.Num;
-                if (Game.DataManager.MyPlayerData.HP > Game.DataManager.MyPlayerData.MaxHP)
-                    Game.DataManager.MyPlayerData.HP = Game.DataManager.MyPlayerData.MaxHP;
+                Game.DataManager.MyPlayer.Data.HP += tmpEvent.Num;
+                if (Game.DataManager.MyPlayer.Data.HP > Game.DataManager.MyPlayer.Data.MaxHP)
+                    Game.DataManager.MyPlayer.Data.HP = Game.DataManager.MyPlayer.Data.MaxHP;
                 break;
 
             case EventType.Food:
                 Game.DataManager.Food += tmpEvent.Num;
                 break;
             case EventType.MP:
-                Game.DataManager.MyPlayerData.MP += tmpEvent.Num;
-                if (Game.DataManager.MyPlayerData.MP > Game.DataManager.MyPlayerData.MaxMP)
-                    Game.DataManager.MyPlayerData.MP = Game.DataManager.MyPlayerData.MaxMP;
+                Game.DataManager.MyPlayer.Data.MP += tmpEvent.Num;
+                if (Game.DataManager.MyPlayer.Data.MP > Game.DataManager.MyPlayer.Data.MaxMP)
+                    Game.DataManager.MyPlayer.Data.MP = Game.DataManager.MyPlayer.Data.MaxMP;
                 break;
             case EventType.Coin:
                 Game.DataManager.Coin += tmpEvent.Num;
@@ -100,7 +100,7 @@ public class DealEvent
             case EventType.Equip:
                 for (int j = 0; j < tmpEvent.CostNum; j++)
                 {
-                    Game.DataManager.MyPlayerData.EquipList.Add(new BattleCardData(tmpEvent.ItemId, Game.DataManager.MyPlayerData));
+                    Game.DataManager.MyPlayer.Data.EquipList.Add(new BattleCardData(tmpEvent.ItemId, Game.DataManager.MyPlayer));
           
                 }
                 break;

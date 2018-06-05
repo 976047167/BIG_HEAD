@@ -12,10 +12,10 @@ public class BattleBuffData
     /// 触发buff的卡牌信息，没有那就是自带的buff
     /// </summary>
     public BattleCardData CardData { get; private set; }
-    public BattlePlayerData TargetPlayerData { get; private set; }
-    public BattlePlayerData Owner { get; private set; }
+    public BattlePlayer TargetPlayerData { get; private set; }
+    public BattlePlayer Owner { get; private set; }
 
-    public BattleBuffData(int buffId, int extTime, BattleCardData cardData, BattlePlayerData owner, BattlePlayerData target)
+    public BattleBuffData(int buffId, int extTime, BattleCardData cardData, BattlePlayer owner, BattlePlayer target)
     {
         BuffId = buffId;
 
