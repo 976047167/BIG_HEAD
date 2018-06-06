@@ -7,7 +7,7 @@ public partial class BattleAction
 {
     public class AddBuff : BattleActionBase
     {
-        public BattleActionType ActionType { get { return BattleActionType.AddBuff; } }
+        public static BattleActionType ActionType { get { return BattleActionType.AddBuff; } }
         public override void Excute()
         {
             throw new System.NotImplementedException();

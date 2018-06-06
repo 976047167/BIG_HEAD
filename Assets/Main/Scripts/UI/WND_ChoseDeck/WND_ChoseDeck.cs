@@ -126,7 +126,7 @@ public class WND_ChoseDeck : UIFormBase {
         }
         else
         {
-            Game.DataManager.PlayerDetailData.UsingDeck = chosingDeck;
+            Game.DataManager.PlayerData.UsingDeck = chosingDeck;
         }
         
         if (chosingClassCharacter == 0)
@@ -135,7 +135,7 @@ public class WND_ChoseDeck : UIFormBase {
         }
         else
         {
-            Game.DataManager.PlayerDetailData.UsingCharacter = chosingClassCharacter;
+            Game.DataManager.PlayerData.UsingCharacter = chosingClassCharacter;
         }
 
         UIModule.Instance.CloseForm<WND_ChoseDeck>();

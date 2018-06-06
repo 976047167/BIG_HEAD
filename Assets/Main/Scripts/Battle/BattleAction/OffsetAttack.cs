@@ -7,7 +7,7 @@ public partial class BattleAction
 {
     public class OffsetAttack : BattleActionBase
     {
-        public BattleActionType ActionType { get { return BattleActionType.OffsetAttack; } }
+        public static BattleActionType ActionType { get { return BattleActionType.OffsetAttack; } }
         public override void Excute()
         {
             throw new System.NotImplementedException();

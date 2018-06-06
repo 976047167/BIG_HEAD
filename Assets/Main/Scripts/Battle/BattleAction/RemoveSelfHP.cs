@@ -7,7 +7,7 @@ public partial class BattleAction
 {
     public class RemoveSelfHP : BattleActionBase
     {
-        public BattleActionType ActionType { get { return BattleActionType.RemoveSelfHP; } }
+        public static BattleActionType ActionType { get { return BattleActionType.RemoveSelfHP; } }
         public override void Excute()
         {
             throw new System.NotImplementedException();

@@ -7,7 +7,7 @@ public partial class BattleAction
 {
     public class RemoveBuff : BattleActionBase
     {
-        public BattleActionType ActionType { get { return BattleActionType.RemoveBuff; } }
+        public static BattleActionType ActionType { get { return BattleActionType.RemoveBuff; } }
         public override void Excute()
         {
             throw new System.NotImplementedException();

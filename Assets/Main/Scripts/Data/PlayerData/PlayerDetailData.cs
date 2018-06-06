@@ -8,20 +8,11 @@ using AppSettings;
 public class PlayerDetailData : MonoBehaviour
 {
 
-    public List<BattleCardData> EquipList = new List<BattleCardData>();
-    /// <summary>
-    /// 
-    /// </summary>
-    public List<BattleBuffData> BuffList = new List<BattleBuffData>();
-    /// <summary>
-    /// 当前设置的卡牌库，除了初始化，不许改
-    /// </summary>
-    public List<BattleCardData> CardList = new List<BattleCardData>();
+    
 
     public List<Deck> Decks = new List<Deck>();
     public KaKu Kaku = new KaKu();
-    public uint UsingDeck;
-    public int UsingCharacter;
+    
     public Dictionary<ClassType, ClassData> DicAllClassData = new Dictionary<ClassType, ClassData>();
 }
 

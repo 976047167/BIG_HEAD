@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using AppSettings;
 
 public class UIMapInfo : UIFormBase
 {
@@ -13,7 +14,7 @@ public class UIMapInfo : UIFormBase
     private UILabel labMp;
     private UILabel labFood;
     private UILabel labGold;
-    private BattlePlayerData playerInfo = new BattlePlayerData();
+    private Player playerInfo = new Player();
 
     private void Awake()
     {
@@ -25,7 +26,7 @@ public class UIMapInfo : UIFormBase
         labMp = transform.Find("headFrame/sliderMp/labMp").GetComponent<UILabel>();
         labGold = transform.Find("headFrame/gold/labgold").GetComponent<UILabel>();
         labFood = transform.Find("headFrame/food/labfood").GetComponent<UILabel>();
-        playerInfo = Game.DataManager.MyPlayer.Data;
+        playerInfo = Game.DataManager.MyPlayer;
     }
 
     // Use this for initialization
@@ -37,16 +38,16 @@ public class UIMapInfo : UIFormBase
     // Update is called once per frame
     void Update()
     {
-       
-        if (Head.mainTexture == null || Head.mainTexture.name != playerInfo.HeadIcon)
+
+        if (Head.mainTexture == null)
         {
-            Head.Load(playerInfo.HeadIcon);
+            Head.Load(playerInfo.Data.HeadIcon);
         }
-        labName.text = playerInfo.Name;
-        sliderHp.value = playerInfo.HP / playerInfo.MaxHP;
-        labHp.text = string.Format("{0}/{1}", playerInfo.HP, playerInfo.MaxHP);
-        sliderHp.value = playerInfo.MP / playerInfo.MaxMP;
-        labMp.text = string.Format("{0}/{1}", playerInfo.MP, playerInfo.MaxMP);
+        labName.text = playerInfo.Data.Name;
+        sliderHp.value = playerInfo.Data.HP / playerInfo.Data.MaxHP;
+        labHp.text = string.Format("{0}/{1}", playerInfo.Data.HP, playerInfo.Data.MaxHP);
+        sliderHp.value = playerInfo.Data.MP / playerInfo.Data.MaxMP;
+        labMp.text = string.Format("{0}/{1}", playerInfo.Data.MP, playerInfo.Data.MaxMP);
         labFood.text = (Game.DataManager.Food.ToString());
         labGold.text = (Game.DataManager.Coin.ToString());
        }

@@ -33,7 +33,7 @@ public partial class BattleAction
 {
     public class #ACTION_NAME : BattleActionBase
     {
-        public BattleActionType ActionType { get { return BattleActionType.#ACTION_NAME; } }
+        public static BattleActionType ActionType { get { return BattleActionType.#ACTION_NAME; } }
         public override void Excute()
         {
             throw new System.NotImplementedException();

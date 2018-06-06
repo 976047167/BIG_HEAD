@@ -7,7 +7,7 @@ public partial class BattleAction
 {
     public class RecoverHP : BattleActionBase
     {
-        public BattleActionType ActionType { get { return BattleActionType.RecoverHP; } }
+        public static BattleActionType ActionType { get { return BattleActionType.RecoverHP; } }
         public override void Excute()
         {
             throw new System.NotImplementedException();

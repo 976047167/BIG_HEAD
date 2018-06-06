@@ -7,7 +7,7 @@ public partial class BattleAction
 {
     public class GroupOverlayDamage : BattleActionBase
     {
-        public BattleActionType ActionType { get { return BattleActionType.GroupOverlayDamage; } }
+        public static BattleActionType ActionType { get { return BattleActionType.GroupOverlayDamage; } }
         public override void Excute()
         {
             throw new System.NotImplementedException();

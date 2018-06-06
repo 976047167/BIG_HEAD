@@ -2,10 +2,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Reflection;
+using System;
 
 public class BattleMgr
 {
     public const int MAX_HAND_CARD_COUNT = 7;
+
+    
 
     UIBattleForm battleForm;
     public BattleState State { get; private set; }
@@ -325,7 +329,7 @@ public class BattleMgr
                 }
                 //playerData.CurrentCardList = new List<BattleCardData>(playerData.CardList);
             }
-            BattleCardData card = playerData.CurrentCardList[Random.Range(0, playerData.CurrentCardList.Count)];
+            BattleCardData card = playerData.CurrentCardList[UnityEngine.Random.Range(0, playerData.CurrentCardList.Count)];
             playerData.CurrentCardList.Remove(card);
             card.Owner.Data.HandCardList.Add(card);
             battleForm.AddUIAction(new UIAction_DrawCard(card));

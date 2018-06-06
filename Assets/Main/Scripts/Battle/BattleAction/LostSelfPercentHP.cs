@@ -7,7 +7,7 @@ public partial class BattleAction
 {
     public class LostSelfPercentHP : BattleActionBase
     {
-        public BattleActionType ActionType { get { return BattleActionType.LostSelfPercentHP; } }
+        public static BattleActionType ActionType { get { return BattleActionType.LostSelfPercentHP; } }
         public override void Excute()
         {
             throw new System.NotImplementedException();

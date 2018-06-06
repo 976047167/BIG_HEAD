@@ -60,8 +60,8 @@ public class WND_Kaku : UIFormBase
         // List<BattleCardData> deckCardList = Game.DataManager.MyPlayerData.CardList; 
         // LoadDeckCard((List<BattleCardData>)deckCardList);
       
-        Deck usingDeck = Decks.Find((deck) =>deck.Uid ==   Game.DataManager.PlayerDetailData.UsingDeck);
-        ClassCharacterTableSetting character = ClassCharacterTableSettings.Get(Game.DataManager.PlayerDetailData.UsingCharacter);
+        Deck usingDeck = Decks.Find((deck) =>deck.Uid ==   Game.DataManager.PlayerData.UsingDeck);
+        ClassCharacterTableSetting character = ClassCharacterTableSettings.Get(Game.DataManager.PlayerData.UsingCharacter);
         SetCharacterIcon(character.Image);
         if (usingDeck != null && usingDeck.ClassType ==(ClassType) character.ClassType)
         {

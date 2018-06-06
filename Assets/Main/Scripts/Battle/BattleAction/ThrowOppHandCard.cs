@@ -7,7 +7,7 @@ public partial class BattleAction
 {
     public class ThrowOppHandCard : BattleActionBase
     {
-        public BattleActionType ActionType { get { return BattleActionType.ThrowOppHandCard; } }
+        public static BattleActionType ActionType { get { return BattleActionType.ThrowOppHandCard; } }
         public override void Excute()
         {
             throw new System.NotImplementedException();

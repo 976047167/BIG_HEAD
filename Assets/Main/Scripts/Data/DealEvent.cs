@@ -100,7 +100,7 @@ public class DealEvent
             case EventType.Equip:
                 for (int j = 0; j < tmpEvent.CostNum; j++)
                 {
-                    Game.DataManager.MyPlayer.Data.EquipList.Add(new BattleCardData(tmpEvent.ItemId, Game.DataManager.MyPlayer));
+                    //Game.DataManager.MyPlayer.DetailData.EquipList.Add(new BattleCardData(tmpEvent.ItemId, Game.DataManager.MyPlayer));
           
                 }
                 break;

@@ -7,7 +7,7 @@ public partial class BattleAction
 {
     public class RemoveMP : BattleActionBase
     {
-        public BattleActionType ActionType { get { return BattleActionType.RemoveMP; } }
+        public static BattleActionType ActionType { get { return BattleActionType.RemoveMP; } }
         public override void Excute()
         {
             throw new System.NotImplementedException();

@@ -7,7 +7,7 @@ public partial class BattleAction
 {
     public class DefenseDamage : BattleActionBase
     {
-        public BattleActionType ActionType { get { return BattleActionType.DefenseDamage; } }
+        public static BattleActionType ActionType { get { return BattleActionType.DefenseDamage; } }
         public override void Excute()
         {
             throw new System.NotImplementedException();

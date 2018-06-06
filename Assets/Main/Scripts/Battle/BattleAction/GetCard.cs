@@ -7,7 +7,7 @@ public partial class BattleAction
 {
     public class GetCard : BattleActionBase
     {
-        public BattleActionType ActionType { get { return BattleActionType.GetCard; } }
+        public static BattleActionType ActionType { get { return BattleActionType.GetCard; } }
         public override void Excute()
         {
             throw new System.NotImplementedException();

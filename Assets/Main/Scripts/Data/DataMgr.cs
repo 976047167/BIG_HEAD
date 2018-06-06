@@ -25,9 +25,9 @@ public class DataMgr
     //}
     public int Food;
     public int Coin;
-    public BattlePlayer MyPlayer { get; private set; }
+    public MyPlayer MyPlayer { get; private set; }
     public AccountData AccountData { get; private set; }
-
+    public MapPlayerData PlayerData { get; private set; }
     public PlayerDetailData PlayerDetailData { get; private set; }
  
     /// <summary>
@@ -40,11 +40,19 @@ public class DataMgr
         AccountData.Diamonds = 100;
         AccountData.Uid = 0x1;
 
+        MyPlayer = new MyPlayer();
+        PlayerData = MyPlayer.Data;
+        MyPlayer.Data.HeadIcon = 1008;
+        MyPlayer.Data.Name = "大头";
+        MyPlayer.Data.Name = "player No.1";
+        MyPlayer.Data.HP = MyPlayer.Data.MaxHP = 10;
+        MyPlayer.Data.MP = MyPlayer.Data.MaxMP = 2;
+        //MyPlayer.Data.AP = MyPlayer.Data.MaxAP = 1;
+        MyPlayer.Data.Level = 1;
+        MyPlayer.Data.HeadIcon = 1008;
 
 
-
-
-        PlayerDetailData = new PlayerDetailData();
+        PlayerDetailData = MyPlayer.DetailData;
         PlayerDetailData.Kaku.Add(new NormalCard(1));
         PlayerDetailData.Kaku.Add(new NormalCard(2));
         PlayerDetailData.Kaku.Add(new NormalCard(2));
@@ -67,8 +75,8 @@ public class DataMgr
         tmpDeck.AddCard(2);
         tmpDeck.AddCard(3);
         PlayerDetailData.Decks.Add(tmpDeck);
-        PlayerDetailData.UsingCharacter = 1;
-        PlayerDetailData.UsingDeck = uid;
+        MyPlayer.Data.UsingCharacter = 1;
+        MyPlayer.Data.UsingDeck = uid;
 
 
 

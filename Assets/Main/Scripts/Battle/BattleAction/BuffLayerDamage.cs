@@ -7,7 +7,7 @@ public partial class BattleAction
 {
     public class BuffLayerDamage : BattleActionBase
     {
-        public BattleActionType ActionType { get { return BattleActionType.BuffLayerDamage; } }
+        public static BattleActionType ActionType { get { return BattleActionType.BuffLayerDamage; } }
         public override void Excute()
         {
             throw new System.NotImplementedException();

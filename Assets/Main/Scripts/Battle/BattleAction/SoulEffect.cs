@@ -7,7 +7,7 @@ public partial class BattleAction
 {
     public class SoulEffect : BattleActionBase
     {
-        public BattleActionType ActionType { get { return BattleActionType.SoulEffect; } }
+        public static BattleActionType ActionType { get { return BattleActionType.SoulEffect; } }
         public override void Excute()
         {
             throw new System.NotImplementedException();

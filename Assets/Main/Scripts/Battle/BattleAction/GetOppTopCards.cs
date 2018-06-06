@@ -7,7 +7,7 @@ public partial class BattleAction
 {
     public class GetOppTopCards : BattleActionBase
     {
-        public BattleActionType ActionType { get { return BattleActionType.GetOppTopCards; } }
+        public static BattleActionType ActionType { get { return BattleActionType.GetOppTopCards; } }
         public override void Excute()
         {
             throw new System.NotImplementedException();

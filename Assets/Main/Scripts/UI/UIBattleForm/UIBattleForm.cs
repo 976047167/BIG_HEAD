@@ -136,7 +136,7 @@ public class UIBattleForm : UIFormBase
     }
     public PlayerInfoViews GetPlayerInfoViewByPlayerData(BattlePlayer player)
     {
-        if (player == Game.DataManager.MyPlayer)
+        if (player == Game.BattleManager.MyPlayer)
         {
             return myPlayerViews;
         }
@@ -316,7 +316,7 @@ public class UIBattleForm : UIFormBase
             playerInfo.HP -= damage;
             if (playerInfo.HP <= 0)
             {
-                if (bindPlayerData == Game.DataManager.MyPlayer.Data)
+                if (bindPlayerData == Game.BattleManager.MyPlayer.Data)
                 {
                     Game.BattleManager.BattleForm.LoseBattle();
                 }

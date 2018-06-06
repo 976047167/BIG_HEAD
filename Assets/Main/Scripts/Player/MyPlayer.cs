@@ -8,8 +8,13 @@ using System;
 [Serializable]
 public class MyPlayer : Player
 {
-
+    
     protected PlayerDetailData m_playerDetialData;
 
     public PlayerDetailData DetailData { get { return m_playerDetialData; } }
+    public MyPlayer()
+    {
+        m_Data = new MapPlayerData();
+        m_playerDetialData = new PlayerDetailData();
+    }
 }

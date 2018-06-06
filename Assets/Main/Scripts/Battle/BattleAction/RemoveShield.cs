@@ -7,7 +7,7 @@ public partial class BattleAction
 {
     public class RemoveShield : BattleActionBase
     {
-        public BattleActionType ActionType { get { return BattleActionType.RemoveShield; } }
+        public static BattleActionType ActionType { get { return BattleActionType.RemoveShield; } }
         public override void Excute()
         {
             throw new System.NotImplementedException();
