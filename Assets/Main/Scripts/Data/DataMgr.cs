@@ -27,7 +27,7 @@ public class DataMgr
     public int Coin;
     public MyPlayer MyPlayer { get; private set; }
     public AccountData AccountData { get; private set; }
-    public MapPlayerData PlayerData { get; private set; }
+    public PlayerData PlayerData { get; private set; }
     public PlayerDetailData PlayerDetailData { get; private set; }
  
     /// <summary>

@@ -6,7 +6,7 @@ using UnityEngine;
 /// </summary>
 public class Player
 {
-    protected MapPlayerData m_Data;
-    public MapPlayerData Data { get { return m_Data; } }
+    protected PlayerData m_Data;
+    public PlayerData Data { get { return m_Data; } }
 
 }

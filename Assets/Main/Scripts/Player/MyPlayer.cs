@@ -14,7 +14,7 @@ public class MyPlayer : Player
     public PlayerDetailData DetailData { get { return m_playerDetialData; } }
     public MyPlayer()
     {
-        m_Data = new MapPlayerData();
+        m_Data = new PlayerData();
         m_playerDetialData = new PlayerDetailData();
     }
 }
