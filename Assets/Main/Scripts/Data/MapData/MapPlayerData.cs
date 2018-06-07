@@ -1,8 +1,10 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
-public class PlayerData
+/// <summary>
+/// 地图玩家数据类
+/// </summary>
+public class MapPlayerData
 {
     public string Name;
     public int Level;
@@ -33,5 +35,4 @@ public class PlayerData
     public List<BattleBuffData> BuffList { get { return m_BuffList; } }
 
     public List<BattleCardData> CardList { get { return mCardList; } }
-
 }
