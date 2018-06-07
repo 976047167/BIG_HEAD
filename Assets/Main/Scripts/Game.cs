@@ -15,6 +15,7 @@ public class Game : MonoBehaviour
     
     private void Start()
     {
+        
         StartCoroutine(Init());
         
     }
@@ -39,8 +40,9 @@ public class Game : MonoBehaviour
 
     void StartGame()
     {
+        ProcedureManager.ChangeProcedure<Procedure_Launch>();
         dataMgr.OnInit();
-        SceneManager.LoadScene("Init");
+        //SceneManager.LoadScene("Init");
 
     }
 

@@ -1,0 +1,4 @@
+Id	Name	Path
+int	string	string
+1	主场景	Main
+2	大平原	BigPlain

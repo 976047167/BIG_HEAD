@@ -85,14 +85,49 @@ public class UIModule
 
     public void CloseForm<T>() where T : UIFormBase
     {
-        if (DicOpenedUIForm[typeof(T)] == null)
+        CloseForm(typeof(T));
+    }
+    public void CloseForm(Type formType)
+    {
+        if (DicOpenedUIForm.ContainsKey(formType) == false || DicOpenedUIForm[formType] == null)
         {
             return;
         }
-        GameObject.Destroy(DicOpenedUIForm[typeof(T)].gameObject);
-        DicOpenedUIForm.Remove(typeof(T));
+        DicOpenedUIForm[formType].Close();
+        GameObject.Destroy(DicOpenedUIForm[formType].gameObject);
+        DicOpenedUIForm.Remove(formType);
         Resources.UnloadUnusedAssets();
         GC.Collect();
+    }
+
+    public void CloaseAllForm(params Type[] exceptForms)
+    {
+        List<Type> removeList = new List<Type>();
+        foreach (var form in DicOpenedUIForm)
+        {
+            if (form.Value == null)
+            {
+                removeList.Add(form.Key);
+                continue;
+            }
+            bool except = false;
+            for (int i = 0; i < exceptForms.Length; i++)
+            {
+                if (form.Key == exceptForms[i])
+                {
+                    except = true;
+                    break;
+                }
+            }
+            if (except == false)
+            {
+                removeList.Add(form.Key);
+            }
+        }
+        for (int i = 0; i < removeList.Count; i++)
+        {
+            CloseForm(removeList[i]);
+        }
     }
 
     static Dictionary<Type, UIConfig> DicUIConfig = new Dictionary<Type, UIConfig>()
