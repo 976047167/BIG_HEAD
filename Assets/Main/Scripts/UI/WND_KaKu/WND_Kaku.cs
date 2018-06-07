@@ -66,12 +66,12 @@ public class WND_Kaku : UIFormBase
         if (usingDeck != null && usingDeck.ClassType ==(ClassType) character.ClassType)
         {
             
-            LoadDeckList(Decks.FindAll((deck) => deck.ClassType == usingDeck.ClassType));
+          //  LoadDeckList(Decks.FindAll((deck) => deck.ClassType == usingDeck.ClassType));
             ChoseDeck(usingDeck.Uid);
         }
          else
         {
-            LoadDeckList(Decks.FindAll((deck) => deck.ClassType == (ClassType)character.ClassType));
+           // LoadDeckList(Decks.FindAll((deck) => deck.ClassType == (ClassType)character.ClassType));
             LoadKaKuCard(KaKu.GetDicCards(KaKu.GetClassTypeCards((ClassType)character.ClassType, true)));
         }
        
@@ -82,6 +82,7 @@ public class WND_Kaku : UIFormBase
     {
         charaterIcon.Load(icon);
     }
+    /*
     private void LoadDeckList(List<Deck> decks)
     {
         foreach (var trans in deckGrid.GetChildList())
@@ -108,6 +109,7 @@ public class WND_Kaku : UIFormBase
         }
         deckGrid.repositionNow = true;
     }
+    */
 
     //key为卡片id，value为卡片张数；
     private void LoadDeckCard(Dictionary<int, List<NormalCard>> cardsDic)
@@ -356,7 +358,7 @@ public class WND_Kaku : UIFormBase
             {
                 for (int i = 0; i < hits.Length; i++)
                 {
-                    if (hits[i].collider.name == "bgKaku" && startDragGrid == deckGrid )
+                    if (hits[i].collider.name == "bgKaku" && startDragGrid == cardGrid)
                     {
 
                         MoveCardFromDeckToKaKu(dragObj.GetComponent<UINormalCard>().CardId);
