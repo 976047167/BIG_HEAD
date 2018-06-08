@@ -26,20 +26,49 @@ public class UIModule
 
     Dictionary<Type, UIFormBase> DicOpenedUIForm = new Dictionary<Type, UIFormBase>();
     static int baseDepth = 0;
+
+    void LoadUIRoot(Type formType)
+    {
+        ResourceManager.LoadGameObject("UI/UI Root", (path, args, root) =>
+        {
+            if (uiCamera == null)
+            {
+                uiRoot = root.transform;
+                uiCamera = uiRoot.Find("Camera");
+                GameObject.DontDestroyOnLoad(root);
+            }
+            else
+                GameObject.Destroy(root);
+            if (formType != null)
+            {
+                OpenForm(formType);
+            }
+        }, (path, args) => { Debug.LogError("没有找到uiRoot->" + path); });
+    }
+
     public void OpenForm<T>(object userdata = null) where T : UIFormBase
     {
-        if (DicOpenedUIForm.ContainsKey(typeof(T)) && DicOpenedUIForm[typeof(T)] != null)
+        OpenForm(typeof(T));
+    }
+    void OpenForm(Type formType, object userdata = null)
+    {
+        if (uiCamera == null)
         {
-            DicOpenedUIForm[typeof(T)].gameObject.SetActive(true);
+            LoadUIRoot(formType);
             return;
         }
-        UIConfig config = DicUIConfig[typeof(T)];
+        if (DicOpenedUIForm.ContainsKey(formType) && DicOpenedUIForm[formType] != null)
+        {
+            DicOpenedUIForm[formType].gameObject.SetActive(true);
+            return;
+        }
+        UIConfig config = DicUIConfig[formType];
         if (config == null)
         {
-            Debug.LogError("The UI[" + typeof(T).ToString() + "] is not configed!");
+            Debug.LogError("The UI[" + formType.ToString() + "] is not configed!");
             return;
         }
-        ResourceManager.LoadGameObject(config.PrefabName, LoadFormSuccess, LoadFormFailed, typeof(T), userdata);
+        ResourceManager.LoadGameObject("UI/" + config.PrefabName, LoadFormSuccess, LoadFormFailed, formType, userdata);
 
     }
     void LoadFormSuccess(string path, object[] userData, GameObject uiForm)
@@ -87,7 +116,7 @@ public class UIModule
     {
         CloseForm(typeof(T));
     }
-    public void CloseForm(Type formType)
+    void CloseForm(Type formType)
     {
         if (DicOpenedUIForm.ContainsKey(formType) == false || DicOpenedUIForm[formType] == null)
         {
@@ -132,28 +161,29 @@ public class UIModule
 
     static Dictionary<Type, UIConfig> DicUIConfig = new Dictionary<Type, UIConfig>()
     {
-        {typeof(UIBattleForm),new UIConfig("UIForm/WND_BattleForm") },
-        {typeof(UIMapInfo),new UIConfig("UIForm/WND_MapInfo") },
-        {typeof(WND_Dialog),new UIConfig("UIForm/WND_Dialog") },
-        {typeof(WND_Bag),new UIConfig("UIForm/WND_Bag") },
-        {typeof(WND_ShowCard),new UIConfig("UIForm/WND_ShowCard") },
-        {typeof(WND_Kaku),new UIConfig("UIForm/WND_Kaku") },
-        {typeof(UIMenu),new UIConfig("UIForm/WND_Menu") },
-        {typeof(WND_Reward),new UIConfig("UIForm/WND_Reward") },
-        {typeof(WND_MainTown),new UIConfig("UIForm/WND_MainTown") },
-        {typeof(WND_ChoseDeck),new UIConfig("UIForm/WND_ChoseDeck") },
+        {typeof(UIBattleForm),new UIConfig("Instance/WND_BattleForm") },
+        {typeof(UIMapInfo),new UIConfig("WND_MapInfo") },
+        {typeof(WND_Dialog),new UIConfig("WND_Dialog") },
+        {typeof(WND_Bag),new UIConfig("WND_Bag") },
+        {typeof(WND_ShowCard),new UIConfig("WND_ShowCard") },
+        {typeof(WND_Kaku),new UIConfig("WND_Kaku") },
+        {typeof(UIMenu),new UIConfig("WND_Menu") },
+        {typeof(WND_Reward),new UIConfig("WND_Reward") },
+        {typeof(WND_MainTown),new UIConfig("Lobby/WND_MainTown") },
+        {typeof(WND_ChoseDeck),new UIConfig("WND_ChoseDeck") },
+        {typeof(WND_Loading),new UIConfig("Internal/WND_Loading") }
     };
-    public bool SetUICamera(UIModelCameraHelper uiCameraHelper)
-    {
-        if (uiCamera == null)
-        {
-            uiRoot = uiCameraHelper.transform;
-            uiCamera = uiRoot.Find("Camera");
-            return true;
-        }
-        GameObject.Destroy(uiCameraHelper.gameObject);
-        return false;
-    }
+    //public bool SetUICamera(UIModelCameraHelper uiCameraHelper)
+    //{
+    //    if (uiCamera == null)
+    //    {
+    //        uiRoot = uiCameraHelper.transform;
+    //        uiCamera = uiRoot.Find("Camera");
+    //        return true;
+    //    }
+    //    GameObject.Destroy(uiCameraHelper.gameObject);
+    //    return false;
+    //}
     class UIConfig
     {
         public string PrefabName;

@@ -1,9 +1,9 @@
 fileFormatVersion: 2
-guid: c2641052cb70f9c46ab5ac1e7496eca4
-timeCreated: 1515784396
+guid: a6c289ceabc97e84cb214fc108c3477d
+timeCreated: 1526832945
 licenseType: Free
 NativeFormatImporter:
   mainObjectFileID: 100100000
   userData: 
-  assetBundleName: prefabs/uiform/wnd_dialog.bundle
+  assetBundleName: prefabs/ui/lobby/wnd_maintown.bundle
   assetBundleVariant: 

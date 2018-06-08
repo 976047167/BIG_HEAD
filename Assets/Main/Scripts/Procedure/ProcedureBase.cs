@@ -8,7 +8,7 @@ public abstract class ProcedureBase
     {
 
     }
-    public virtual void OnEnter()
+    public virtual void OnEnter(ProcedureBase last)
     {
 
     }
@@ -16,7 +16,7 @@ public abstract class ProcedureBase
     {
 
     }
-    public virtual void OnExit()
+    public virtual void OnExit(ProcedureBase next)
     {
 
     }

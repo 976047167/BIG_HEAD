@@ -1,9 +1,9 @@
 fileFormatVersion: 2
-guid: 3adace1fb3c36824eabab25526e094c9
-timeCreated: 1519481394
+guid: ea9136ee5cb54204ba8fc13e330f539a
+timeCreated: 1528448014
 licenseType: Pro
 NativeFormatImporter:
   mainObjectFileID: 100100000
   userData: 
-  assetBundleName: prefabs/uiform/wnd_mapinfo.bundle
+  assetBundleName: prefabs/ui/preload/wnd_hud.bundle
   assetBundleVariant: 

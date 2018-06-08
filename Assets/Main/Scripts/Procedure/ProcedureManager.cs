@@ -11,15 +11,16 @@ public class ProcedureManager
 
     public static void ChangeProcedure<T>(object userdata = null) where T : ProcedureBase, new()
     {
-        if (current == null)
+        if (helper == null)
         {
             helper = new GameObject("[ProcedureManagerHelper]").AddComponent<ProcedureManagerHelper>();
         }
-        else
-            current.OnExit();
-        current = new T();
-        current.OnInit(userdata);
-        current.OnEnter();
+        ProcedureBase next = new T();
+        next.OnInit(userdata);
+        if (current != null)
+            current.OnExit(next);
+        next.OnEnter(current);
+        current = next;
     }
 
 

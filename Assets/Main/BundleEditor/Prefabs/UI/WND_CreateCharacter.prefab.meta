@@ -1,9 +1,9 @@
 fileFormatVersion: 2
-guid: 566c3a0a62b958041a4bc7f248d41e6a
-timeCreated: 1527540568
+guid: ff92f362f17ff3947b38ad74ea038a68
+timeCreated: 1528391829
 licenseType: Free
 NativeFormatImporter:
   mainObjectFileID: 100100000
   userData: 
-  assetBundleName: 
+  assetBundleName: prefabs/ui/wnd_createcharacter.bundle
   assetBundleVariant: 

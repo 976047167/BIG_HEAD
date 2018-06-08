@@ -20,6 +20,7 @@ public class BuildAssetBundleEditor : MonoBehaviour
 
     public static string sourcePath = Application.dataPath + "/Main/BundleEditor";
     const string AssetBundlesOutputPath = "Assets/StreamingAssets";
+    const string AssetBundleIgnore = "AssetBundleIgnore";
     [MenuItem("Tools/AssetBundle/Build AssetBundle %&B", false, 20)]
     static void BuildAssetBundle()
     {
@@ -117,11 +118,21 @@ public class BuildAssetBundleEditor : MonoBehaviour
         string _source = Replace(source);
         string _assetPath = "Assets" + _source.Substring(Application.dataPath.Length);
         Debug.Log("file source : " + source + "\n" + _assetPath);
+        //过滤
+        string[] labels = AssetDatabase.GetLabels(AssetDatabase.LoadAssetAtPath<UnityEngine.Object>(_assetPath));
+        for (int i = 0; i < labels.Length; i++)
+        {
+            if( labels[i]== AssetBundleIgnore)
+            {
+                return;
+            }
+        }
         //依赖项咱不单独打包
         AssetImporter assetImporter = AssetImporter.GetAtPath(_assetPath);
         string bundleName = source.Substring(sourcePath.Length + 1);
         bundleName = bundleName.Substring(0, bundleName.LastIndexOf(".")) + ResourceManager.BUNDLE_SUFFIX;
         assetImporter.assetBundleName = bundleName;
+
         //assetImporter.SaveAndReimport();
         //自动获取依赖项并给其资源设置AssetBundleName  
         //string[] dps = AssetDatabase.GetDependencies(_assetPath);

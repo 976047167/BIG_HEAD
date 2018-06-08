@@ -1,9 +1,9 @@
 fileFormatVersion: 2
-guid: 0fc3863c3f6667347a9ee494494db6f7
-timeCreated: 1519486133
+guid: 9dc67ec4138cc9145984111faff5035c
+timeCreated: 1528399118
 licenseType: Pro
 NativeFormatImporter:
   mainObjectFileID: 100100000
   userData: 
-  assetBundleName: prefabs/uiform/wnd_battleform.bundle
+  assetBundleName: prefabs/ui/internal/wnd_loading.bundle
   assetBundleVariant: 

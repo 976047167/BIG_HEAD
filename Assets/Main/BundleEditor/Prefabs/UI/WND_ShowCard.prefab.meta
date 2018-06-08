@@ -1,9 +1,9 @@
 fileFormatVersion: 2
-guid: 1cc5ffb7b9c00df43acca2059a9c58e2
-timeCreated: 1523199917
+guid: 0bde7f453e7c4ac4fbf8a8d9ed824009
+timeCreated: 1521396532
 licenseType: Free
 NativeFormatImporter:
   mainObjectFileID: 100100000
   userData: 
-  assetBundleName: prefabs/uiform/wnd_menu.bundle
+  assetBundleName: prefabs/ui/wnd_showcard.bundle
   assetBundleVariant: 

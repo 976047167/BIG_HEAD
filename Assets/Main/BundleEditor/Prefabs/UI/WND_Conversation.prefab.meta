@@ -1,9 +1,9 @@
 fileFormatVersion: 2
-guid: ff92f362f17ff3947b38ad74ea038a68
-timeCreated: 1528391829
+guid: cdefbb0b0b2cc4b4faa35dcc0c38b377
+timeCreated: 1515781847
 licenseType: Free
 NativeFormatImporter:
   mainObjectFileID: 100100000
   userData: 
-  assetBundleName: 
+  assetBundleName: prefabs/ui/wnd_conversation.bundle
   assetBundleVariant: 

@@ -7,7 +7,7 @@ public class UIModelCameraHelper : MonoBehaviour
 
     private void Awake()
     {
-        if (UIModule.Instance.SetUICamera(this))
+        //if (UIModule.Instance.SetUICamera(this))
         {
             DontDestroyOnLoad(gameObject);
         }
