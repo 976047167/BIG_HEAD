@@ -5,7 +5,7 @@ using AppSettings;
 /// <summary>
 /// 当前客户端玩家数据存放
 /// </summary>
-public class PlayerDetailData : MonoBehaviour
+public class PlayerDetailData
 {
 
     

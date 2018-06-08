@@ -346,7 +346,7 @@ public class AssetLoader
 
     protected Object[] assets;
     protected byte[] bytes;
-    protected AssetBundleRequest assetBundleRequest;
+    protected AsyncOperation assetBundleRequest;
     public static AssetLoader Get(string assetPath, AssetType assetType)
     {
         assetPath = assetPath.ToLower();
@@ -530,12 +530,17 @@ public class AssetLoader
         else if (AssetType == AssetType.Scene)
         {
             //加载场景使用
-            AssetBundleRequest bundleRequest = www.assetBundle.LoadAllAssetsAsync();
-            assetBundleRequest = bundleRequest;
-            bundleRequest.allowSceneActivation = false;
-            while (bundleRequest.isDone == false)
+            if (assetBundle.isStreamedSceneAssetBundle)
             {
-                yield return null;
+                string[] scenePaths = assetBundle.GetAllScenePaths();
+                string sceneName = System.IO.Path.GetFileNameWithoutExtension(scenePaths[0]);
+                AsyncOperation bundleRequest = SceneManager.LoadSceneAsync(sceneName);
+                assetBundleRequest = bundleRequest;
+                bundleRequest.allowSceneActivation = true;
+                while (bundleRequest.isDone == false)
+                {
+                    yield return null;
+                }
             }
         }
     }
