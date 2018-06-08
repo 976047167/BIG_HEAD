@@ -1,31 +1,28 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-/// <summary>
-/// Loading状态，切换场景流程
-/// </summary>
-public class Procedure_Loading : ProcedureBase
+
+public class Procedure_Lobby : ProcedureBase
 {
     public override void OnEnter(ProcedureBase last)
     {
         base.OnEnter(last);
-        Game.UI.OpenForm<WND_Loading>();
+        Game.UI.OpenForm<WND_MainTown>();
     }
 
     public override void OnExit(ProcedureBase next)
     {
         base.OnExit(next);
+        Game.UI.CloseForm<WND_MainTown>();
     }
 
-    public override void OnInit(object userdata = null)
+    public override bool OnInit(object userdata = null)
     {
-        base.OnInit(userdata);
+        return base.OnInit(userdata);
     }
 
     public override void OnUpdate()
     {
         base.OnUpdate();
     }
-
-    
 }

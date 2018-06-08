@@ -11,18 +11,31 @@ public class ProcedureManager
 
     public static void ChangeProcedure<T>(object userdata = null) where T : ProcedureBase, new()
     {
+        ChangeProcedure(typeof(T), userdata);
+    }
+
+    public static void ChangeProcedure(string procedureName, object userdata = null)
+    {
+        ChangeProcedure(Assembly.GetExecutingAssembly().GetType(procedureName), userdata);
+    }
+    public static void ChangeProcedure(System.Type procedureType, object userdata = null)
+    {
         if (helper == null)
         {
             helper = new GameObject("[ProcedureManagerHelper]").AddComponent<ProcedureManagerHelper>();
         }
-        ProcedureBase next = new T();
-        next.OnInit(userdata);
+        ProcedureBase next = System.Activator.CreateInstance(procedureType) as ProcedureBase;
+        if (next==null)
+        {
+            return;
+        }
+        if (!next.OnInit(userdata))
+            return;
         if (current != null)
             current.OnExit(next);
         next.OnEnter(current);
         current = next;
     }
-
 
 }
 

@@ -25,6 +25,7 @@
 //#define LOG_BROADCAST_MESSAGE
 //#define LOG_BROADCAST_PROCESS
 //#define REQUIRE_LISTENER
+#define MESSAGE_ID
 
 using System;
 using System.Collections.Generic;
@@ -42,12 +43,12 @@ static public class Messenger
     //Disable the unused variable warning
 #pragma warning disable 0414
     //Ensures that the MessengerHelper will be created automatically upon start of the game.
-    static private MessengerHelper messengerHelper = (new GameObject("MessengerHelper")).AddComponent<MessengerHelper>();
+    static private MessengerHelper messengerHelper = (new GameObject("[MessengerHelper]")).AddComponent<MessengerHelper>();
 #pragma warning restore 0414
-    static public Dictionary<string, Delegate> m_eventListenTable = new Dictionary<string, Delegate>();     // 监听列表
+    static public Dictionary<uint, Delegate> m_eventListenTable = new Dictionary<uint, Delegate>();     // 监听列表
 
     //Message handlers that should never be removed, regardless of calling Cleanup
-    static public List<string> permanentMessages = new List<string>();
+    static public List<uint> permanentMessages = new List<uint>();
 
     #endregion
 
@@ -56,10 +57,10 @@ static public class Messenger
     // for async broadcast
     public abstract class AsyncMsgInfoBase
     {
-        public string eventType;
+        public uint eventType;
         protected string strLog;
 
-        public AsyncMsgInfoBase(string type)
+        public AsyncMsgInfoBase(uint type)
         {
             eventType = type;
         }
@@ -76,7 +77,7 @@ static public class Messenger
     {
         private Callback cb;
 
-        public AsyncMsgInfo(string type) : base(type) { }
+        public AsyncMsgInfo(uint type) : base(type) { }
         public void SetParam(Callback c)
         {
             cb = c;
@@ -106,7 +107,7 @@ static public class Messenger
         private Callback<T> cb;
         private T param1;
 
-        public AsyncMsgInfo(string type) : base(type) { }
+        public AsyncMsgInfo(uint type) : base(type) { }
         public void SetParam(Callback<T> c, T p)
         {
             cb = c;
@@ -138,7 +139,7 @@ static public class Messenger
         private T param1;
         private U param2;
 
-        public AsyncMsgInfo(string type) : base(type) { }
+        public AsyncMsgInfo(uint type) : base(type) { }
         public void SetParam(Callback<T, U> c, T p1, U p2)
         {
             cb = c;
@@ -172,7 +173,7 @@ static public class Messenger
         private U param2;
         private V param3;
 
-        public AsyncMsgInfo(string type) : base(type) { }
+        public AsyncMsgInfo(uint type) : base(type) { }
         public void SetParam(Callback<T, U, V> c, T p1, U p2, V p3)
         {
             cb = c;
@@ -208,7 +209,7 @@ static public class Messenger
 
     #region Helper methods
     //Marks a certain message as permanent.
-    static public void MarkAsPermanent(string eventType)
+    static public void MarkAsPermanent(uint eventType)
     {
 #if LOG_ALL_MESSAGES
 	Debug.Log("Messenger MarkAsPermanent \t\"" + eventType + "\"");
@@ -223,13 +224,13 @@ static public class Messenger
 	Debug.Log("MESSENGER Cleanup. Make sure that none of necessary listeners are removed.");
 #endif
 
-        List<string> messagesToRemove = new List<string>();
+        List<uint> messagesToRemove = new List<uint>();
 
-        foreach (KeyValuePair<string, Delegate> pair in m_eventListenTable)
+        foreach (KeyValuePair<uint, Delegate> pair in m_eventListenTable)
         {
             bool wasFound = false;
 
-            foreach (string message in permanentMessages)
+            foreach (uint message in permanentMessages)
             {
                 if (pair.Key == message)
                 {
@@ -242,14 +243,14 @@ static public class Messenger
                 messagesToRemove.Add(pair.Key);
         }
 
-        foreach (string message in messagesToRemove)
+        foreach (uint message in messagesToRemove)
         {
             Remove(message);
         }
 
     }
 
-    static private void Remove(string message)
+    static private void Remove(uint message)
     {
         // remove from ayncevent
         int nCount = m_eventTypeAsyncList.Count;
@@ -270,7 +271,7 @@ static public class Messenger
     #endregion
 
     #region Message logging and exception throwing
-    static public void OnListenerAdding(string eventType, Delegate listenerBeingAdded)
+    static public void OnListenerAdding(uint eventType, Delegate listenerBeingAdded)
     {
 #if LOG_ALL_MESSAGES || LOG_ADD_LISTENER
 	Debug.Log("MESSENGER OnListenerAdding \"" + eventType + "\"{" + listenerBeingAdded.Target + " -> " + listenerBeingAdded.Method + "}");
@@ -288,7 +289,7 @@ static public class Messenger
         }
     }
 
-    static public bool OnListenerRemoving(string eventType, Delegate listenerBeingRemoved)
+    static public bool OnListenerRemoving(uint eventType, Delegate listenerBeingRemoved)
     {
 #if LOG_ALL_MESSAGES
 	Debug.Log("MESSENGER OnListenerRemoving \t\"" + eventType + "\"\t{" + listenerBeingRemoved.Target + " -> " + listenerBeingRemoved.Method + "}");
@@ -314,7 +315,7 @@ static public class Messenger
         return false;
     }
 
-    static public void OnBroadcasting(string eventType, bool bAsync)
+    static public void OnBroadcasting(uint eventType, bool bAsync)
     {
 #if LOG_ALL_MESSAGES || LOG_BROADCAST_MESSAGE
         Debug.Log("MESSENGER SEND " + (bAsync ? "ASYNC\t" : "\t") + System.DateTime.Now.ToString("hh:mm:ss.fff") + "\tInvoking \t\"" + eventType + "\"");
@@ -328,7 +329,7 @@ static public class Messenger
 #endif
     }
 
-    static public BroadcastException CreateBroadcastSignatureException(string eventType)
+    static public BroadcastException CreateBroadcastSignatureException(uint eventType)
     {
         return new BroadcastException(string.Format("Broadcasting message \"{0}\" but listeners have a different signature than the broadcaster.", eventType));
     }
@@ -352,37 +353,70 @@ static public class Messenger
 
     #region AddListener
     //No parameters
-    static public void AddListener(string eventType, Callback handler)
+    static public void AddListener(uint eventType, Callback handler)
     {
         OnListenerAdding(eventType, handler);
         m_eventListenTable[eventType] = (Callback)m_eventListenTable[eventType] + handler;
     }
 
     //Single parameter
-    static public void AddListener<T>(string eventType, Callback<T> handler)
+    static public void AddListener<T>(uint eventType, Callback<T> handler)
     {
         OnListenerAdding(eventType, handler);
         m_eventListenTable[eventType] = (Callback<T>)m_eventListenTable[eventType] + handler;
     }
 
     //Two parameters
-    static public void AddListener<T, U>(string eventType, Callback<T, U> handler)
+    static public void AddListener<T, U>(uint eventType, Callback<T, U> handler)
     {
         OnListenerAdding(eventType, handler);
         m_eventListenTable[eventType] = (Callback<T, U>)m_eventListenTable[eventType] + handler;
     }
 
     //Three parameters
-    static public void AddListener<T, U, V>(string eventType, Callback<T, U, V> handler)
+    static public void AddListener<T, U, V>(uint eventType, Callback<T, U, V> handler)
     {
         OnListenerAdding(eventType, handler);
         m_eventListenTable[eventType] = (Callback<T, U, V>)m_eventListenTable[eventType] + handler;
     }
+#if MESSAGE_ID
+    //No parameters
+    static public void AddListener(MessageID messageID, Callback handler)
+    {
+        uint eventType = (uint)messageID;
+        OnListenerAdding(eventType, handler);
+        m_eventListenTable[eventType] = (Callback)m_eventListenTable[eventType] + handler;
+    }
+
+    //Single parameter
+    static public void AddListener<T>(MessageID messageID, Callback<T> handler)
+    {
+        uint eventType = (uint)messageID;
+        OnListenerAdding(eventType, handler);
+        m_eventListenTable[eventType] = (Callback<T>)m_eventListenTable[eventType] + handler;
+    }
+
+    //Two parameters
+    static public void AddListener<T, U>(MessageID messageID, Callback<T, U> handler)
+    {
+        uint eventType = (uint)messageID;
+        OnListenerAdding(eventType, handler);
+        m_eventListenTable[eventType] = (Callback<T, U>)m_eventListenTable[eventType] + handler;
+    }
+
+    //Three parameters
+    static public void AddListener<T, U, V>(MessageID messageID, Callback<T, U, V> handler)
+    {
+        uint eventType = (uint)messageID;
+        OnListenerAdding(eventType, handler);
+        m_eventListenTable[eventType] = (Callback<T, U, V>)m_eventListenTable[eventType] + handler;
+    }
+#endif
     #endregion
 
     #region RemoveListener
     //No parameters
-    static public void RemoveListener(string eventType, Callback handler)
+    static public void RemoveListener(uint eventType, Callback handler)
     {
         if (OnListenerRemoving(eventType, handler))
         {
@@ -395,7 +429,7 @@ static public class Messenger
     }
 
     //Single parameter
-    static public void RemoveListener<T>(string eventType, Callback<T> handler)
+    static public void RemoveListener<T>(uint eventType, Callback<T> handler)
     {
         if (OnListenerRemoving(eventType, handler))
         {
@@ -408,7 +442,7 @@ static public class Messenger
     }
 
     //Two parameters
-    static public void RemoveListener<T, U>(string eventType, Callback<T, U> handler)
+    static public void RemoveListener<T, U>(uint eventType, Callback<T, U> handler)
     {
         if (OnListenerRemoving(eventType, handler))
         {
@@ -421,7 +455,7 @@ static public class Messenger
     }
 
     //Three parameters
-    static public void RemoveListener<T, U, V>(string eventType, Callback<T, U, V> handler)
+    static public void RemoveListener<T, U, V>(uint eventType, Callback<T, U, V> handler)
     {
         if (OnListenerRemoving(eventType, handler))
         {
@@ -432,50 +466,145 @@ static public class Messenger
             }
         }
     }
+#if MESSAGE_ID
+    //No parameters
+    static public void RemoveListener(MessageID messageID, Callback handler)
+    {
+        uint eventType = (uint)messageID;
+        if (OnListenerRemoving(eventType, handler))
+        {
+            m_eventListenTable[eventType] = (Callback)m_eventListenTable[eventType] - handler;
+            if (m_eventListenTable[eventType] == null)
+            {
+                Remove(eventType);
+            }
+        }
+    }
+
+    //Single parameter
+    static public void RemoveListener<T>(MessageID messageID, Callback<T> handler)
+    {
+        uint eventType = (uint)messageID;
+        if (OnListenerRemoving(eventType, handler))
+        {
+            m_eventListenTable[eventType] = (Callback<T>)m_eventListenTable[eventType] - handler;
+            if (m_eventListenTable[eventType] == null)
+            {
+                Remove(eventType);
+            }
+        }
+    }
+
+    //Two parameters
+    static public void RemoveListener<T, U>(MessageID messageID, Callback<T, U> handler)
+    {
+        uint eventType = (uint)messageID;
+        if (OnListenerRemoving(eventType, handler))
+        {
+            m_eventListenTable[eventType] = (Callback<T, U>)m_eventListenTable[eventType] - handler;
+            if (m_eventListenTable[eventType] == null)
+            {
+                Remove(eventType);
+            }
+        }
+    }
+
+    //Three parameters
+    static public void RemoveListener<T, U, V>(MessageID messageID, Callback<T, U, V> handler)
+    {
+        uint eventType = (uint)messageID;
+        if (OnListenerRemoving(eventType, handler))
+        {
+            m_eventListenTable[eventType] = (Callback<T, U, V>)m_eventListenTable[eventType] - handler;
+            if (m_eventListenTable[eventType] == null)
+            {
+                Remove(eventType);
+            }
+        }
+    }
+#endif
     #endregion
 
     #region Broadcast definition
 
     //No parameters
-    static public void Broadcast(string eventType)
+    static public void Broadcast(uint eventType)
     {
         DoBroadcast(eventType, false);
     }
-    static public void BroadcastAsync(string eventType)
+    static public void BroadcastAsync(uint eventType)
     {
         DoBroadcast(eventType, true);
     }
 
     //Single parameter
-    static public void Broadcast<T>(string eventType, T arg1)
+    static public void Broadcast<T>(uint eventType, T arg1)
     {
         DoBroadcast<T>(eventType, arg1, false);
     }
-    static public void BroadcastAsync<T>(string eventType, T arg1)
+    static public void BroadcastAsync<T>(uint eventType, T arg1)
     {
         DoBroadcast<T>(eventType, arg1, true);
     }
 
     //Two parameters
-    static public void Broadcast<T, U>(string eventType, T arg1, U arg2)
+    static public void Broadcast<T, U>(uint eventType, T arg1, U arg2)
     {
         DoBroadcast<T, U>(eventType, arg1, arg2, false);
     }
-    static public void BroadcastAsync<T, U>(string eventType, T arg1, U arg2)
+    static public void BroadcastAsync<T, U>(uint eventType, T arg1, U arg2)
     {
         DoBroadcast<T, U>(eventType, arg1, arg2, true);
     }
 
     //Three parameters
-    static public void Broadcast<T, U, V>(string eventType, T arg1, U arg2, V arg3)
+    static public void Broadcast<T, U, V>(uint eventType, T arg1, U arg2, V arg3)
     {
         DoBroadcast<T, U, V>(eventType, arg1, arg2, arg3, false);
     }
-    static public void BroadcastAsync<T, U, V>(string eventType, T arg1, U arg2, V arg3)
+    static public void BroadcastAsync<T, U, V>(uint eventType, T arg1, U arg2, V arg3)
     {
         DoBroadcast<T, U, V>(eventType, arg1, arg2, arg3, true);
     }
+#if MESSAGE_ID
+    static public void Broadcast(MessageID eventType)
+    {
+        DoBroadcast((uint)eventType, false);
+    }
+    static public void BroadcastAsync(MessageID eventType)
+    {
+        DoBroadcast((uint)eventType, true);
+    }
+    //Single parameter
+    static public void Broadcast<T>(MessageID eventType, T arg1)
+    {
+        DoBroadcast<T>((uint)eventType, arg1, false);
+    }
+    static public void BroadcastAsync<T>(MessageID eventType, T arg1)
+    {
+        DoBroadcast<T>((uint)eventType, arg1, true);
+    }
 
+    //Two parameters
+    static public void Broadcast<T, U>(MessageID eventType, T arg1, U arg2)
+    {
+        DoBroadcast<T, U>((uint)eventType, arg1, arg2, false);
+    }
+    static public void BroadcastAsync<T, U>(MessageID eventType, T arg1, U arg2)
+    {
+        DoBroadcast<T, U>((uint)eventType, arg1, arg2, true);
+    }
+
+    //Three parameters
+    static public void Broadcast<T, U, V>(MessageID eventType, T arg1, U arg2, V arg3)
+    {
+        DoBroadcast<T, U, V>((uint)eventType, arg1, arg2, arg3, false);
+    }
+    static public void BroadcastAsync<T, U, V>(MessageID eventType, T arg1, U arg2, V arg3)
+    {
+        DoBroadcast<T, U, V>((uint)eventType, arg1, arg2, arg3, true);
+    }
+#endif
     #endregion
 
     #region Broadcast implementation
@@ -496,22 +625,22 @@ static public class Messenger
         }
     }
 
-    static private void DoBroadcast(string eventType, bool bAsync)
+    static private void DoBroadcast(uint eventType, bool bAsync)
     {
         OnBroadcasting(eventType, bAsync);
         ReadyBroadcast(GetMsgInfo(eventType), bAsync);
     }
-    static private void DoBroadcast<T>(string eventType, T arg1, bool bAsync)
+    static private void DoBroadcast<T>(uint eventType, T arg1, bool bAsync)
     {
         OnBroadcasting(eventType, bAsync);
         ReadyBroadcast(GetMsgInfo(eventType, arg1), bAsync);
     }
-    static private void DoBroadcast<T, U>(string eventType, T arg1, U arg2, bool bAsync)
+    static private void DoBroadcast<T, U>(uint eventType, T arg1, U arg2, bool bAsync)
     {
         OnBroadcasting(eventType, bAsync);
         ReadyBroadcast(GetMsgInfo(eventType, arg1, arg2), bAsync);
     }
-    static private void DoBroadcast<T, U, V>(string eventType, T arg1, U arg2, V arg3, bool bAsync)
+    static private void DoBroadcast<T, U, V>(uint eventType, T arg1, U arg2, V arg3, bool bAsync)
     {
         OnBroadcasting(eventType, bAsync);
         ReadyBroadcast(GetMsgInfo(eventType, arg1, arg2, arg3), bAsync);
@@ -559,10 +688,10 @@ static public class Messenger
     #endregion
 
     #region 对象池
-    static private Dictionary<string, AsyncMsgInfoBase> m_eventTypeList_Pool = new Dictionary<string, AsyncMsgInfoBase>();    // 缓存池，每个事件都缓存
+    static private Dictionary<uint, AsyncMsgInfoBase> m_eventTypeList_Pool = new Dictionary<uint, AsyncMsgInfoBase>();    // 缓存池，每个事件都缓存
 
     // 得到一个对象
-    static AsyncMsgInfoBase GetMsgInfo(string eventType)
+    static AsyncMsgInfoBase GetMsgInfo(uint eventType)
     {
         Delegate d;
         if (m_eventListenTable.TryGetValue(eventType, out d))
@@ -585,7 +714,7 @@ static public class Messenger
         return null;
     }
 
-    static AsyncMsgInfoBase GetMsgInfo<T>(string eventType, T arg1)
+    static AsyncMsgInfoBase GetMsgInfo<T>(uint eventType, T arg1)
     {
         Delegate d;
         if (m_eventListenTable.TryGetValue(eventType, out d))
@@ -607,7 +736,7 @@ static public class Messenger
         return null;
     }
 
-    static AsyncMsgInfoBase GetMsgInfo<T, U>(string eventType, T arg1, U arg2)
+    static AsyncMsgInfoBase GetMsgInfo<T, U>(uint eventType, T arg1, U arg2)
     {
         Delegate d;
         if (m_eventListenTable.TryGetValue(eventType, out d))
@@ -629,7 +758,7 @@ static public class Messenger
         return null;
     }
 
-    static AsyncMsgInfoBase GetMsgInfo<T, U, V>(string eventType, T arg1, U arg2, V arg3)
+    static AsyncMsgInfoBase GetMsgInfo<T, U, V>(uint eventType, T arg1, U arg2, V arg3)
     {
         Delegate d;
         if (m_eventListenTable.TryGetValue(eventType, out d))
@@ -665,7 +794,7 @@ static public class Messenger
         }
     }
 
-    static AsyncMsgInfoBase GetFromPool(string eventType)
+    static AsyncMsgInfoBase GetFromPool(uint eventType)
     {
         if (m_eventTypeList_Pool.ContainsKey(eventType))
         {
@@ -681,24 +810,4 @@ static public class Messenger
 
     #endregion
 }
-public sealed class MessengerHelper : MonoBehaviour
-{
-    void Awake()
-    {
-        DontDestroyOnLoad(gameObject);
-    }
 
-    //Clean up eventTable every time a new level loads.
-    public void OnLevelWasLoaded(int unused)
-    {
-        //Messenger.Cleanup();
-    }
-    public void OnDisable()
-    {
-        Messenger.Cleanup();
-    }
-    private void Update()
-    {
-        Messenger.Update();
-    }
-}

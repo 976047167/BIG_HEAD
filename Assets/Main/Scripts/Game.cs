@@ -41,6 +41,7 @@ public class Game : MonoBehaviour
     void StartGame()
     {
         ProcedureManager.ChangeProcedure<Procedure_Launch>();
+
         dataMgr.OnInit();
         //SceneManager.LoadScene("Init");
 

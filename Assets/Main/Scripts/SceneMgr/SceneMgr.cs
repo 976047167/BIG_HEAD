@@ -6,13 +6,8 @@ using AppSettings;
 
 public class SceneMgr
 {
-
-    public static void LoadScene(int seneId)
+    public static void ChangeScene(int sceneId)
     {
-        
-    }
-    public static void LoadSceneAdditive(int seneId)
-    {
-        
+        ProcedureManager.ChangeProcedure<Procedure_ChangeScene>(sceneId);
     }
 }

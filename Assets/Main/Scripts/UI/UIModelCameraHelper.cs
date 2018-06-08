@@ -12,4 +12,8 @@ public class UIModelCameraHelper : MonoBehaviour
             DontDestroyOnLoad(gameObject);
         }
     }
+    private void Update()
+    {
+        UIModule.Instance.UpdateForms();
+    }
 }

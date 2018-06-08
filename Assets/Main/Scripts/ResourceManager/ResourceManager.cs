@@ -146,12 +146,17 @@ public class ResourceManager
     /// </summary>
     public static void LoadScene(string path, Action<string, object[]> callback, Action<string, object[]> failure, params object[] userData)
     {
+        path = "Scenes/" + path + (EditorMode ? "" : BUNDLE_SUFFIX);
         if (EditorMode)
         {
-            SceneManager.LoadScene(path);
+            bool addtive = (bool)userData[0];
+            if (addtive)
+                SceneManager.LoadScene(System.IO.Path.Combine(Application.dataPath, "Main/BundleEditor/" + path), LoadSceneMode.Additive);
+            else
+                SceneManager.LoadScene(System.IO.Path.Combine("", "Main/BundleEditor/" + path), LoadSceneMode.Single);
+            callback(path, userData);
+            return;
         }
-
-        path = "Scenes/" + path + (EditorMode ? ".scene" : BUNDLE_SUFFIX);
         AssetLoader assetLoader = AssetLoader.Get(path, AssetType.Scene);
         assetLoader.AddLoadRequest(new LoadRequestScene(callback, failure, userData));
         helper.StartCoroutine(assetLoader.Load());

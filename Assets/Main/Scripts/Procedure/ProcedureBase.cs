@@ -1,12 +1,16 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
 public abstract class ProcedureBase
 {
-    public virtual void OnInit(object userdata = null)
+    /// <summary>
+    /// 可以初始化失败
+    /// </summary>
+    /// <param name="userdata"></param>
+    /// <returns></returns>
+    public virtual bool OnInit(object userdata = null)
     {
-
+        return true;
     }
     public virtual void OnEnter(ProcedureBase last)
     {

@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class UIModule
+public partial class UIModule
 {
     private UIModule()
     {
@@ -26,7 +26,7 @@ public class UIModule
 
     Dictionary<Type, UIFormBase> DicOpenedUIForm = new Dictionary<Type, UIFormBase>();
     static int baseDepth = 0;
-
+    UIModelCameraHelper uiCameraHelper = null;
     void LoadUIRoot(Type formType)
     {
         ResourceManager.LoadGameObject("UI/UI Root", (path, args, root) =>
@@ -35,6 +35,11 @@ public class UIModule
             {
                 uiRoot = root.transform;
                 uiCamera = uiRoot.Find("Camera");
+                uiCameraHelper = uiRoot.GetComponent<UIModelCameraHelper>();
+                if (uiCameraHelper == null)
+                {
+                    uiCameraHelper = root.AddComponent<UIModelCameraHelper>();
+                }
                 GameObject.DontDestroyOnLoad(root);
             }
             else
@@ -48,7 +53,7 @@ public class UIModule
 
     public void OpenForm<T>(object userdata = null) where T : UIFormBase
     {
-        OpenForm(typeof(T));
+        OpenForm(typeof(T), userdata);
     }
     void OpenForm(Type formType, object userdata = null)
     {
@@ -102,6 +107,7 @@ public class UIModule
         }
         DicOpenedUIForm[(userData[0] as Type)] = script;
         script.Init(userData[1]);
+        Messenger.Broadcast<UIFormBase>(MessageID.UI_FORM_LOADED, script);
     }
     void LoadFormFailed(string path, object[] userData)
     {
@@ -109,6 +115,10 @@ public class UIModule
     }
     public T GetForm<T>() where T : UIFormBase
     {
+        if (DicOpenedUIForm.ContainsKey(typeof(T)) == false)
+        {
+            return null;
+        }
         return DicOpenedUIForm[typeof(T)] as T;
     }
 
@@ -159,20 +169,32 @@ public class UIModule
         }
     }
 
-    static Dictionary<Type, UIConfig> DicUIConfig = new Dictionary<Type, UIConfig>()
+    List<Type> m_RemoveList = new List<Type>();
+    List<UIFormBase> m_RormList = new List<UIFormBase>();
+    public void UpdateForms()
     {
-        {typeof(UIBattleForm),new UIConfig("Instance/WND_BattleForm") },
-        {typeof(UIMapInfo),new UIConfig("WND_MapInfo") },
-        {typeof(WND_Dialog),new UIConfig("WND_Dialog") },
-        {typeof(WND_Bag),new UIConfig("WND_Bag") },
-        {typeof(WND_ShowCard),new UIConfig("WND_ShowCard") },
-        {typeof(WND_Kaku),new UIConfig("WND_Kaku") },
-        {typeof(UIMenu),new UIConfig("WND_Menu") },
-        {typeof(WND_Reward),new UIConfig("WND_Reward") },
-        {typeof(WND_MainTown),new UIConfig("Lobby/WND_MainTown") },
-        {typeof(WND_ChoseDeck),new UIConfig("WND_ChoseDeck") },
-        {typeof(WND_Loading),new UIConfig("Internal/WND_Loading") }
-    };
+        foreach (var form in DicOpenedUIForm)
+        {
+            if (form.Value == null)
+            {
+                m_RemoveList.Add(form.Key);
+                continue;
+            }
+            m_RormList.Add(form.Value);
+        }
+        for (int i = 0; i < m_RormList.Count; i++)
+        {
+            m_RormList[i].FormUpdate();
+        }
+        for (int i = 0; i < m_RemoveList.Count; i++)
+        {
+            CloseForm(m_RemoveList[i]);
+        }
+        m_RemoveList.Clear();
+        m_RormList.Clear();
+    }
+
+
     //public bool SetUICamera(UIModelCameraHelper uiCameraHelper)
     //{
     //    if (uiCamera == null)

@@ -2946,6 +2946,11 @@ namespace AppSettings
         /// </summary>
         public string Path { get; private set;}
         
+        /// <summary>
+        /// 场景逻辑
+        /// </summary>
+        public string Procedure { get; private set;}
+        
 
         internal SceneTableSetting(TableFileRow row)
         {
@@ -2957,6 +2962,7 @@ namespace AppSettings
             Id = row.Get_int(row.Values[0], ""); 
             Name = row.Get_string(row.Values[1], ""); 
             Path = row.Get_string(row.Values[2], ""); 
+            Procedure = row.Get_string(row.Values[3], ""); 
         }
 
         /// <summary>

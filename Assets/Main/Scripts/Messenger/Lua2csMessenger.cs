@@ -42,50 +42,50 @@ public class Lua2csMessenger
         set { m_Instance = value; }
 
     }
-    public void Broadcast(string eventType)
+    public void Broadcast(uint eventType)
     {
         Messenger.Broadcast(eventType);
     }
 
-    public void Broadcast(string eventType, Object para1)
+    public void Broadcast(uint eventType, Object para1)
     {
         Messenger.Broadcast<Object>(eventType, para1);
     }
 
-    public void Broadcast(string eventType, Object para1, Object para2)
+    public void Broadcast(uint eventType, Object para1, Object para2)
     {
         Messenger.Broadcast<Object, Object>(eventType, para1, para2);
     }
 
-    public void Broadcast(string eventType, Object para1, Object para2, Object para3)
+    public void Broadcast(uint eventType, Object para1, Object para2, Object para3)
     {
         Messenger.Broadcast<Object, Object, Object>(eventType, para1, para2, para3);
     }
 
-    public void BroadcastAsync(string eventType)
+    public void BroadcastAsync(uint eventType)
     {
         Messenger.BroadcastAsync(eventType);
     }
 
-    public void BroadcastAsync(string eventType, Object para1)
+    public void BroadcastAsync(uint eventType, Object para1)
     {
         Messenger.BroadcastAsync<Object>(eventType, para1);
     }
 
-    public void BroadcastAsync(string eventType, System.Object para1, System.Object para2)
+    public void BroadcastAsync(uint eventType, System.Object para1, System.Object para2)
     {
         Messenger.BroadcastAsync<Object, Object>(eventType, para1, para2);
     }
 
-    public void BroadcastAsync(string eventType, System.Object para1, System.Object para2, System.Object para3)
+    public void BroadcastAsync(uint eventType, System.Object para1, System.Object para2, System.Object para3)
     {
         Messenger.BroadcastAsync<Object, Object, Object>(eventType, para1, para2, para3);
     }
-    public void AddListener(string eventType, Callback callback)
+    public void AddListener(uint eventType, Callback callback)
     {
         Messenger.AddListener(eventType, callback);
     }
-    public void AddListener1(string eventType, MsgCallback1 callback)
+    public void AddListener1(uint eventType, MsgCallback1 callback)
     {
         Callback<object> call = (obj) =>
         {
@@ -96,7 +96,7 @@ public class Lua2csMessenger
         };
         Messenger.AddListener<object>(eventType, call);
     }
-    public void AddListener2(string eventType, MsgCallback2 callback)
+    public void AddListener2(uint eventType, MsgCallback2 callback)
     {
         Callback<object, object> call = (arg0, arg1) =>
          {
@@ -107,7 +107,7 @@ public class Lua2csMessenger
          };
         Messenger.AddListener<object, object>(eventType, call);
     }
-    public void AddListener3(string eventType, MsgCallback3 callback)
+    public void AddListener3(uint eventType, MsgCallback3 callback)
     {
         Callback<object, object, object> call = (arg0, arg1, arg2) =>
          {

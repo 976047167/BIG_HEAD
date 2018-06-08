@@ -1,8 +1,30 @@
 ﻿
 public enum MessageID : uint
 {
+
+    /// <summary>
+    /// UI编号从10000开始
+    /// </summary>
+    UI_START = 10000,
+    /// <summary>
+    /// UI窗口加载完成
+    /// </summary>
+    UI_FORM_LOADED,
+    /// <summary>
+    /// 游戏开始
+    /// </summary>
+    UI_GAME_START,
+    /// <summary>
+    /// 
+    /// </summary>
+    SCENE_LOAD_COMPLETE,
+
+    
+
+
+
     ///<summary> 断线</summary>
-    MSG_LOST_CONNECT_TO_SERVER = 10000,
+    MSG_LOST_CONNECT_TO_SERVER = 100000,
 
     ///<summary> 旧场景准备关闭（新场景准备加载）</summary>
     MSG_SCENE_LOAD_PRE,
