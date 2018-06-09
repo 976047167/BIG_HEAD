@@ -8,9 +8,11 @@ public class BattlePlayer
     public BattlePlayerData Data { get; private set; }
     private BattlePlayerAI playerAI;
     public bool IsMe { get; private set; }
+    public Player Player { get; private set; }
 
     public BattlePlayer(Player player)
     {
+        this.Player = player;
         Data = new BattlePlayerData();
         Data.Name = player.Data.Name;
         Data.HP = player.Data.HP;
@@ -57,7 +59,7 @@ public class BattlePlayer
         Data.CurrentCardList = new List<BattleCardData>(Data.CardList);
         Data.AP = 0;
         Data.MaxAP = 0;
-        IsMe = Data == Game.BattleManager.MyPlayer.Data;
+        IsMe = false;
 
     }
 

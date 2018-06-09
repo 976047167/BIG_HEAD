@@ -18,8 +18,6 @@ public class BattleMgr
     public int MonsterId { get; private set; }
     public BattlePlayer MyPlayer { get; private set; }
     public BattlePlayer OppPlayer { get; private set; }
-    public BattlePlayerData MyPlayerData { get; private set; }
-    public BattlePlayerData OppPlayerData { get; private set; }
     public UIBattleForm BattleForm
     {
         get
@@ -40,7 +38,7 @@ public class BattleMgr
         MyPlayer = new BattlePlayer(Game.DataManager.MyPlayer);
 
 
-        OppPlayer = new BattlePlayer(monsterId);
+        
         OppPlayer.StartAI();
         Game.UI.OpenForm<UIBattleForm>();
     }
@@ -49,9 +47,7 @@ public class BattleMgr
         //Game.UI.CloseForm<UIBattleForm>();
         OppPlayer.StopAI();
         MonsterId = 0;
-        MyPlayerData.BuffList.Clear();
-        MyPlayerData = null;
-        OppPlayerData = null;
+        MyPlayer.Data.BuffList.Clear();
         MyPlayer = null;
         OppPlayer = null;
         State = BattleState.None;
@@ -64,18 +60,18 @@ public class BattleMgr
             Debug.LogError("怪物表格配置错误");
             return;
         }
-        OppPlayerData = new BattlePlayerData();
-        OppPlayerData.HP = monster.HP;
-        OppPlayerData.MaxHP = monster.MaxHp;
-        OppPlayerData.MP = monster.MP;
-        OppPlayerData.MaxMP = monster.MaxMP;
-        OppPlayerData.AP = monster.AP;
-        OppPlayerData.MaxAP = monster.MaxAP;
-        OppPlayerData.Level = monster.Level;
-        OppPlayerData.HeadIcon = monster.IconId;
+        OppPlayer = new BattlePlayer(monsterId);
+        OppPlayer.Data.HP = monster.HP;
+        OppPlayer.Data.MaxHP = monster.MaxHp;
+        OppPlayer.Data.MP = monster.MP;
+        OppPlayer.Data.MaxMP = monster.MaxMP;
+        OppPlayer.Data.AP = monster.AP;
+        OppPlayer.Data.MaxAP = monster.MaxAP;
+        OppPlayer.Data.Level = monster.Level;
+        OppPlayer.Data.HeadIcon = monster.IconId;
         for (int i = 0; i < monster.BattleCards.Count; i++)
         {
-            OppPlayerData.CardList.Add(new BattleCardData(monster.BattleCards[i], OppPlayer));
+            OppPlayer.Data.CardList.Add(new BattleCardData(monster.BattleCards[i], OppPlayer));
         }
         //TODO: Buff Equip
     }
@@ -98,11 +94,11 @@ public class BattleMgr
         {
             return;
         }
-        if (OppPlayerData.HP <= 0)
+        if (OppPlayer.Data.HP <= 0)
         {
             State = BattleState.BattleEnd_Win;
         }
-        if (MyPlayerData.HP <= 0)
+        if (MyPlayer.Data.HP <= 0)
         {
             State = BattleState.BattleEnd_Lose;
         }
@@ -125,7 +121,7 @@ public class BattleMgr
             case BattleState.Ready:
                 break;
             case BattleState.MyRoundStart:
-                MyPlayerData.AP = MyPlayerData.MaxAP = MyPlayerData.MaxAP + 1;
+                MyPlayer.Data.AP = MyPlayer.Data.MaxAP = MyPlayer.Data.MaxAP + 1;
                 State++;
                 break;
             case BattleState.MyDrawCard:
@@ -144,7 +140,7 @@ public class BattleMgr
                 State++;
                 break;
             case BattleState.OppRoundStart:
-                OppPlayerData.AP = OppPlayerData.MaxAP = OppPlayerData.MaxAP + 1;
+                OppPlayer.Data.AP = OppPlayer.Data.MaxAP = OppPlayer.Data.MaxAP + 1;
                 State++;
                 break;
             case BattleState.OppDrawCard:
@@ -395,12 +391,12 @@ public class BattleMgr
             case BattleActionType.Attack:
                 if (owner == MyPlayer)
                 {
-                    OppPlayerData.HP -= actionArg;
+                    OppPlayer.Data.HP -= actionArg;
                     battleForm.AddUIAction(new UIAction_HPDamage(OppPlayer, actionArg));
                 }
                 else if (owner == OppPlayer)
                 {
-                    MyPlayerData.HP -= actionArg;
+                    MyPlayer.Data.HP -= actionArg;
                     battleForm.AddUIAction(new UIAction_HPDamage(MyPlayer, actionArg));
                 }
 

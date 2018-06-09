@@ -56,7 +56,7 @@ public class UIBattleForm : UIFormBase
     void Start()
     {
         myPlayerViews = new PlayerInfoViews(Game.BattleManager.MyPlayer.Data);
-        oppPlayerViews = new PlayerInfoViews(Game.BattleManager.OppPlayerData);
+        oppPlayerViews = new PlayerInfoViews(Game.BattleManager.OppPlayer.Data);
         myPlayerViews.GetUIController(transform.Find("BattleInfo/MeInfo"));
         oppPlayerViews.GetUIController(transform.Find("BattleInfo/OppInfo"));
         resultInfo = transform.Find("ResultInfo").gameObject;
