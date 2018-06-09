@@ -92,12 +92,15 @@ public class UIDrawCall : MonoBehaviour
 	[System.NonSerialized] bool mTextureClip = false;
 	[System.NonSerialized] bool mIsNew = true;
 
-	/// <summary>
-	/// Callback that will be triggered at OnWillRenderObject() time.
-	/// </summary>
+    public delegate void OnUpdateRqCallback(int rq);
+    /// <summary>
+    /// Callback that will be triggered at OnWillRenderObject() time.
+    /// </summary>
 
-	public OnRenderCallback onRender;
-	public delegate void OnRenderCallback (Material mat);
+    public delegate void OnRenderCallback(Material material);
+
+    public OnRenderCallback onRender;
+    public OnUpdateRqCallback onUpdateRQ;
 
 	/// <summary>
 	/// Callback that will be triggered when a new draw call gets created.
@@ -125,14 +128,16 @@ public class UIDrawCall : MonoBehaviour
 				if (mDynamicMat != null)
 				{
 					mDynamicMat.renderQueue = value;
-#if UNITY_EDITOR
+//#if UNITY_EDITOR
 					if (mRenderer != null) mRenderer.enabled = isActive;
-#endif
+//#endif
 				}
 			}
 		}
 	}
 
+    private int mExtraRq = 0;
+    public int ExtraRq { get { return mExtraRq; } set { mExtraRq = value; } }
 	/// <summary>
 	/// Renderer's sorting order, to be used with Unity's 2D system.
 	/// </summary>
@@ -191,7 +196,7 @@ public class UIDrawCall : MonoBehaviour
 		}
 	}
 
-#if UNITY_EDITOR
+//#if UNITY_EDITOR
 
 	/// <summary>
 	/// Whether the draw call is currently active.
@@ -218,7 +223,7 @@ public class UIDrawCall : MonoBehaviour
 		}
 	}
 	bool mActive = true;
-#endif
+//#endif
 
 	/// <summary>
 	/// Transform is cached for speed and efficiency.
@@ -916,7 +921,8 @@ public class UIDrawCall : MonoBehaviour
 		dc.renderQueue = pan.startingRenderQueue;
 		dc.sortingOrder = pan.sortingOrder;
 		dc.manager = pan;
-		return dc;
+        dc.ExtraRq = 0;
+        return dc;
 	}
 
 	/// <summary>
@@ -1044,7 +1050,10 @@ public class UIDrawCall : MonoBehaviour
 			}
 
 			dc.onRender = null;
-
+            dc.onUpdateRQ = null;
+            dc.enabled = true;
+            dc.isActive = true;
+            dc.ExtraRq = 0;
 			if (Application.isPlaying)
 			{
 				if (mActiveList.Remove(dc))
@@ -1065,7 +1074,13 @@ public class UIDrawCall : MonoBehaviour
 			}
 		}
 	}
-
+    public void UpdateRQ()
+    {
+        if (onUpdateRQ!=null)
+        {
+            onUpdateRQ(renderQueue);
+        }
+    }
 #if !UNITY_4_7 && !UNITY_5_0 && !UNITY_5_1 && !UNITY_5_2 && !UNITY_5_3
 	/// <summary>
 	/// Move all draw calls to the specified scene.

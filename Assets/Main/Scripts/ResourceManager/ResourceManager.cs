@@ -536,8 +536,9 @@ public class AssetLoader
                 string sceneName = System.IO.Path.GetFileNameWithoutExtension(scenePaths[0]);
                 AsyncOperation bundleRequest = SceneManager.LoadSceneAsync(sceneName);
                 assetBundleRequest = bundleRequest;
-                bundleRequest.allowSceneActivation = true;
-                while (bundleRequest.isDone == false)
+                bundleRequest.allowSceneActivation = false;
+                //0.9时已经加载完成
+                while (bundleRequest.progress < 0.9f)
                 {
                     yield return null;
                 }

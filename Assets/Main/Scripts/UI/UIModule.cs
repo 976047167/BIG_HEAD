@@ -42,7 +42,7 @@ public partial class UIModule
                 }
                 GameObject.DontDestroyOnLoad(root);
             }
-            else
+            else if (root.transform != uiRoot)
                 GameObject.Destroy(root);
             if (formType != null)
             {
@@ -195,17 +195,22 @@ public partial class UIModule
     }
 
 
-    //public bool SetUICamera(UIModelCameraHelper uiCameraHelper)
-    //{
-    //    if (uiCamera == null)
-    //    {
-    //        uiRoot = uiCameraHelper.transform;
-    //        uiCamera = uiRoot.Find("Camera");
-    //        return true;
-    //    }
-    //    GameObject.Destroy(uiCameraHelper.gameObject);
-    //    return false;
-    //}
+    public bool SetUICamera(UIModelCameraHelper uiCameraHelper)
+    {
+        if (this.uiCameraHelper == uiCameraHelper)
+        {
+            return true;
+        }
+        if (uiCamera == null)
+        {
+            uiRoot = uiCameraHelper.transform;
+            uiCamera = uiRoot.Find("Camera");
+            this.uiCameraHelper = uiCameraHelper;
+            return true;
+        }
+        GameObject.Destroy(uiCameraHelper.gameObject);
+        return false;
+    }
     class UIConfig
     {
         public string PrefabName;

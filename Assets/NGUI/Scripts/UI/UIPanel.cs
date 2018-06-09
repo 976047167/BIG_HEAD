@@ -215,7 +215,8 @@ public class UIPanel : UIRect
 #endif
 	bool mSortWidgets = false;
 	bool mUpdateScroll = false;
-
+    int mExtraRq = 0;
+    public int ExtraRq { get { return mExtraRq; } set { mExtraRq = value; } }
 	/// <summary>
 	/// Helper property that returns the first unused depth value.
 	/// </summary>
@@ -1284,19 +1285,19 @@ public class UIPanel : UIRect
 				{
 					p.startingRenderQueue = rq;
 					p.UpdateDrawCalls(i);
-					rq += p.drawCalls.Count;
+                    rq += p.drawCalls.Count + p.ExtraRq;
 				}
 				else if (p.renderQueue == RenderQueue.StartAt)
 				{
 					p.UpdateDrawCalls(i);
 					if (p.drawCalls.Count != 0)
-						rq = Mathf.Max(rq, p.startingRenderQueue + p.drawCalls.Count);
+                        rq = Mathf.Max(rq, p.startingRenderQueue + p.drawCalls.Count + p.ExtraRq);
 				}
 				else // Explicit
 				{
 					p.UpdateDrawCalls(i);
 					if (p.drawCalls.Count != 0)
-						rq = Mathf.Max(rq, p.startingRenderQueue + 1);
+                        rq = Mathf.Max(rq, p.startingRenderQueue + 1 + p.ExtraRq);
 				}
 			}
 		}
@@ -1401,6 +1402,8 @@ public class UIPanel : UIRect
 						dc.UpdateGeometry(count);
 						dc.onRender = mOnRender;
 						mOnRender = null;
+                        dc.onUpdateRQ = mOnUpdateRQ;
+                        mOnUpdateRQ = null;
 						count = 0;
 						dc = null;
 					}
@@ -1416,6 +1419,10 @@ public class UIPanel : UIRect
 					{
 						dc = UIDrawCall.Create(this, mat, tex, sdr);
 						dc.depthStart = w.depth;
+                        if (w is UIParticle)
+                        {
+                            dc.ExtraRq += (w as UIParticle).extraRQ;
+                        }
 						dc.depthEnd = dc.depthStart;
 						dc.panel = this;
 						dc.onCreateDrawCall = onCreateDrawCall;
@@ -1438,6 +1445,11 @@ public class UIPanel : UIRect
 						if (mOnRender == null) mOnRender = w.mOnRender;
 						else mOnRender += w.mOnRender;
 					}
+                    if (w.onUpdateRQ!=null)
+                    {
+                        if (mOnUpdateRQ == null)mOnUpdateRQ = w.onUpdateRQ;
+                        else mOnUpdateRQ += w.onUpdateRQ;
+                    }
 				}
 			}
 			else w.drawCall = null;
@@ -1449,14 +1461,16 @@ public class UIPanel : UIRect
 			dc.UpdateGeometry(count);
 			dc.onRender = mOnRender;
 			mOnRender = null;
+            dc.onUpdateRQ = mOnUpdateRQ;
+            mOnUpdateRQ = null;
 		}
 	}
 
 	UIDrawCall.OnRenderCallback mOnRender;
-
-	/// <summary>
-	/// Fill the geometry for the specified draw call.
-	/// </summary>
+    UIDrawCall.OnUpdateRqCallback mOnUpdateRQ;
+    /// <summary>
+    /// Fill the geometry for the specified draw call.
+    /// </summary>
 
 	public bool FillDrawCall (UIDrawCall dc)
 	{
@@ -1492,7 +1506,12 @@ public class UIPanel : UIRect
 							if (mOnRender == null) mOnRender = w.mOnRender;
 							else mOnRender += w.mOnRender;
 						}
-					}
+                        if (w.onUpdateRQ != null)
+                        {
+                            if (mOnUpdateRQ == null) mOnUpdateRQ = w.onUpdateRQ;
+                            else mOnUpdateRQ += w.onUpdateRQ;
+                        }
+                    }
 					else w.drawCall = null;
 				}
 				++i;
@@ -1503,7 +1522,9 @@ public class UIPanel : UIRect
 				dc.UpdateGeometry(count);
 				dc.onRender = mOnRender;
 				mOnRender = null;
-				return true;
+                dc.onUpdateRQ = mOnUpdateRQ;
+                mOnUpdateRQ = null;
+                return true;
 			}
 		}
 		return false;
@@ -1560,7 +1581,7 @@ public class UIPanel : UIRect
 
 		Quaternion rot = trans.rotation;
 		Vector3 scale = trans.lossyScale;
-
+        ExtraRq = 0;
 		for (int i = 0; i < drawCalls.Count; ++i)
 		{
 			UIDrawCall dc = drawCalls[i];
@@ -1570,7 +1591,9 @@ public class UIPanel : UIRect
 			t.rotation = rot;
 			t.localScale = scale;
 
-			dc.renderQueue = (renderQueue == RenderQueue.Explicit) ? startingRenderQueue : startingRenderQueue + i;
+            dc.renderQueue = (renderQueue == RenderQueue.Explicit) ? startingRenderQueue : startingRenderQueue + i + ExtraRq;
+            ExtraRq += dc.ExtraRq;
+            dc.UpdateRQ();
 			dc.alwaysOnScreen = alwaysOnScreen &&
 				(mClipping == UIDrawCall.Clipping.None || mClipping == UIDrawCall.Clipping.ConstrainButDontClip);
 			dc.sortingOrder = useSortingOrder ? ((mSortingOrder == 0 && renderQueue == RenderQueue.Automatic) ? sortOrder : mSortingOrder) : 0;

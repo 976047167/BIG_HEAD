@@ -87,7 +87,30 @@ public class UIWidget : UIRect
 			}
 		}
 	}
-
+    private UIDrawCall.OnUpdateRqCallback mOnUpdateRQ = null;
+    public UIDrawCall.OnUpdateRqCallback onUpdateRQ
+    {
+        get
+        {
+            return mOnUpdateRQ;
+        }
+        set
+        {
+            //#if UNITY_FLASH
+            //			if (!(mOnUpdateRQ == value))
+            //#else
+            //            if (mOnUpdateRQ != value)
+            //#endif
+            //            {
+            //#if !UNITY_FLASH
+            //                if (drawCall != null && drawCall.onUpdateRQ != null && mOnUpdateRQ != null)
+            //                    drawCall.onUpdateRQ -= mOnUpdateRQ;
+            //#endif
+            mOnUpdateRQ = value;
+            //    if (drawCall != null) drawCall.onUpdateRQ += value;
+            //}
+        }
+    }
 	/// <summary>
 	/// If set to 'true', the box collider's dimensions will be adjusted to always match the widget whenever it resizes.
 	/// </summary>
