@@ -56,7 +56,7 @@ public class DealEvent
                 for (int j = 0; j < tmpEvent.CostNum; j++)
                 {
                     bool done = false;
-                    foreach (BattleCardData i in Game.DataManager.MyPlayer.Data.EquipList)
+                    foreach (NormalCard i in Game.DataManager.MyPlayer.Data.EquipList)
                     {
                         if (i.CardId == tmpEvent.CostItemId)
                         {

@@ -5,7 +5,7 @@ using System.Collections;
 
 public partial class BattleAction
 {
-    public class EquipEndReplace : BattleActionBase
+    public class EquipEndReplace : BattleAction
     {
         public static BattleActionType ActionType { get { return BattleActionType.EquipEndReplace; } }
         public override void Excute()

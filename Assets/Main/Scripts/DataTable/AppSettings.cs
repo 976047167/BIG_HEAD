@@ -1113,9 +1113,9 @@ namespace AppSettings
         public int SkillId { get; private set;}
         
         /// <summary>
-        /// 图标路径
+        /// 图标
         /// </summary>
-        public string Icon { get; private set;}
+        public int IconId { get; private set;}
         
         /// <summary>
         /// 手上的卡组
@@ -1166,7 +1166,7 @@ namespace AppSettings
             AP = row.Get_int(row.Values[8], ""); 
             MaxAP = row.Get_int(row.Values[9], ""); 
             SkillId = row.Get_int(row.Values[10], ""); 
-            Icon = row.Get_string(row.Values[11], ""); 
+            IconId = row.Get_int(row.Values[11], ""); 
             BattleCards = row.Get_List_int(row.Values[12], ""); 
             BuffIds = row.Get_List_int(row.Values[13], ""); 
             BuffParams = row.Get_List_int(row.Values[14], ""); 

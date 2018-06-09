@@ -37,12 +37,12 @@ public class WND_Launch : UIFormBase
     protected override void OnUpdate()
     {
         base.OnUpdate();
-        
-        if (progress>=100)
+
+        if (progress >= 100)
         {
             ProcedureManager.ChangeProcedure<Procedure_Login>();
         }
-        progress++;
+        progress += 3;
         sliderProgress.value = progress / 100f;
     }
 }

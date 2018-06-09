@@ -16,24 +16,24 @@ public class WND_Bag : UIFormBase
     protected override void OnInit(object userdata)
     {
         base.OnInit(userdata);
-        List<BattleCardData> cardList = Game.DataManager.MyPlayer.Data.CardList;
-        LoadCard((List<BattleCardData>)cardList);
+        List<NormalCard> cardList = Game.DataManager.MyPlayer.Data.CardList;
+        LoadCard(cardList);
     }
     //key为卡片id，value为卡片张数；
-    private void LoadCard(List<BattleCardData> cardList)
+    private void LoadCard(List<NormalCard> cardList)
     {
         foreach (var card in cardList)
         {
 
-                GameObject item = Instantiate(battleCard);
-                int id = card.Data.Id;
-                item.name = "Card" + id;
-                //item.GetComponent<UIBattleCard>().SetData(id);
-                item.AddComponent<UIDragScrollView>();
-                item.transform.parent = grid.transform;
-                item.transform.localPosition = new Vector3();
-                item.transform.localScale = new Vector3(1, 1, 1);
-                item.SetActive(true);
+            GameObject item = Instantiate(battleCard);
+            int id = card.CardId;
+            item.name = "Card" + id;
+            //item.GetComponent<UIBattleCard>().SetData(id);
+            item.AddComponent<UIDragScrollView>();
+            item.transform.parent = grid.transform;
+            item.transform.localPosition = new Vector3();
+            item.transform.localScale = new Vector3(1, 1, 1);
+            item.SetActive(true);
             UIEventListener.Get(item).onClick = (GameObject a) =>
             {
                 UIModule.Instance.OpenForm<WND_ShowCard>(id);

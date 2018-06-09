@@ -5,7 +5,7 @@ using System.Collections;
 
 public partial class BattleAction
 {
-    public class ExtraDamage : BattleActionBase
+    public class ExtraDamage : BattleAction
     {
         public static BattleActionType ActionType { get { return BattleActionType.ExtraDamage; } }
         public override void Excute()

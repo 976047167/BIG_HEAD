@@ -5,7 +5,7 @@ using System.Collections;
 
 public partial class BattleAction
 {
-    public class DodgeDamage : BattleActionBase
+    public class DodgeDamage : BattleAction
     {
         public static BattleActionType ActionType { get { return BattleActionType.DodgeDamage; } }
         public override void Excute()

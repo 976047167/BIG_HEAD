@@ -5,7 +5,7 @@ using UnityEditor;
 using System.IO;
 using System;
 using System.Reflection;
-[CustomEditor(typeof(BattleActionBase))]
+[CustomEditor(typeof(BattleAction))]
 public class CardActionEditor : Editor
 {
     [MenuItem("Tools/BattleAction", false, 1000)]

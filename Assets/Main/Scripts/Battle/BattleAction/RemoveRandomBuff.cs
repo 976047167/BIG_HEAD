@@ -5,7 +5,7 @@ using System.Collections;
 
 public partial class BattleAction
 {
-    public class RemoveRandomBuff : BattleActionBase
+    public class RemoveRandomBuff : BattleAction
     {
         public static BattleActionType ActionType { get { return BattleActionType.RemoveRandomBuff; } }
         public override void Excute()

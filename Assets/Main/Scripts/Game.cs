@@ -42,7 +42,7 @@ public class Game : MonoBehaviour
     {
         ProcedureManager.ChangeProcedure<Procedure_Launch>();
 
-        dataMgr.OnInit();
+        
         //SceneManager.LoadScene("Init");
 
     }

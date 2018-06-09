@@ -52,7 +52,7 @@ public class KaKu {
     {
         if (classType == 0)
             return Cards;
-        return Cards.FindAll((card) => (card.CardData.ClassLimit == classType || includeNone && card.CardData.ClassLimit == 0));
+        return Cards.FindAll((card) => (card.Data.ClassLimit == classType || includeNone && card.Data.ClassLimit == 0));
 
 
     }

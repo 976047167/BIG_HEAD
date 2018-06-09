@@ -5,7 +5,7 @@ using System.Collections;
 
 public partial class BattleAction
 {
-    public class SoulEffect : BattleActionBase
+    public class SoulEffect : BattleAction
     {
         public static BattleActionType ActionType { get { return BattleActionType.SoulEffect; } }
         public override void Excute()

@@ -29,7 +29,8 @@ public class DataMgr
     public AccountData AccountData { get; private set; }
     public PlayerData PlayerData { get; private set; }
     public PlayerDetailData PlayerDetailData { get; private set; }
- 
+
+    static uint uidIndex = 1;
     /// <summary>
     /// 游戏启动时初始化
     /// </summary>
@@ -50,6 +51,19 @@ public class DataMgr
         //MyPlayer.Data.AP = MyPlayer.Data.MaxAP = 1;
         MyPlayer.Data.Level = 1;
         MyPlayer.Data.HeadIcon = 1008;
+        MyPlayer.Data.CardList.Add(new NormalCard(1, uidIndex++));
+        MyPlayer.Data.CardList.Add(new NormalCard(1, uidIndex++));
+        MyPlayer.Data.CardList.Add(new NormalCard(1, uidIndex++));
+        MyPlayer.Data.CardList.Add(new NormalCard(1, uidIndex++));
+        MyPlayer.Data.CardList.Add(new NormalCard(2, uidIndex++));
+        MyPlayer.Data.CardList.Add(new NormalCard(2, uidIndex++));
+        MyPlayer.Data.CardList.Add(new NormalCard(3, uidIndex++));
+        MyPlayer.Data.CardList.Add(new NormalCard(4, uidIndex++));
+        MyPlayer.Data.CardList.Add(new NormalCard(5, uidIndex++));
+        MyPlayer.Data.CardList.Add(new NormalCard(6, uidIndex++));
+        MyPlayer.Data.CardList.Add(new NormalCard(7, uidIndex++));
+
+
 
 
         PlayerDetailData = MyPlayer.DetailData;

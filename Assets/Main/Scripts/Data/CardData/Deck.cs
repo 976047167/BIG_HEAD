@@ -25,8 +25,8 @@ public class Deck {
     public void SetClassType(ClassType newClassType)
     {
         Cards.RemoveAll((card) => (
-            card.CardData.ClassLimit != (int)ClassType.None &&
-            card.CardData.ClassLimit != (int)newClassType)
+            card.Data.ClassLimit != (int)ClassType.None &&
+            card.Data.ClassLimit != (int)newClassType)
             );
 
     }
@@ -74,7 +74,7 @@ public class Deck {
     }
     private void AddNormalCard(NormalCard card)
     {
-        if (card.CardData.ClassLimit != (int)ClassType && card.CardData.ClassLimit !=  (int) ClassType.None)
+        if (card.Data.ClassLimit != (int)ClassType && card.Data.ClassLimit !=  (int) ClassType.None)
         {
             Debug.LogError("加入卡组的卡职业不正确");
             return;

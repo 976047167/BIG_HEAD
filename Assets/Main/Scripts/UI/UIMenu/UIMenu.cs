@@ -13,14 +13,16 @@ public class UIMenu : UIFormBase
 
     }
     // Use this for initialization
-    void Start () {
-		
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
+    void Start()
+    {
+
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+
+    }
     void btnMenuClick(GameObject btn)
     {
         UIModule.Instance.OpenForm<WND_Kaku>();

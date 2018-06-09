@@ -12,6 +12,7 @@ public class WND_MainTown : UIFormBase
     private UILabel labCoin;
     private UILabel labYuanBao;
     private GameObject btnDungeon;
+    private GameObject btnPlot;
 
     // Use this for initialization
     private void Awake()
@@ -22,10 +23,11 @@ public class WND_MainTown : UIFormBase
         labYuanBao = transform.Find("background/spFrameYuanBao/labYuanBaoNum").GetComponent<UILabel>();
         labVipLevel = transform.Find("background/spFrameHead/spVipLevel/labVipLevel").GetComponent<UILabel>();
         btnKaKu = transform.Find("background/btnKaKu").gameObject;
+        btnPlot = transform.Find("background/btnPlot").gameObject;
         btnDungeon = transform.Find("background/btnDungeon").gameObject;
         UIEventListener.Get(btnKaKu).onClick = KakuClick;
         UIEventListener.Get(btnDungeon).onClick = DungeonClick;
-
+        UIEventListener.Get(btnPlot).onClick = Onclick_btnPlot;
     }
 
     private void Start()
@@ -47,5 +49,8 @@ public class WND_MainTown : UIFormBase
         UIModule.Instance.OpenForm<WND_ChoseDeck>(2);
     }
 
-
+    protected void Onclick_btnPlot(GameObject go)
+    {
+        SceneMgr.ChangeScene(3);
+    }
 }

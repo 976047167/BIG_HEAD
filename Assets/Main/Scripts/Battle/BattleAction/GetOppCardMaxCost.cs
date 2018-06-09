@@ -5,7 +5,7 @@ using System.Collections;
 
 public partial class BattleAction
 {
-    public class GetOppCardMaxCost : BattleActionBase
+    public class GetOppCardMaxCost : BattleAction
     {
         public static BattleActionType ActionType { get { return BattleActionType.GetOppCardMaxCost; } }
         public override void Excute()

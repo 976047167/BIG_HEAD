@@ -41,7 +41,7 @@ public class WND_Loading : UIFormBase
         }
         if (progress < 100)
         {
-            progress++;
+            progress += 3;
         }
         if (progress >= 100f && isLoadSceneSuccess == false)
         {

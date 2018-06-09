@@ -9,7 +9,7 @@ public class BattleMgr
 {
     public const int MAX_HAND_CARD_COUNT = 7;
 
-    
+
 
     UIBattleForm battleForm;
     public BattleState State { get; private set; }
@@ -37,31 +37,10 @@ public class BattleMgr
         Debug.Log("StartBattle => " + monsterId);
         MonsterId = monsterId;
         SetOppData(monsterId);
-        
-        MyPlayerData = MyPlayer.Data;
-        MyPlayerData = new BattlePlayerData();
-        MyPlayerData.Name = "player No.1";
-        MyPlayerData.HP = MyPlayerData.MaxHP = 10;
-        MyPlayerData.MP = MyPlayerData.MaxMP = 2;
-        MyPlayerData.AP = MyPlayerData.MaxAP = 1;
-        MyPlayerData.Level = 1;
-        MyPlayerData.SkillId = 0;
-        MyPlayerData.HeadIcon = "Head/npc_009";
-        MyPlayerData.CardList.Clear();
-        MyPlayerData.CardList.Add(new BattleCardData(1, MyPlayer));
-        MyPlayerData.CardList.Add(new BattleCardData(1, MyPlayer));
-        MyPlayerData.CardList.Add(new BattleCardData(1, MyPlayer));
-        MyPlayerData.CardList.Add(new BattleCardData(1, MyPlayer));
-        MyPlayerData.CardList.Add(new BattleCardData(2, MyPlayer));
-        MyPlayerData.CardList.Add(new BattleCardData(2, MyPlayer));
-        MyPlayerData.CardList.Add(new BattleCardData(3, MyPlayer));
-        MyPlayerData.CardList.Add(new BattleCardData(4, MyPlayer));
-        MyPlayerData.CardList.Add(new BattleCardData(5, MyPlayer));
-        MyPlayerData.CardList.Add(new BattleCardData(6, MyPlayer));
-        MyPlayerData.CardList.Add(new BattleCardData(7, MyPlayer));
-        MyPlayer = new BattlePlayer(MyPlayerData);
+        MyPlayer = new BattlePlayer(Game.DataManager.MyPlayer);
 
-        OppPlayer = new BattlePlayer(OppPlayerData);
+
+        OppPlayer = new BattlePlayer(monsterId);
         OppPlayer.StartAI();
         Game.UI.OpenForm<UIBattleForm>();
     }
@@ -93,7 +72,7 @@ public class BattleMgr
         OppPlayerData.AP = monster.AP;
         OppPlayerData.MaxAP = monster.MaxAP;
         OppPlayerData.Level = monster.Level;
-        OppPlayerData.HeadIcon = monster.Icon;
+        OppPlayerData.HeadIcon = monster.IconId;
         for (int i = 0; i < monster.BattleCards.Count; i++)
         {
             OppPlayerData.CardList.Add(new BattleCardData(monster.BattleCards[i], OppPlayer));
@@ -351,9 +330,13 @@ public class BattleMgr
                 {
                     ApplyAction(buff.Data.ActionTypes[i], buff.Data.ActionPrarms[i], buff.CardData, playerData, playerData);
                     buff.Time--;
-                    if (buff.Time <= 0)
+                    if (buff.Time == 0)
                     {
                         removeList.Add(buff);
+                    }
+                    if (buff.Time < 0)
+                    {
+                        buff.Time = -1;
                     }
                 }
             }
@@ -380,7 +363,7 @@ public class BattleMgr
     {
         if (target == null)
         {
-            if (owner== OppPlayer)
+            if (owner == OppPlayer)
             {
 
             }
@@ -442,7 +425,7 @@ public class BattleMgr
 
 
 
-    
+
 
     /// <summary>
     /// 回合开始 -> 抽卡阶段 -> 行动阶段（出牌） -> 行动结束-> 回合结束

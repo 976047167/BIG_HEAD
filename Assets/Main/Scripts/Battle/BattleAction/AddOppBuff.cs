@@ -5,7 +5,7 @@ using System.Collections;
 
 public partial class BattleAction
 {
-    public class AddOppBuff : BattleActionBase
+    public class AddOppBuff : BattleAction
     {
         public static BattleActionType ActionType { get { return BattleActionType.AddOppBuff; } }
         public override void Excute()

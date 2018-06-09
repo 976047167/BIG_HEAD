@@ -5,7 +5,7 @@ using System.Collections;
 
 public partial class BattleAction
 {
-    public class RemoveBuffLayers : BattleActionBase
+    public class RemoveBuffLayers : BattleAction
     {
         public static BattleActionType ActionType { get { return BattleActionType.RemoveBuffLayers; } }
         public override void Excute()

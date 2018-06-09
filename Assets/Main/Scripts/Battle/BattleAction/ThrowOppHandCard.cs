@@ -5,7 +5,7 @@ using System.Collections;
 
 public partial class BattleAction
 {
-    public class ThrowOppHandCard : BattleActionBase
+    public class ThrowOppHandCard : BattleAction
     {
         public static BattleActionType ActionType { get { return BattleActionType.ThrowOppHandCard; } }
         public override void Excute()

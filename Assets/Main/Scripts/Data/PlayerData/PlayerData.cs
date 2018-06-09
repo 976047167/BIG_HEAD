@@ -14,24 +14,25 @@ public class PlayerData
     public int MP;
     public int MaxMP;
     public int HeadIcon;
-
+    public int MapSkillID;
+    public int BattleSkillID;
     public uint UsingDeck;
     public int UsingCharacter;
 
-    private List<BattleCardData> m_EquipList = new List<BattleCardData>();
+    private List<NormalCard> m_EquipList = new List<NormalCard>();
     /// <summary>
     /// 
     /// </summary>
-    private List<BattleBuffData> m_BuffList = new List<BattleBuffData>();
+    private List<NormalCard> m_BuffList = new List<NormalCard>();
     /// <summary>
     /// 当前设置的卡牌库，除了初始化，不许改
     /// </summary>
-    private List<BattleCardData> mCardList = new List<BattleCardData>();
+    private List<NormalCard> mCardList = new List<NormalCard>();
 
-    public List<BattleCardData> EquipList { get { return m_EquipList; } }
+    public List<NormalCard> EquipList { get { return m_EquipList; } }
 
-    public List<BattleBuffData> BuffList { get { return m_BuffList; } }
+    public List<NormalCard> BuffList { get { return m_BuffList; } }
 
-    public List<BattleCardData> CardList { get { return mCardList; } }
+    public List<NormalCard> CardList { get { return mCardList; } }
 
 }

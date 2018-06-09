@@ -55,7 +55,7 @@ public class UIBattleForm : UIFormBase
     // Use this for initialization
     void Start()
     {
-        myPlayerViews = new PlayerInfoViews(Game.BattleManager.MyPlayerData);
+        myPlayerViews = new PlayerInfoViews(Game.BattleManager.MyPlayer.Data);
         oppPlayerViews = new PlayerInfoViews(Game.BattleManager.OppPlayerData);
         myPlayerViews.GetUIController(transform.Find("BattleInfo/MeInfo"));
         oppPlayerViews.GetUIController(transform.Find("BattleInfo/OppInfo"));
@@ -291,7 +291,7 @@ public class UIBattleForm : UIFormBase
         }
         public void UpdateInfo()
         {
-            if (utHeadIcon.mainTexture == null || utHeadIcon.mainTexture.name != bindPlayerData.HeadIcon)
+            if (utHeadIcon.mainTexture == null)
             {
                 utHeadIcon.Load(bindPlayerData.HeadIcon);
             }

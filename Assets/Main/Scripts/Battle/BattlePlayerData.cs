@@ -16,7 +16,7 @@ public class BattlePlayerData
     public int MaxMP;
     public int AP;
     public int MaxAP;
-    public string HeadIcon;
+    public int HeadIcon;
 
     //public BattleCardData
     public List<BattleCardData> EquipList = new List<BattleCardData>();

@@ -5,7 +5,7 @@ using System.Collections;
 
 public partial class BattleAction
 {
-    public class BuffLayerEffect : BattleActionBase
+    public class BuffLayerEffect : BattleAction
     {
         public static BattleActionType ActionType { get { return BattleActionType.BuffLayerEffect; } }
         public override void Excute()

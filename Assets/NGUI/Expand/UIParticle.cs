@@ -45,6 +45,60 @@ public class UIParticle : UIWidget
         return Particles != null && Particles.Count > 0;
     }
 
+    //void OnWillRenderObject()
+    //{
+    //    if (panel==null)
+    //    {
+    //        return;
+    //    }
+    //    if (panel.hasClipping)
+    //    {
+    //        //裁剪区域
+    //        Vector4 cr = panel.drawCallClipRange;
+    //        //裁剪边儿的柔和度
+    //        Vector2 soft = panel.clipSoftness;
+
+    //        Vector2 sharpenss = new Vector2(1000.0f, 1000.0f);
+
+    //        if (soft.x > 0f)
+    //            sharpenss.x = cr.z / soft.x;
+    //        if (soft.y > 0f)
+    //            sharpenss.y = cr.w / soft.y;
+
+    //        //经过测试粒子系统产生的Mesh是不受UIPanel缩放比影响的
+    //        //所以要将其缩放比记录下来
+    //        float scale = panel.transform.lossyScale.x;
+    //        //粒子系统的顶点坐标系相对于panel会有一定的偏移，所以要将其position记录下来
+    //        Vector3 position = panel.transform.position;
+
+    //        Debug.Assert(dyMaterial != null, "dyMaterial 创建失败！！！！！！");
+
+    //        //坐标变化的顺序：缩放、旋转、平移，这里不考虑粒子系统的旋转
+    //        dyMaterial.SetVector
+    //        (
+    //            Shader.PropertyToID("_ClipRange0"),
+    //            new Vector4(
+    //                         -cr.x / cr.z - position.x / scale / cr.z,
+    //                         -cr.y / cr.w - position.y / scale / cr.w,
+    //                         1f / cr.z / scale,
+    //                         1f / cr.w / scale
+    //                        )
+    //        );
+
+    //        dyMaterial.SetVector(Shader.PropertyToID("_ClipArgs0"), new Vector4(sharpenss.x, sharpenss.y, 0, 1));
+    //    }
+    //}
+    List<Material> changedMats = new List<Material>();
+
+    private void OnDestroy()
+    {
+        if (gameObject.scene == null)
+            return;
+        for (int i = 0; i < changedMats.Count; i++)
+        {
+            Destroy(changedMats[i]);
+        }
+    }
     #region Play and Stop
     protected override void OnDisable()
     {
@@ -340,26 +394,26 @@ public class UIParticle : UIWidget
                             {
                                 continue;
                             }
-                            if (Application.isPlaying == true)
-                                ren.material.renderQueue = renderQueue + i;
-                            else
-                                ren.material.renderQueue = renderQueue + i;
+                            ren.material.renderQueue = renderQueue + i;
+                            if (!changedMats.Contains(ren.material))
+                            {
+                                changedMats.Add(ren.material);
+                            }
+
                             lastRender = ren;
                         }
-                    }
-                    else
-                    {
-                        //if (ren.sharedMaterial)
-                        //    if (Application.isPlaying == true)
-                        //        ren.sharedMaterial.renderQueue = renderQueue + i;
-                        //    else
-                        //        ren.sharedMaterial.renderQueue = renderQueue + i;
                     }
 
 
 #else
                     if(ren.material)
-                         ren.material.renderQueue = renderQueue + i;
+                    {
+                        ren.material.renderQueue = renderQueue + i;
+                        if (!changedMats.Contains(ren.material))
+                        {
+                            changedMats.Add(ren.material);
+                        }
+                    }
 #endif
                     ren.sortingOrder = 0;
                     ren.sortingLayerName = "Default";

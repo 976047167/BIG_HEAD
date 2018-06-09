@@ -5,7 +5,7 @@ using System.Collections;
 
 public partial class BattleAction
 {
-    public class LostSelfPercentHP : BattleActionBase
+    public class LostSelfPercentHP : BattleAction
     {
         public static BattleActionType ActionType { get { return BattleActionType.LostSelfPercentHP; } }
         public override void Excute()

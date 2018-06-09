@@ -21,8 +21,8 @@ public class MapLogic : MonoBehaviour
         mainCamera = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();
         MakeMap();
         MakePlayer();
-        Game.UI.OpenForm<UIMapInfo>();
-        Game.UI.OpenForm<UIMenu>();
+        //Game.UI.OpenForm<UIMapInfo>();
+        //Game.UI.OpenForm<UIMenu>();
     }
 
     // Update is called once per frame
