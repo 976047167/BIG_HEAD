@@ -49,7 +49,7 @@ public class WND_ChoseDeck : UIFormBase {
                         item.name = "" + chararcter.Id;
                         item.GetComponent<UITexture>().Load(chararcter.Image);
                         item.transform.Find("CheckMark").GetComponent<UITexture>().Load(chararcter.Image);
-                        EventDelegate.Add(item.GetComponent<UIToggle>().onChange, OnClassCharacterChose);
+                        //EventDelegate.Add(item.GetComponent<UIToggle>().onChange, OnClassCharacterChose);
                         item.transform.SetParent(classTypeGrid.transform, false);
                         item.transform.localPosition = new Vector3();
                         item.transform.localScale = new Vector3(1, 1, 1);
@@ -72,6 +72,7 @@ public class WND_ChoseDeck : UIFormBase {
 
 
     }
+    /*
     private void OnClassCharacterChose()
     {
        if( UIToggle.current.value == true)
@@ -85,6 +86,7 @@ public class WND_ChoseDeck : UIFormBase {
             LoadDeckList(ClassCharacterTableSettings.Get(classCharacter).ClassType);
         }
     }
+
     private void LoadDeckList(int classType)
     {
         foreach (var trans in deckGrid.GetChildList())
@@ -110,7 +112,7 @@ public class WND_ChoseDeck : UIFormBase {
         }
         deckGrid.repositionNow = true;
     }
-
+    */
     private void ExitClick (GameObject obj)
     {
            print("ExitClick");

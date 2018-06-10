@@ -15,8 +15,9 @@ public class WND_MainTown : UIFormBase
     private GameObject btnPlot;
 
     // Use this for initialization
-    private void Awake()
+    protected override void OnInit(object userdata)
     {
+        base.OnInit(userdata);
         labName = transform.Find("background/spFrameHead/labName").GetComponent<UILabel>();
         labLevel = transform.Find("background/spFrameHead/spLevel/labLevel").GetComponent<UILabel>();
         labCoin = transform.Find("background/spFrameCoin/labCoinNum").GetComponent<UILabel>();
@@ -29,24 +30,24 @@ public class WND_MainTown : UIFormBase
         UIEventListener.Get(btnDungeon).onClick = DungeonClick;
         UIEventListener.Get(btnPlot).onClick = Onclick_btnPlot;
     }
-
-    private void Start()
+    protected override void OnOpen()
     {
+        base.OnOpen();
         labName.text = Game.DataManager.MyPlayer.Data.Name;
-        labLevel.text = "" + Game.DataManager.MyPlayer.Data.Level;
-        labVipLevel.text = "" + Game.DataManager.AccountData.VipLevel;
-        labYuanBao.text = "" + Game.DataManager.AccountData.Diamonds;
-        labCoin.text = "" + Game.DataManager.AccountData.Gold;
+        labLevel.text =  Game.DataManager.MyPlayer.Data.Level.ToString();
+        labVipLevel.text =  Game.DataManager.AccountData.VipLevel.ToString();
+        labYuanBao.text = Game.DataManager.AccountData.Diamonds.ToString();
+        labCoin.text = Game.DataManager.AccountData.Gold.ToString();
 
     }
 
     private void KakuClick(GameObject obj)
     {
-        UIModule.Instance.OpenForm<WND_ChoseDeck>(1);
+        UIModule.Instance.OpenForm<WND_Kaku>(1);
     }
     private void DungeonClick(GameObject obj)
     {
-        UIModule.Instance.OpenForm<WND_ChoseDeck>(2);
+      //  UIModule.Instance.OpenForm<WND_ChoseDeck>(2);
     }
 
     protected void Onclick_btnPlot(GameObject go)

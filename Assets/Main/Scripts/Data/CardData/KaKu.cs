@@ -57,12 +57,20 @@ public class KaKu {
 
     }
     //从卡库中剔除卡组的卡片
-    public List<NormalCard> GetCardsWithDeck(Deck deck) { 
+    public List<NormalCard> GetCardsWithDeck(Deck deck) {
+        List<NormalCard> result = new List<NormalCard>();
 
-
-        List<NormalCard> result =GetClassTypeCards(deck.ClassType,true);
-        return result.FindAll((card) => (deck.Cards.Exists((item)=>(item == card)) == false));
-    
+        for (int i = 0;i< Cards.Count; i++)
+        {
+            for (int j = 0; j < deck.Cards.Count; j++)
+            {
+                if (Cards[i] == deck.Cards[j])
+                    break;
+                if (j == deck.Cards.Count - 1)
+                    result.Add(Cards[i]);
+            }
+        }
+        return result;
 
     }
 

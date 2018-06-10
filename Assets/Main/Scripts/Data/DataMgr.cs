@@ -80,17 +80,13 @@ public class DataMgr
         PlayerDetailData.Kaku.Add(new NormalCard(7));
 
 
-        uint uid = 124111315;
-        Deck tmpDeck = new Deck(uid);
-        tmpDeck.SetDeckName("卡组1");
-        tmpDeck.SetClassType(ClassType.Warriop);
+        Deck tmpDeck = new Deck();
         tmpDeck.AddCard(1);
         tmpDeck.AddCard(1);
         tmpDeck.AddCard(2);
         tmpDeck.AddCard(3);
-        PlayerDetailData.Decks.Add(tmpDeck);
-        MyPlayer.Data.UsingCharacter = 1;
-        MyPlayer.Data.UsingDeck = uid;
+        PlayerDetailData.Deck=tmpDeck;
+
 
 
 

@@ -10,7 +10,7 @@ public class PlayerDetailData
 
     
 
-    public List<Deck> Decks = new List<Deck>();
+    public Deck Deck = new Deck();
     public KaKu Kaku = new KaKu();
     
     public Dictionary<ClassType, ClassData> DicAllClassData = new Dictionary<ClassType, ClassData>();
