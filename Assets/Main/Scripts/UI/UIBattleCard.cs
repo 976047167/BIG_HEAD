@@ -206,7 +206,7 @@ public class UIBattleCard : MonoBehaviour
     {
         CardData = card;
         cacheForm = form;
-        m_TexIcon.Load(card.Data.Icon);
+        m_TexIcon.Load(card.Data.IconID);
         m_lblName.text = CardData.Data.Name;
         if (CardData.Data.Type != 0)
         {

@@ -377,7 +377,7 @@ public class UIBattleForm : UIFormBase
                 {
                     buffIcon = Instantiate(goBuffIconTemplete, gridBuffGrid.transform);
                     BuffIcons.Add(buffData.BuffId, buffIcon);
-                    buffIcon.GetComponent<UITexture>().Load(buffData.Data.Icon);
+                    buffIcon.GetComponent<UITexture>().Load(buffData.Data.IconID);
                     gridBuffGrid.Reposition();
                 }
                 else
