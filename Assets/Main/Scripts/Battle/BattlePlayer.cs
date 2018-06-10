@@ -62,7 +62,19 @@ public class BattlePlayer
         IsMe = false;
 
     }
-
+    /// <summary>
+    /// 应用卡牌的效果
+    /// </summary>
+    /// <param name="cardData"></param>
+    public void ApplyCardEffect(BattleCardData cardData)
+    {
+        cardData.Owner.Data.UsedCardList.Add(cardData);
+        cardData.Owner.Data.AP -= cardData.Data.Spending;
+        for (int i = 0; i < cardData.Data.ActionTypes.Count; i++)
+        {
+            ApplyAction(cardData.Data.ActionTypes[i], cardData.Data.ActionParams[i], cardData.Data.ActionParams[i], cardData, cardData.Owner, null);
+        }
+    }
     /// <summary>
     /// 触发buff的时机  1回合开始,2回合结束,3受到伤害,4发起伤害
     /// </summary>
@@ -96,7 +108,7 @@ public class BattlePlayer
         }
     }
 
-    void ApplyAction(int actionType, int actionArg, int actionArg2, BattleCardData cardData, BattlePlayer owner, BattlePlayer target)
+    public void ApplyAction(int actionType, int actionArg, int actionArg2, BattleCardData cardData, BattlePlayer owner, BattlePlayer target)
     {
         if (target == null)
         {
