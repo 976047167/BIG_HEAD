@@ -107,7 +107,7 @@ public class WND_Reward : UIFormBase
             };
             UITexture icon = item.transform.Find("texReward").GetComponent<UITexture>();
             icon.gameObject.SetActive(true);
-            icon.Load(cardData.Icon);
+            icon.Load(cardData.IconID);
             item.transform.parent = grid.transform;
             item.transform.localPosition = new Vector3();
             item.transform.localScale = new Vector3(1, 1, 1);

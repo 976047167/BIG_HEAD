@@ -25,7 +25,7 @@ public class UINormalCard : MonoBehaviour
         CardId = cardId;
         CardNum =1 ;
         CardData = BattleCardTableSettings.Get(CardId);
-        Icon.Load(CardData.Icon);
+        Icon.Load(CardData.IconID);
         labSpending.text = "" + CardData.Spending;
 
 

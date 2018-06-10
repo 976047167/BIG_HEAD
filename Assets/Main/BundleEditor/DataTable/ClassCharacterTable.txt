@@ -1,7 +1,7 @@
-Id	Name	Desc	ClassType	Icon	Image	MapSkillId	BattleSkillId	ChooseText	DefaultCardList
+Id	Name	Desc	ClassType	IconID	Image	MapSkillId	BattleSkillId	ChooseText	DefaultCardList
 int	string 	string	int	int	int	int	int	int	List<int>
-1	战士	拥有强大力量的人类	1	0	8	0	0	0	1,2,3,4,5
+1	战士	拥有强大力量的人类	1	1	8	0	0	0	1,2,3,4,5
 2	战士	拥有强大力量的人类	2	1	9	1	1	1	1,2,3,4,6
-3	战士	拥有强大力量的人类	3	2	10	2	2	2	1,2,3,4,7
-4	战士	拥有强大力量的人类	4	3	11	3	3	3	1,2,3,4,8
-5	战士	拥有强大力量的人类	5	4	12	4	4	4	1,2,3,4,9
+3	战士	拥有强大力量的人类	3	1	10	2	2	2	1,2,3,4,7
+4	战士	拥有强大力量的人类	4	1	11	3	3	3	1,2,3,4,8
+5	战士	拥有强大力量的人类	5	1	12	4	4	4	1,2,3,4,9

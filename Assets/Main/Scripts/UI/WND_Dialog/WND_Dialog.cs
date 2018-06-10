@@ -92,8 +92,8 @@ public class WND_Dialog : UIFormBase
         
 
          printString = DialogTableSettings.Get(Id).Text;
-        string path = DialogTableSettings.Get(Id).ImagePath;
-        if (path == "")
+        int path = DialogTableSettings.Get(Id).ImagePath;
+        if (path == 0)
             imgHead.gameObject.SetActive(false);
         else
         {

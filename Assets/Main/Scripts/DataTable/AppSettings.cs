@@ -280,7 +280,7 @@ namespace AppSettings
         /// <summary>
         /// Buff图标
         /// </summary>
-        public string Icon { get; private set;}
+        public int IconID { get; private set;}
         
         /// <summary>
         /// 是否可以叠加
@@ -333,7 +333,7 @@ namespace AppSettings
             Id = row.Get_int(row.Values[0], ""); 
             Name = row.Get_string (row.Values[1], ""); 
             Desc = row.Get_string(row.Values[2], ""); 
-            Icon = row.Get_string(row.Values[3], ""); 
+            IconID = row.Get_int(row.Values[3], ""); 
             IsSuperposition = row.Get_bool(row.Values[4], ""); 
             MaxFloor = row.Get_int(row.Values[5], ""); 
             DispelGrade = row.Get_int(row.Values[6], ""); 
@@ -575,7 +575,7 @@ namespace AppSettings
         /// <summary>
         /// 图标
         /// </summary>
-        public int Icon { get; private set;}
+        public int IconID { get; private set;}
         
         /// <summary>
         /// 卡片展示ID
@@ -624,7 +624,7 @@ namespace AppSettings
             Quality = row.Get_int(row.Values[6], ""); 
             Spending = row.Get_int(row.Values[7], ""); 
             ClassLimit = row.Get_int(row.Values[8], ""); 
-            Icon = row.Get_int(row.Values[9], ""); 
+            IconID = row.Get_int(row.Values[9], ""); 
             Show = row.Get_int(row.Values[10], ""); 
             Effect = row.Get_int(row.Values[11], ""); 
             Price = row.Get_int(row.Values[12], ""); 
@@ -834,7 +834,7 @@ namespace AppSettings
         /// <summary>
         /// 装备图标
         /// </summary>
-        public string Icon { get; private set;}
+        public int IconID { get; private set;}
         
         /// <summary>
         /// 次数
@@ -867,7 +867,7 @@ namespace AppSettings
             Id = row.Get_int(row.Values[0], ""); 
             Name = row.Get_string (row.Values[1], ""); 
             Desc = row.Get_string(row.Values[2], ""); 
-            Icon = row.Get_string(row.Values[3], ""); 
+            IconID = row.Get_int(row.Values[3], ""); 
             Count = row.Get_int(row.Values[4], ""); 
             ActionTypes = row.Get_List_int(row.Values[5], ""); 
             ActionPrarms = row.Get_List_int(row.Values[6], ""); 
@@ -1586,7 +1586,7 @@ namespace AppSettings
         /// <summary>
         /// 职业头像
         /// </summary>
-        public int Icon { get; private set;}
+        public int IconID { get; private set;}
         
         /// <summary>
         /// 职业贴图
@@ -1625,7 +1625,7 @@ namespace AppSettings
             Name = row.Get_string (row.Values[1], ""); 
             Desc = row.Get_string(row.Values[2], ""); 
             ClassType = row.Get_int(row.Values[3], ""); 
-            Icon = row.Get_int(row.Values[4], ""); 
+            IconID = row.Get_int(row.Values[4], ""); 
             Image = row.Get_int(row.Values[5], ""); 
             MapSkillId = row.Get_int(row.Values[6], ""); 
             BattleSkillId = row.Get_int(row.Values[7], ""); 
@@ -1839,7 +1839,7 @@ namespace AppSettings
         /// <summary>
         /// #头像图片路径
         /// </summary>
-        public string ImagePath { get; private set;}
+        public int ImagePath { get; private set;}
         
 
         internal DialogTableSetting(TableFileRow row)
@@ -1853,7 +1853,7 @@ namespace AppSettings
             Text = row.Get_string(row.Values[1], ""); 
             Type = row.Get_int(row.Values[2], "1"); 
             NextIds = row.Get_List_int(row.Values[3], ""); 
-            ImagePath = row.Get_string(row.Values[4], ""); 
+            ImagePath = row.Get_int(row.Values[4], ""); 
         }
 
         /// <summary>
