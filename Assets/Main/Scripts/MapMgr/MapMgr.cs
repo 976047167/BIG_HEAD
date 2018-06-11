@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MapLogic : MonoBehaviour
+public class MapMgr : MonoBehaviour
 {
     public MapCardBase[,] maplist;
     public GameObject playerGo;
@@ -10,7 +10,7 @@ public class MapLogic : MonoBehaviour
     public Camera mainCamera;
     List<MapCardBase> mapCards = new List<MapCardBase>();
     MapLayerData currentMapLayerData;
-    public static MapLogic Instance;
+    public static MapMgr Instance;
     private void Awake()
     {
         Instance = this;

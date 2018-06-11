@@ -197,7 +197,7 @@ public class MapCardBase
     void OnClick(GameObject go)
     {
         Debug.Log(gameObject.name + "  " + Pos.X + ":" + Pos.Y);
-        MapLogic.Instance.OnClickMapCard(this);
+        MapMgr.Instance.OnClickMapCard(this);
 
     }
     #region 地图事件响应

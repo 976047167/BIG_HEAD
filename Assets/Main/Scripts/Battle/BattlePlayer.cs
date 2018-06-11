@@ -108,7 +108,7 @@ public class BattlePlayer
         }
     }
 
-    public void ApplyAction(int actionType, int actionArg, int actionArg2, BattleCardData cardData, BattlePlayer owner, BattlePlayer target)
+    void ApplyAction(int actionType, int actionArg, int actionArg2, BattleCardData cardData, BattlePlayer owner, BattlePlayer target)
     {
         if (target == null)
         {
@@ -117,7 +117,16 @@ public class BattlePlayer
         BattleAction battleAction = BattleAction.Create((BattleActionType)actionType, actionArg, actionArg2, cardData, owner, target);
         battleAction.Excute();
     }
+    /// <summary>
+    /// 游戏逻辑里面的效果实现
+    /// </summary>
+    /// <param name="actionType"></param>
+    /// <param name="actionArg"></param>
+    /// <param name="actionArg2"></param>
+    public void ApplyAction(BattleActionType actionType, int actionArg, int actionArg2 = 0)
+    {
 
+    }
     public void EndRound()
     {
         Game.BattleManager.RoundEnd();

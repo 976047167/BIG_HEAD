@@ -38,7 +38,7 @@ public class BattleMgr
         MyPlayer = new BattlePlayer(Game.DataManager.MyPlayer);
 
 
-        
+
         OppPlayer.StartAI();
         Game.UI.OpenForm<UIBattleForm>();
     }
@@ -128,7 +128,7 @@ public class BattleMgr
                 //ApplyPlayerBuffs(MyPlayer, 1);
                 MyPlayer.ApplyPlayerBuffs(1);
                 //DrawCard(MyPlayer.Data, 3);
-                MyPlayer.ApplyAction((int)BattleActionType.DrawCard, 3, 0, null, MyPlayer, MyPlayer);
+                MyPlayer.ApplyAction(BattleActionType.DrawCard, 3);
                 State++;
                 break;
             case BattleState.MyRound:
