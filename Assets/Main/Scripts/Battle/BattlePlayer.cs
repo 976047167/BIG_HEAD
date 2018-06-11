@@ -80,7 +80,7 @@ public class BattlePlayer
     /// </summary>
     /// <param name="playerData"></param>
     /// <param name="actionTime">当前使用特效的时机</param>
-    public void ApplyPlayerBuffs(int actionTime)
+    public void ApplyBuffs(int actionTime)
     {
         List<BattleBuffData> removeList = new List<BattleBuffData>();
         foreach (var buff in this.Data.BuffList)

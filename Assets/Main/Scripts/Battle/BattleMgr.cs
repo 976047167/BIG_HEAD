@@ -126,7 +126,7 @@ public class BattleMgr
                 break;
             case BattleState.MyDrawCard:
                 //ApplyPlayerBuffs(MyPlayer, 1);
-                MyPlayer.ApplyPlayerBuffs(1);
+                MyPlayer.ApplyBuffs(1);
                 //DrawCard(MyPlayer.Data, 3);
                 MyPlayer.ApplyAction(BattleActionType.DrawCard, 3);
                 State++;
@@ -139,6 +139,7 @@ public class BattleMgr
             case BattleState.MyRoundEnd:
                 CanUseCard = false;
                 //ApplyPlayerBuffs(MyPlayer, 2);
+                MyPlayer.ApplyBuffs(2);
                 State++;
                 break;
             case BattleState.OppRoundStart:
