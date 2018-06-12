@@ -1,0 +1,3 @@
+Id	Path
+int	string
+1	Character/Player/Player

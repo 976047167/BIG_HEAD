@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MapMgr : MonoBehaviour
+public class MapMgr
 {
     public MapCardBase[,] maplist;
     public GameObject playerGo;
@@ -10,23 +10,36 @@ public class MapMgr : MonoBehaviour
     public Camera mainCamera;
     List<MapCardBase> mapCards = new List<MapCardBase>();
     MapLayerData currentMapLayerData;
-    public static MapMgr Instance;
-    private void Awake()
+    public GameObject MapCardRoot { private set; get; }
+
+
+    static MapMgr m_Instance;
+
+    protected MapPlayer mapPlayer;
+
+    private MapMgr() { }
+
+    public static MapMgr Instance
     {
-        Instance = this;
+        get
+        {
+            if (m_Instance == null)
+            {
+                m_Instance = new MapMgr();
+            }
+            return m_Instance;
+        }
     }
-    // Use this for initialization
-    void Start()
+    public void Init()
     {
         mainCamera = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();
+        MapCardRoot = new GameObject("MapMgr");
+        mapPlayer = new MapPlayer(Game.DataManager.MyPlayer);
         MakeMap();
         MakePlayer();
-        //Game.UI.OpenForm<UIMapInfo>();
-        //Game.UI.OpenForm<UIMenu>();
     }
 
-    // Update is called once per frame
-    void Update()
+    public void Update()
     {
         if (UICamera.isOverUI == false && Input.GetKeyDown(KeyCode.Mouse0))
         {
@@ -36,6 +49,10 @@ public class MapMgr : MonoBehaviour
                 hits[i].collider.gameObject.SendMessage("OnClick");
             }
         }
+    }
+    public void Clear()
+    {
+        m_Instance = null;
     }
 
     void MakeMap()
@@ -59,7 +76,7 @@ public class MapMgr : MonoBehaviour
                 maplist[mapCards[i].X, mapCards[i].Y] = mapCards[i];
                 mapCards[i].State = MapCardBase.CardState.Behind;
                 mapCards[i].SetActive(true);
-                mapCards[i].SetParent(transform);
+                mapCards[i].SetParent(MapCardRoot.transform);
                 continue;
             }
             MapCardPos pos = mapCards[Random.Range(0, i)].Pos;
@@ -78,7 +95,7 @@ public class MapMgr : MonoBehaviour
             maplist[mapCards[i].X, mapCards[i].Y] = mapCards[i];
             mapCards[i].State = MapCardBase.CardState.Behind;
             mapCards[i].SetActive(true);
-            mapCards[i].SetParent(transform);
+            mapCards[i].SetParent(MapCardRoot.transform);
         }
     }
 

@@ -9,4 +9,9 @@ public class Player
     protected PlayerData m_Data;
     public PlayerData Data { get { return m_Data; } }
 
+    public Player()
+    {
+        m_Data = new PlayerData();
+    }
+
 }

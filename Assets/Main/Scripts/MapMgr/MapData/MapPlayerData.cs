@@ -4,35 +4,42 @@ using UnityEngine;
 /// <summary>
 /// 地图玩家数据类
 /// </summary>
-public class MapPlayerData
+public class MapPlayerData : PlayerData
 {
-    public string Name;
-    public int Level;
-    /// <summary>
-    /// 血量
-    /// </summary>
-    public int HP;
-    public int MaxHP;
-    public int MP;
-    public int MaxMP;
-    public int HeadIcon;
+    public MapPlayerData(PlayerData playerData)
+    {
+        Name = playerData.Name;
+        Level = playerData.Level;
+        HP = playerData.HP;
+        MaxHP = playerData.MaxHP;
+        MP = playerData.MP;
+        MaxMP = playerData.MaxMP;
+        HeadIcon = playerData.HeadIcon;
+        MapSkillID = playerData.MapSkillID;
+        BattleSkillID = playerData.BattleSkillID;
+        UsingDeck = playerData.UsingDeck;
+        UsingCharacter = playerData.UsingCharacter;
+        m_EquipList = new List<NormalCard>(playerData.EquipList);
+        m_BuffList = new List<NormalCard>(playerData.BuffList);
+        m_CardList = new List<NormalCard>(playerData.CardList);
 
-    public uint UsingDeck;
-    public int UsingCharacter;
-
-    private List<BattleCardData> m_EquipList = new List<BattleCardData>();
+        m_MapEquipList = new List<NormalCard>(m_EquipList);
+        m_MapBuffList = new List<NormalCard>(m_BuffList);
+        m_MapCardList = new List<NormalCard>(m_MapCardList);
+    }
+    protected List<NormalCard> m_MapEquipList = new List<NormalCard>();
     /// <summary>
     /// 
     /// </summary>
-    private List<BattleBuffData> m_BuffList = new List<BattleBuffData>();
+    protected List<NormalCard> m_MapBuffList = new List<NormalCard>();
     /// <summary>
     /// 当前设置的卡牌库，除了初始化，不许改
     /// </summary>
-    private List<BattleCardData> mCardList = new List<BattleCardData>();
+    private List<NormalCard> m_MapCardList = new List<NormalCard>();
 
-    public List<BattleCardData> EquipList { get { return m_EquipList; } }
+    public List<NormalCard> MapEquipList { get { return m_MapEquipList; } }
 
-    public List<BattleBuffData> BuffList { get { return m_BuffList; } }
+    public List<NormalCard> MapBuffList { get { return m_MapBuffList; } }
 
-    public List<BattleCardData> CardList { get { return mCardList; } }
+    public List<NormalCard> MapCardList { get { return m_MapCardList; } }
 }

@@ -18,21 +18,22 @@ public class PlayerData
     public int BattleSkillID;
     public uint UsingDeck;
     public int UsingCharacter;
+    public ClassData ClassData;
 
-    private List<NormalCard> m_EquipList = new List<NormalCard>();
+    protected List<NormalCard> m_EquipList = new List<NormalCard>();
     /// <summary>
     /// 
     /// </summary>
-    private List<NormalCard> m_BuffList = new List<NormalCard>();
+    protected List<NormalCard> m_BuffList = new List<NormalCard>();
     /// <summary>
     /// 当前设置的卡牌库，除了初始化，不许改
     /// </summary>
-    private List<NormalCard> mCardList = new List<NormalCard>();
+    protected List<NormalCard> m_CardList = new List<NormalCard>();
 
     public List<NormalCard> EquipList { get { return m_EquipList; } }
 
     public List<NormalCard> BuffList { get { return m_BuffList; } }
 
-    public List<NormalCard> CardList { get { return mCardList; } }
+    public List<NormalCard> CardList { get { return m_CardList; } }
 
 }

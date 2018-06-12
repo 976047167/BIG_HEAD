@@ -9,6 +9,7 @@ public class Procedure_BigPlain : ProcedureBase
         base.OnEnter(last);
         Game.UI.OpenForm<UIMapInfo>();
         Game.UI.OpenForm<UIMenu>();
+        MapMgr.Instance.Init();
     }
 
     public override void OnExit(ProcedureBase next)
@@ -16,6 +17,7 @@ public class Procedure_BigPlain : ProcedureBase
         base.OnExit(next);
         Game.UI.CloseForm<UIMapInfo>();
         Game.UI.CloseForm<UIMenu>();
+        MapMgr.Instance.Clear();
     }
 
     public override bool OnInit(object userdata = null)
@@ -26,5 +28,6 @@ public class Procedure_BigPlain : ProcedureBase
     public override void OnUpdate()
     {
         base.OnUpdate();
+        MapMgr.Instance.Update();
     }
 }

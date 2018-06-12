@@ -120,12 +120,9 @@ public class BattlePlayer
     /// <summary>
     /// 游戏逻辑里面的效果实现
     /// </summary>
-    /// <param name="actionType"></param>
-    /// <param name="actionArg"></param>
-    /// <param name="actionArg2"></param>
     public void ApplyAction(BattleActionType actionType, int actionArg, int actionArg2 = 0)
     {
-
+        ApplyAction((int)actionType, actionArg, actionArg2, null, this, this);
     }
     public void EndRound()
     {

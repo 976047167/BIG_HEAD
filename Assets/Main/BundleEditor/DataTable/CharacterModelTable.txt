@@ -1,0 +1,6 @@
+Id	Path
+int	string
+1	Character/Player/Player
+2	Character/Player/Mage
+3	Character/Player/Warriop
+4	Character/Player/Prisst

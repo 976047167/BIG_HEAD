@@ -5,5 +5,5 @@ using UnityEngine;
 public class ClassData
 {
     public ClassType Type = ClassType.None;
-
+    public int CharacterID = 0;
 }
