@@ -51,9 +51,7 @@ public class DataMgr
         //MyPlayer.Data.AP = MyPlayer.Data.MaxAP = 1;
         MyPlayer.Data.Level = 1;
         MyPlayer.Data.HeadIcon = 1008;
-        MyPlayer.Data.ClassData = new ClassData();
-        MyPlayer.Data.ClassData.CharacterID = 3;
-        MyPlayer.Data.ClassData.Type = ClassType.Mage;
+        MyPlayer.Data.ClassData = new ClassData(3);
         MyPlayer.Data.CardList.Add(new NormalCard(1, uidIndex++));
         MyPlayer.Data.CardList.Add(new NormalCard(1, uidIndex++));
         MyPlayer.Data.CardList.Add(new NormalCard(1, uidIndex++));

@@ -22,6 +22,7 @@ public class MapPlayerData : PlayerData
         m_EquipList = new List<NormalCard>(playerData.EquipList);
         m_BuffList = new List<NormalCard>(playerData.BuffList);
         m_CardList = new List<NormalCard>(playerData.CardList);
+        ClassData = playerData.ClassData;
 
         m_MapEquipList = new List<NormalCard>(m_EquipList);
         m_MapBuffList = new List<NormalCard>(m_BuffList);

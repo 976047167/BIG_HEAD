@@ -5,8 +5,6 @@ using UnityEngine;
 public class MapMgr
 {
     public MapCardBase[,] maplist;
-    public GameObject playerGo;
-    public MapCardPos currentPos;
     public Camera mainCamera;
     List<MapCardBase> mapCards = new List<MapCardBase>();
     MapLayerData currentMapLayerData;
@@ -15,7 +13,9 @@ public class MapMgr
 
     static MapMgr m_Instance;
 
-    protected MapPlayer mapPlayer;
+    protected MapPlayer m_MyMapPlayer;
+
+    public MapPlayer MyMapPlayer { get { return m_MyMapPlayer; } }
 
     private MapMgr() { }
 
@@ -34,7 +34,7 @@ public class MapMgr
     {
         mainCamera = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();
         MapCardRoot = new GameObject("MapMgr");
-        mapPlayer = new MapPlayer(Game.DataManager.MyPlayer);
+        m_MyMapPlayer = new MapPlayer(Game.DataManager.MyPlayer);
         MakeMap();
         MakePlayer();
     }
@@ -101,44 +101,41 @@ public class MapMgr
 
     void MakePlayer()
     {
-        ResourceManager.LoadGameObject("Character/Player/Player", LoadPlayerSuccess,
-            (str, obj) => { Debug.LogError("Load player Failed!"); }
-            );
-    }
-    void LoadPlayerSuccess(string path, object[] userData, GameObject go)
-    {
-        playerGo = go;
         MapCardBase mapcard = mapCards[Random.Range(0, mapCards.Count)];
-        currentPos = mapcard.Pos;
-        playerGo.transform.position = GetTransfromByPos(currentPos);
+        MapCardPos currentPos = new MapCardPos(mapcard.X, mapcard.Y);
+        m_MyMapPlayer.CreateModel(currentPos);
         mapcard.State = MapCardBase.CardState.Front;
+        //ResourceManager.LoadGameObject("Character/Player/Player", LoadPlayerSuccess,
+        //    (str, obj) => { Debug.LogError("Load player Failed!"); }
+        //    );
+
     }
+    //void LoadPlayerSuccess(string path, object[] userData, GameObject go)
+    //{
+    //    playerGo = go;
+    //    MapCardBase mapcard = mapCards[Random.Range(0, mapCards.Count)];
+    //    currentPos = mapcard.Pos;
+    //    playerGo.transform.position = GetTransfromByPos(currentPos);
+    //    mapcard.State = MapCardBase.CardState.Front;
+    //}
 
     public void OnClickMapCard(MapCardBase mapCard)
     {
-        int distance = Mathf.Abs(mapCard.Pos.X - currentPos.X) + Mathf.Abs(mapCard.Y - currentPos.Y);
+        int distance = Mathf.Abs(mapCard.Pos.X - m_MyMapPlayer.CurPos.X) + Mathf.Abs(mapCard.Y - m_MyMapPlayer.CurPos.Y);
         if (distance == 1)
         {
-            PlayerMoveTo(mapCard.Pos);
+            m_MyMapPlayer.MoveTo(mapCard.Pos);
         }
     }
 
-    void PlayerMoveTo(MapCardPos pos)
+    public MapCardBase GetMapCard(int x, int y)
     {
-        maplist[pos.X, pos.Y].OnPlayerExit();
-        currentPos = pos;
-        TweenPosition.Begin(playerGo, 0.5f, GetTransfromByPos(pos), true);
-        MapCardBase mapcard = maplist[pos.X, pos.Y];
-        if (mapcard != null)
-        {
-            mapcard.State = MapCardBase.CardState.Front;
-            mapcard.OnPlayerEnter();
-        }
+        return maplist[x, y];
     }
 
-    Vector3 GetTransfromByPos(MapCardPos pos)
+    public Vector3 GetTransfromByPos(MapCardPos pos)
     {
-        Vector3 position = new Vector3((pos.X - 2) * 2f, 0.1f, (pos.Y - 2) * 2f);
+        Vector3 position = new Vector3((pos.X - 2) * 2f, 0.25f, (pos.Y - 2) * 2f);
         return position;
     }
 }

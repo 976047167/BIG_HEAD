@@ -17,7 +17,7 @@ public class MapCardBase
     public GameObject gameObject { protected set; get; }
     public Transform transform { protected set; get; }
     public Transform parent { get; protected set; }
-    public MapCardPos Pos;
+    public MapCardPos Pos = new MapCardPos(0, 0);
     private CardState state;
     public bool Active { get; private set; }
 
@@ -290,12 +290,10 @@ public class MapCardBase
         Front = 11,
     }
 }
-[SerializeField]
-public struct MapCardPos
+[System.Serializable]
+public class MapCardPos
 {
-    [SerializeField]
     public int X;
-    [SerializeField]
     public int Y;
     public MapCardPos(int x, int y)
     {
