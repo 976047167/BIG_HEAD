@@ -13,6 +13,7 @@ public class WND_MainTown : UIFormBase
     private UILabel labYuanBao;
     private GameObject btnDungeon;
     private GameObject btnPlot;
+    private GameObject headFrame;
 
     // Use this for initialization
     protected override void OnInit(object userdata)
@@ -26,9 +27,11 @@ public class WND_MainTown : UIFormBase
         btnKaKu = transform.Find("background/btnKaKu").gameObject;
         btnPlot = transform.Find("background/btnPlot").gameObject;
         btnDungeon = transform.Find("background/btnDungeon").gameObject;
+        headFrame = transform.Find("background/spFrameHead").gameObject;
         UIEventListener.Get(btnKaKu).onClick = KakuClick;
         UIEventListener.Get(btnDungeon).onClick = DungeonClick;
         UIEventListener.Get(btnPlot).onClick = Onclick_btnPlot;
+        UIEventListener.Get(headFrame).onClick = OnClick_HeadFrame;
     }
     protected override void OnOpen()
     {
@@ -43,7 +46,7 @@ public class WND_MainTown : UIFormBase
 
     private void KakuClick(GameObject obj)
     {
-        UIModule.Instance.OpenForm<WND_Kaku>(1);
+        Game.UI.OpenForm<WND_Kaku>(1);
     }
     private void DungeonClick(GameObject obj)
     {
@@ -53,5 +56,10 @@ public class WND_MainTown : UIFormBase
     protected void Onclick_btnPlot(GameObject go)
     {
         SceneMgr.ChangeScene(3);
+    }
+    private void OnClick_HeadFrame(GameObject obj)
+    {
+        Game.UI.OpenForm<WND_Settings>();
+
     }
 }

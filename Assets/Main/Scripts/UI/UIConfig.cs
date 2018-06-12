@@ -20,5 +20,6 @@ public partial class UIModule
         {typeof(WND_Loading),new UIConfig("Internal/WND_Loading") },
         {typeof(WND_Launch),new UIConfig("Internal/WND_Launch") },
         {typeof(WND_Login),new UIConfig("Internal/WND_Login") },
+         {typeof(WND_Settings),new UIConfig("WND_Settings") },
     };
 }
