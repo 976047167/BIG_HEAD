@@ -243,6 +243,7 @@ public class WND_Kaku : UIFormBase
             {
 
                 GameObject item = Instantiate(CardInstence);
+                item.SetActive(true);
                 int id = cardId;
                 item.name = "" + id;
                 item.AddComponent<UIDragScrollView>();
@@ -253,7 +254,7 @@ public class WND_Kaku : UIFormBase
                 item.transform.SetParent(cardGrid.transform, false);
                 item.transform.localPosition = new Vector3();
                 item.transform.localScale = cardScale;
-                item.SetActive(true);
+
                 
             }
             else
@@ -315,7 +316,7 @@ public class WND_Kaku : UIFormBase
             obj.GetComponent<UIDragScrollView>().enabled = false;
             
             dragObj = Instantiate(obj);
-
+            dragObj.SetActive(true);
             dragObj.GetComponent<UINormalCard>().SetCard(obj.GetComponent<UINormalCard>().CardId);
             dragObj.transform.SetParent(MovingPanel.transform, true);
             dragObj.transform.localScale = cardScale;
