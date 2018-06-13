@@ -27,6 +27,8 @@ public class UIMapInfo : UIFormBase
         labGold = transform.Find("headFrame/gold/labgold").GetComponent<UILabel>();
         labFood = transform.Find("headFrame/food/labfood").GetComponent<UILabel>();
         playerInfo = Game.DataManager.MyPlayer;
+        Messenger.AddListener(MessageID.MSG_UPDATE_ROLE_INFO_PANEL, UpdatePlayerInfoPanel);
+
     }
 
     // Use this for initialization
@@ -34,15 +36,16 @@ public class UIMapInfo : UIFormBase
     {
         
     }
-
+    protected override void OnOpen()
+    {
+        base.OnOpen();
+        UpdatePlayerInfoPanel();
+    }
     // Update is called once per frame
-    void Update()
+    void UpdatePlayerInfoPanel()
     {
 
-        if (Head.mainTexture == null)
-        {
-            Head.Load(playerInfo.Data.HeadIcon);
-        }
+         Head.Load(playerInfo.Data.HeadIcon);
         labName.text = playerInfo.Data.Name;
         sliderHp.value = playerInfo.Data.HP / playerInfo.Data.MaxHP;
         labHp.text = string.Format("{0}/{1}", playerInfo.Data.HP, playerInfo.Data.MaxHP);
@@ -50,5 +53,6 @@ public class UIMapInfo : UIFormBase
         labMp.text = string.Format("{0}/{1}", playerInfo.Data.MP, playerInfo.Data.MaxMP);
         labFood.text = (Game.DataManager.Food.ToString());
         labGold.text = (Game.DataManager.Coin.ToString());
-       }
+  
+}
 }

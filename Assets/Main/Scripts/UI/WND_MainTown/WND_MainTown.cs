@@ -14,6 +14,7 @@ public class WND_MainTown : UIFormBase
     private GameObject btnDungeon;
     private GameObject btnPlot;
     private GameObject headFrame;
+    private UITexture headIcon;
 
     // Use this for initialization
     protected override void OnInit(object userdata)
@@ -28,22 +29,28 @@ public class WND_MainTown : UIFormBase
         btnPlot = transform.Find("background/btnPlot").gameObject;
         btnDungeon = transform.Find("background/btnDungeon").gameObject;
         headFrame = transform.Find("background/spFrameHead").gameObject;
+        headIcon = headFrame.transform.Find("texHead").GetComponent<UITexture>();
         UIEventListener.Get(btnKaKu).onClick = KakuClick;
         UIEventListener.Get(btnDungeon).onClick = DungeonClick;
         UIEventListener.Get(btnPlot).onClick = Onclick_btnPlot;
         UIEventListener.Get(headFrame).onClick = OnClick_HeadFrame;
+        Messenger.AddListener(MessageID.MSG_UPDATE_ROLE_INFO_PANEL, UpdatePlayerInfoPanel);
     }
     protected override void OnOpen()
     {
         base.OnOpen();
+        UpdatePlayerInfoPanel();
+    }
+    private void UpdatePlayerInfoPanel()
+    {
+
         labName.text = Game.DataManager.MyPlayer.Data.Name;
-        labLevel.text =  Game.DataManager.MyPlayer.Data.Level.ToString();
-        labVipLevel.text =  Game.DataManager.AccountData.VipLevel.ToString();
+        labLevel.text = Game.DataManager.MyPlayer.Data.Level.ToString();
+        labVipLevel.text = Game.DataManager.AccountData.VipLevel.ToString();
         labYuanBao.text = Game.DataManager.AccountData.Diamonds.ToString();
         labCoin.text = Game.DataManager.AccountData.Gold.ToString();
-
+        headIcon.Load(Game.DataManager.PlayerData.HeadIcon);
     }
-
     private void KakuClick(GameObject obj)
     {
         Game.UI.OpenForm<WND_Kaku>(1);

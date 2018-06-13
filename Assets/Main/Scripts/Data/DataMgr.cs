@@ -43,14 +43,13 @@ public class DataMgr
 
         MyPlayer = new MyPlayer();
         PlayerData = MyPlayer.Data;
-        MyPlayer.Data.HeadIcon = 1008;
         MyPlayer.Data.Name = "大头";
         MyPlayer.Data.Name = "player No.1";
         MyPlayer.Data.HP = MyPlayer.Data.MaxHP = 10;
         MyPlayer.Data.MP = MyPlayer.Data.MaxMP = 2;
         //MyPlayer.Data.AP = MyPlayer.Data.MaxAP = 1;
         MyPlayer.Data.Level = 1;
-        MyPlayer.Data.HeadIcon = 1008;
+        MyPlayer.Data.HeadIcon = 1007;
         MyPlayer.Data.ClassData = new ClassData(3);
         MyPlayer.Data.CardList.Add(new NormalCard(1, uidIndex++));
         MyPlayer.Data.CardList.Add(new NormalCard(1, uidIndex++));
