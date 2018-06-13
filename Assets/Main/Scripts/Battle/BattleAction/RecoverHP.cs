@@ -10,7 +10,11 @@ public partial class BattleAction
         public static BattleActionType ActionType { get { return BattleActionType.RecoverHP; } }
         public override void Excute()
         {
-            throw new System.NotImplementedException();
+            owner.Data.HP += actionArg;
+            if (owner.Data.HP>owner.Data.MaxHP)
+            {
+                owner.Data.HP = owner.Data.MaxHP;
+            }
         }
     }
 }

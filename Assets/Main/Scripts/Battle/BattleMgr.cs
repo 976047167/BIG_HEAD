@@ -9,7 +9,7 @@ public class BattleMgr
 {
     public const int MAX_HAND_CARD_COUNT = 7;
 
-
+    Dictionary<string, int> dicCounter = null;
 
     UIBattleForm battleForm;
     public BattleState State { get; private set; }
@@ -36,7 +36,7 @@ public class BattleMgr
         MonsterId = monsterId;
         SetOppData(monsterId);
         MyPlayer = new BattlePlayer(Game.DataManager.MyPlayer);
-
+        dicCounter = new Dictionary<string, int>();
 
 
         OppPlayer.StartAI();
@@ -50,6 +50,7 @@ public class BattleMgr
         MyPlayer.Data.BuffList.Clear();
         MyPlayer = null;
         OppPlayer = null;
+        dicCounter = null;
         State = BattleState.None;
     }
     public void SetOppData(int monsterId)
@@ -147,8 +148,10 @@ public class BattleMgr
                 State++;
                 break;
             case BattleState.OppDrawCard:
-                ApplyPlayerBuffs(OppPlayer, 1);
-                DrawCard(OppPlayer.Data, 3);
+                //ApplyPlayerBuffs(OppPlayer, 1);
+                //DrawCard(OppPlayer.Data, 3);
+                OppPlayer.ApplyBuffs(1);
+                OppPlayer.ApplyAction(BattleActionType.DrawCard, 3);
                 State++;
                 break;
             case BattleState.OppRound:
@@ -159,7 +162,8 @@ public class BattleMgr
                 State++;
                 break;
             case BattleState.OppRoundEnd:
-                ApplyPlayerBuffs(OppPlayer, 2);
+                //ApplyPlayerBuffs(OppPlayer, 2);
+                OppPlayer.ApplyBuffs(2);
                 State = BattleState.MyRoundStart;
                 break;
             case BattleState.BattleEnd_Win:
@@ -279,8 +283,8 @@ public class BattleMgr
             useCard.AddBindUIAction(new UIAction_ApSpend(battleCardData.Owner, battleCardData.Data.Spending));
             battleForm.AddUIAction(useCard);
 
-            ApplyCardEffect(battleCardData);
-
+            //ApplyCardEffect(battleCardData);
+            battleCardData.Owner.ApplyCardEffect(battleCardData);
             return true;
         }
         return false;
