@@ -108,7 +108,7 @@ public class BattlePlayer
         }
     }
 
-    void ApplyAction(int actionType, int actionArg, int actionArg2, BattleCardData cardData, BattlePlayer owner, BattlePlayer target)
+    void ApplyAction(int actionType, int actionArg, int actionArg2, BattleCardData cardData, BattlePlayer owner, BattlePlayer target = null)
     {
         if (target == null)
         {

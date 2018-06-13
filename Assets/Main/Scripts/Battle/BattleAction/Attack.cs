@@ -10,7 +10,16 @@ public partial class BattleAction
         public static BattleActionType ActionType { get { return BattleActionType.Attack; } }
         public override void Excute()
         {
-            throw new System.NotImplementedException();
+            if (owner.IsMe)
+            {
+                target.Data.HP -= actionArg;
+                battleMgr.AddUIAction(new UIAction_HPDamage(target, actionArg));
+            }
+            else if (owner == target)
+            {
+                owner.Data.HP -= actionArg;
+                battleMgr.AddUIAction(new UIAction_HPDamage(owner, actionArg));
+            }
         }
     }
 }

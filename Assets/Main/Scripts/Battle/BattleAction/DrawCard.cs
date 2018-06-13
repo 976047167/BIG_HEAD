@@ -10,7 +10,26 @@ public partial class BattleAction
         public static BattleActionType ActionType { get { return BattleActionType.DrawCard; } }
         public override void Excute()
         {
-            throw new System.NotImplementedException();
+            int count = actionArg;
+            for (int i = 0; i < count; i++)
+            {
+                if (owner.Data.HandCardList.Count >= BattleMgr.MAX_HAND_CARD_COUNT)
+                {
+                    return;
+                }
+                if (owner.Data.CurrentCardList.Count <= 0)
+                {
+                    for (int j = 0; j < owner.Data.CardList.Count; j++)
+                    {
+                        owner.Data.CurrentCardList.Add(new BattleCardData(owner.Data.CardList[j].Data.Id, owner.Data.CardList[j].Owner));
+                    }
+                    //playerData.CurrentCardList = new List<BattleCardData>(playerData.CardList);
+                }
+                BattleCardData card = owner.Data.CurrentCardList[UnityEngine.Random.Range(0, owner.Data.CurrentCardList.Count)];
+                owner.Data.CurrentCardList.Remove(card);
+                owner.Data.HandCardList.Add(card);
+                battleMgr.AddUIAction(new UIAction_DrawCard(card));
+            }
         }
     }
 }

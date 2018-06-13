@@ -313,6 +313,14 @@ public class BattleMgr
             battleForm.AddUIAction(new UIAction_DrawCard(card));
         }
     }
+
+    public void AddUIAction(UIAction uiAction)
+    {
+        if (battleForm != null)
+        {
+            battleForm.AddUIAction(uiAction);
+        }
+    }
     /// <summary>
     /// 触发buff的时机  1回合开始,2回合结束,3受到伤害,4发起伤害
     /// </summary>

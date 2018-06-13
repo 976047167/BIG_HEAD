@@ -10,12 +10,12 @@ using System.Reflection;
 public abstract partial class BattleAction
 {
 
-    protected int ActionArg;
-    protected int ActionArg2;
-    protected BattleCardData CardData;
-    protected BattlePlayer Owner;
-    protected BattlePlayer Target;
-
+    protected int actionArg;
+    protected int actionArg2;
+    protected BattleCardData cardData;
+    protected BattlePlayer owner;
+    protected BattlePlayer target;
+    protected BattleMgr battleMgr;
     
     /// <summary>
     /// 效果的实现
@@ -51,11 +51,12 @@ public abstract partial class BattleAction
             Init();
         }
         BattleAction battleAction = Activator.CreateInstance(dicActionType[actionType]) as BattleAction;
-        battleAction.ActionArg = actionArg;
-        battleAction.ActionArg2 = actionArg2;
-        battleAction.CardData = cardData;
-        battleAction.Owner = owner;
-        battleAction.Target = target;
+        battleAction.actionArg = actionArg;
+        battleAction.actionArg2 = actionArg2;
+        battleAction.cardData = cardData;
+        battleAction.owner = owner;
+        battleAction.target = target;
+        battleAction.battleMgr = Game.BattleManager;
         return battleAction;
     }
     #endregion
