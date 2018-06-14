@@ -69,57 +69,7 @@ public class PlayerInfoView : MonoBehaviour
         lblCemeteryCount.text = playerInfo.CemeteryCount.ToString();
         SetBuffUI();
     }
-    public IEnumerator SetHpDamage(int damage)
-    {
-        Color orginColor = lblHP.color;
-        lblHP.color = Color.red;
-        yield return null;
-        TweenScale.Begin(lblHP.gameObject, 0.15f, new Vector3(1.2f, 1.2f, 1.2f));
-        yield return new WaitForSeconds(0.15f);
-        playerInfo.HP -= damage;
-        if (playerInfo.HP <= 0)
-        {
-            if (BindPlayerData == Game.BattleManager.MyPlayer.Data)
-            {
-                Game.BattleManager.BattleForm.LoseBattle();
-            }
-            else
-            {
-                Game.BattleManager.BattleForm.WinBattle();
-            }
-        }
-        TweenScale.Begin(lblHP.gameObject, 0.15f, Vector3.one);
-        yield return new WaitForSeconds(0.15f);
-        lblHP.color = orginColor;
-    }
-    public IEnumerator SetHpRecover(int hp)
-    {
-        Color orginColor = lblHP.color;
-        lblHP.color = Color.green;
-        yield return null;
-        TweenScale.Begin(lblHP.gameObject, 0.15f, new Vector3(1.2f, 1.2f, 1.2f));
-        yield return new WaitForSeconds(0.15f);
-        playerInfo.HP += hp;
-        if (playerInfo.HP >= playerInfo.MaxHP)
-        {
-            playerInfo.HP = playerInfo.MaxHP;
-        }
-        TweenScale.Begin(lblHP.gameObject, 0.15f, Vector3.one);
-        yield return new WaitForSeconds(0.15f);
-        lblHP.color = orginColor;
-    }
-    public IEnumerator SpendAp(int ap)
-    {
-        Color orginColor = lblMP.color;
-        lblMP.color = Color.green;
-        yield return null;
-        TweenScale.Begin(lblMP.gameObject, 0.15f, new Vector3(1.2f, 1.2f, 1.2f));
-        yield return new WaitForSeconds(0.15f);
-        playerInfo.AP -= ap;
-        TweenScale.Begin(lblMP.gameObject, 0.15f, Vector3.one);
-        yield return new WaitForSeconds(0.15f);
-        lblMP.color = orginColor;
-    }
+
     void SetBuffUI()
     {
         foreach (var item in BuffIcons)
@@ -158,22 +108,75 @@ public class PlayerInfoView : MonoBehaviour
     {
         playerInfo.Buffs.Add(buffData);
     }
-    public void DrawCard()
-    {
-        playerInfo.CardCount--;
-        if (playerInfo.CardCount <= 0)
-        {
-            playerInfo.CardCount = BindPlayerData.CurrentCardList.Count;
-        }
-    }
-    public void UseCard(BattleCardData cardData)
-    {
-        playerInfo.CemeteryCount++;
-        playerInfo.AP -= cardData.Data.Spending;
-    }
-    public void RoundStart()
-    {
-        playerInfo.AP = playerInfo.MaxAP = BindPlayerData.MaxAP;
-    }
+
+    //public IEnumerator SetHpDamage(int damage)
+    //{
+    //    Color orginColor = lblHP.color;
+    //    lblHP.color = Color.red;
+    //    yield return null;
+    //    TweenScale.Begin(lblHP.gameObject, 0.15f, new Vector3(1.2f, 1.2f, 1.2f));
+    //    yield return new WaitForSeconds(0.15f);
+    //    playerInfo.HP -= damage;
+    //    if (playerInfo.HP <= 0)
+    //    {
+    //        if (BindPlayerData == Game.BattleManager.MyPlayer.Data)
+    //        {
+    //            Game.BattleManager.BattleForm.LoseBattle();
+    //        }
+    //        else
+    //        {
+    //            Game.BattleManager.BattleForm.WinBattle();
+    //        }
+    //    }
+    //    TweenScale.Begin(lblHP.gameObject, 0.15f, Vector3.one);
+    //    yield return new WaitForSeconds(0.15f);
+    //    lblHP.color = orginColor;
+    //}
+    //public IEnumerator SetHpRecover(int hp)
+    //{
+    //    Color orginColor = lblHP.color;
+    //    lblHP.color = Color.green;
+    //    yield return null;
+    //    TweenScale.Begin(lblHP.gameObject, 0.15f, new Vector3(1.2f, 1.2f, 1.2f));
+    //    yield return new WaitForSeconds(0.15f);
+    //    playerInfo.HP += hp;
+    //    if (playerInfo.HP >= playerInfo.MaxHP)
+    //    {
+    //        playerInfo.HP = playerInfo.MaxHP;
+    //    }
+    //    TweenScale.Begin(lblHP.gameObject, 0.15f, Vector3.one);
+    //    yield return new WaitForSeconds(0.15f);
+    //    lblHP.color = orginColor;
+    //}
+    //public IEnumerator SpendAp(int ap)
+    //{
+    //    Color orginColor = lblMP.color;
+    //    lblMP.color = Color.green;
+    //    yield return null;
+    //    TweenScale.Begin(lblMP.gameObject, 0.15f, new Vector3(1.2f, 1.2f, 1.2f));
+    //    yield return new WaitForSeconds(0.15f);
+    //    playerInfo.AP -= ap;
+    //    TweenScale.Begin(lblMP.gameObject, 0.15f, Vector3.one);
+    //    yield return new WaitForSeconds(0.15f);
+    //    lblMP.color = orginColor;
+    //}
+
+    //public void DrawCard()
+    //{
+    //    playerInfo.CardCount--;
+    //    if (playerInfo.CardCount <= 0)
+    //    {
+    //        playerInfo.CardCount = BindPlayerData.CurrentCardList.Count;
+    //    }
+    //}
+    //public void UseCard(BattleCardData cardData)
+    //{
+    //    playerInfo.CemeteryCount++;
+    //    playerInfo.AP -= cardData.Data.Spending;
+    //}
+    //public void RoundStart()
+    //{
+    //    playerInfo.AP = playerInfo.MaxAP = BindPlayerData.MaxAP;
+    //}
 
 }

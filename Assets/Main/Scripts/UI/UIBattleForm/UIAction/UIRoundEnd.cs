@@ -7,14 +7,17 @@ public partial class UIAction
     public class UIRoundEnd : UIAction
     {
         public static UIActionType ActionType { get { return UIActionType.RoundEnd; } }
-        public UIRoundEnd() : base()
+        public BattlePlayer PlayerData { get; private set; }
+        public UIRoundEnd(BattlePlayer playerData) : base()
         {
-            
+            PlayerData = playerData;
         }
 
         public override IEnumerator Excute()
         {
-            throw new System.NotImplementedException(typeof(UIRoundEnd).ToString());
+            //BattleForm.ClearUsedCards();
+            BattleForm.UsedCardsGrid.GetChildList().ForEach((t) => t.gameObject.SetActive(false));
+            yield return null;
         }
     }
 }

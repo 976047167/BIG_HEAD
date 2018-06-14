@@ -7,14 +7,17 @@ public partial class UIAction
     public class UIRoundStart : UIAction
     {
         public static UIActionType ActionType { get { return UIActionType.RoundStart; } }
-        public UIRoundStart() : base()
+        public BattlePlayer Player { get; private set; }
+        public UIRoundStart(BattlePlayer playerData) : base()
         {
-            
+            Player = playerData;
         }
 
         public override IEnumerator Excute()
         {
-            throw new System.NotImplementedException(typeof(UIRoundStart).ToString());
+            PlayerInfoView playerInfoView = BattleForm.GetPlayerInfoViewByPlayer(Player);
+            playerInfoView.PlayerInfo.AP = playerInfoView.PlayerInfo.MaxAP = playerInfoView.BindPlayerData.MaxAP;
+            yield return null;
         }
     }
 }

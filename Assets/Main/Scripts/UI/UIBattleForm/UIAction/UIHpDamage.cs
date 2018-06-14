@@ -38,7 +38,7 @@ public partial class UIAction
             TweenScale.Begin(playerInfoView.lblHP.gameObject, 0.15f, Vector3.one);
             yield return new WaitForSeconds(0.15f);
             playerInfoView.lblHP.color = orginColor;
-            yield return BattleForm.GetPlayerInfoViewByPlayer(Target).SetHpDamage(Damage);
+            //yield return BattleForm.GetPlayerInfoViewByPlayer(Target).SetHpDamage(Damage);
         }
     }
 }

@@ -229,7 +229,7 @@ public class BattleMgr
             case BattleState.Ready:
                 break;
             case BattleState.MyRoundStart:
-                AddUIAction(new UIAction.RoundStart(MyPlayer));
+                AddUIAction(new UIAction.UIRoundStart(MyPlayer));
                 break;
             case BattleState.MyDrawCard:
                 break;
@@ -239,10 +239,10 @@ public class BattleMgr
                 break;
             case BattleState.MyRoundEnd:
                 //battleForm.ClearUsedCards();
-                AddUIAction(new UIAction.RoundEnd(MyPlayer));
+                AddUIAction(new UIAction.UIRoundEnd(MyPlayer));
                 break;
             case BattleState.OppRoundStart:
-                AddUIAction(new UIAction.RoundStart(OppPlayer));
+                AddUIAction(new UIAction.UIRoundStart(OppPlayer));
                 break;
             case BattleState.OppDrawCard:
                 break;
@@ -251,7 +251,7 @@ public class BattleMgr
             case BattleState.OppUsingCard:
                 break;
             case BattleState.OppRoundEnd:
-                AddUIAction(new UIAction.RoundEnd(OppPlayer));
+                AddUIAction(new UIAction.UIRoundEnd(OppPlayer));
                 //battleForm.ClearUsedCards();
                 break;
             case BattleState.BattleEnd_Win:
@@ -281,7 +281,7 @@ public class BattleMgr
         if (battleCardData.Data.Spending <= battleCardData.Owner.Data.AP)
         {
             battleCardData.Owner.Data.HandCardList.Remove(battleCardData);
-            UIAction.UseCard useCard = new UIAction.UseCard(battleCardData);
+            UIAction.UIUseCard useCard = new UIAction.UIUseCard(battleCardData);
             useCard.AddBindUIAction(new UIAction.UIApSpend(battleCardData.Owner, battleCardData.Data.Spending));
             AddUIAction(useCard);
 
@@ -427,7 +427,7 @@ public class BattleMgr
             case BattleActionType.RecoverHP:
                 target.Data.HP += actionArg;
                 target.Data.HP = target.Data.HP > target.Data.MaxHP ? target.Data.MaxHP : target.Data.HP;
-                AddUIAction(new UIAction.HpRecover(target, actionArg));
+                AddUIAction(new UIAction.UIHpRecover(target, actionArg));
                 break;
             case BattleActionType.RecoverMP:
                 break;

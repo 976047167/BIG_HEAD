@@ -26,7 +26,13 @@ public partial class UIAction
             {
                 BattleForm.CreateBattleCard(CardData, BattleForm.OppCardsGrid);
             }
-            BattleForm.GetPlayerInfoViewByPlayer(CardData.Owner).DrawCard();
+            //BattleForm.GetPlayerInfoViewByPlayer(CardData.Owner).DrawCard();
+            PlayerInfoView playerInfoView = BattleForm.GetPlayerInfoViewByPlayer(CardData.Owner);
+            playerInfoView.PlayerInfo.CardCount--;
+            if (playerInfoView.PlayerInfo.CardCount <= 0)
+            {
+                playerInfoView.PlayerInfo.CardCount = playerInfoView.BindPlayerData.CurrentCardList.Count;
+            }
             yield return new WaitForSeconds(0.5f);
         }
     }
