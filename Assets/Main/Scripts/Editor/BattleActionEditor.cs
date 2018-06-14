@@ -8,7 +8,7 @@ using System.Reflection;
 [CustomEditor(typeof(BattleAction))]
 public class CardActionEditor : Editor
 {
-    [MenuItem("Tools/BattleAction", false, 1000)]
+    [MenuItem("Tools/Battle/BattleAction", false, 1000)]
     static void SeletEnable()
     {
         Type actionType = typeof(BattleActionType);

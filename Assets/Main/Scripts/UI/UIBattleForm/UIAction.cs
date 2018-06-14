@@ -1,180 +1,210 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Reflection;
 using UnityEngine;
 
-public enum UIActionType
-{
-    None = 0,
-    DrawCard,
-    UseCard,
-    HpDamage,
-    ApSpend,
-    HpRecover,
-    AddBuff,
-    RoundStart,
-    RoundEnd,
-}
-public abstract class UIAction
+public abstract partial class UIAction
 {
     protected UIBattleForm BattleForm;
-    public UIActionType ActionType { get; protected set; }
+    /// <summary>
+    /// 多个ui表现
+    /// </summary>
     public List<UIAction> BindActionList { get; protected set; }
-    public UIAction(UIActionType type)
+
+    
+    public UIAction()
     {
         this.BattleForm = Game.BattleManager.BattleForm;
-        ActionType = type;
     }
     public void AddBindUIAction(UIAction childUIAction)
     {
-        if (BindActionList==null)
+        if (BindActionList == null)
         {
             BindActionList = new List<UIAction>(1);
         }
         BindActionList.Add(childUIAction);
     }
+
+
     public abstract IEnumerator Excute();
+    //static Dictionary<UIAction, Type> dicActionType = null;
+    //static void Init()
+    //{
+    //    Type baseType = typeof(UIAction);
+    //    Type[] types = Assembly.GetExecutingAssembly().GetExportedTypes();
+    //    dicActionType = new Dictionary<UIAction, Type>(Enum.GetNames(typeof(UIActionType)).Length);
+    //    List<string> tableNames = new List<string>();
+    //    Type type = null;
+    //    for (int i = 0; i < types.Length; i++)
+    //    {
+    //        type = types[i];
+    //        if (baseType != type && baseType.IsAssignableFrom(type))
+    //        {
+
+    //            dicActionType.Add((UIAction)type.GetProperty("UIAction", BindingFlags.Static | BindingFlags.Public).GetValue(null, null), type);
+    //        }
+    //    }
+    //}
+
+    //public static BattleAction Create(BattleActionType actionType, int actionArg, int actionArg2, BattleCardData cardData, BattlePlayer owner, BattlePlayer target)
+    //{
+    //    if (dicActionType == null)
+    //    {
+    //        Init();
+    //    }
+    //    BattleAction battleAction = Activator.CreateInstance(dicActionType[actionType]) as BattleAction;
+    //    battleAction.actionArg = actionArg;
+    //    battleAction.actionArg2 = actionArg2;
+    //    battleAction.cardData = cardData;
+    //    battleAction.owner = owner;
+    //    battleAction.target = target;
+    //    battleAction.battleMgr = Game.BattleManager;
+    //    return battleAction;
+    //}
 
 
-}
-public class UIAction_DrawCard : UIAction
-{
-    public BattleCardData CardData { get; private set; }
 
-    public UIAction_DrawCard(BattleCardData data) : base(UIActionType.DrawCard)
+    //public class DrawCard : UIAction
+    //{
+    //    public BattleCardData CardData { get; private set; }
+
+    //    public DrawCard(BattleCardData data) : base()
+    //    {
+    //        CardData = data;
+    //    }
+
+    //    public override IEnumerator Excute()
+    //    {
+    //        yield return null;
+    //        if (CardData.Owner == Game.BattleManager.MyPlayer)
+    //        {
+    //            BattleForm.CreateBattleCard(CardData, BattleForm.MyCardsGrid);
+    //        }
+    //        else
+    //        {
+    //            BattleForm.CreateBattleCard(CardData, BattleForm.OppCardsGrid);
+    //        }
+    //        BattleForm.GetPlayerInfoViewByPlayer(CardData.Owner).DrawCard();
+    //        yield return new WaitForSeconds(0.5f);
+    //    }
+    //}
+
+    //public class HPDamage : UIAction
+    //{
+    //    public BattlePlayer Target { get; private set; }
+    //    public int Damage { get; private set; }
+    //    public HPDamage(BattlePlayer target, int hpDamage) : base()
+    //    {
+    //        Target = target;
+    //        Damage = hpDamage;
+    //    }
+    //    public override IEnumerator Excute()
+    //    {
+    //        yield return BattleForm.GetPlayerInfoViewByPlayer(Target).SetHpDamage(Damage);
+    //    }
+    //}
+    public class HpRecover : UIAction
     {
-        CardData = data;
-    }
-
-    public override IEnumerator Excute()
-    {
-        yield return null;
-        if (CardData.Owner == Game.BattleManager.MyPlayer)
+        public BattlePlayer Target { get; private set; }
+        public int RecoverdHp { get; private set; }
+        public HpRecover(BattlePlayer target, int hpRecover) : base()
         {
-            BattleForm.CreateBattleCard(CardData, BattleForm.MyCardsGrid);
+            Target = target;
+            RecoverdHp = hpRecover;
         }
-        else
+        public override IEnumerator Excute()
         {
-            BattleForm.CreateBattleCard(CardData, BattleForm.OppCardsGrid);
+            yield return BattleForm.GetPlayerInfoViewByPlayer(Target).SetHpRecover(RecoverdHp);
         }
-        BattleForm.GetPlayerInfoViewByPlayerData(CardData.Owner).DrawCard();
-        yield return new WaitForSeconds(0.5f);
     }
-}
-
-public class UIAction_HPDamage : UIAction
-{
-    public BattlePlayer Target { get; private set; }
-    public int Damage { get; private set; }
-    public UIAction_HPDamage(BattlePlayer target, int hpDamage) : base(UIActionType.HpDamage)
+    public class UseCard : UIAction
     {
-        Target = target;
-        Damage = hpDamage;
-    }
-    public override IEnumerator Excute()
-    {
-        yield return BattleForm.GetPlayerInfoViewByPlayerData(Target).SetHpDamage(Damage);
-    }
-}
-public class UIAction_HpRecover : UIAction
-{
-    public BattlePlayer Target { get; private set; }
-    public int HpRecover { get; private set; }
-    public UIAction_HpRecover(BattlePlayer target, int hpRecover) : base(UIActionType.HpDamage)
-    {
-        Target = target;
-        HpRecover = hpRecover;
-    }
-    public override IEnumerator Excute()
-    {
-        yield return BattleForm.GetPlayerInfoViewByPlayerData(Target).SetHpRecover(HpRecover);
-    }
-}
-public class UIAction_UseCard : UIAction
-{
-    public BattleCardData CardData { get; private set; }
-    public UIAction_UseCard(BattleCardData cardData) : base(UIActionType.UseCard)
-    {
-        CardData = cardData;
-    }
-
-    public override IEnumerator Excute()
-    {
-        UIBattleCard battleCard = BattleForm.GetUIBattleCard(CardData);
-        if (battleCard == null)
+        public BattleCardData CardData { get; private set; }
+        public UseCard(BattleCardData cardData) : base()
         {
+            CardData = cardData;
+        }
+
+        public override IEnumerator Excute()
+        {
+            UIBattleCard battleCard = BattleForm.GetUIBattleCard(CardData);
+            if (battleCard == null)
+            {
+                yield return null;
+            }
+            battleCard.UseCard();
+            Vector3 cachePos = battleCard.cacheChildCardTrans.position;
+            battleCard.transform.SetParent(BattleForm.UsedCardsGrid.transform, false);
+            BattleForm.UsedCardsGrid.Reposition();
+            BattleForm.MyCardsGrid.Reposition();
+
+            battleCard.cacheChildCardTrans.position = cachePos;
+            yield return null;
+            TweenPosition.Begin(battleCard.cacheChildCardTrans.gameObject, 0.5f, Vector3.zero, false);
+            BattleForm.GetPlayerInfoViewByPlayer(CardData.Owner).UseCard(battleCard.CardData);
+            yield return new WaitForSeconds(0.5f);
+            BattleForm.OppCardsGrid.Reposition();
+            battleCard.RefreshDepth();
             yield return null;
         }
-        battleCard.UseCard();
-        Vector3 cachePos = battleCard.cacheChildCardTrans.position;
-        battleCard.transform.SetParent(BattleForm.UsedCardsGrid.transform, false);
-        BattleForm.UsedCardsGrid.Reposition();
-        BattleForm.MyCardsGrid.Reposition();
+    }
+    //public class AddBuff : UIAction
+    //{
+    //    public BattleBuffData BuffData { get; private set; }
+    //    public AddBuff(BattleBuffData buffData) : base()
+    //    {
+    //        BuffData = buffData;
+    //    }
 
-        battleCard.cacheChildCardTrans.position = cachePos;
-        yield return null;
-        TweenPosition.Begin(battleCard.cacheChildCardTrans.gameObject, 0.5f, Vector3.zero, false);
-        BattleForm.GetPlayerInfoViewByPlayerData(CardData.Owner).UseCard(battleCard.CardData);
-        yield return new WaitForSeconds(0.5f);
-        BattleForm.OppCardsGrid.Reposition();
-        battleCard.RefreshDepth();
-        yield return null;
-    }
-}
-public class UIAction_AddBuff : UIAction
-{
-    public BattleBuffData BuffData { get; private set; }
-    public UIAction_AddBuff(BattleBuffData buffData) : base(UIActionType.AddBuff)
-    {
-        BuffData = buffData;
-    }
+    //    public override IEnumerator Excute()
+    //    {
+    //        BattleForm.GetPlayerInfoViewByPlayer(BuffData.TargetPlayerData).AddBuff(BuffData);
+    //        yield return null;
+    //    }
+    //}
+    //public class ApSpend : UIAction
+    //{
+    //    public BattlePlayer Player { get; private set; }
+    //    public int SpentAp { get; private set; }
+    //    public ApSpend(BattlePlayer player, int spentAp) : base()
+    //    {
+    //        Player = player;
+    //        SpentAp = spentAp;
+    //    }
 
-    public override IEnumerator Excute()
+    //    public override IEnumerator Excute()
+    //    {
+    //        BattleForm.GetPlayerInfoViewByPlayer(Player).SpendAp(SpentAp);
+    //        yield return null;
+    //    }
+    //}
+    public class RoundStart : UIAction
     {
-        BattleForm.GetPlayerInfoViewByPlayerData(BuffData.TargetPlayerData).AddBuff(BuffData);
-        yield return null;
-    }
-}
-public class UIAction_ApSpend : UIAction
-{
-    public BattlePlayer Player { get; private set; }
-    public int SpentAp { get; private set; }
-    public UIAction_ApSpend(BattlePlayer player, int spentAp) : base(UIActionType.ApSpend)
-    {
-        Player = player;
-        SpentAp = spentAp;
-    }
+        public BattlePlayer Player { get; private set; }
+        public RoundStart(BattlePlayer playerData) : base()
+        {
+            Player = playerData;
+        }
 
-    public override IEnumerator Excute()
-    {
-        BattleForm.GetPlayerInfoViewByPlayerData(Player).SpendAp(SpentAp);
-        yield return null;
+        public override IEnumerator Excute()
+        {
+            BattleForm.GetPlayerInfoViewByPlayer(Player).RoundStart();
+            yield return null;
+        }
     }
-}
-public class UIAction_RoundStart : UIAction
-{
-    public BattlePlayer Player { get; private set; }
-    public UIAction_RoundStart(BattlePlayer playerData) : base(UIActionType.RoundStart)
+    public class RoundEnd : UIAction
     {
-        Player = playerData;
-    }
+        public BattlePlayer PlayerData { get; private set; }
+        public RoundEnd(BattlePlayer playerData) : base()
+        {
+            PlayerData = playerData;
+        }
 
-    public override IEnumerator Excute()
-    {
-        BattleForm.GetPlayerInfoViewByPlayerData(Player).RoundStart();
-        yield return null;
-    }
-}
-public class UIAction_RoundEnd : UIAction
-{
-    public BattlePlayerData PlayerData { get; private set; }
-    public UIAction_RoundEnd(BattlePlayerData playerData) : base(UIActionType.RoundEnd)
-    {
-        PlayerData = playerData;
-    }
-
-    public override IEnumerator Excute()
-    {
-        BattleForm.ClearUsedCards();
-        yield return null;
+        public override IEnumerator Excute()
+        {
+            BattleForm.ClearUsedCards();
+            yield return null;
+        }
     }
 }

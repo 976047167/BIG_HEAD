@@ -12,6 +12,7 @@ public class BattleMgr
     Dictionary<string, int> dicCounter = null;
 
     UIBattleForm battleForm;
+    Queue<UIAction> uiActions = new Queue<UIAction>();
     public BattleState State { get; private set; }
     public bool CanUseCard { get; private set; }
 
@@ -25,7 +26,6 @@ public class BattleMgr
             return battleForm;
         }
     }
-
     /// <summary>
     /// 开始战斗
     /// </summary>
@@ -38,7 +38,6 @@ public class BattleMgr
         MyPlayer = new BattlePlayer(Game.DataManager.MyPlayer);
         dicCounter = new Dictionary<string, int>();
 
-
         OppPlayer.StartAI();
         Game.UI.OpenForm<UIBattleForm>();
     }
@@ -47,6 +46,7 @@ public class BattleMgr
         //Game.UI.CloseForm<UIBattleForm>();
         OppPlayer.StopAI();
         MonsterId = 0;
+        uiActions.Clear();
         MyPlayer.Data.BuffList.Clear();
         MyPlayer = null;
         OppPlayer = null;
@@ -76,6 +76,8 @@ public class BattleMgr
         }
         //TODO: Buff Equip
     }
+
+
     /// <summary>
     /// UI加载完毕，准备开始游戏
     /// </summary>
@@ -227,7 +229,7 @@ public class BattleMgr
             case BattleState.Ready:
                 break;
             case BattleState.MyRoundStart:
-                battleForm.AddUIAction(new UIAction_RoundStart(MyPlayer));
+                AddUIAction(new UIAction.RoundStart(MyPlayer));
                 break;
             case BattleState.MyDrawCard:
                 break;
@@ -237,10 +239,10 @@ public class BattleMgr
                 break;
             case BattleState.MyRoundEnd:
                 //battleForm.ClearUsedCards();
-                battleForm.AddUIAction(new UIAction_RoundEnd(MyPlayer.Data));
+                AddUIAction(new UIAction.RoundEnd(MyPlayer));
                 break;
             case BattleState.OppRoundStart:
-                battleForm.AddUIAction(new UIAction_RoundStart(OppPlayer));
+                AddUIAction(new UIAction.RoundStart(OppPlayer));
                 break;
             case BattleState.OppDrawCard:
                 break;
@@ -249,7 +251,7 @@ public class BattleMgr
             case BattleState.OppUsingCard:
                 break;
             case BattleState.OppRoundEnd:
-                battleForm.AddUIAction(new UIAction_RoundEnd(OppPlayer.Data));
+                AddUIAction(new UIAction.RoundEnd(OppPlayer));
                 //battleForm.ClearUsedCards();
                 break;
             case BattleState.BattleEnd_Win:
@@ -279,9 +281,9 @@ public class BattleMgr
         if (battleCardData.Data.Spending <= battleCardData.Owner.Data.AP)
         {
             battleCardData.Owner.Data.HandCardList.Remove(battleCardData);
-            UIAction_UseCard useCard = new UIAction_UseCard(battleCardData);
-            useCard.AddBindUIAction(new UIAction_ApSpend(battleCardData.Owner, battleCardData.Data.Spending));
-            battleForm.AddUIAction(useCard);
+            UIAction.UseCard useCard = new UIAction.UseCard(battleCardData);
+            useCard.AddBindUIAction(new UIAction.UIApSpend(battleCardData.Owner, battleCardData.Data.Spending));
+            AddUIAction(useCard);
 
             //ApplyCardEffect(battleCardData);
             battleCardData.Owner.ApplyCardEffect(battleCardData);
@@ -314,16 +316,22 @@ public class BattleMgr
             BattleCardData card = playerData.CurrentCardList[UnityEngine.Random.Range(0, playerData.CurrentCardList.Count)];
             playerData.CurrentCardList.Remove(card);
             card.Owner.Data.HandCardList.Add(card);
-            battleForm.AddUIAction(new UIAction_DrawCard(card));
+            AddUIAction(new UIAction.UIDrawCard(card));
         }
     }
 
     public void AddUIAction(UIAction uiAction)
     {
-        if (battleForm != null)
+        uiActions.Enqueue(uiAction);
+    }
+
+    public UIAction GetTopUIAction()
+    {
+        if (uiActions.Count>0)
         {
-            battleForm.AddUIAction(uiAction);
+            return uiActions.Dequeue();
         }
+        return null;
     }
     /// <summary>
     /// 触发buff的时机  1回合开始,2回合结束,3受到伤害,4发起伤害
@@ -400,26 +408,26 @@ public class BattleMgr
                 {
                     BattleBuffData buffData = new BattleBuffData(actionArg, 0, cardData, owner, target);
                     target.Data.BuffList.Add(buffData);
-                    battleForm.AddUIAction(new UIAction_AddBuff(buffData));
+                    AddUIAction(new UIAction.UIAddBuff(buffData));
                 }
                 break;
             case BattleActionType.Attack:
                 if (owner == MyPlayer)
                 {
                     OppPlayer.Data.HP -= actionArg;
-                    battleForm.AddUIAction(new UIAction_HPDamage(OppPlayer, actionArg));
+                    AddUIAction(new UIAction.UIHpDamage(OppPlayer, actionArg));
                 }
                 else if (owner == OppPlayer)
                 {
                     MyPlayer.Data.HP -= actionArg;
-                    battleForm.AddUIAction(new UIAction_HPDamage(MyPlayer, actionArg));
+                    AddUIAction(new UIAction.UIHpDamage(MyPlayer, actionArg));
                 }
 
                 break;
             case BattleActionType.RecoverHP:
                 target.Data.HP += actionArg;
                 target.Data.HP = target.Data.HP > target.Data.MaxHP ? target.Data.MaxHP : target.Data.HP;
-                battleForm.AddUIAction(new UIAction_HpRecover(target, actionArg));
+                AddUIAction(new UIAction.HpRecover(target, actionArg));
                 break;
             case BattleActionType.RecoverMP:
                 break;

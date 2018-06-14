@@ -13,12 +13,12 @@ public partial class BattleAction
             if (owner.IsMe)
             {
                 target.Data.HP -= actionArg;
-                battleMgr.AddUIAction(new UIAction_HPDamage(target, actionArg));
+                battleMgr.AddUIAction(new UIAction.UIHpDamage(target, actionArg));
             }
             else if (owner == target)
             {
                 owner.Data.HP -= actionArg;
-                battleMgr.AddUIAction(new UIAction_HPDamage(owner, actionArg));
+                battleMgr.AddUIAction(new UIAction.UIHpDamage(owner, actionArg));
             }
         }
     }

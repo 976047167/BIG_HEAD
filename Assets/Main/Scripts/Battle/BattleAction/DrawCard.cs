@@ -28,7 +28,7 @@ public partial class BattleAction
                 BattleCardData card = owner.Data.CurrentCardList[UnityEngine.Random.Range(0, owner.Data.CurrentCardList.Count)];
                 owner.Data.CurrentCardList.Remove(card);
                 owner.Data.HandCardList.Add(card);
-                battleMgr.AddUIAction(new UIAction_DrawCard(card));
+                battleMgr.AddUIAction(new UIAction.UIDrawCard(card));
             }
         }
     }
