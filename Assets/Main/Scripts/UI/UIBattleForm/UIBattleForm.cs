@@ -20,6 +20,9 @@ public class UIBattleForm : UIFormBase
     private GameObject resultInfo;
     [SerializeField]
     private UILabel lblResultInfo;
+    [SerializeField]
+    private UILabel lblRoundCount;
+
 
     int monsterId = 0;
 
@@ -67,7 +70,7 @@ public class UIBattleForm : UIFormBase
         UpdateInfo();
         monsterId = Game.BattleManager.MonsterId;
         Game.BattleManager.ReadyStart(this);
-        UIEventListener.Get(transform.Find("btnRoundEnd").gameObject).onClick = OnClick_RoundEnd;
+        UIEventListener.Get(transform.Find("MovingPanel/btnRoundEnd").gameObject).onClick = OnClick_RoundEnd;
         UIEventListener.Get(transform.Find("ResultInfo/mask").gameObject).onClick = Onclick_CloseUI;
 
         StartCoroutine(CoroutineUseCard());

@@ -574,14 +574,19 @@ namespace AppSettings
         public int ClassLimit { get; private set;}
         
         /// <summary>
-        /// 图标
+        /// 左边半个图标
         /// </summary>
-        public int IconID { get; private set;}
+        public int IconLeftID { get; private set;}
+        
+        /// <summary>
+        /// 右边半个图标
+        /// </summary>
+        public int IconRightID { get; private set;}
         
         /// <summary>
         /// 卡片展示ID
         /// </summary>
-        public int Show { get; private set;}
+        public int ShowID { get; private set;}
         
         /// <summary>
         /// 卡片特效ID
@@ -625,13 +630,14 @@ namespace AppSettings
             Quality = row.Get_int(row.Values[6], ""); 
             Spending = row.Get_int(row.Values[7], ""); 
             ClassLimit = row.Get_int(row.Values[8], ""); 
-            IconID = row.Get_int(row.Values[9], ""); 
-            Show = row.Get_int(row.Values[10], ""); 
-            Effect = row.Get_int(row.Values[11], ""); 
-            Price = row.Get_int(row.Values[12], ""); 
-            ActionTypes = row.Get_List_int(row.Values[13], ""); 
-            ActionParams = row.Get_List_int(row.Values[14], ""); 
-            ActionParams2 = row.Get_List_int(row.Values[15], ""); 
+            IconLeftID = row.Get_int(row.Values[9], ""); 
+            IconRightID = row.Get_int(row.Values[10], ""); 
+            ShowID = row.Get_int(row.Values[11], ""); 
+            Effect = row.Get_int(row.Values[12], ""); 
+            Price = row.Get_int(row.Values[13], ""); 
+            ActionTypes = row.Get_List_int(row.Values[14], ""); 
+            ActionParams = row.Get_List_int(row.Values[15], ""); 
+            ActionParams2 = row.Get_List_int(row.Values[16], ""); 
         }
 
         /// <summary>
