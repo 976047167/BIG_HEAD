@@ -130,7 +130,7 @@ public class BattleMgr
                 break;
             case BattleState.MyDrawCard:
                 //ApplyPlayerBuffs(MyPlayer, 1);
-                MyPlayer.ApplyBuffs(1);
+                MyPlayer.ApplyTimeEffects(BattleActionTime.RoundStart);
                 //DrawCard(MyPlayer.Data, 3);
                 MyPlayer.ApplyAction(BattleActionType.DrawCard, 3);
                 State++;
@@ -143,7 +143,7 @@ public class BattleMgr
             case BattleState.MyRoundEnd:
                 CanUseCard = false;
                 //ApplyPlayerBuffs(MyPlayer, 2);
-                MyPlayer.ApplyBuffs(2);
+                MyPlayer.ApplyTimeEffects(BattleActionTime.RoundEnd);
                 State++;
                 break;
             case BattleState.OppRoundStart:
@@ -153,7 +153,7 @@ public class BattleMgr
             case BattleState.OppDrawCard:
                 //ApplyPlayerBuffs(OppPlayer, 1);
                 //DrawCard(OppPlayer.Data, 3);
-                OppPlayer.ApplyBuffs(1);
+                OppPlayer.ApplyTimeEffects(BattleActionTime.RoundStart);
                 OppPlayer.ApplyAction(BattleActionType.DrawCard, 3);
                 State++;
                 break;
@@ -166,7 +166,7 @@ public class BattleMgr
                 break;
             case BattleState.OppRoundEnd:
                 //ApplyPlayerBuffs(OppPlayer, 2);
-                OppPlayer.ApplyBuffs(2);
+                OppPlayer.ApplyTimeEffects(BattleActionTime.RoundEnd);
                 State = BattleState.MyRoundStart;
                 break;
             case BattleState.BattleEnd_Win:

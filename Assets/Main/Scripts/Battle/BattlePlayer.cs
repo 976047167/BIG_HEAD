@@ -84,6 +84,14 @@ public class BattlePlayer
         }
     }
     /// <summary>
+    /// 应用触发效果
+    /// </summary>
+    public void ApplyTimeEffects(BattleActionTime actionTime)
+    {
+        ApplyBuffs((int)actionTime);
+        ApplyEquips((int)actionTime);
+    }
+    /// <summary>
     /// 触发buff的时机  1回合开始,2回合结束,3受到伤害,4发起伤害
     /// </summary>
     /// <param name="playerData"></param>
@@ -115,7 +123,10 @@ public class BattlePlayer
             this.Data.BuffList.Remove(item);
         }
     }
-
+    public void ApplyEquips(int actionTime)
+    {
+        throw new System.NotImplementedException();
+    }
     void ApplyAction(int actionType, int actionArg, int actionArg2, BattleCardData cardData, BattlePlayer owner, BattlePlayer target = null)
     {
         if (target == null)
