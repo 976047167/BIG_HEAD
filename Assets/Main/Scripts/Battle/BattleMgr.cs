@@ -8,14 +8,14 @@ using System;
 public class BattleMgr
 {
     public const int MAX_HAND_CARD_COUNT = 7;
-
+    public const int MAX_EQUIP_COUNT = 1;
     Dictionary<string, int> dicCounter = null;
 
     UIBattleForm battleForm;
     Queue<UIAction> uiActions = new Queue<UIAction>();
     public BattleState State { get; private set; }
     public bool CanUseCard { get; private set; }
-
+    public int RoundCount { get; private set; }
     public int MonsterId { get; private set; }
     public BattlePlayer MyPlayer { get; private set; }
     public BattlePlayer OppPlayer { get; private set; }
@@ -37,7 +37,7 @@ public class BattleMgr
         SetOppData(monsterId);
         MyPlayer = new BattlePlayer(Game.DataManager.MyPlayer);
         dicCounter = new Dictionary<string, int>();
-
+        RoundCount = 0;
         OppPlayer.StartAI();
         Game.UI.OpenForm<UIBattleForm>();
     }
@@ -125,6 +125,7 @@ public class BattleMgr
                 break;
             case BattleState.MyRoundStart:
                 MyPlayer.Data.AP = MyPlayer.Data.MaxAP = MyPlayer.Data.MaxAP + 1;
+                RoundCount++;
                 State++;
                 break;
             case BattleState.MyDrawCard:
@@ -327,7 +328,7 @@ public class BattleMgr
 
     public UIAction GetTopUIAction()
     {
-        if (uiActions.Count>0)
+        if (uiActions.Count > 0)
         {
             return uiActions.Dequeue();
         }

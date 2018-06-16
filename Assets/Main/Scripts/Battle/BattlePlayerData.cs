@@ -19,7 +19,7 @@ public class BattlePlayerData
     public int HeadIcon;
 
     //public BattleCardData
-    public List<BattleCardData> EquipList = new List<BattleCardData>();
+    public List<BattleEquipData> EquipList = new List<BattleEquipData>();
     /// <summary>
     /// 
     /// </summary>

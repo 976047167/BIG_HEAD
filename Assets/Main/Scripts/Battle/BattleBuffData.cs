@@ -20,12 +20,13 @@ public class BattleBuffData
         BuffId = buffId;
 
         Data = BattleBuffTableSettings.Get(buffId);
-        Time = extTime + Data.Time;
+        
         if (Data == null)
         {
             Debug.LogError("BuffId: " + buffId + " not exist!");
             return;
         }
+        Time = extTime + Data.Time;
         CardData = cardData;
         Owner = owner;
         TargetPlayerData = target;

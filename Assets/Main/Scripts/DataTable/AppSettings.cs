@@ -844,6 +844,11 @@ namespace AppSettings
         public int IconID { get; private set;}
         
         /// <summary>
+        /// 装备类型(武器1,头盔2,防具3)
+        /// </summary>
+        public int Type { get; private set;}
+        
+        /// <summary>
         /// 次数
         /// </summary>
         public int Count { get; private set;}
@@ -875,10 +880,11 @@ namespace AppSettings
             Name = row.Get_string (row.Values[1], ""); 
             Desc = row.Get_string(row.Values[2], ""); 
             IconID = row.Get_int(row.Values[3], ""); 
-            Count = row.Get_int(row.Values[4], ""); 
-            ActionTypes = row.Get_List_int(row.Values[5], ""); 
-            ActionPrarms = row.Get_List_int(row.Values[6], ""); 
-            ActionParams2 = row.Get_List_int(row.Values[7], ""); 
+            Type = row.Get_int(row.Values[4], ""); 
+            Count = row.Get_int(row.Values[5], ""); 
+            ActionTypes = row.Get_List_int(row.Values[6], ""); 
+            ActionPrarms = row.Get_List_int(row.Values[7], ""); 
+            ActionParams2 = row.Get_List_int(row.Values[8], ""); 
         }
 
         /// <summary>

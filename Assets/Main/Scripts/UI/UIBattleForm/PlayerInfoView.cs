@@ -20,20 +20,26 @@ public class PlayerInfoView : MonoBehaviour
     public UILabel lblCemeteryCount;
     public UIGrid gridBuffGrid;
     public GameObject goBuffIconTemplete;
-    Dictionary<int, GameObject> BuffIcons = new Dictionary<int, GameObject>();
+    public GameObject goEquipTemplete;
+    Dictionary<int, GameObject> buffIcons = new Dictionary<int, GameObject>();
+    Dictionary<int, GameObject> equipIcons = new Dictionary<int, GameObject>();
     protected UIPlayerInfo playerInfo = new UIPlayerInfo();
-    public UIPlayerInfo PlayerInfo { get { return playerInfo; } }
+    public UIPlayerInfo PlayerInfo { get { IsDirty = true; return playerInfo; } }
+    public BattlePlayerData bindPlayerData = null;
+    public BattlePlayerData BindPlayerData { get { IsDirty = false; return bindPlayerData; } }
+    public Dictionary<int, GameObject> BuffIcons { get { return buffIcons; } }
+    public Dictionary<int, GameObject> EquipIcons { get { return equipIcons; } }
 
-    public BattlePlayerData BindPlayerData { private set; get; }
+    protected bool IsDirty = false;
     public void InitData(BattlePlayerData playerData)
     {
-        BindPlayerData = playerData;
-        this.playerInfo.HP = BindPlayerData.HP;
-        this.playerInfo.MaxHP = BindPlayerData.MaxHP;
-        this.playerInfo.AP = BindPlayerData.AP;
-        this.playerInfo.MaxAP = BindPlayerData.MaxAP;
-        this.playerInfo.CardCount = BindPlayerData.CurrentCardList.Count;
-        this.playerInfo.CemeteryCount = BindPlayerData.UsedCardList.Count;
+        bindPlayerData = playerData;
+        this.playerInfo.HP = bindPlayerData.HP;
+        this.playerInfo.MaxHP = bindPlayerData.MaxHP;
+        this.playerInfo.AP = bindPlayerData.AP;
+        this.playerInfo.MaxAP = bindPlayerData.MaxAP;
+        this.playerInfo.CardCount = bindPlayerData.CurrentCardList.Count;
+        this.playerInfo.CemeteryCount = bindPlayerData.UsedCardList.Count;
         GetUIController(transform);
     }
     void GetUIController(Transform transform)
@@ -51,12 +57,13 @@ public class PlayerInfoView : MonoBehaviour
         lblCemeteryCount = transform.Find("Cemetery/CardCount").GetComponent<UILabel>();
         gridBuffGrid = transform.Find("BuffGrid").GetComponent<UIGrid>();
         goBuffIconTemplete = gridBuffGrid.transform.Find("buff").gameObject;
+        goEquipTemplete = gridEquipGrid.transform.Find("BattleCardEquip").gameObject;
     }
     public void UpdateInfo()
     {
         if (utHeadIcon.mainTexture == null)
         {
-            utHeadIcon.Load(BindPlayerData.HeadIcon);
+            utHeadIcon.Load(bindPlayerData.HeadIcon);
         }
         lblLevel.text = playerInfo.Level.ToString();
         spHP_Progress.fillAmount = (float)playerInfo.HP / playerInfo.MaxHP;
@@ -68,11 +75,12 @@ public class PlayerInfoView : MonoBehaviour
         lblCardCount.text = playerInfo.CardCount.ToString();
         lblCemeteryCount.text = playerInfo.CemeteryCount.ToString();
         SetBuffUI();
+        IsDirty = false;
     }
 
     void SetBuffUI()
     {
-        foreach (var item in BuffIcons)
+        foreach (var item in buffIcons)
         {
             item.Value.SetActive(false);
         }
@@ -86,15 +94,15 @@ public class PlayerInfoView : MonoBehaviour
                 continue;
             }
             GameObject buffIcon;
-            if (!BuffIcons.ContainsKey(buffData.BuffId))
+            if (!buffIcons.ContainsKey(buffData.BuffId))
             {
                 buffIcon = Instantiate(goBuffIconTemplete, gridBuffGrid.transform);
-                BuffIcons.Add(buffData.BuffId, buffIcon);
+                buffIcons.Add(buffData.BuffId, buffIcon);
                 buffIcon.GetComponent<UITexture>().Load(buffData.Data.IconID);
                 gridBuffGrid.Reposition();
             }
             else
-                buffIcon = BuffIcons[buffData.BuffId];
+                buffIcon = buffIcons[buffData.BuffId];
             buffIcon.SetActive(true);
             buffIcon.transform.Find("Label").GetComponent<UILabel>().text = buffData.Time.ToString();
         }
@@ -104,79 +112,33 @@ public class PlayerInfoView : MonoBehaviour
         }
     }
 
+
     public void AddBuff(BattleBuffData buffData)
     {
         playerInfo.Buffs.Add(buffData);
     }
 
-    //public IEnumerator SetHpDamage(int damage)
+    //public void SetEquipIcon(BattleEquipData equipData)
     //{
-    //    Color orginColor = lblHP.color;
-    //    lblHP.color = Color.red;
-    //    yield return null;
-    //    TweenScale.Begin(lblHP.gameObject, 0.15f, new Vector3(1.2f, 1.2f, 1.2f));
-    //    yield return new WaitForSeconds(0.15f);
-    //    playerInfo.HP -= damage;
-    //    if (playerInfo.HP <= 0)
+    //    BattleEquipData removedEquip = null;
+    //    if (playerInfo.Equips.Count > 0 && playerInfo.Equips.Count >= BattleMgr.MAX_EQUIP_COUNT)
     //    {
-    //        if (BindPlayerData == Game.BattleManager.MyPlayer.Data)
-    //        {
-    //            Game.BattleManager.BattleForm.LoseBattle();
-    //        }
-    //        else
-    //        {
-    //            Game.BattleManager.BattleForm.WinBattle();
-    //        }
+    //        removedEquip = playerInfo.Equips[0];
+    //        playerInfo.Equips.RemoveAt(0);
     //    }
-    //    TweenScale.Begin(lblHP.gameObject, 0.15f, Vector3.one);
-    //    yield return new WaitForSeconds(0.15f);
-    //    lblHP.color = orginColor;
-    //}
-    //public IEnumerator SetHpRecover(int hp)
-    //{
-    //    Color orginColor = lblHP.color;
-    //    lblHP.color = Color.green;
-    //    yield return null;
-    //    TweenScale.Begin(lblHP.gameObject, 0.15f, new Vector3(1.2f, 1.2f, 1.2f));
-    //    yield return new WaitForSeconds(0.15f);
-    //    playerInfo.HP += hp;
-    //    if (playerInfo.HP >= playerInfo.MaxHP)
+    //    playerInfo.Equips.Add(equipData);
+    //    GameObject goEquip = null;
+    //    if (equipIcons.ContainsKey(equipData.EquipId))
     //    {
-    //        playerInfo.HP = playerInfo.MaxHP;
+    //        goEquip = equipIcons[equipData.EquipId];
     //    }
-    //    TweenScale.Begin(lblHP.gameObject, 0.15f, Vector3.one);
-    //    yield return new WaitForSeconds(0.15f);
-    //    lblHP.color = orginColor;
-    //}
-    //public IEnumerator SpendAp(int ap)
-    //{
-    //    Color orginColor = lblMP.color;
-    //    lblMP.color = Color.green;
-    //    yield return null;
-    //    TweenScale.Begin(lblMP.gameObject, 0.15f, new Vector3(1.2f, 1.2f, 1.2f));
-    //    yield return new WaitForSeconds(0.15f);
-    //    playerInfo.AP -= ap;
-    //    TweenScale.Begin(lblMP.gameObject, 0.15f, Vector3.one);
-    //    yield return new WaitForSeconds(0.15f);
-    //    lblMP.color = orginColor;
-    //}
-
-    //public void DrawCard()
-    //{
-    //    playerInfo.CardCount--;
-    //    if (playerInfo.CardCount <= 0)
+    //    if (goEquip == null)
     //    {
-    //        playerInfo.CardCount = BindPlayerData.CurrentCardList.Count;
+    //        goEquip = Instantiate(goEquipTemplete);
     //    }
-    //}
-    //public void UseCard(BattleCardData cardData)
-    //{
-    //    playerInfo.CemeteryCount++;
-    //    playerInfo.AP -= cardData.Data.Spending;
-    //}
-    //public void RoundStart()
-    //{
-    //    playerInfo.AP = playerInfo.MaxAP = BindPlayerData.MaxAP;
+    //    goEquip.name = equipData.EquipId.ToString();
+    //    UIUtility.SetEquipTips(goEquip, equipData.EquipId);
+    //    goEquip.transform.Find("Icon").GetComponent<UITexture>().Load(equipData.Data.IconID);
     //}
 
 }

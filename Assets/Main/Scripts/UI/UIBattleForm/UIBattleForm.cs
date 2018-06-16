@@ -70,7 +70,7 @@ public class UIBattleForm : UIFormBase
         UpdateInfo();
         monsterId = Game.BattleManager.MonsterId;
         Game.BattleManager.ReadyStart(this);
-        UIEventListener.Get(transform.Find("MovingPanel/btnRoundEnd").gameObject).onClick = OnClick_RoundEnd;
+        UIEventListener.Get(transform.Find("FlowPanel/btnRoundEnd").gameObject).onClick = OnClick_RoundEnd;
         UIEventListener.Get(transform.Find("ResultInfo/mask").gameObject).onClick = Onclick_CloseUI;
 
         StartCoroutine(CoroutineUseCard());
@@ -131,6 +131,7 @@ public class UIBattleForm : UIFormBase
         parentGrid.Reposition();
         return battleCard;
     }
+    
     public UIBattleCard GetUIBattleCard(BattleCardData cardData)
     {
         if (dicBattleCard.ContainsKey(cardData))
@@ -191,6 +192,7 @@ public class UIPlayerInfo
     public int CardCount = 0;
     public int CemeteryCount = 0;
     public List<BattleBuffData> Buffs = new List<BattleBuffData>();
+    public List<BattleEquipData> Equips = new List<BattleEquipData>();
 }
 
 

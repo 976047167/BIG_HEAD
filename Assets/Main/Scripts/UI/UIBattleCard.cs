@@ -11,7 +11,9 @@ public class UIBattleCard : MonoBehaviour
     [SerializeField]
     private bool m_Used = false;
     [SerializeField]
-    private UITexture m_TexIcon;
+    private UITexture m_TexIconRight;
+    [SerializeField]
+    private UITexture m_TexIconLeft;
     [SerializeField]
     private UILabel m_lblName;
     [SerializeField]
@@ -22,6 +24,8 @@ public class UIBattleCard : MonoBehaviour
     private UISprite m_spAttack;
     [SerializeField]
     private UILabel m_lblAttackCount;
+    [SerializeField]
+    private GameObject m_ContentRoot;
 
     Vector3 offsetPos;
     [HideInInspector]
@@ -64,7 +68,7 @@ public class UIBattleCard : MonoBehaviour
     public void ApplyUseEffect()
     {
         //Game.BattleManager.ApplyCardEffect(CardData);
-        
+
     }
     bool IsMine()
     {
@@ -175,7 +179,8 @@ public class UIBattleCard : MonoBehaviour
     {
         CardData = card;
         cacheForm = form;
-        m_TexIcon.Load(card.Data.IconLeftID);
+        m_TexIconRight.Load(card.Data.IconRightID);
+        m_TexIconLeft.Load(card.Data.IconLeftID);
         m_lblName.text = CardData.Data.Name;
         if (CardData.Data.Type != 0)
         {
@@ -193,7 +198,7 @@ public class UIBattleCard : MonoBehaviour
                 case BattleActionType.Attack:
                     if (CardData.Data.Type == 0)
                     {
-                        m_spExpand.gameObject.SetActive(true);
+                        m_spAttack.gameObject.SetActive(true);
                         m_lblAttackCount.text = CardData.Data.ActionParams[i].ToString();
                     }
                     break;
@@ -207,16 +212,11 @@ public class UIBattleCard : MonoBehaviour
                     break;
             }
         }
-        m_spExpand.gameObject.SetActive(false);
+        m_spExpand.gameObject.SetActive(true);
         m_lblExpandCount.text = CardData.Data.Spending.ToString();
         if (card.Owner != Game.BattleManager.MyPlayer)
         {
-            m_TexIcon.gameObject.SetActive(false);
-            m_lblName.gameObject.SetActive(false);
-            m_spExpand.gameObject.SetActive(false);
-            m_lblExpandCount.gameObject.SetActive(false);
-            m_spAttack.gameObject.SetActive(false);
-            m_lblAttackCount.gameObject.SetActive(false);
+            m_ContentRoot.SetActive(false);
         }
     }
     public void RefreshDepth()
@@ -251,12 +251,7 @@ public class UIBattleCard : MonoBehaviour
         m_Used = true;
         if (CardData.Owner != Game.BattleManager.MyPlayer)
         {
-            m_TexIcon.gameObject.SetActive(true);
-            m_lblName.gameObject.SetActive(true);
-            m_spExpand.gameObject.SetActive(true);
-            m_lblExpandCount.gameObject.SetActive(true);
-            m_spAttack.gameObject.SetActive(true);
-            m_lblAttackCount.gameObject.SetActive(true);
+            m_ContentRoot.SetActive(true);
         }
         return true;
     }

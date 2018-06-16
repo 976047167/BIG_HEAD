@@ -26,10 +26,18 @@ public class BattlePlayer
         Data.HeadIcon = player.Data.HeadIcon;
         Data.CardList.Clear();
 
-        Data.EquipList = new List<BattleCardData>(player.Data.EquipList.Count);
+        Data.EquipList = new List<BattleEquipData>(player.Data.EquipList.Count);
         for (int i = 0; i < player.Data.EquipList.Count; i++)
         {
-            Data.EquipList.Add(new BattleCardData(player.Data.EquipList[i].CardId, this));
+            List<int> actions = player.Data.EquipList[i].Data.ActionTypes;
+            for (int j = 0; j < actions.Count; j++)
+            {
+                if (actions[i] == (int)BattleActionType.AddEuipment)
+                {
+                    Data.EquipList.Add(new BattleEquipData(player.Data.EquipList[j].Data.ActionParams[0], this));
+                    break;
+                }
+            }
         }
         Data.CardList = new List<BattleCardData>(player.Data.CardList.Count);
         for (int i = 0; i < player.Data.CardList.Count; i++)
