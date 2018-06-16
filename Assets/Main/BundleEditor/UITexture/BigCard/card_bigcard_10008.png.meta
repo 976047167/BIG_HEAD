@@ -1,6 +1,6 @@
 fileFormatVersion: 2
-guid: d67f19a128afebd4c81917656f220ece
-timeCreated: 1529141514
+guid: 7f3e3fe257a339b458cb89a4e0a0236b
+timeCreated: 1529168399
 licenseType: Free
 TextureImporter:
   fileIDToRecycleName: {}
@@ -19,7 +19,7 @@ TextureImporter:
     externalNormalMap: 0
     heightScale: 0.25
     normalMapFilter: 0
-  isReadable: 1
+  isReadable: 0
   grayScaleToAlpha: 0
   generateCubemap: 6
   cubemapConvolution: 0
@@ -31,7 +31,7 @@ TextureImporter:
     aniso: -1
     mipBias: -1
     wrapMode: -1
-  nPOTScale: 0
+  nPOTScale: 1
   lightmap: 0
   compressionQuality: 50
   spriteMode: 0
@@ -64,5 +64,5 @@ TextureImporter:
     outline: []
   spritePackingTag: 
   userData: 
-  assetBundleName: uitexture/equip/1.bundle
+  assetBundleName: 
   assetBundleVariant: 

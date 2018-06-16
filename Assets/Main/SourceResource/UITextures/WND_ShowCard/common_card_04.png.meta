@@ -1,6 +1,6 @@
 fileFormatVersion: 2
-guid: d67f19a128afebd4c81917656f220ece
-timeCreated: 1529141514
+guid: e1c742a5adb94aa46b0623ad152549e1
+timeCreated: 1529143715
 licenseType: Free
 TextureImporter:
   fileIDToRecycleName: {}
@@ -64,5 +64,5 @@ TextureImporter:
     outline: []
   spritePackingTag: 
   userData: 
-  assetBundleName: uitexture/equip/1.bundle
+  assetBundleName: 
   assetBundleVariant: 
