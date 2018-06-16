@@ -8,14 +8,25 @@ public class UINormalCard : MonoBehaviour
     public int CardId {get;private set;}
     public BattleCardTableSetting CardData { get; private set; }
     private int cardNum;
-    private UITexture Icon;
+    private UITexture leftIcon;
+    private UITexture rightIcon;
     private UILabel labCardNum;
     private UILabel labSpending;
+    private UISprite spAttack;
+    private UISprite spSkill;
+    private UISprite spItem;
+    private UISprite spEquip;
     private void Awake()
     {
-        Icon = transform.Find("spFrameIcon/Icon").GetComponent<UITexture>();
+        leftIcon = transform.Find("spLeft/spFrameIcon/Icon").GetComponent<UITexture>();
+        rightIcon = transform.Find("spRight/spFrameIcon/Icon").GetComponent<UITexture>();
         labCardNum = transform.Find("spFrameNum/labNum").GetComponent<UILabel>();
         labSpending = transform.Find("spFrameSpending/labSpending").GetComponent<UILabel>();
+        spAttack = transform.Find("spAttack").GetComponent<UISprite>();
+        spSkill = transform.Find("spSkill").GetComponent<UISprite>();
+        spItem = transform.Find("spItem").GetComponent<UISprite>();
+        spEquip = transform.Find("spEquip").GetComponent<UISprite>();
+
     }
 
 
@@ -25,18 +36,26 @@ public class UINormalCard : MonoBehaviour
         CardId = cardId;
         CardNum =1 ;
         CardData = BattleCardTableSettings.Get(CardId);
-        Icon.Load(CardData.IconLeftID);
+        leftIcon.Load(CardData.IconLeftID);
+        rightIcon = transform.Find("spRight/spFrameIcon/Icon").GetComponent<UITexture>();
         labSpending.text = "" + CardData.Spending;
-
+        ShowCardType(CardData.Type);
 
         UIEventListener.Get(gameObject).onClick = (GameObject a) =>
         {
-            UIModule.Instance.OpenForm<WND_ShowCard>(CardId);
+            Game.UI.OpenForm<WND_ShowCard>(CardId);
 
 
         };
         
 
+    }
+    private void ShowCardType(int cardType)
+    {
+        spAttack.gameObject.SetActive(cardType == 0);
+        spEquip.gameObject.SetActive(cardType == 1);
+        spSkill.gameObject.SetActive(cardType == 2);
+        spItem.gameObject.SetActive(cardType == 3);
     }
 
     public int CardNum

@@ -65,7 +65,7 @@ public class WND_Kaku : UIFormBase
     protected override void OnOpen()
     {
         base.OnOpen();
-        ResourceManager.LoadGameObject("UI/Item/NormalCard", (str, obj, go) => { CardInstence = go; }, (str, obj) => { });
+        ResourceManager.LoadGameObject("UI/Item/UINormalCard", (str, obj, go) => { CardInstence = go; }, (str, obj) => { });
         CardInstence.transform.SetParent(transform);
         CardInstence.transform.localScale = new Vector3(1,1,1);
         CardInstence.SetActive(false);
