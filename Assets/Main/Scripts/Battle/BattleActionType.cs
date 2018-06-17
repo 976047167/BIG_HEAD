@@ -81,7 +81,7 @@ public enum BattleActionType : int
     /// <summary>
     /// 额外造成伤害，P为原伤害的百分比，向下取整
     /// </summary>
-    ExtraDamage = 19,
+    ExtraPercentDamage = 19,
     /// <summary>
     /// 移除所有BUFF，P为0是自己，1是对方，驱散等级为P2
     /// </summary>

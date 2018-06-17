@@ -10,7 +10,8 @@ public partial class BattleAction
         public static BattleActionType ActionType { get { return BattleActionType.AttackIgnoreDefense; } }
         public override void Excute()
         {
-            throw new System.NotImplementedException();
+            target.Data.HP -= actionArg;
+            battleMgr.AddUIAction(new UIAction.UIHpDamage(target, actionArg));
         }
     }
 }

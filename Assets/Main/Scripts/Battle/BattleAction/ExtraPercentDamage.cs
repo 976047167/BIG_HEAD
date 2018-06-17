@@ -5,9 +5,9 @@ using System.Collections;
 
 public partial class BattleAction
 {
-    public class ExtraDamage : BattleAction
+    public class ExtraPercentDamage : BattleAction
     {
-        public static BattleActionType ActionType { get { return BattleActionType.ExtraDamage; } }
+        public static BattleActionType ActionType { get { return BattleActionType.ExtraPercentDamage; } }
         public override void Excute()
         {
             throw new System.NotImplementedException();

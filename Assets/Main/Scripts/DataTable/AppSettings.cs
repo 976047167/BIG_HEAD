@@ -859,6 +859,11 @@ namespace AppSettings
         public List<int> ActionTypes { get; private set;}
         
         /// <summary>
+        /// 特效触发时机 1游戏开始,2回合开始,3回合结束,4受到伤害,5发起伤害,6使用卡牌,7抽卡
+        /// </summary>
+        public List<int> ActionTimes { get; private set;}
+        
+        /// <summary>
         /// 特效参数
         /// </summary>
         public List<int> ActionPrarms { get; private set;}
@@ -883,8 +888,9 @@ namespace AppSettings
             Type = row.Get_int(row.Values[4], ""); 
             Count = row.Get_int(row.Values[5], ""); 
             ActionTypes = row.Get_List_int(row.Values[6], ""); 
-            ActionPrarms = row.Get_List_int(row.Values[7], ""); 
-            ActionParams2 = row.Get_List_int(row.Values[8], ""); 
+            ActionTimes = row.Get_List_int(row.Values[7], ""); 
+            ActionPrarms = row.Get_List_int(row.Values[8], ""); 
+            ActionParams2 = row.Get_List_int(row.Values[9], ""); 
         }
 
         /// <summary>

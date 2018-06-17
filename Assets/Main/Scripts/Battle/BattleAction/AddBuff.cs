@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Collections;
+using AppSettings;
 
 public partial class BattleAction
 {
@@ -10,7 +11,35 @@ public partial class BattleAction
         public static BattleActionType ActionType { get { return BattleActionType.AddBuff; } }
         public override void Excute()
         {
-            throw new System.NotImplementedException();
+            bool added = false;
+            for (int i = 0; i < owner.Data.BuffList.Count; i++)
+            {
+                if (actionArg == owner.Data.BuffList[i].BuffId)
+                {
+                    added = true;
+                    //刷新buff时间，不叠加
+                    BattleBuffTableSetting buffData = BattleBuffTableSettings.Get(owner.Data.BuffList[i].BuffId);
+                    if (buffData.IsSuperposition == false)
+                    {
+                        owner.Data.BuffList[i].Time = buffData.Time;
+                    }
+                    else
+                    {
+                        owner.Data.BuffList[i].Time = owner.Data.BuffList[i].Time + buffData.Time;
+                        if (owner.Data.BuffList[i].Time > buffData.MaxFloor)
+                        {
+                            owner.Data.BuffList[i].Time = buffData.MaxFloor;
+                        }
+                    }
+                    break;
+                }
+            }
+            if (added == false)
+            {
+                BattleBuffData buffData = new BattleBuffData(actionArg, 0, cardData, owner, owner);
+                owner.Data.BuffList.Add(buffData);
+                battleMgr.AddUIAction(new UIAction.UIAddBuff(buffData));
+            }
         }
     }
 }

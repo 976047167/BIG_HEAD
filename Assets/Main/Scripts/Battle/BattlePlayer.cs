@@ -88,22 +88,22 @@ public class BattlePlayer
     /// </summary>
     public void ApplyTimeEffects(BattleActionTime actionTime)
     {
-        ApplyBuffs((int)actionTime);
-        ApplyEquips((int)actionTime);
+        ApplyBuffs(actionTime);
+        ApplyEquips(actionTime);
     }
     /// <summary>
-    /// 触发buff的时机  1回合开始,2回合结束,3受到伤害,4发起伤害
+    /// 触发buff的时机
     /// </summary>
     /// <param name="playerData"></param>
     /// <param name="actionTime">当前使用特效的时机</param>
-    public void ApplyBuffs(int actionTime)
+    public void ApplyBuffs(BattleActionTime actionTime)
     {
         List<BattleBuffData> removeList = new List<BattleBuffData>();
         foreach (var buff in this.Data.BuffList)
         {
             for (int i = 0; i < buff.Data.ActionTimes.Count; i++)
             {
-                if (buff.Data.ActionTimes[i] == actionTime)
+                if (buff.Data.ActionTimes[i] == (int)actionTime)
                 {
                     ApplyAction(buff.Data.ActionTypes[i], buff.Data.ActionPrarms[i], buff.Data.ActionParams2[i], buff.CardData, this, this);
                     buff.Time--;
@@ -123,9 +123,32 @@ public class BattlePlayer
             this.Data.BuffList.Remove(item);
         }
     }
-    public void ApplyEquips(int actionTime)
+    public void ApplyEquips(BattleActionTime actionTime)
     {
-        throw new System.NotImplementedException();
+        List<BattleEquipData> removeList = new List<BattleEquipData>();
+        foreach (var equip in this.Data.EquipList)
+        {
+            for (int i = 0; i < equip.Data.ActionTimes.Count; i++)
+            {
+                if (equip.Data.ActionTimes[i] == (int)actionTime)
+                {
+                    ApplyAction(equip.Data.ActionTypes[i], equip.Data.ActionPrarms[i], equip.Data.ActionParams2[i], equip.CardData, this);
+                    //equip.Time--;
+                    //if (equip.Time == 0)
+                    //{
+                    //    removeList.Add(equip);
+                    //}
+                    //if (equip.Time < 0)
+                    //{
+                    //    equip.Time = -1;
+                    //}
+                }
+            }
+        }
+        foreach (var item in removeList)
+        {
+            this.Data.EquipList.Remove(item);
+        }
     }
     void ApplyAction(int actionType, int actionArg, int actionArg2, BattleCardData cardData, BattlePlayer owner, BattlePlayer target = null)
     {
@@ -147,7 +170,7 @@ public class BattlePlayer
     {
         Game.BattleManager.RoundEnd();
     }
-
+    
     public void StartAI()
     {
         if (playerAI == null)
