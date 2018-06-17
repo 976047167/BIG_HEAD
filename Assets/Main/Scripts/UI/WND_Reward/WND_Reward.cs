@@ -101,10 +101,7 @@ public class WND_Reward : UIFormBase
             }
 
             item.GetComponent<UILabel>().gradientBottom = color;
-            UIEventListener.Get(item).onClick = (GameObject obj) =>
-            {
-                UIModule.Instance.OpenForm<WND_ShowCard>(card);
-            };
+            UIUtility.SetCardTips(item, cardData.Id);
             UITexture icon = item.transform.Find("texReward").GetComponent<UITexture>();
             icon.gameObject.SetActive(true);
             icon.Load(cardData.IconLeftID);

@@ -12,6 +12,7 @@ public class UINormalCard : MonoBehaviour
     private UITexture rightIcon;
     private UILabel labCardNum;
     private UILabel labSpending;
+    private UILabel labAttack;
     private UISprite spAttack;
     private UISprite spSkill;
     private UISprite spItem;
@@ -26,7 +27,7 @@ public class UINormalCard : MonoBehaviour
         spSkill = transform.Find("spSkill").GetComponent<UISprite>();
         spItem = transform.Find("spItem").GetComponent<UISprite>();
         spEquip = transform.Find("spEquip").GetComponent<UISprite>();
-
+        labAttack = spAttack.transform.Find("labAttack").GetComponent<UILabel>();
     }
 
 
@@ -37,25 +38,28 @@ public class UINormalCard : MonoBehaviour
         CardNum =1 ;
         CardData = BattleCardTableSettings.Get(CardId);
         leftIcon.Load(CardData.IconLeftID);
-        rightIcon = transform.Find("spRight/spFrameIcon/Icon").GetComponent<UITexture>();
-        labSpending.text = "" + CardData.Spending;
+        rightIcon.Load(CardData.IconRightID);
+       
+        labSpending.text =CardData.Spending.ToString();
         ShowCardType(CardData.Type);
 
-        UIEventListener.Get(gameObject).onClick = (GameObject a) =>
+        if (CardData.Type == 0 && CardData.ActionTypes[0] == 1)
         {
-            Game.UI.OpenForm<WND_ShowCard>(CardId);
+            labAttack.text = CardData.ActionParams[0].ToString();
+        }
 
+        UIUtility.SetCardTips(gameObject,CardId);
 
-        };
-        
 
     }
     private void ShowCardType(int cardType)
     {
         spAttack.gameObject.SetActive(cardType == 0);
+        /*
         spEquip.gameObject.SetActive(cardType == 1);
         spSkill.gameObject.SetActive(cardType == 2);
         spItem.gameObject.SetActive(cardType == 3);
+        */
     }
 
     public int CardNum
