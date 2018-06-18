@@ -19,16 +19,16 @@ public partial class BattleAction
                     added = true;
                     //刷新buff时间，不叠加
                     BattleBuffTableSetting buffData = BattleBuffTableSettings.Get(owner.Data.BuffList[i].BuffId);
-                    if (buffData.IsSuperposition == false)
+                    if (buffData.IsOverlay == false)
                     {
                         owner.Data.BuffList[i].Time = buffData.Time;
                     }
                     else
                     {
                         owner.Data.BuffList[i].Time = owner.Data.BuffList[i].Time + buffData.Time;
-                        if (owner.Data.BuffList[i].Time > buffData.MaxFloor)
+                        if (owner.Data.BuffList[i].Time > buffData.MaxLayer)
                         {
-                            owner.Data.BuffList[i].Time = buffData.MaxFloor;
+                            owner.Data.BuffList[i].Time = buffData.MaxLayer;
                         }
                     }
                     break;

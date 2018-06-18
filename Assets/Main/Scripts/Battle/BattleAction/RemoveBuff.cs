@@ -10,7 +10,15 @@ public partial class BattleAction
         public static BattleActionType ActionType { get { return BattleActionType.RemoveBuff; } }
         public override void Excute()
         {
-            throw new System.NotImplementedException();
+            for (int i = 0; i < target.Data.BuffList.Count; i++)
+            {
+                if (actionArg == target.Data.BuffList[i].BuffId)
+                {
+                    target.Data.BuffList.RemoveAt(i);
+                    battleMgr.AddUIAction(new UIAction.UIRemoveBuff(target, actionArg));
+                    break;
+                }
+            }
         }
     }
 }

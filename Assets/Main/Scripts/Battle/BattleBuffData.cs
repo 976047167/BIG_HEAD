@@ -6,7 +6,14 @@ using AppSettings;
 public class BattleBuffData
 {
     public int BuffId { get; private set; }
+    /// <summary>
+    /// 持续时间
+    /// </summary>
     public int Time { get; set; }
+    /// <summary>
+    /// 叠加层数
+    /// </summary>
+    public int Layer { get; set; }
     public BattleBuffTableSetting Data { get; private set; }
     /// <summary>
     /// 触发buff的卡牌信息，没有那就是自带的buff

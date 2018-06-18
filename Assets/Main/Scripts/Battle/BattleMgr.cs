@@ -283,7 +283,7 @@ public class BattleMgr
         {
             battleCardData.Owner.Data.HandCardList.Remove(battleCardData);
             UIAction.UIUseCard useCard = new UIAction.UIUseCard(battleCardData);
-            useCard.AddBindUIAction(new UIAction.UIApSpend(battleCardData.Owner, battleCardData.Data.Spending));
+            useCard.AddBindUIAction(new UIAction.UIMpSpend(battleCardData.Owner, battleCardData.Data.Spending));
             AddUIAction(useCard);
 
             //ApplyCardEffect(battleCardData);

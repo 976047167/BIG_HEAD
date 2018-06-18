@@ -10,7 +10,7 @@ public partial class BattleAction
         public static BattleActionType ActionType { get { return BattleActionType.DefenseDamage; } }
         public override void Excute()
         {
-            throw new System.NotImplementedException();
+            Debug.LogError("这是一个被动buff");
         }
     }
 }

@@ -286,12 +286,17 @@ namespace AppSettings
         /// <summary>
         /// 是否可以叠加
         /// </summary>
-        public bool IsSuperposition { get; private set;}
+        public bool IsOverlay { get; private set;}
+        
+        /// <summary>
+        /// 默认层数
+        /// </summary>
+        public int DefaultLayer { get; private set;}
         
         /// <summary>
         /// 可叠加的最高层数
         /// </summary>
-        public int MaxFloor { get; private set;}
+        public int MaxLayer { get; private set;}
         
         /// <summary>
         /// 驱散等级
@@ -335,14 +340,15 @@ namespace AppSettings
             Name = row.Get_string (row.Values[1], ""); 
             Desc = row.Get_string(row.Values[2], ""); 
             IconID = row.Get_int(row.Values[3], ""); 
-            IsSuperposition = row.Get_bool(row.Values[4], ""); 
-            MaxFloor = row.Get_int(row.Values[5], ""); 
-            DispelGrade = row.Get_int(row.Values[6], ""); 
-            Time = row.Get_int(row.Values[7], ""); 
-            ActionTimes = row.Get_List_int(row.Values[8], ""); 
-            ActionTypes = row.Get_List_int(row.Values[9], ""); 
-            ActionPrarms = row.Get_List_int(row.Values[10], ""); 
-            ActionParams2 = row.Get_List_int(row.Values[11], ""); 
+            IsOverlay = row.Get_bool(row.Values[4], ""); 
+            DefaultLayer = row.Get_int(row.Values[5], ""); 
+            MaxLayer = row.Get_int(row.Values[6], ""); 
+            DispelGrade = row.Get_int(row.Values[7], ""); 
+            Time = row.Get_int(row.Values[8], ""); 
+            ActionTimes = row.Get_List_int(row.Values[9], ""); 
+            ActionTypes = row.Get_List_int(row.Values[10], ""); 
+            ActionPrarms = row.Get_List_int(row.Values[11], ""); 
+            ActionParams2 = row.Get_List_int(row.Values[12], ""); 
         }
 
         /// <summary>

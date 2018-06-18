@@ -131,7 +131,7 @@ public enum BattleActionType : int
     /// </summary>
     SoulEffect = 31,
     /// <summary>
-    /// P为BUFF的ID，根据BUFF层数来获取对应层数的魔量，并移除该BUFF
+    /// P1为BUFF的ID，根据BUFF层数来获取对应层数*P2的魔量，并移除该BUFF
     /// </summary>
     BuffLayerEffect = 32,
     /// <summary>
