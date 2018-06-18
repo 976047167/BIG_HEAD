@@ -5,12 +5,12 @@ using System.Collections;
 
 public partial class BattleAction
 {
-    public class BuffLayerDamage : BattleAction
+    public class BuffLayerAddDamage : BattleAction
     {
         public static BattleActionType ActionType { get { return BattleActionType.BuffLayerDamage; } }
         public override void Excute()
         {
-            throw new System.NotImplementedException();
+            Debug.LogError("这是一个被动效果");
         }
     }
 }

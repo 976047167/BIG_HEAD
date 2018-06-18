@@ -8,10 +8,16 @@ public enum UIActionType
     DrawCard,
     UseCard,
     HpDamage,
-    ApSpend,
+    MpSpend,
     HpRecover,
+    MPRecover,
     AddBuff,
     RoundStart,
     RoundEnd,
     AddEquip,
+    RemoveBuff,
+    /// <summary>
+    /// 闪避伤害动画
+    /// </summary>
+    DodgeDamage,
 }

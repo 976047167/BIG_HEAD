@@ -10,7 +10,14 @@ public partial class BattleAction
         public static BattleActionType ActionType { get { return BattleActionType.BuffLayerEffect; } }
         public override void Excute()
         {
-            throw new System.NotImplementedException();
+            for (int i = 0; i < owner.Data.BuffList.Count; i++)
+            {
+                if (actionArg == owner.Data.BuffList[i].BuffId)
+                {
+                    Create(BattleActionType.RecoverMP, owner.Data.BuffList[i].Layer * actionArg2, 0, cardData, owner, owner);
+                    Create(BattleActionType.RemoveBuff, actionArg, 0, cardData, owner, owner);
+                }
+            }
         }
     }
 }

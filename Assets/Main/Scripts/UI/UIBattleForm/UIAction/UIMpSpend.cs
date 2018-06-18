@@ -4,11 +4,11 @@ using UnityEngine;
 
 public partial class UIAction
 {
-    public class UIApSpend : UIAction
+    public class UIMpSpend : UIAction
     {
         public BattlePlayer Player { get; private set; }
         public int SpentAp { get; private set; }
-        public UIApSpend(BattlePlayer player, int spentAp) : base()
+        public UIMpSpend(BattlePlayer player, int spentAp) : base()
         {
             Player = player;
             SpentAp = spentAp;

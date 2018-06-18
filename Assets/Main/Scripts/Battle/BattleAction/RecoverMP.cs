@@ -10,7 +10,11 @@ public partial class BattleAction
         public static BattleActionType ActionType { get { return BattleActionType.RecoverMP; } }
         public override void Excute()
         {
-            throw new System.NotImplementedException();
+            owner.Data.MP += actionArg;
+            if (owner.Data.MP> owner.Data.MaxMP)
+            {
+                owner.Data.MP = owner.Data.MaxMP;
+            }
         }
     }
 }

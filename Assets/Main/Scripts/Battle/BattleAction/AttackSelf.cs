@@ -10,7 +10,7 @@ public partial class BattleAction
         public static BattleActionType ActionType { get { return BattleActionType.AttackSelf; } }
         public override void Excute()
         {
-            throw new System.NotImplementedException();
+            Create(BattleActionType.Attack, actionArg, actionArg2, cardData, owner, owner).Excute();
         }
     }
 }
