@@ -1,6 +1,6 @@
 fileFormatVersion: 2
-guid: 5d9623d2f4b3c3a4a92267017894b407
-timeCreated: 1526760315
+guid: 60704ae5cb60bea409b3ebae3be3ecd7
+timeCreated: 1529343501
 licenseType: Free
 TextureImporter:
   fileIDToRecycleName: {}
@@ -64,5 +64,5 @@ TextureImporter:
     outline: []
   spritePackingTag: 
   userData: 
-  assetBundleName: prefabs/uiatlas/main.bundle
+  assetBundleName: 
   assetBundleVariant: 

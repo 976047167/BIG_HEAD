@@ -1,6 +1,6 @@
 fileFormatVersion: 2
-guid: c4569c9a09eb20c498386326b38c7673
-timeCreated: 1527099508
+guid: d60573fe1c8487c42accb176b4ea4874
+timeCreated: 1529342480
 licenseType: Free
 TextureImporter:
   fileIDToRecycleName: {}
@@ -64,5 +64,5 @@ TextureImporter:
     outline: []
   spritePackingTag: 
   userData: 
-  assetBundleName: prefabs/uiatlas/kaku.bundle
+  assetBundleName: 
   assetBundleVariant: 
