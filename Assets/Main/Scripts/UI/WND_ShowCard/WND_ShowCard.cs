@@ -24,7 +24,7 @@ public class WND_ShowCard : UIFormBase
         icon = transform.Find("CardBg/iconFrame/icon").GetComponent<UITexture>();
         labName = transform.Find("CardBg/labName").GetComponent<UILabel>();
         spSpending = transform.Find("CardBg/describeFrame/spSpending").GetComponent<UISprite>();
-        spendingNum = transform.Find("labSpending").GetComponent<UILabel>();
+        spendingNum = spSpending.transform.Find("labSpending").GetComponent<UILabel>();
         describle = transform.Find("CardBg/describeFrame/ScrollView/labDescribe").GetComponent<UILabel>();
         spAttack = transform.Find("CardBg/describeFrame/spAttack").GetComponent<UISprite>();
         spSkill = transform.Find("CardBg/describeFrame/spSkill").GetComponent<UISprite>();
@@ -43,22 +43,22 @@ public class WND_ShowCard : UIFormBase
     protected override void OnInit(object userdata)
     {
         base.OnInit(userdata);
-       object[] args = (object[]) userdata;
+       int[] args = (int[]) userdata;
         if (args.Length < 2)
         {
             Debug.LogError("WND_ShowCard OnInit : wrong args!");
             return;
         }
-        switch ((int)args[0])
+        switch (args[0])
         {
             case 0:
-                InitCard((int)args[1]);
+                InitCard(args[1]);
                 break;
              case 1:
-                InitBuff((int)args[1]);
+                InitBuff(args[1]);
                 break;
             case 2:
-                InitEquip((int)args[1]);
+                InitEquip(args[1]);
                 break;
 
         }

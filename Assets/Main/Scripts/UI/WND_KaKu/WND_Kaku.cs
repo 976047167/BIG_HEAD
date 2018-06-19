@@ -169,19 +169,23 @@ public class WND_Kaku : UIFormBase
 
     private void SkillChose()
     {
-  
-        foreach (var trans in kakuGrid.GetChildList())
+        //直接用Grid的GetChild会出问题。改用transfom的
+        for (int i = 0;i<kakuGrid.transform.childCount;i++)
         {
-            if (trans.GetComponent<UINormalCard>().CardData.Type != 2 )
+            Transform trans = kakuGrid.transform.GetChild(i);
+            if (trans.GetComponent<UINormalCard>().CardData.Type != 2)
                 trans.gameObject.SetActive(!UIToggle.current.value);
         }
+    
+       
         kakuGrid.repositionNow = true;
     }
 
     private void EquipChose()
     {
-        foreach (var trans in kakuGrid.GetChildList())
+        for (int i = 0; i < kakuGrid.transform.childCount; i++)
         {
+            Transform trans = kakuGrid.transform.GetChild(i);
             if (trans.GetComponent<UINormalCard>().CardData.Type != 1)
                 trans.gameObject.SetActive(!UIToggle.current.value);
         }
@@ -189,8 +193,9 @@ public class WND_Kaku : UIFormBase
     }
     private void ItemChose()
     {
-        foreach (var trans in kakuGrid.GetChildList())
+        for (int i = 0; i < kakuGrid.transform.childCount; i++)
         {
+            Transform trans = kakuGrid.transform.GetChild(i);
             if (trans.GetComponent<UINormalCard>().CardData.Type != 3)
                 trans.gameObject.SetActive(!UIToggle.current.value);
         }
@@ -216,7 +221,6 @@ public class WND_Kaku : UIFormBase
             if (cardFromDeck.CardNum == 0 )
                 Destroy(cardFromDeck.gameObject);
             UINormalCard cardToKaKu =  kakuGrid.transform.Find("" + cardId).GetComponent<UINormalCard>();
-            cardToKaKu.gameObject.SetActive(true);
             cardToKaKu.CardNum += 1;
             kakuGrid.repositionNow = true;
             cardGrid.repositionNow = true;
@@ -238,8 +242,16 @@ public class WND_Kaku : UIFormBase
                 return;
             }
             cardFromKaKu.CardNum -= 1;
-
-            if (tempDeck.Cards.Find((item) => item.CardId == cardId) == null)
+            bool isFoud = false;
+            for (int i = 0; i < tempDeck.Cards.Count; i++)
+            {
+                if (tempDeck.Cards[i].CardId == cardId)
+                {
+                    isFoud = true;
+                    break;
+                }
+            }
+            if (isFoud == false)
             {
 
                 GameObject item = Instantiate(CardInstence);
