@@ -28,63 +28,41 @@ public class WND_Dialog : UIFormBase
     protected override void OnInit(object id)
     {
         base.OnInit(id);
-        if (id.GetType() == typeof(int))
-        {
-            ShowDialog((int)id);
-        }else if(id.GetType() == typeof(List<int>))
-            {
-           List<int> a = (List<int>)id;
-            MonsterId = a[1];
-            ShowDialog(a[0]);
-        }
-        
-    }
-    void Awake()
-    {
+
         labTips = transform.Find("imgTips/labTips").GetComponent<UILabel>();
         imgHead = transform.Find("imgTips/imgHead").GetComponent<UITexture>();
         btnShowAll = transform.Find("btnShowAll").gameObject;
         UIEventListener.Get(btnShowAll).onClick = PrintStringAll;
         btnSelect = transform.Find("btnSelect").GetComponent<UIButton>();
-        
+
         grid = transform.Find("Container/Grid").GetComponent<UIGrid>();
 
 
-    }
-
-    void Start()
-    {
-
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
-
-    //public static void ShowDialog(int Id)
-    //{
-    //    if (instance == null)
-    //    {
-    //        GameObject prefab = (GameObject)Resources.Load("Prefabs/UIForm/WND");
-    //        GameObject wnd =
-    //        wnd.transform.position = Vector3.zero;
-    //    }
-
-    //    instance.showDialog(Id);
-
-    //}
-    private void OnDestroy()
-    {
+        if (id.GetType() == typeof(int))
+        {
+            preserntIndex = (int)id;
+        }else if(id.GetType() == typeof(List<int>))
+            {
+           List<int> a = (List<int>)id;
+            preserntIndex = a[0];
+            MonsterId = a[1];
+        }
         
     }
+    protected override void OnOpen()
+    {
+
+        ShowDialog(preserntIndex);
+
+    }
+
+
     private void ShowDialog(int Id)
     {
         if (Id == 0)
         {
-            btnShowAll.SetActive(false);
-            UIModule.Instance.CloseForm<WND_Dialog>();
+
+           Game.UI.CloseForm<WND_Dialog>();
             return;
         }
         preserntIndex = Id;
@@ -107,13 +85,15 @@ public class WND_Dialog : UIFormBase
     }
     private void ClearGrid()
     {
-        List < Transform > list = grid.GetChildList();
-        foreach(Transform i in list)
+        for (int i = 1;i<grid.transform.childCount;i++)
         {
-            Destroy(i.gameObject);
+            Transform trans = grid.transform.GetChild(i);
+            Destroy(trans.gameObject);
 
         }
-        grid.repositionNow = true;
+
+        //暂时弃掉
+       // grid.repositionNow = true;
     }
     private IEnumerator PrintStringByStep()
     {
@@ -140,7 +120,7 @@ public class WND_Dialog : UIFormBase
         {
             StopCoroutine("PrintStringByStep");
             print("PrintStringByStep is stop");
-            labTips.text = this.printString;
+            labTips.text = printString;
             isPrinting = false;
             return;
         }
@@ -151,10 +131,7 @@ public class WND_Dialog : UIFormBase
         switch ((DialogType)type)
         {
             case DialogType.Normal:
-                    
-                int NextId = NextIds[0];
-
-                ShowDialog(NextId);
+                ShowDialog(NextIds[0]);
                 break;
             case DialogType.Select:
                 if (isChosing) {
@@ -167,10 +144,10 @@ public class WND_Dialog : UIFormBase
                 {
                     GameObject item = Instantiate(btnSelect.gameObject);
                     item.name = "option" + i;
-                    item.transform.Find("imgNum/labSelectNum").GetComponent<UILabel>().text = ""+(i+1);
+                    item.transform.Find("imgNum/labSelectNum").GetComponent<UILabel>().text = (i+1).ToString();
                     item.transform.Find("labSelectString").GetComponent<UILabel>().text = DialogTableSettings.Get(NextIds[i]).Text;
                     int nextId = NextIds[i];
-                    UIEventListener.Get(item.gameObject).onClick = (GameObject a)=> {
+                    UIEventListener.Get(item.gameObject).onClick = (GameObject obj)=> {
                         isChosing = false;
                         ClearGrid();
                         ShowDialog(nextId);
@@ -193,20 +170,18 @@ public class WND_Dialog : UIFormBase
                     ShowDialog(NextIds[2]);
                 }
                else
-                    UIModule.Instance.CloseForm<WND_Dialog>();
+                    Game.UI.CloseForm<WND_Dialog>();
                 break;
             case DialogType.Battle:
                 if (MonsterId != 0)
                     Game.BattleManager.StartBattle(MonsterId);
-                UIModule.Instance.CloseForm<WND_Dialog>();
+                Game.UI.CloseForm<WND_Dialog>();
                 break;
             default:
-                
                 print("Unknow type!");
-                UIModule.Instance.CloseForm<WND_Dialog>();
+                Game.UI.CloseForm<WND_Dialog>();
                 break;
         }
-        
     }
   
 }
