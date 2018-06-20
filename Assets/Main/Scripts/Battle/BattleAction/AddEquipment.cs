@@ -1,13 +1,13 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Collections;
 
 public partial class BattleAction
 {
-    public class AddEuipment : BattleAction
+    public class AddEquipment : BattleAction
     {
-        public static BattleActionType ActionType { get { return BattleActionType.AddEuipment; } }
+        public static BattleActionType ActionType { get { return BattleActionType.AddEquipment; } }
         public override void Excute()
         {
             if (owner.Data.EquipList.Count > 0 && owner.Data.EquipList.Count >= BattleMgr.MAX_EQUIP_COUNT)

@@ -49,7 +49,7 @@ public enum BattleActionType : int
     /// <summary>
     /// 添加ID为P的装备
     /// </summary>
-    AddEuipment = 11,
+    AddEquipment = 11,
     /// <summary>
     /// 驱散P个随机BUFF，驱散等级为P2
     /// </summary>
@@ -61,7 +61,7 @@ public enum BattleActionType : int
     /// <summary>
     /// 抵挡1次伤害
     /// </summary>
-    OffsetAttack = 14,
+    WithstandOneAttack = 14,
     /// <summary>
     /// 减少对方P点护盾
     /// </summary>

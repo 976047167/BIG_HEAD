@@ -16,7 +16,11 @@ public abstract partial class BattleAction
     protected BattlePlayer owner;
     protected BattlePlayer target;
     protected BattleMgr battleMgr;
-    
+    /// <summary>
+    /// 执行深度,预防无限递归
+    /// </summary>
+    protected int depth;
+    const int MAX_EXCUTE_DEPTH = 10;
     /// <summary>
     /// 效果的实现
     /// </summary>
@@ -44,7 +48,7 @@ public abstract partial class BattleAction
         }
     }
 
-    public static BattleAction Create(BattleActionType actionType, int actionArg, int actionArg2, BattleCardData cardData, BattlePlayer owner, BattlePlayer target)
+    public static BattleAction CreateNew(BattleActionType actionType, int actionArg, int actionArg2, BattleCardData cardData, BattlePlayer owner, BattlePlayer target)
     {
         if (dicActionType == null)
         {
@@ -57,7 +61,23 @@ public abstract partial class BattleAction
         battleAction.owner = owner;
         battleAction.target = target;
         battleAction.battleMgr = Game.BattleManager;
+        //StackTrace st = new StackTrace();
+        //执行深度
+        battleAction.depth = 1;
         return battleAction;
+    }
+    protected BattleAction Create(BattleActionType actionType, int actionArg, int actionArg2, BattleCardData cardData, BattlePlayer owner, BattlePlayer target)
+    {
+        if (depth > MAX_EXCUTE_DEPTH)
+        {
+            return Create(BattleActionType.None, 0, 0, null, null, null);
+        }
+        BattleAction battleAction = Create(actionType, actionArg, actionArg2, cardData, owner, target);
+        //StackTrace st = new StackTrace();
+        //执行深度
+        battleAction.depth = depth + 1;
+        return battleAction;
+
     }
     #endregion
 }

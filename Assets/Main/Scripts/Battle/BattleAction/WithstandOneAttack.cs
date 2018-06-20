@@ -5,12 +5,12 @@ using System.Collections;
 
 public partial class BattleAction
 {
-    public class SoulEffect : BattleAction
+    public class WithstandOneAttack : BattleAction
     {
-        public static BattleActionType ActionType { get { return BattleActionType.SoulEffect; } }
+        public static BattleActionType ActionType { get { return BattleActionType.WithstandOneAttack; } }
         public override void Excute()
         {
-            throw new System.NotImplementedException();
+            Debug.LogError("这是一个buff");
         }
     }
 }

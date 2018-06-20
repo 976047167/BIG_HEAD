@@ -32,7 +32,7 @@ public class BattlePlayer
             List<int> actions = player.Data.EquipList[i].Data.ActionTypes;
             for (int j = 0; j < actions.Count; j++)
             {
-                if (actions[i] == (int)BattleActionType.AddEuipment)
+                if (actions[i] == (int)BattleActionType.AddEquipment)
                 {
                     Data.EquipList.Add(new BattleEquipData(player.Data.EquipList[j].Data.ActionParams[0], this));
                     break;
@@ -156,7 +156,7 @@ public class BattlePlayer
         {
             target = IsMe ? Game.BattleManager.OppPlayer : this;
         }
-        BattleAction battleAction = BattleAction.Create((BattleActionType)actionType, actionArg, actionArg2, cardData, owner, target);
+        BattleAction battleAction = BattleAction.CreateNew((BattleActionType)actionType, actionArg, actionArg2, cardData, owner, target);
         battleAction.Excute();
     }
     /// <summary>
@@ -170,7 +170,7 @@ public class BattlePlayer
     {
         Game.BattleManager.RoundEnd();
     }
-    
+
     public void StartAI()
     {
         if (playerAI == null)

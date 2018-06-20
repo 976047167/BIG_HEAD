@@ -1,4 +1,4 @@
-using System;
+锘縰sing System;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Collections;
@@ -10,7 +10,7 @@ public partial class BattleAction
         public static BattleActionType ActionType { get { return BattleActionType.DefenseDamage; } }
         public override void Excute()
         {
-            Debug.LogError("这是一个被动buff");
+            Debug.LogError("杩欐槸涓�涓鍔╞uff");
         }
     }
 }

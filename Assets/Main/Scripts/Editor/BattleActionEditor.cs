@@ -44,10 +44,12 @@ public partial class BattleAction
     static void CreateScript(string actionName)
     {
         string path = Path.Combine(Application.dataPath, scriptPath + actionName + ".cs");
-        StreamWriter sw = File.CreateText(path);
+        FileStream fs = File.Create(path);
         Debug.LogError(path);
+        StreamWriter sw = new StreamWriter(fs, System.Text.Encoding.UTF8);
         sw.Write(Template.Replace("#ACTION_NAME", actionName));
         sw.Close();
+        fs.Close();
     }
 
 }

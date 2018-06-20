@@ -17,7 +17,7 @@ public partial class BattleAction
                 if (actionArg == owner.Data.BuffList[i].BuffId)
                 {
                     added = true;
-                    //刷新buff时间，不叠加
+                    //脣垄脨脗buff脢卤录盲拢卢虏禄碌镁录脫
                     BattleBuffTableSetting buffData = BattleBuffTableSettings.Get(owner.Data.BuffList[i].BuffId);
                     if (buffData.IsOverlay == false)
                     {

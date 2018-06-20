@@ -1,4 +1,4 @@
-using System;
+ï»¿using System;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Collections;
@@ -10,7 +10,7 @@ public partial class BattleAction
         public static BattleActionType ActionType { get { return BattleActionType.BuffLayerDamage; } }
         public override void Excute()
         {
-            Debug.LogError("ÕâÊÇÒ»¸ö±»¶¯Ð§¹û");
+            Debug.LogError("è¿™æ˜¯ä¸€ä¸ªè¢«åŠ¨æ•ˆæžœ");
         }
     }
 }

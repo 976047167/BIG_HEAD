@@ -435,7 +435,7 @@ public class BattleMgr
             case BattleActionType.DrawCard:
                 DrawCard(owner.Data, actionArg);
                 break;
-            case BattleActionType.AddEuipment:
+            case BattleActionType.AddEquipment:
                 break;
             default:
                 break;
