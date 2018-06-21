@@ -9,3 +9,4 @@ int	string 	string	int	bool	int	int	int	int	List<int>	List<int>	List<int>	List<i
 7	崩剑式	下一次攻击翻倍	20006	0	1	1	0	0	5	19,29	100,1	0,0
 8	灵体	灵体	20007	1	1	20	1	-1	4	29	1	0
 9	燃烧	每回合损失3点血	20008	1	1	20	0	5	1	9	3	0
+10	中毒	每回合损失5点生命值	9	0	1	1	0	-1	2	1	5	0
