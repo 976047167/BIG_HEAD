@@ -351,19 +351,4 @@ public partial class BattleAction
     }
 }
 
-public class BattleEffectData
-{
-    BattleActionType effectType = BattleActionType.None;
-    int priority = 0;
-    SourceType sourceType = SourceType.None;
-    BattleEquipData equipData = null;
-    BattleBuffData buffData = null;
-    BattleCardData cardData = null;
 
-    public enum SourceType
-    {
-        None = 0,
-        Buff = 1,
-        Equip = 2,
-    }
-}
