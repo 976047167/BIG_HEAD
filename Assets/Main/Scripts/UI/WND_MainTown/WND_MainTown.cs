@@ -15,6 +15,7 @@ public class WND_MainTown : UIFormBase
     private GameObject btnPlot;
     private GameObject headFrame;
     private UITexture headIcon;
+    private int iconId = 0;
 
     // Use this for initialization
     protected override void OnInit(object userdata)
@@ -49,7 +50,12 @@ public class WND_MainTown : UIFormBase
         labVipLevel.text = Game.DataManager.AccountData.VipLevel.ToString();
         labYuanBao.text = Game.DataManager.AccountData.Diamonds.ToString();
         labCoin.text = Game.DataManager.AccountData.Gold.ToString();
-        headIcon.Load(Game.DataManager.PlayerData.HeadIcon);
+        if (iconId != Game.DataManager.PlayerData.HeadIcon)
+        {
+            iconId = Game.DataManager.PlayerData.HeadIcon;
+            headIcon.Load(iconId);
+        }
+        
     }
     private void KakuClick(GameObject obj)
     {

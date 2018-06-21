@@ -15,9 +15,11 @@ public class UIMapInfo : UIFormBase
     private UILabel labFood;
     private UILabel labGold;
     private Player playerInfo = new Player();
+    private int iconId = 0;
 
-    private void Awake()
+    protected override void OnInit(object userdata)
     {
+        base.OnInit(userdata);
         Head = transform.Find("headFrame/texHead").GetComponent<UITexture>();
         sliderHp = transform.Find("headFrame/sliderHp").GetComponent<UIProgressBar>();
         sliderMp = transform.Find("headFrame/sliderMp").GetComponent<UIProgressBar>();
@@ -31,11 +33,7 @@ public class UIMapInfo : UIFormBase
 
     }
 
-    // Use this for initialization
-    void Start()
-    {
-        
-    }
+
     protected override void OnOpen()
     {
         base.OnOpen();
@@ -44,8 +42,12 @@ public class UIMapInfo : UIFormBase
     // Update is called once per frame
     void UpdatePlayerInfoPanel()
     {
-
-         Head.Load(playerInfo.Data.HeadIcon);
+        if (iconId != playerInfo.Data.HeadIcon)
+        {
+            iconId = playerInfo.Data.HeadIcon;
+            Head.Load(iconId);
+        }
+       
         labName.text = playerInfo.Data.Name;
         sliderHp.value = playerInfo.Data.HP / playerInfo.Data.MaxHP;
         labHp.text = string.Format("{0}/{1}", playerInfo.Data.HP, playerInfo.Data.MaxHP);

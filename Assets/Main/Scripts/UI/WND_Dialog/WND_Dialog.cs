@@ -162,7 +162,7 @@ public class WND_Dialog : UIFormBase
                 grid.repositionNow = true;
                 break;
             case DialogType.Event:
-                int result = DealEvent.deal(NextIds[0]);
+                int result = Trade.deal(NextIds[0]);
                if (result == 0) 
                    ShowDialog(NextIds[1]);
                else if(result == 1)

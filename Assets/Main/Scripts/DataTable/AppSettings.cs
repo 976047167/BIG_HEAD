@@ -48,7 +48,6 @@ namespace AppSettings
                 {
                     _settingsList = new IReloadableSettings[]
                     { 
-                        BattleActionTableSettings._instance,
                         BattleBuffTableSettings._instance,
                         BattleCardTableSettings._instance,
                         BattleEquipTableSettings._instance,
@@ -57,13 +56,13 @@ namespace AppSettings
                         CharacterModelTableSettings._instance,
                         ClassCharacterTableSettings._instance,
                         DialogTableSettings._instance,
-                        EventTableSettings._instance,
                         NpcTableSettings._instance,
                         PromptTableSettings._instance,
                         RewardTableSettings._instance,
                         SceneTableSettings._instance,
                         ShopTableSettings._instance,
                         TextureTableSettings._instance,
+                        TradeTableSettings._instance,
                     };
                 }
                 return _settingsList;
@@ -92,223 +91,6 @@ namespace AppSettings
 
     }
 
-
-	/// <summary>
-	/// Auto Generate for Tab File: "BattleActionTable.txt"
-    /// No use of generic and reflection, for better performance,  less IL code generating
-	/// </summary>>
-    public partial class BattleActionTableSettings : IReloadableSettings
-    {
-        /// <summary>
-        /// How many reload function load?
-        /// </summary>>
-        public static int ReloadCount { get; private set; }
-
-		public static readonly string[] TabFilePaths = 
-        {
-            "BattleActionTable.txt"
-        };
-        internal static BattleActionTableSettings _instance = new BattleActionTableSettings();
-        Dictionary<int, BattleActionTableSetting> _dict = new Dictionary<int, BattleActionTableSetting>();
-
-        /// <summary>
-        /// Trigger delegate when reload the Settings
-        /// </summary>>
-	    public static System.Action OnReload;
-
-        /// <summary>
-        /// Constructor, just reload(init)
-        /// When Unity Editor mode, will watch the file modification and auto reload
-        /// </summary>
-	    private BattleActionTableSettings()
-	    {
-        }
-
-        /// <summary>
-        /// Get the singleton
-        /// </summary>
-        /// <returns></returns>
-	    public static BattleActionTableSettings GetInstance()
-	    {
-            if (ReloadCount == 0)
-            {
-                _instance._ReloadAll(true);
-    #if UNITY_EDITOR
-                if (SettingModule.IsFileSystemMode)
-                {
-                    for (var j = 0; j < TabFilePaths.Length; j++)
-                    {
-                        var tabFilePath = TabFilePaths[j];
-                        SettingModule.WatchSetting(tabFilePath, (path) =>
-                        {
-                            if (path.Replace("\\", "/").EndsWith(path))
-                            {
-                                _instance.ReloadAll();
-                                Log.LogConsole_MultiThread("File Watcher! Reload success! -> " + path);
-                            }
-                        });
-                    }
-
-                }
-    #endif
-            }
-
-	        return _instance;
-	    }
-        
-        public int Count
-        {
-            get
-            {
-                return _dict.Count;
-            }
-        }
-
-        /// <summary>
-        /// Do reload the setting file: BattleActionTable, no exception when duplicate primary key
-        /// </summary>
-        public void ReloadAll()
-        {
-            _ReloadAll(false);
-        }
-
-        /// <summary>
-        /// Do reload the setting class : BattleActionTable, no exception when duplicate primary key, use custom string content
-        /// </summary>
-        public void ReloadAllWithString(string context)
-        {
-            _ReloadAll(false, context);
-        }
-
-        /// <summary>
-        /// Do reload the setting file: BattleActionTable
-        /// </summary>
-	    void _ReloadAll(bool throwWhenDuplicatePrimaryKey, string customContent = null)
-        {
-            for (var j = 0; j < TabFilePaths.Length; j++)
-            {
-                var tabFilePath = TabFilePaths[j];
-                TableFile tableFile;
-                if (customContent == null)
-                    tableFile = SettingModule.Get(tabFilePath, false);
-                else
-                    tableFile = TableFile.LoadFromString(customContent);
-
-                using (tableFile)
-                {
-                    foreach (var row in tableFile)
-                    {
-                        var pk = BattleActionTableSetting.ParsePrimaryKey(row);
-                        BattleActionTableSetting setting;
-                        if (!_dict.TryGetValue(pk, out setting))
-                        {
-                            setting = new BattleActionTableSetting(row);
-                            _dict[setting.Id] = setting;
-                        }
-                        else 
-                        {
-                            if (throwWhenDuplicatePrimaryKey) throw new System.Exception(string.Format("DuplicateKey, Class: {0}, File: {1}, Key: {2}", this.GetType().Name, tabFilePath, pk));
-                            else setting.Reload(row);
-                        }
-                    }
-                }
-            }
-
-	        if (OnReload != null)
-	        {
-	            OnReload();
-	        }
-
-            ReloadCount++;
-            Log.Info("Reload settings: {0}, Row Count: {1}, Reload Count: {2}", GetType(), Count, ReloadCount);
-        }
-
-	    /// <summary>
-        /// foreachable enumerable: BattleActionTable
-        /// </summary>
-        public static IEnumerable GetAll()
-        {
-            foreach (var row in GetInstance()._dict.Values)
-            {
-                yield return row;
-            }
-        }
-
-        /// <summary>
-        /// GetEnumerator for `MoveNext`: BattleActionTable
-        /// </summary> 
-	    public static IEnumerator GetEnumerator()
-	    {
-	        return GetInstance()._dict.Values.GetEnumerator();
-	    }
-         
-	    /// <summary>
-        /// Get class by primary key: BattleActionTable
-        /// </summary>
-        public static BattleActionTableSetting Get(int primaryKey)
-        {
-            BattleActionTableSetting setting;
-            if (GetInstance()._dict.TryGetValue(primaryKey, out setting)) return setting;
-            return null;
-        }
-
-        // ========= CustomExtraString begin ===========
-        
-        // ========= CustomExtraString end ===========
-    }
-
-	/// <summary>
-	/// Auto Generate for Tab File: "BattleActionTable.txt"
-    /// Singleton class for less memory use
-	/// </summary>
-	public partial class BattleActionTableSetting : TableRowFieldParser
-	{
-		
-        /// <summary>
-        /// #目录
-        /// </summary>
-        public int Id { get; private set;}
-        
-        /// <summary>
-        /// 文本
-        /// </summary>
-        public string  Name { get; private set;}
-        
-        /// <summary>
-        /// 是否为被动效果
-        /// </summary>
-        public bool IsBuff { get; private set;}
-        
-        /// <summary>
-        /// 优先级
-        /// </summary>
-        public int Priority { get; private set;}
-        
-
-        internal BattleActionTableSetting(TableFileRow row)
-        {
-            Reload(row);
-        }
-
-        internal void Reload(TableFileRow row)
-        { 
-            Id = row.Get_int(row.Values[0], ""); 
-            Name = row.Get_string (row.Values[1], ""); 
-            IsBuff = row.Get_bool(row.Values[2], ""); 
-            Priority = row.Get_int(row.Values[3], ""); 
-        }
-
-        /// <summary>
-        /// Get PrimaryKey from a table row
-        /// </summary>
-        /// <param name="row"></param>
-        /// <returns></returns>
-        public static int ParsePrimaryKey(TableFileRow row)
-        {
-            var primaryKey = row.Get_int(row.Values[0], "");
-            return primaryKey;
-        }
-	}
 
 	/// <summary>
 	/// Auto Generate for Tab File: "BattleBuffTable.txt"
@@ -2323,241 +2105,6 @@ namespace AppSettings
 	}
 
 	/// <summary>
-	/// Auto Generate for Tab File: "EventTable.txt"
-    /// No use of generic and reflection, for better performance,  less IL code generating
-	/// </summary>>
-    public partial class EventTableSettings : IReloadableSettings
-    {
-        /// <summary>
-        /// How many reload function load?
-        /// </summary>>
-        public static int ReloadCount { get; private set; }
-
-		public static readonly string[] TabFilePaths = 
-        {
-            "EventTable.txt"
-        };
-        internal static EventTableSettings _instance = new EventTableSettings();
-        Dictionary<int, EventTableSetting> _dict = new Dictionary<int, EventTableSetting>();
-
-        /// <summary>
-        /// Trigger delegate when reload the Settings
-        /// </summary>>
-	    public static System.Action OnReload;
-
-        /// <summary>
-        /// Constructor, just reload(init)
-        /// When Unity Editor mode, will watch the file modification and auto reload
-        /// </summary>
-	    private EventTableSettings()
-	    {
-        }
-
-        /// <summary>
-        /// Get the singleton
-        /// </summary>
-        /// <returns></returns>
-	    public static EventTableSettings GetInstance()
-	    {
-            if (ReloadCount == 0)
-            {
-                _instance._ReloadAll(true);
-    #if UNITY_EDITOR
-                if (SettingModule.IsFileSystemMode)
-                {
-                    for (var j = 0; j < TabFilePaths.Length; j++)
-                    {
-                        var tabFilePath = TabFilePaths[j];
-                        SettingModule.WatchSetting(tabFilePath, (path) =>
-                        {
-                            if (path.Replace("\\", "/").EndsWith(path))
-                            {
-                                _instance.ReloadAll();
-                                Log.LogConsole_MultiThread("File Watcher! Reload success! -> " + path);
-                            }
-                        });
-                    }
-
-                }
-    #endif
-            }
-
-	        return _instance;
-	    }
-        
-        public int Count
-        {
-            get
-            {
-                return _dict.Count;
-            }
-        }
-
-        /// <summary>
-        /// Do reload the setting file: EventTable, no exception when duplicate primary key
-        /// </summary>
-        public void ReloadAll()
-        {
-            _ReloadAll(false);
-        }
-
-        /// <summary>
-        /// Do reload the setting class : EventTable, no exception when duplicate primary key, use custom string content
-        /// </summary>
-        public void ReloadAllWithString(string context)
-        {
-            _ReloadAll(false, context);
-        }
-
-        /// <summary>
-        /// Do reload the setting file: EventTable
-        /// </summary>
-	    void _ReloadAll(bool throwWhenDuplicatePrimaryKey, string customContent = null)
-        {
-            for (var j = 0; j < TabFilePaths.Length; j++)
-            {
-                var tabFilePath = TabFilePaths[j];
-                TableFile tableFile;
-                if (customContent == null)
-                    tableFile = SettingModule.Get(tabFilePath, false);
-                else
-                    tableFile = TableFile.LoadFromString(customContent);
-
-                using (tableFile)
-                {
-                    foreach (var row in tableFile)
-                    {
-                        var pk = EventTableSetting.ParsePrimaryKey(row);
-                        EventTableSetting setting;
-                        if (!_dict.TryGetValue(pk, out setting))
-                        {
-                            setting = new EventTableSetting(row);
-                            _dict[setting.Id] = setting;
-                        }
-                        else 
-                        {
-                            if (throwWhenDuplicatePrimaryKey) throw new System.Exception(string.Format("DuplicateKey, Class: {0}, File: {1}, Key: {2}", this.GetType().Name, tabFilePath, pk));
-                            else setting.Reload(row);
-                        }
-                    }
-                }
-            }
-
-	        if (OnReload != null)
-	        {
-	            OnReload();
-	        }
-
-            ReloadCount++;
-            Log.Info("Reload settings: {0}, Row Count: {1}, Reload Count: {2}", GetType(), Count, ReloadCount);
-        }
-
-	    /// <summary>
-        /// foreachable enumerable: EventTable
-        /// </summary>
-        public static IEnumerable GetAll()
-        {
-            foreach (var row in GetInstance()._dict.Values)
-            {
-                yield return row;
-            }
-        }
-
-        /// <summary>
-        /// GetEnumerator for `MoveNext`: EventTable
-        /// </summary> 
-	    public static IEnumerator GetEnumerator()
-	    {
-	        return GetInstance()._dict.Values.GetEnumerator();
-	    }
-         
-	    /// <summary>
-        /// Get class by primary key: EventTable
-        /// </summary>
-        public static EventTableSetting Get(int primaryKey)
-        {
-            EventTableSetting setting;
-            if (GetInstance()._dict.TryGetValue(primaryKey, out setting)) return setting;
-            return null;
-        }
-
-        // ========= CustomExtraString begin ===========
-        
-        // ========= CustomExtraString end ===========
-    }
-
-	/// <summary>
-	/// Auto Generate for Tab File: "EventTable.txt"
-    /// Singleton class for less memory use
-	/// </summary>
-	public partial class EventTableSetting : TableRowFieldParser
-	{
-		
-        /// <summary>
-        /// #目录
-        /// </summary>
-        public int Id { get; private set;}
-        
-        /// <summary>
-        /// #事件类型 1血量改变，2食物改变，3蓝量，4金钱，5卡片，6剧情物品/标志
-        /// </summary>
-        public int Type { get; private set;}
-        
-        /// <summary>
-        /// 物品/卡片的id
-        /// </summary>
-        public int ItemId { get; private set;}
-        
-        /// <summary>
-        /// 改变数量
-        /// </summary>
-        public int Num { get; private set;}
-        
-        /// <summary>
-        /// 花费类型
-        /// </summary>
-        public int CostType { get; private set;}
-        
-        /// <summary>
-        /// 花费的物品id
-        /// </summary>
-        public int CostItemId { get; private set;}
-        
-        /// <summary>
-        /// 花费数量
-        /// </summary>
-        public int CostNum { get; private set;}
-        
-
-        internal EventTableSetting(TableFileRow row)
-        {
-            Reload(row);
-        }
-
-        internal void Reload(TableFileRow row)
-        { 
-            Id = row.Get_int(row.Values[0], ""); 
-            Type = row.Get_int(row.Values[1], ""); 
-            ItemId = row.Get_int(row.Values[2], ""); 
-            Num = row.Get_int(row.Values[3], ""); 
-            CostType = row.Get_int(row.Values[4], ""); 
-            CostItemId = row.Get_int(row.Values[5], ""); 
-            CostNum = row.Get_int(row.Values[6], ""); 
-        }
-
-        /// <summary>
-        /// Get PrimaryKey from a table row
-        /// </summary>
-        /// <param name="row"></param>
-        /// <returns></returns>
-        public static int ParsePrimaryKey(TableFileRow row)
-        {
-            var primaryKey = row.Get_int(row.Values[0], "");
-            return primaryKey;
-        }
-	}
-
-	/// <summary>
 	/// Auto Generate for Tab File: "NpcTable.txt"
     /// No use of generic and reflection, for better performance,  less IL code generating
 	/// </summary>>
@@ -3827,6 +3374,241 @@ namespace AppSettings
         { 
             Id = row.Get_int(row.Values[0], ""); 
             Path = row.Get_string(row.Values[1], ""); 
+        }
+
+        /// <summary>
+        /// Get PrimaryKey from a table row
+        /// </summary>
+        /// <param name="row"></param>
+        /// <returns></returns>
+        public static int ParsePrimaryKey(TableFileRow row)
+        {
+            var primaryKey = row.Get_int(row.Values[0], "");
+            return primaryKey;
+        }
+	}
+
+	/// <summary>
+	/// Auto Generate for Tab File: "TradeTable.txt"
+    /// No use of generic and reflection, for better performance,  less IL code generating
+	/// </summary>>
+    public partial class TradeTableSettings : IReloadableSettings
+    {
+        /// <summary>
+        /// How many reload function load?
+        /// </summary>>
+        public static int ReloadCount { get; private set; }
+
+		public static readonly string[] TabFilePaths = 
+        {
+            "TradeTable.txt"
+        };
+        internal static TradeTableSettings _instance = new TradeTableSettings();
+        Dictionary<int, TradeTableSetting> _dict = new Dictionary<int, TradeTableSetting>();
+
+        /// <summary>
+        /// Trigger delegate when reload the Settings
+        /// </summary>>
+	    public static System.Action OnReload;
+
+        /// <summary>
+        /// Constructor, just reload(init)
+        /// When Unity Editor mode, will watch the file modification and auto reload
+        /// </summary>
+	    private TradeTableSettings()
+	    {
+        }
+
+        /// <summary>
+        /// Get the singleton
+        /// </summary>
+        /// <returns></returns>
+	    public static TradeTableSettings GetInstance()
+	    {
+            if (ReloadCount == 0)
+            {
+                _instance._ReloadAll(true);
+    #if UNITY_EDITOR
+                if (SettingModule.IsFileSystemMode)
+                {
+                    for (var j = 0; j < TabFilePaths.Length; j++)
+                    {
+                        var tabFilePath = TabFilePaths[j];
+                        SettingModule.WatchSetting(tabFilePath, (path) =>
+                        {
+                            if (path.Replace("\\", "/").EndsWith(path))
+                            {
+                                _instance.ReloadAll();
+                                Log.LogConsole_MultiThread("File Watcher! Reload success! -> " + path);
+                            }
+                        });
+                    }
+
+                }
+    #endif
+            }
+
+	        return _instance;
+	    }
+        
+        public int Count
+        {
+            get
+            {
+                return _dict.Count;
+            }
+        }
+
+        /// <summary>
+        /// Do reload the setting file: TradeTable, no exception when duplicate primary key
+        /// </summary>
+        public void ReloadAll()
+        {
+            _ReloadAll(false);
+        }
+
+        /// <summary>
+        /// Do reload the setting class : TradeTable, no exception when duplicate primary key, use custom string content
+        /// </summary>
+        public void ReloadAllWithString(string context)
+        {
+            _ReloadAll(false, context);
+        }
+
+        /// <summary>
+        /// Do reload the setting file: TradeTable
+        /// </summary>
+	    void _ReloadAll(bool throwWhenDuplicatePrimaryKey, string customContent = null)
+        {
+            for (var j = 0; j < TabFilePaths.Length; j++)
+            {
+                var tabFilePath = TabFilePaths[j];
+                TableFile tableFile;
+                if (customContent == null)
+                    tableFile = SettingModule.Get(tabFilePath, false);
+                else
+                    tableFile = TableFile.LoadFromString(customContent);
+
+                using (tableFile)
+                {
+                    foreach (var row in tableFile)
+                    {
+                        var pk = TradeTableSetting.ParsePrimaryKey(row);
+                        TradeTableSetting setting;
+                        if (!_dict.TryGetValue(pk, out setting))
+                        {
+                            setting = new TradeTableSetting(row);
+                            _dict[setting.Id] = setting;
+                        }
+                        else 
+                        {
+                            if (throwWhenDuplicatePrimaryKey) throw new System.Exception(string.Format("DuplicateKey, Class: {0}, File: {1}, Key: {2}", this.GetType().Name, tabFilePath, pk));
+                            else setting.Reload(row);
+                        }
+                    }
+                }
+            }
+
+	        if (OnReload != null)
+	        {
+	            OnReload();
+	        }
+
+            ReloadCount++;
+            Log.Info("Reload settings: {0}, Row Count: {1}, Reload Count: {2}", GetType(), Count, ReloadCount);
+        }
+
+	    /// <summary>
+        /// foreachable enumerable: TradeTable
+        /// </summary>
+        public static IEnumerable GetAll()
+        {
+            foreach (var row in GetInstance()._dict.Values)
+            {
+                yield return row;
+            }
+        }
+
+        /// <summary>
+        /// GetEnumerator for `MoveNext`: TradeTable
+        /// </summary> 
+	    public static IEnumerator GetEnumerator()
+	    {
+	        return GetInstance()._dict.Values.GetEnumerator();
+	    }
+         
+	    /// <summary>
+        /// Get class by primary key: TradeTable
+        /// </summary>
+        public static TradeTableSetting Get(int primaryKey)
+        {
+            TradeTableSetting setting;
+            if (GetInstance()._dict.TryGetValue(primaryKey, out setting)) return setting;
+            return null;
+        }
+
+        // ========= CustomExtraString begin ===========
+        
+        // ========= CustomExtraString end ===========
+    }
+
+	/// <summary>
+	/// Auto Generate for Tab File: "TradeTable.txt"
+    /// Singleton class for less memory use
+	/// </summary>
+	public partial class TradeTableSetting : TableRowFieldParser
+	{
+		
+        /// <summary>
+        /// #目录
+        /// </summary>
+        public int Id { get; private set;}
+        
+        /// <summary>
+        /// #事件类型 1血量改变，2食物改变，3蓝量，4金钱，5卡片，6剧情物品/标志
+        /// </summary>
+        public int Type { get; private set;}
+        
+        /// <summary>
+        /// 物品/卡片的id
+        /// </summary>
+        public int ItemId { get; private set;}
+        
+        /// <summary>
+        /// 改变数量
+        /// </summary>
+        public int Num { get; private set;}
+        
+        /// <summary>
+        /// 花费类型
+        /// </summary>
+        public int CostType { get; private set;}
+        
+        /// <summary>
+        /// 花费的物品id
+        /// </summary>
+        public int CostItemId { get; private set;}
+        
+        /// <summary>
+        /// 花费数量
+        /// </summary>
+        public int CostNum { get; private set;}
+        
+
+        internal TradeTableSetting(TableFileRow row)
+        {
+            Reload(row);
+        }
+
+        internal void Reload(TableFileRow row)
+        { 
+            Id = row.Get_int(row.Values[0], ""); 
+            Type = row.Get_int(row.Values[1], ""); 
+            ItemId = row.Get_int(row.Values[2], ""); 
+            Num = row.Get_int(row.Values[3], ""); 
+            CostType = row.Get_int(row.Values[4], ""); 
+            CostItemId = row.Get_int(row.Values[5], ""); 
+            CostNum = row.Get_int(row.Values[6], ""); 
         }
 
         /// <summary>
