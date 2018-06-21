@@ -22,7 +22,7 @@ public abstract partial class BattleAction
     protected int depth;
     const int MAX_EXCUTE_DEPTH = 10;
     /// <summary>
-    /// 效果的实现
+    /// 主动效果的实现
     /// </summary>
     /// <param name="num"></param>
     public abstract void Excute();

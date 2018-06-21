@@ -15,7 +15,7 @@ public partial class UIAction
 
         public override IEnumerator Excute()
         {
-            BattleForm.GetPlayerInfoViewByPlayer(BuffData.TargetPlayerData).AddBuff(BuffData);
+            BattleForm.GetPlayerInfoViewByPlayer(BuffData.Target).AddBuff(BuffData);
             yield return null;
         }
     }

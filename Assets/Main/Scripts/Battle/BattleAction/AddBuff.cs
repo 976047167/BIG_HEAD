@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Collections;
@@ -17,7 +17,7 @@ public partial class BattleAction
                 if (actionArg == owner.Data.BuffList[i].BuffId)
                 {
                     added = true;
-                    //Ë¢ÐÂbuffÊ±¼ä£¬²»µþ¼Ó
+                    //刷新buff时间，不叠加
                     BattleBuffTableSetting buffData = BattleBuffTableSettings.Get(owner.Data.BuffList[i].BuffId);
                     if (buffData.IsOverlay == false)
                     {
