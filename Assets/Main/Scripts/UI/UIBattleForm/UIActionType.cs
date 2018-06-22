@@ -20,4 +20,16 @@ public enum UIActionType
     /// 闪避伤害动画
     /// </summary>
     DodgeDamage,
+    /// <summary>
+    /// 凭空获得卡牌
+    /// </summary>
+    GetCard,
+    /// <summary>
+    /// 抢对手的牌
+    /// </summary>
+    GetOppCard,
+    /// <summary>
+    /// 抽对面的卡
+    /// </summary>
+    DrawOppCard,
 }

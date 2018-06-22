@@ -348,7 +348,7 @@ public class BattleMgr
             {
                 if (buff.Data.ActionTimes[i] == actionTime)
                 {
-                    ApplyAction(buff.Data.ActionTypes[i], buff.Data.ActionPrarms[i], buff.CardData, playerData, playerData);
+                    ApplyAction(buff.Data.ActionTypes[i], buff.Data.ActionParams[i], buff.CardData, playerData, playerData);
                     buff.Time--;
                     if (buff.Time == 0)
                     {

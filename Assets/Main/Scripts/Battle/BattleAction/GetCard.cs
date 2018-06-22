@@ -10,7 +10,16 @@ public partial class BattleAction
         public static BattleActionType ActionType { get { return BattleActionType.GetCard; } }
         public override void Excute()
         {
-            throw new System.NotImplementedException();
+            for (int i = 0; i < actionArg; i++)
+            {
+                if (owner.Data.HandCardList.Count >= BattleMgr.MAX_HAND_CARD_COUNT)
+                {
+                    return;
+                }
+                BattleCardData cardData = new BattleCardData(actionArg2, owner);
+                owner.Data.HandCardList.Add(cardData);
+                battleMgr.AddUIAction(new UIAction.UIGetCard(cardData));
+            }
         }
     }
 }

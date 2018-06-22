@@ -105,7 +105,7 @@ public class BattlePlayer
             {
                 if (buff.Data.ActionTimes[i] == (int)actionTime)
                 {
-                    ApplyAction(buff.Data.ActionTypes[i], buff.Data.ActionPrarms[i], buff.Data.ActionParams2[i], buff.CardData, this, this);
+                    ApplyAction(buff.Data.ActionTypes[i], buff.Data.ActionParams[i], buff.Data.ActionParams2[i], buff.CardData, this, this);
                     buff.Time--;
                     if (buff.Time == 0)
                     {

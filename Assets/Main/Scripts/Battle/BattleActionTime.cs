@@ -6,7 +6,7 @@ using UnityEngine;
 /// </summary>
 public enum BattleActionTime : int
 {
-    None=0,
+    None = 0,
     BattleStart,
     RoundStart,
     RoundEnd,

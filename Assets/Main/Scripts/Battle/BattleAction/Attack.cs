@@ -23,7 +23,7 @@ public partial class BattleAction
                     switch ((BattleActionType)buff.Data.ActionTypes[j])
                     {
                         case BattleActionType.BuffLayerDamage:
-                            finalDamage = finalDamage + buff.Layer * buff.Data.ActionPrarms[j];
+                            finalDamage = finalDamage + buff.Layer * buff.Data.ActionParams[j];
                             buff.Layer--;
                             if (buff.Layer == 0)
                             {
@@ -66,7 +66,7 @@ public partial class BattleAction
                     switch ((BattleActionType)buff.Data.ActionTypes[j])
                     {
                         case BattleActionType.DefenseDamage:
-                            finalDamage = finalDamage - buff.Data.ActionPrarms[j];
+                            finalDamage = finalDamage - buff.Data.ActionParams[j];
                             buff.Layer--;
                             if (buff.Layer == 0)
                             {
@@ -150,6 +150,14 @@ public partial class BattleAction
                                     Create(BattleActionType.Attack, finalDamage, 0, buff.CardData, target, owner);
                                 }
                                 break;
+                            case BattleActionType.GetOppHandCardByAttack:
+                                buff.Layer--;
+                                if (buff.Layer == 0)
+                                {
+                                    target.Data.BuffList.RemoveAt(i);
+                                }
+                                Create(BattleActionType.GetOppHandCardByAttack, buff.Data.ActionParams[j], buff.Data.ActionParams2[j], buff.CardData, owner, target);
+                                break;
                             default:
                                 break;
                         }
@@ -190,7 +198,7 @@ public partial class BattleAction
                     switch ((BattleActionType)buff.Data.ActionTypes[j])
                     {
                         case BattleActionType.ExtraPercentDamage:
-                            extraDamage += Mathf.RoundToInt((float)finalDamage * ((float)buff.Data.ActionPrarms[j] / 100f));
+                            extraDamage += Mathf.RoundToInt((float)finalDamage * ((float)buff.Data.ActionParams[j] / 100f));
                             buff.Layer--;
                             if (buff.Layer == 0)
                             {
@@ -235,7 +243,7 @@ public partial class BattleAction
                     switch ((BattleActionType)buff.Data.ActionTypes[j])
                     {
                         case BattleActionType.DefenseDamage:
-                            extraDamage = extraDamage - buff.Data.ActionPrarms[j];
+                            extraDamage = extraDamage - buff.Data.ActionParams[j];
                             buff.Layer--;
                             if (buff.Layer == 0)
                             {

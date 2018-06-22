@@ -48,6 +48,7 @@ namespace AppSettings
                 {
                     _settingsList = new IReloadableSettings[]
                     { 
+                        BattleActionTableSettings._instance,
                         BattleBuffTableSettings._instance,
                         BattleCardTableSettings._instance,
                         BattleEquipTableSettings._instance,
@@ -91,6 +92,223 @@ namespace AppSettings
 
     }
 
+
+	/// <summary>
+	/// Auto Generate for Tab File: "BattleActionTable.txt"
+    /// No use of generic and reflection, for better performance,  less IL code generating
+	/// </summary>>
+    public partial class BattleActionTableSettings : IReloadableSettings
+    {
+        /// <summary>
+        /// How many reload function load?
+        /// </summary>>
+        public static int ReloadCount { get; private set; }
+
+		public static readonly string[] TabFilePaths = 
+        {
+            "BattleActionTable.txt"
+        };
+        internal static BattleActionTableSettings _instance = new BattleActionTableSettings();
+        Dictionary<int, BattleActionTableSetting> _dict = new Dictionary<int, BattleActionTableSetting>();
+
+        /// <summary>
+        /// Trigger delegate when reload the Settings
+        /// </summary>>
+	    public static System.Action OnReload;
+
+        /// <summary>
+        /// Constructor, just reload(init)
+        /// When Unity Editor mode, will watch the file modification and auto reload
+        /// </summary>
+	    private BattleActionTableSettings()
+	    {
+        }
+
+        /// <summary>
+        /// Get the singleton
+        /// </summary>
+        /// <returns></returns>
+	    public static BattleActionTableSettings GetInstance()
+	    {
+            if (ReloadCount == 0)
+            {
+                _instance._ReloadAll(true);
+    #if UNITY_EDITOR
+                if (SettingModule.IsFileSystemMode)
+                {
+                    for (var j = 0; j < TabFilePaths.Length; j++)
+                    {
+                        var tabFilePath = TabFilePaths[j];
+                        SettingModule.WatchSetting(tabFilePath, (path) =>
+                        {
+                            if (path.Replace("\\", "/").EndsWith(path))
+                            {
+                                _instance.ReloadAll();
+                                Log.LogConsole_MultiThread("File Watcher! Reload success! -> " + path);
+                            }
+                        });
+                    }
+
+                }
+    #endif
+            }
+
+	        return _instance;
+	    }
+        
+        public int Count
+        {
+            get
+            {
+                return _dict.Count;
+            }
+        }
+
+        /// <summary>
+        /// Do reload the setting file: BattleActionTable, no exception when duplicate primary key
+        /// </summary>
+        public void ReloadAll()
+        {
+            _ReloadAll(false);
+        }
+
+        /// <summary>
+        /// Do reload the setting class : BattleActionTable, no exception when duplicate primary key, use custom string content
+        /// </summary>
+        public void ReloadAllWithString(string context)
+        {
+            _ReloadAll(false, context);
+        }
+
+        /// <summary>
+        /// Do reload the setting file: BattleActionTable
+        /// </summary>
+	    void _ReloadAll(bool throwWhenDuplicatePrimaryKey, string customContent = null)
+        {
+            for (var j = 0; j < TabFilePaths.Length; j++)
+            {
+                var tabFilePath = TabFilePaths[j];
+                TableFile tableFile;
+                if (customContent == null)
+                    tableFile = SettingModule.Get(tabFilePath, false);
+                else
+                    tableFile = TableFile.LoadFromString(customContent);
+
+                using (tableFile)
+                {
+                    foreach (var row in tableFile)
+                    {
+                        var pk = BattleActionTableSetting.ParsePrimaryKey(row);
+                        BattleActionTableSetting setting;
+                        if (!_dict.TryGetValue(pk, out setting))
+                        {
+                            setting = new BattleActionTableSetting(row);
+                            _dict[setting.Id] = setting;
+                        }
+                        else 
+                        {
+                            if (throwWhenDuplicatePrimaryKey) throw new System.Exception(string.Format("DuplicateKey, Class: {0}, File: {1}, Key: {2}", this.GetType().Name, tabFilePath, pk));
+                            else setting.Reload(row);
+                        }
+                    }
+                }
+            }
+
+	        if (OnReload != null)
+	        {
+	            OnReload();
+	        }
+
+            ReloadCount++;
+            Log.Info("Reload settings: {0}, Row Count: {1}, Reload Count: {2}", GetType(), Count, ReloadCount);
+        }
+
+	    /// <summary>
+        /// foreachable enumerable: BattleActionTable
+        /// </summary>
+        public static IEnumerable GetAll()
+        {
+            foreach (var row in GetInstance()._dict.Values)
+            {
+                yield return row;
+            }
+        }
+
+        /// <summary>
+        /// GetEnumerator for `MoveNext`: BattleActionTable
+        /// </summary> 
+	    public static IEnumerator GetEnumerator()
+	    {
+	        return GetInstance()._dict.Values.GetEnumerator();
+	    }
+         
+	    /// <summary>
+        /// Get class by primary key: BattleActionTable
+        /// </summary>
+        public static BattleActionTableSetting Get(int primaryKey)
+        {
+            BattleActionTableSetting setting;
+            if (GetInstance()._dict.TryGetValue(primaryKey, out setting)) return setting;
+            return null;
+        }
+
+        // ========= CustomExtraString begin ===========
+        
+        // ========= CustomExtraString end ===========
+    }
+
+	/// <summary>
+	/// Auto Generate for Tab File: "BattleActionTable.txt"
+    /// Singleton class for less memory use
+	/// </summary>
+	public partial class BattleActionTableSetting : TableRowFieldParser
+	{
+		
+        /// <summary>
+        /// #目录
+        /// </summary>
+        public int Id { get; private set;}
+        
+        /// <summary>
+        /// 文本
+        /// </summary>
+        public string  Name { get; private set;}
+        
+        /// <summary>
+        /// 是否为被动效果
+        /// </summary>
+        public bool IsBuff { get; private set;}
+        
+        /// <summary>
+        /// 优先级
+        /// </summary>
+        public int Priority { get; private set;}
+        
+
+        internal BattleActionTableSetting(TableFileRow row)
+        {
+            Reload(row);
+        }
+
+        internal void Reload(TableFileRow row)
+        { 
+            Id = row.Get_int(row.Values[0], ""); 
+            Name = row.Get_string (row.Values[1], ""); 
+            IsBuff = row.Get_bool(row.Values[2], ""); 
+            Priority = row.Get_int(row.Values[3], ""); 
+        }
+
+        /// <summary>
+        /// Get PrimaryKey from a table row
+        /// </summary>
+        /// <param name="row"></param>
+        /// <returns></returns>
+        public static int ParsePrimaryKey(TableFileRow row)
+        {
+            var primaryKey = row.Get_int(row.Values[0], "");
+            return primaryKey;
+        }
+	}
 
 	/// <summary>
 	/// Auto Generate for Tab File: "BattleBuffTable.txt"
@@ -321,7 +539,7 @@ namespace AppSettings
         /// <summary>
         /// Buff效果的参数
         /// </summary>
-        public List<int> ActionPrarms { get; private set;}
+        public List<int> ActionParams { get; private set;}
         
         /// <summary>
         /// 特效参数2
@@ -347,7 +565,7 @@ namespace AppSettings
             Time = row.Get_int(row.Values[8], ""); 
             ActionTimes = row.Get_List_int(row.Values[9], ""); 
             ActionTypes = row.Get_List_int(row.Values[10], ""); 
-            ActionPrarms = row.Get_List_int(row.Values[11], ""); 
+            ActionParams = row.Get_List_int(row.Values[11], ""); 
             ActionParams2 = row.Get_List_int(row.Values[12], ""); 
         }
 
