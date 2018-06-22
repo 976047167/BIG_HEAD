@@ -12,5 +12,10 @@ public partial class BattleAction
         {
             Debug.LogError("this is a buff");
         }
+
+        public override int Excute(int damage)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

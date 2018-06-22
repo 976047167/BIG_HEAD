@@ -12,8 +12,13 @@ public partial class BattleAction
         {
             if (actionArg>0)
             {
-                Create(BattleActionType.AddEquipment, actionArg, actionArg2, cardData, owner, owner);
+                Create(BattleActionType.AddEquipment, actionArg, actionArg2, sourceData, owner, owner);
             }
+        }
+
+        public override int Excute(int damage)
+        {
+            throw new NotImplementedException();
         }
     }
 }

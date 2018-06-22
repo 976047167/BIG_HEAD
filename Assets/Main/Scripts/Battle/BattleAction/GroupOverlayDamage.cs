@@ -10,7 +10,20 @@ public partial class BattleAction
         public static BattleActionType ActionType { get { return BattleActionType.GroupOverlayDamage; } }
         public override void Excute()
         {
-            throw new System.NotImplementedException();
+            Debug.LogError("This is a Buff!");
+        }
+
+        public override int Excute(int damage)
+        {
+            if (sourceData.ItemType == BattleEffectItemType.Card)
+            {
+                BattleCardData cardData = sourceData as BattleCardData;
+                battleMgr.SetRoundCounter("CardGroup" + cardData.Data.GroupId, 1);
+                int count = battleMgr.GetBattleCounter("CardGroup" + cardData.Data.GroupId);
+                return damage + count * actionArg;
+            }
+            Debug.LogError("不支持非卡牌用此效果!");
+            return damage;
         }
     }
 }

@@ -21,5 +21,10 @@ public partial class BattleAction
                 battleMgr.AddUIAction(new UIAction.UIGetCard(cardData));
             }
         }
+
+        public override int Excute(int damage)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

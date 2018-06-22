@@ -16,5 +16,10 @@ public partial class BattleAction
                 owner.Data.HP = owner.Data.MaxHP;
             }
         }
+
+        public override int Excute(int damage)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

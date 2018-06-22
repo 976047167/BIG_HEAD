@@ -10,7 +10,26 @@ public partial class BattleAction
         public static BattleActionType ActionType { get { return BattleActionType.TansferBuffs; } }
         public override void Excute()
         {
-            throw new System.NotImplementedException();
+            List<BattleBuffData> canRemoveList = new List<BattleBuffData>();
+            for (int i = 0; i < owner.Data.BuffList.Count; i++)
+            {
+                if (owner.Data.BuffList[i].Data.DispelGrade <= actionArg)
+                {
+                    canRemoveList.Add(owner.Data.BuffList[i]);
+                }
+            }
+
+            for (int i = 0; i < canRemoveList.Count; i++)
+            {
+                //owner.Data.BuffList.Remove(canRemoveList[i]);
+                Create(BattleActionType.RemoveBuff, canRemoveList[i].BuffId, 0, sourceData, owner, owner).Excute();
+                Create(BattleActionType.AddBuff, canRemoveList[i].BuffId, canRemoveList[i].Layer, sourceData, target, target).Excute();
+            }
+        }
+
+        public override int Excute(int damage)
+        {
+            throw new NotImplementedException();
         }
     }
 }

@@ -11,10 +11,15 @@ public partial class BattleAction
         public override void Excute()
         {
             owner.Data.MP += actionArg;
-            if (owner.Data.MP> owner.Data.MaxMP)
+            if (owner.Data.MP > owner.Data.MaxMP)
             {
                 owner.Data.MP = owner.Data.MaxMP;
             }
+        }
+
+        public override int Excute(int damage)
+        {
+            throw new NotImplementedException();
         }
     }
 }

@@ -36,10 +36,14 @@ public partial class BattleAction
             }
             if (added == false)
             {
-                BattleBuffData buffData = new BattleBuffData(actionArg, 0, cardData, owner, owner);
+                BattleBuffData buffData = new BattleBuffData(actionArg, 0, sourceData, owner, owner);
                 owner.Data.BuffList.Add(buffData);
                 battleMgr.AddUIAction(new UIAction.UIAddBuff(buffData));
             }
+        }
+        public override int Excute(int damage)
+        {
+            throw new NotImplementedException();
         }
     }
 }

@@ -14,9 +14,14 @@ public partial class BattleAction
             {
                 owner.Data.EquipList.RemoveAt(0);
             }
-            BattleEquipData battleEquipData = new BattleEquipData(actionArg, cardData, owner);
+            BattleEquipData battleEquipData = new BattleEquipData(actionArg, sourceData, owner);
             owner.Data.EquipList.Add(battleEquipData);
             battleMgr.AddUIAction(new UIAction.UIAddEquip(battleEquipData));
+        }
+
+        public override int Excute(int damage)
+        {
+            throw new NotImplementedException();
         }
     }
 }

@@ -10,7 +10,13 @@ public partial class BattleAction
         public static BattleActionType ActionType { get { return BattleActionType.LostSelfPercentHP; } }
         public override void Excute()
         {
-            throw new System.NotImplementedException();
+            int damage = Mathf.RoundToInt(owner.Data.HP * (actionArg / 100f));
+            Create(BattleActionType.Attack, damage, 0, sourceData, owner, owner).Excute();
+        }
+
+        public override int Excute(int damage)
+        {
+            throw new NotImplementedException();
         }
     }
 }

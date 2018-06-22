@@ -32,5 +32,10 @@ public partial class BattleAction
                 battleMgr.AddUIAction(new UIAction.UIDrawOppCard(drawedCard));
             }
         }
+
+        public override int Excute(int damage)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

@@ -105,7 +105,7 @@ public class BattlePlayer
             {
                 if (buff.Data.ActionTimes[i] == (int)actionTime)
                 {
-                    ApplyAction(buff.Data.ActionTypes[i], buff.Data.ActionParams[i], buff.Data.ActionParams2[i], buff.CardData, this, this);
+                    ApplyAction(buff.Data.ActionTypes[i], buff.Data.ActionParams[i], buff.Data.ActionParams2[i], buff, this, this);
                     buff.Time--;
                     if (buff.Time == 0)
                     {
@@ -132,7 +132,7 @@ public class BattlePlayer
             {
                 if (equip.Data.ActionTimes[i] == (int)actionTime)
                 {
-                    ApplyAction(equip.Data.ActionTypes[i], equip.Data.ActionPrarms[i], equip.Data.ActionParams2[i], equip.CardData, this);
+                    ApplyAction(equip.Data.ActionTypes[i], equip.Data.ActionPrarms[i], equip.Data.ActionParams2[i], equip, this);
                     //equip.Time--;
                     //if (equip.Time == 0)
                     //{
@@ -150,7 +150,7 @@ public class BattlePlayer
             this.Data.EquipList.Remove(item);
         }
     }
-    void ApplyAction(int actionType, int actionArg, int actionArg2, BattleCardData cardData, BattlePlayer owner, BattlePlayer target = null)
+    void ApplyAction(int actionType, int actionArg, int actionArg2, BattleEffectItemData cardData, BattlePlayer owner, BattlePlayer target = null)
     {
         if (target == null)
         {

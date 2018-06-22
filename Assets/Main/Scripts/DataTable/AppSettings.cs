@@ -788,6 +788,11 @@ namespace AppSettings
         public int Quality { get; private set;}
         
         /// <summary>
+        /// 卡牌系列ID(0是没有系列)
+        /// </summary>
+        public int GroupId { get; private set;}
+        
+        /// <summary>
         /// 魔法开销
         /// </summary>
         public int Spending { get; private set;}
@@ -852,16 +857,17 @@ namespace AppSettings
             ExtraDesc = row.Get_string(row.Values[4], ""); 
             Type = row.Get_int(row.Values[5], ""); 
             Quality = row.Get_int(row.Values[6], ""); 
-            Spending = row.Get_int(row.Values[7], ""); 
-            ClassLimit = row.Get_int(row.Values[8], ""); 
-            IconLeftID = row.Get_int(row.Values[9], ""); 
-            IconRightID = row.Get_int(row.Values[10], ""); 
-            ShowID = row.Get_int(row.Values[11], ""); 
-            Effect = row.Get_int(row.Values[12], ""); 
-            Price = row.Get_int(row.Values[13], ""); 
-            ActionTypes = row.Get_List_int(row.Values[14], ""); 
-            ActionParams = row.Get_List_int(row.Values[15], ""); 
-            ActionParams2 = row.Get_List_int(row.Values[16], ""); 
+            GroupId = row.Get_int(row.Values[7], ""); 
+            Spending = row.Get_int(row.Values[8], ""); 
+            ClassLimit = row.Get_int(row.Values[9], ""); 
+            IconLeftID = row.Get_int(row.Values[10], ""); 
+            IconRightID = row.Get_int(row.Values[11], ""); 
+            ShowID = row.Get_int(row.Values[12], ""); 
+            Effect = row.Get_int(row.Values[13], ""); 
+            Price = row.Get_int(row.Values[14], ""); 
+            ActionTypes = row.Get_List_int(row.Values[15], ""); 
+            ActionParams = row.Get_List_int(row.Values[16], ""); 
+            ActionParams2 = row.Get_List_int(row.Values[17], ""); 
         }
 
         /// <summary>

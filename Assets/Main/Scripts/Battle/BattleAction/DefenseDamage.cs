@@ -12,5 +12,9 @@ public partial class BattleAction
         {
             Debug.LogError("这是一个被动buff");
         }
+        public override int Excute(int damage)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

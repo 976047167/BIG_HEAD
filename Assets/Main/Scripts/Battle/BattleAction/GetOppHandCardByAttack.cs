@@ -25,5 +25,10 @@ public partial class BattleAction
                 handList.Remove(handList[cardIndex]);
             }
         }
+
+        public override int Excute(int damage)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

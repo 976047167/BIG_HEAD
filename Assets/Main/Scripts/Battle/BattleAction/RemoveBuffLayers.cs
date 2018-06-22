@@ -10,7 +10,24 @@ public partial class BattleAction
         public static BattleActionType ActionType { get { return BattleActionType.RemoveBuffLayers; } }
         public override void Excute()
         {
-            throw new System.NotImplementedException();
+            if (sourceData.ItemType == BattleEffectItemType.Buff)
+            {
+                BattleBuffData buff = sourceData as BattleBuffData;
+                buff.Layer -= actionArg;
+                if (buff.Layer <= 0)
+                {
+                    sourceData.Owner.Data.BuffList.Remove(buff);
+                }
+                battleMgr.AddUIAction(new UIAction.UIRemoveBuff(target, buff.BuffId, actionArg));
+                return;
+            }
+            else
+                Debug.LogError("这是BUFF专用效果!");
+        }
+
+        public override int Excute(int damage)
+        {
+            throw new NotImplementedException();
         }
     }
 }

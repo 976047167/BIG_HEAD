@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using AppSettings;
 
-public class BattleEquipData
+public class BattleEquipData : BattleEffectItemData
 {
     public int EquipId { get; private set; }
     public int Time { get; set; }
@@ -13,10 +13,9 @@ public class BattleEquipData
     /// <summary>
     /// 触发buff的卡牌信息，没有那就是自带的装备
     /// </summary>
-    public BattleCardData CardData { get; private set; }
-    public BattlePlayer Owner { get; private set; }
+    public BattleEffectItemData CardData { get; private set; }
 
-    public BattleEquipData(int equipId, BattleCardData cardData, BattlePlayer owner)
+    public BattleEquipData(int equipId, BattleEffectItemData cardData, BattlePlayer owner)
     {
         EquipId = equipId;
 
@@ -42,11 +41,12 @@ public class BattleEquipData
         }
         Type = (EquipType)Data.Type;
         Owner = owner;
+        ItemType = BattleEffectItemType.Equip;
     }
 }
 public enum EquipType
 {
-    None=0,
+    None = 0,
     /// <summary>
     /// 武器
     /// </summary>

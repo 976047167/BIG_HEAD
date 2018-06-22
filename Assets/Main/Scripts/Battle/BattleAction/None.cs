@@ -10,7 +10,12 @@ public partial class BattleAction
         public static BattleActionType ActionType { get { return BattleActionType.None; } }
         public override void Excute()
         {
-            
+
+        }
+
+        public override int Excute(int damage)
+        {
+            return 0;
         }
     }
 }

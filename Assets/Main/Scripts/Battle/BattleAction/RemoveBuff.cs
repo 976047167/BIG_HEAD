@@ -14,11 +14,17 @@ public partial class BattleAction
             {
                 if (actionArg == target.Data.BuffList[i].BuffId)
                 {
+
+                    battleMgr.AddUIAction(new UIAction.UIRemoveBuff(target, actionArg, -1));
                     target.Data.BuffList.RemoveAt(i);
-                    battleMgr.AddUIAction(new UIAction.UIRemoveBuff(target, actionArg));
                     break;
                 }
             }
+        }
+
+        public override int Excute(int damage)
+        {
+            throw new NotImplementedException();
         }
     }
 }

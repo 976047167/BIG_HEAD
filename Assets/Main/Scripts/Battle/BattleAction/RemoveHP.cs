@@ -13,5 +13,10 @@ public partial class BattleAction
             target.Data.HP -= actionArg;
             battleMgr.AddUIAction(new UIAction.UIHpDamage(target, actionArg));
         }
+
+        public override int Excute(int damage)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

@@ -38,6 +38,10 @@ public partial class BattleAction
         {
             throw new System.NotImplementedException();
         }
+        public override int Excute(int damage)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
 ";

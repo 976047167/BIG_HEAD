@@ -9,7 +9,8 @@ public class BattleMgr
 {
     public const int MAX_HAND_CARD_COUNT = 7;
     public const int MAX_EQUIP_COUNT = 1;
-    Dictionary<string, int> dicCounter = null;
+    Dictionary<string, int> dicRoundCounter = null;
+    Dictionary<string, int> dicBattleCounter = null;
 
     UIBattleForm battleForm;
     Queue<UIAction> uiActions = new Queue<UIAction>();
@@ -36,7 +37,8 @@ public class BattleMgr
         MonsterId = monsterId;
         SetOppData(monsterId);
         MyPlayer = new BattlePlayer(Game.DataManager.MyPlayer);
-        dicCounter = new Dictionary<string, int>();
+        dicRoundCounter = new Dictionary<string, int>();
+        dicBattleCounter = new Dictionary<string, int>();
         RoundCount = 0;
         OppPlayer.StartAI();
         Game.UI.OpenForm<UIBattleForm>();
@@ -50,7 +52,8 @@ public class BattleMgr
         MyPlayer.Data.BuffList.Clear();
         MyPlayer = null;
         OppPlayer = null;
-        dicCounter = null;
+        dicRoundCounter = null;
+        dicBattleCounter = null;
         State = BattleState.None;
     }
     public void SetOppData(int monsterId)
@@ -276,6 +279,7 @@ public class BattleMgr
         {
             State = BattleState.OppRoundEnd;
         }
+        dicRoundCounter.Clear();
     }
     public bool UseCard(BattleCardData battleCardData)
     {
@@ -348,7 +352,7 @@ public class BattleMgr
             {
                 if (buff.Data.ActionTimes[i] == actionTime)
                 {
-                    ApplyAction(buff.Data.ActionTypes[i], buff.Data.ActionParams[i], buff.CardData, playerData, playerData);
+                    ApplyAction(buff.Data.ActionTypes[i], buff.Data.ActionParams[i], buff, playerData, playerData);
                     buff.Time--;
                     if (buff.Time == 0)
                     {
@@ -379,7 +383,7 @@ public class BattleMgr
             ApplyAction(cardData.Data.ActionTypes[i], cardData.Data.ActionParams[i], cardData, cardData.Owner, null);
         }
     }
-    void ApplyAction(int actionType, int actionArg, BattleCardData cardData, BattlePlayer owner, BattlePlayer target)
+    void ApplyAction(int actionType, int actionArg, BattleEffectItemData cardData, BattlePlayer owner, BattlePlayer target)
     {
         if (target == null)
         {
@@ -441,9 +445,66 @@ public class BattleMgr
                 break;
         }
     }
-
-
-
+    /// <summary>
+    /// -1取消计数，0归零，大于0，增加这么多
+    /// </summary>
+    /// <param name="countKey"></param>
+    /// <param name="count"></param>
+    public void SetRoundCounter(string countKey, int count = 1)
+    {
+        if (!dicRoundCounter.ContainsKey(countKey))
+        {
+            dicRoundCounter[countKey] = 0;
+        }
+        if (count == -1)
+        {
+            dicRoundCounter.Remove(countKey);
+        }
+        else if (count == 0)
+        {
+            dicRoundCounter[countKey] = 0;
+        }
+        else
+            dicRoundCounter[countKey] += count;
+    }
+    public int GetRoundCounter(string countKey)
+    {
+        if (!dicRoundCounter.ContainsKey(countKey))
+        {
+            return 0;
+        }
+        return dicRoundCounter[countKey];
+    }
+    /// <summary>
+    /// -1取消计数，0归零，大于0，增加这么多
+    /// </summary>
+    /// <param name="countKey"></param>
+    /// <param name="count"></param>
+    public void SetBattleCounter(string countKey, int count = 1)
+    {
+        if (!dicBattleCounter.ContainsKey(countKey))
+        {
+            dicBattleCounter[countKey] = 0;
+        }
+        if (count == -1)
+        {
+            dicBattleCounter.Remove(countKey);
+        }
+        else if (count == 0)
+        {
+            dicBattleCounter[countKey] = 0;
+        }
+        else
+            dicBattleCounter[countKey] += count;
+    }
+    public int GetBattleCounter(string countKey)
+    {
+        if (!dicBattleCounter.ContainsKey(countKey))
+        {
+            return 0;
+        }
+        return dicBattleCounter[countKey];
+    }
 
 
 

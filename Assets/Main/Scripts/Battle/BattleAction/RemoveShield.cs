@@ -10,7 +10,12 @@ public partial class BattleAction
         public static BattleActionType ActionType { get { return BattleActionType.RemoveShield; } }
         public override void Excute()
         {
-            throw new System.NotImplementedException();
+            Debug.LogError("用扣除buff层数代替");
+        }
+
+        public override int Excute(int damage)
+        {
+            throw new NotImplementedException();
         }
     }
 }

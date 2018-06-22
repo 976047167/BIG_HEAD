@@ -31,5 +31,10 @@ public partial class BattleAction
             }
 
         }
+
+        public override int Excute(int damage)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
