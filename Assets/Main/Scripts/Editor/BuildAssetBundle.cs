@@ -24,9 +24,7 @@ public class BuildAssetBundleEditor : MonoBehaviour
     [MenuItem("Tools/AssetBundle/Build AssetBundle %&B", false, 20)]
     static void BuildAssetBundle()
     {
-        ClearAssetBundlesName();
-
-        Pack(sourcePath);
+        SetAssetBundlesName();
 
         string outputPath = Path.Combine(AssetBundlesOutputPath, Platform.GetPlatformFolder(EditorUserBuildSettings.activeBuildTarget).ToLower());
         if (!Directory.Exists(outputPath))
@@ -62,9 +60,14 @@ public class BuildAssetBundleEditor : MonoBehaviour
     [MenuItem("Tools/AssetBundle/Set AssetBundlesName")]
     static void SetAssetBundlesName()
     {
-        ClearAssetBundlesName();
-
+        dicAssetName = new Dictionary<string, string>();
         Pack(sourcePath);
+        foreach (var item in dicAssetName)
+        {
+            AssetImporter assetImporter = AssetImporter.GetAtPath(item.Key);
+            assetImporter.assetBundleName = item.Value;
+        }
+        dicAssetName = null;
     }
     /// <summary>  
     /// 清除之前设置过的AssetBundleName，避免产生不必要的资源也打包  
@@ -93,6 +96,7 @@ public class BuildAssetBundleEditor : MonoBehaviour
     static void Pack(string source)
     {
         //Debug.Log("Pack source " + source);  
+        
         DirectoryInfo folder = new DirectoryInfo(source);
         FileSystemInfo[] files = folder.GetFileSystemInfos();
         int length = files.Length;
@@ -110,44 +114,55 @@ public class BuildAssetBundleEditor : MonoBehaviour
                 }
             }
         }
+        
     }
+    static Dictionary<string, string> dicAssetName = null;
     //设置要打包的文件  
     static void fileWithDepends(string source)
     {
 
         string _source = Replace(source);
         string _assetPath = "Assets" + _source.Substring(Application.dataPath.Length);
+        if (string.IsNullOrEmpty(_assetPath))
+        {
+            return;
+        }
         Debug.Log("file source : " + source + "\n" + _assetPath);
         //过滤
         string[] labels = AssetDatabase.GetLabels(AssetDatabase.LoadAssetAtPath<UnityEngine.Object>(_assetPath));
         for (int i = 0; i < labels.Length; i++)
         {
-            if( labels[i]== AssetBundleIgnore)
+            if (labels[i] == AssetBundleIgnore)
             {
                 return;
             }
         }
-        //依赖项咱不单独打包
-        AssetImporter assetImporter = AssetImporter.GetAtPath(_assetPath);
+        //依赖项只有在SourceResource文件夹内单独打包
+
+        //AssetImporter assetImporter = AssetImporter.GetAtPath(_assetPath);
         string bundleName = source.Substring(sourcePath.Length + 1);
         bundleName = bundleName.Substring(0, bundleName.LastIndexOf(".")) + ResourceManager.BUNDLE_SUFFIX;
-        assetImporter.assetBundleName = bundleName;
+        //assetImporter.assetBundleName = bundleName;
 
-        //assetImporter.SaveAndReimport();
+        dicAssetName[_assetPath] = bundleName;
         //自动获取依赖项并给其资源设置AssetBundleName  
-        //string[] dps = AssetDatabase.GetDependencies(_assetPath);
-        //foreach (var dp in dps)
-        //{
-        //    Debug.Log("dp " + dp);
-        //    if (dp.EndsWith(".cs"))
-        //        continue;
-        //    AssetImporter assetImporter = AssetImporter.GetAtPath(dp);
-        //    string pathTmp = dp.Substring("Assets".Length + 1);
-        //    string assetName = pathTmp.Substring(pathTmp.IndexOf("/") + 1);
-        //    assetName = assetName.Replace(Path.GetExtension(assetName), ".data");
-        //    Debug.Log(assetName);
-        //    assetImporter.assetBundleName = assetName;
-        //}
+        string[] dps = AssetDatabase.GetDependencies(_assetPath);
+        foreach (var dp in dps)
+        {
+            Debug.Log("dp " + dp);
+            if (dp.EndsWith(".cs"))
+                continue;
+            if (!dp.Contains("SourceResource"))
+            {
+                continue;
+            }
+            //AssetImporter assetImporter2 = AssetImporter.GetAtPath(dp);
+            string pathTmp = dp.Substring("Assets".Length + 1);
+            string assetName = pathTmp.Substring(pathTmp.IndexOf("/") + 1);
+            assetName = assetName.Substring(0, assetName.LastIndexOf(".")) + ResourceManager.BUNDLE_SUFFIX;
+            //assetImporter2.assetBundleName = assetName;
+            dicAssetName[dp] = assetName;
+        }
 
     }
 

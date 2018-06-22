@@ -442,6 +442,10 @@ public class AssetLoader
                     dicDependenceLoader = new Dictionary<string, AssetLoader>(denpendence.Length);
                     for (int i = 0; i < denpendence.Length; i++)
                     {
+                        if (dicDependenceLoader.ContainsKey(denpendence[i]))
+                        {
+                            continue;
+                        }
                         dicDependenceLoader.Add(denpendence[i], AssetLoader.Get(denpendence[i], AssetType.UnityAsset));
                         dicDependenceLoader[denpendence[i]].AddLoadRequest(new LoadRequest<Object>(LoadDependenceSuccess, LoadDependenceFailed));
                         yield return dicDependenceLoader[denpendence[i]].Load();
