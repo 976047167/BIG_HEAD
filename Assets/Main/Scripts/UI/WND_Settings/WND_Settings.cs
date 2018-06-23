@@ -38,6 +38,7 @@ public class WND_Settings : UIFormBase {
         myIconIndex = Game.DataManager.PlayerData.HeadIcon;
         UIEventListener.Get(spExit.gameObject).onClick = ExitClick;
         UIEventListener.Get(btnChangeIcon).onClick = ChangeIconClick;
+        UIEventListener.Get(IconMaskBg).onClick = CanceClick;
         UIEventListener.Get(btnCommand).onClick = CommandClick;
         EventDelegate.Add(sliderMusic.onChange, MusicChange);
         EventDelegate.Add(sliderVoice.onChange, VoiceChange);
@@ -108,5 +109,9 @@ public class WND_Settings : UIFormBase {
         Messenger.Broadcast(MessageID.MSG_UPDATE_ROLE_INFO_PANEL);
         IconMaskBg.SetActive(false);
         headIcon.Load(myIconIndex);
+    }
+    private void CanceClick(GameObject obj)
+    {
+        IconMaskBg.SetActive(false);
     }
 }

@@ -65,16 +65,24 @@ public class WND_Kaku : UIFormBase
     protected override void OnOpen()
     {
         base.OnOpen();
-        ResourceManager.LoadGameObject("UI/Item/UINormalCard", (str, obj, go) => { CardInstence = go; }, (str, obj) => { });
-        CardInstence.transform.SetParent(transform);
-        CardInstence.transform.localScale = new Vector3(1,1,1);
-        CardInstence.SetActive(false);
-        LoadDeckCard(Deck.GetDicCards());
-      
-        LoadKaKuCard(tempKaKuCardsDic);
+        ResourceManager.LoadGameObject("UI/Item/UINormalCard", LoadSucess, (str, obj) => { });
+
+
        
 
     }
+
+    private void LoadSucess(string str,object[] obj,GameObject go)
+    {
+        CardInstence = go;
+        CardInstence.transform.SetParent(transform);
+        CardInstence.transform.localScale = new Vector3(1, 1, 1);
+        CardInstence.SetActive(false);
+        LoadDeckCard(Deck.GetDicCards());
+
+        LoadKaKuCard(tempKaKuCardsDic);
+    }
+
     private void SetCharacterIcon(int icon)
     {
         charaterIcon.Load(icon);
