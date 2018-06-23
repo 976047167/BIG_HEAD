@@ -52,10 +52,10 @@ int	string
 10043	Head/npc_010
 10044	Head/player_001
 10045	Head/system_001
-10046	texture_character_01
-10047	texture_character_02
-10048	texture_character_03
-10049	texture_monster_04
+10046	Head/texture_character_01
+10047	Head/texture_character_02
+10048	Head/texture_character_03
+10049	Head/texture_monster_04
 20000	Skill/skill_bianzinv_1
 20001	Skill/skill_bianzinv_2
 20002	Skill/skill_bianzinv_3
