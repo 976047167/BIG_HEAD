@@ -21,6 +21,9 @@ public class BuildAssetBundleEditor : MonoBehaviour
     public static string sourcePath = Application.dataPath + "/Main/BundleEditor";
     const string AssetBundlesOutputPath = "Assets/StreamingAssets";
     const string AssetBundleIgnore = "AssetBundleIgnore";
+    const string FontAssetName = "font";
+    const string ShaderAssetName = "shader";
+
     [MenuItem("Tools/AssetBundle/Build AssetBundle %&B", false, 20)]
     static void BuildAssetBundle()
     {
@@ -96,7 +99,7 @@ public class BuildAssetBundleEditor : MonoBehaviour
     static void Pack(string source)
     {
         //Debug.Log("Pack source " + source);  
-        
+
         DirectoryInfo folder = new DirectoryInfo(source);
         FileSystemInfo[] files = folder.GetFileSystemInfos();
         int length = files.Length;
@@ -114,10 +117,14 @@ public class BuildAssetBundleEditor : MonoBehaviour
                 }
             }
         }
-        
+
     }
     static Dictionary<string, string> dicAssetName = null;
     //设置要打包的文件  
+    /// <summary>
+    /// 需要完成的：材质和模型拆分，通用资源包(字体，shader)
+    /// </summary>
+    /// <param name="source"></param>
     static void fileWithDepends(string source)
     {
 
@@ -157,6 +164,17 @@ public class BuildAssetBundleEditor : MonoBehaviour
                 continue;
             }
             //AssetImporter assetImporter2 = AssetImporter.GetAtPath(dp);
+            string extension = Path.GetExtension(dp).ToLower();
+            if (extension == ".font"||extension==".ttf")
+            {
+                dicAssetName[dp] = FontAssetName;
+                continue;
+            }
+            if (Path.GetExtension(dp).ToLower() == ".shader")
+            {
+                dicAssetName[dp] = ShaderAssetName;
+                continue;
+            }
             string pathTmp = dp.Substring("Assets".Length + 1);
             string assetName = pathTmp.Substring(pathTmp.IndexOf("/") + 1);
             assetName = assetName.Substring(0, assetName.LastIndexOf(".")) + ResourceManager.BUNDLE_SUFFIX;

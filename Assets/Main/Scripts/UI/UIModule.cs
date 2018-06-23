@@ -26,9 +26,19 @@ public partial class UIModule
 
     Dictionary<Type, UIFormBase> DicOpenedUIForm = new Dictionary<Type, UIFormBase>();
     static int baseDepth = 0;
+    bool isLoadingRoot = false;
+    List<Type> waitLoadList = new List<Type>();
     UIModelCameraHelper uiCameraHelper = null;
     void LoadUIRoot(Type formType)
     {
+        if (isLoadingRoot)
+        {
+            waitLoadList.Add(formType);
+            Debug.LogError("拥挤加载!");
+            return;
+        }
+        waitLoadList.Add(formType);
+        isLoadingRoot = true;
         ResourceManager.LoadGameObject("UI/UI Root", (path, args, root) =>
         {
             if (uiCamera == null)
@@ -44,9 +54,11 @@ public partial class UIModule
             }
             else if (root.transform != uiRoot)
                 GameObject.Destroy(root);
-            if (formType != null)
+            isLoadingRoot = false;
+            for (int i = 0; i < waitLoadList.Count; i++)
             {
-                OpenForm(formType);
+                Type form = waitLoadList[i];
+                OpenForm(form);
             }
         }, (path, args) => { Debug.LogError("没有找到uiRoot->" + path); });
     }

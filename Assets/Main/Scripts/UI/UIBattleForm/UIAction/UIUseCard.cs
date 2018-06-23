@@ -32,7 +32,7 @@ public partial class UIAction
             TweenPosition.Begin(battleCard.cacheChildCardTrans.gameObject, 0.5f, Vector3.zero, false);
             PlayerInfoView playerInfoView = BattleForm.GetPlayerInfoViewByPlayer(CardData.Owner);
             playerInfoView.PlayerInfo.CemeteryCount++;
-            playerInfoView.PlayerInfo.AP -= battleCard.CardData.Data.Spending;
+            //playerInfoView.PlayerInfo.AP -= battleCard.CardData.Data.Spending;
             yield return new WaitForSeconds(0.5f);
             BattleForm.OppCardsGrid.Reposition();
             battleCard.RefreshDepth();

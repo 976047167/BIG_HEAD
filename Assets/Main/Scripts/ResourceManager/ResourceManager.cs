@@ -114,6 +114,10 @@ public class ResourceManager
         {
             assetLoader.AddLoadRequest(new LoadRequest<T>(callback, failure, userData));
         }
+        if (assetLoader.LoadState != AssetLoadState.Loaded && assetLoader.LoadState != AssetLoadState.None)
+        {
+            return;
+        }
         helper.StartCoroutine(assetLoader.Load());
     }
 
@@ -436,6 +440,19 @@ public class AssetLoader
             if (ResourceManager.BundleManifest != null)
             {
                 string[] denpendence = ResourceManager.BundleManifest.GetAllDependencies(AssetPath);
+                List<string> allDependence = new List<string>();
+                allDependence.AddRange(denpendence);
+                for (int i = 0; i < denpendence.Length; i++)
+                {
+                    string[] deps = ResourceManager.BundleManifest.GetAllDependencies(denpendence[i]);
+                    for (int j = 0; j < deps.Length; j++)
+                    {
+                        if (!allDependence.Contains(deps[j]))
+                        {
+                            allDependence.Add(deps[j]);
+                        }
+                    }
+                }
                 if (denpendence.Length > 0)
                 {
                     LoadState = AssetLoadState.LoadDenpendence;
@@ -444,10 +461,20 @@ public class AssetLoader
                     {
                         if (dicDependenceLoader.ContainsKey(denpendence[i]))
                         {
+                            Debug.LogError(AssetPath + "---重复依赖---" + denpendence[i]);
                             continue;
                         }
                         dicDependenceLoader.Add(denpendence[i], AssetLoader.Get(denpendence[i], AssetType.UnityAsset));
                         dicDependenceLoader[denpendence[i]].AddLoadRequest(new LoadRequest<Object>(LoadDependenceSuccess, LoadDependenceFailed));
+                        //Debug.LogError(AssetPath + "加载依赖" + denpendence[i]);
+                        if (dicDependenceLoader[denpendence[i]].LoadState != AssetLoadState.Loaded && dicDependenceLoader[denpendence[i]].LoadState != AssetLoadState.None)
+                        {
+                            //重复了，出现依赖循环了，强制加载目标资源，打破循环
+                            Debug.LogError(AssetPath + "---依赖循环---" + denpendence[i]);
+                            dicDependenceLoader[denpendence[i]].LoadState = AssetLoadState.LoadDenpendenceSuccess;
+                            yield return dicDependenceLoader[denpendence[i]].LoadDependenceSuccess();
+                            continue;
+                        }
                         yield return dicDependenceLoader[denpendence[i]].Load();
                     }
                 }
@@ -495,6 +522,8 @@ public class AssetLoader
 
     IEnumerator LoadDependenceSuccess()
     {
+        if (LoadState == AssetLoadState.Loaded)
+            yield break;
         www = new WWW(FullPath);
         LoadState = AssetLoadState.Loading;
         yield return www;
