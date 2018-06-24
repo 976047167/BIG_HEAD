@@ -85,7 +85,7 @@ public class WND_Dialog : UIFormBase
     }
     private void ClearGrid()
     {
-        for (int i = 1;i<grid.transform.childCount;i++)
+        for (int i =0; i<grid.transform.childCount;i++)
         {
             Transform trans = grid.transform.GetChild(i);
             Destroy(trans.gameObject);
