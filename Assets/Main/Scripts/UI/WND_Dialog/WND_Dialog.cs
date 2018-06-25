@@ -109,7 +109,7 @@ public class WND_Dialog : UIFormBase
         for (int i = 1; i <= printString.Length; i++)
         {
             labTips.text = printString.Substring(0, i);
-            yield return new WaitForSeconds(0.5f);
+            yield return new WaitForSeconds(Game.DataManager.DialogSpeed);
         }
         isPrinting = false;
         PrintStringAll(new GameObject());

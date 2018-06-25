@@ -9,17 +9,16 @@ public class WND_BattleSettings : UIFormBase {
 
     private UISlider sliderVoice;
     private UISlider sliderMusic;
-    private UISprite spExit;
+    private GameObject spExit;
     private UISprite spVoice;
     private UISprite spMusic;
-    private UIGrid IconGrid;
     private GameObject btnChangeIcon;
     private UITexture headIcon;
-    private GameObject IconMaskBg;
-    private GameObject IconInstence;
-    private GameObject btnCommand;
+    private GameObject btnGiveUp;
     private int myIconIndex;
-    private bool haveLoading; 
+    private UIToggle Fast;
+    private UIToggle Mid;
+    private UIToggle Slow;
     protected override void OnInit(object userdata)
     {
         base.OnInit(userdata);
@@ -27,21 +26,24 @@ public class WND_BattleSettings : UIFormBase {
         sliderVoice = spVoice.transform.Find("sliderVoice").GetComponent<UISlider>();
         spMusic = transform.Find("bg/frame/spMusic").GetComponent<UISprite>();
         sliderMusic = spMusic.transform.Find("sliderMusic").GetComponent<UISlider>();
-        spExit = transform.Find("bg/frame/spExit").GetComponent<UISprite>();
+        spExit = transform.Find("bg/frame/spExit").gameObject;
         headIcon = transform.Find("bg/frame/texHead").GetComponent<UITexture>();
-        btnChangeIcon = headIcon.transform.Find("spChangeHead").gameObject;
-        IconMaskBg = transform.Find("bg/iconBgMask").gameObject;
-        IconGrid = IconMaskBg.transform.Find("headIconBg/ScrollView/Grid").GetComponent<UIGrid>();
-        IconInstence = transform.Find("headIconInstence").gameObject;
-        btnCommand = IconMaskBg.transform.Find("headIconBg/btnCommand").gameObject;
+        btnGiveUp = transform.Find("bg/frame/btnGiveUp").gameObject;
+        Fast = transform.Find("bg/frame/spDialogSpeed/toggleFast").GetComponent<UIToggle>();
+        Mid = transform.Find("bg/frame/spDialogSpeed/toggleMid").GetComponent<UIToggle>();
+        Slow = transform.Find("bg/frame/spDialogSpeed/toggleSlow").GetComponent<UIToggle>();
 
-        myIconIndex = Game.DataManager.PlayerData.HeadIcon;
-        UIEventListener.Get(spExit.gameObject).onClick = ExitClick;
-        UIEventListener.Get(btnChangeIcon).onClick = ChangeIconClick;
-        UIEventListener.Get(btnCommand).onClick = CommandClick;
+
+        UIEventListener.Get(btnGiveUp).onClick = GiveUpClick;
+
+         UIEventListener.Get(spExit.gameObject).onClick = ExitClick;
+        
         EventDelegate.Add(sliderMusic.onChange, MusicChange);
         EventDelegate.Add(sliderVoice.onChange, VoiceChange);
-        EventDelegate.Add(IconInstence.GetComponent<UIToggle>().onChange,IconChose);
+        EventDelegate.Add(Fast.onChange, FastChange);
+        EventDelegate.Add(Mid.onChange, MidChange);
+        EventDelegate.Add(Slow.onChange, SlowChange);
+
     }
 
     protected override void OnOpen()
@@ -49,6 +51,14 @@ public class WND_BattleSettings : UIFormBase {
         base.OnOpen();
         
         headIcon.Load(myIconIndex);
+        if (Game.DataManager.DialogSpeed == 0.1f)
+            Fast.value = true;
+        else if (Game.DataManager.DialogSpeed == 0.5f)
+            Mid.value = true;
+        else if(Game.DataManager.DialogSpeed == 1.0f)
+            Slow.value = true;
+
+
     }
     private void VoiceChange()
     {
@@ -63,50 +73,35 @@ public class WND_BattleSettings : UIFormBase {
         Game.UI.CloseForm<WND_BattleSettings>();
 
     }
-    private void ChangeIconClick(GameObject obj)
+    private void GiveUpClick(GameObject obj)
     {
-        IconMaskBg.SetActive(true);
-        if (!haveLoading)
-        {
-            haveLoading = true;
-            LoadHeadIconList();
-        }
+        Game.DataManager.MyPlayer.Data.HP = Game.DataManager.MyPlayer.Data.MaxHP ;
+        Game.DataManager.MyPlayer.Data.MP = Game.DataManager.MyPlayer.Data.MaxMP;
+        SceneMgr.ChangeScene(2);
     }
-    private void LoadHeadIconList()
+
+    private void FastChange()
     {
-        List<int> iconIndexList = new List<int>();
-        foreach(TextureTableSetting texSetting in TextureTableSettings.GetAll())
+        if(UIToggle.current.value == true)
         {
-            if (texSetting.Id >= 10000 && texSetting.Id < 20000)
-                iconIndexList.Add(texSetting.Id);
+            Game.DataManager.DialogSpeed = 0.1f;
         }
-         for(int i = 0; i<iconIndexList.Count; i++) {
-            int iconIndex = iconIndexList[i];
-            GameObject item = Instantiate(IconInstence);
-            item.SetActive(true);
-            item.name = iconIndex.ToString();
-            item.transform.Find("Texture").GetComponent<UITexture>().Load(iconIndex);
-            if (iconIndex == myIconIndex)
-                item.GetComponent<UIToggle>().value = true;
-            item.transform.SetParent(IconGrid.transform, false);
-            item.transform.localScale = new Vector3(1, 1, 1);
-            item.transform.localPosition = Vector3.zero;
-        }
-        IconGrid.repositionNow = true;
 
     }
-    private void IconChose()
+    private void MidChange()
     {
         if (UIToggle.current.value == true)
         {
-            int.TryParse(UIToggle.current.name,out myIconIndex);
+            Game.DataManager.DialogSpeed = 0.5f;
         }
+
     }
-    private void CommandClick(GameObject obj)
+    private void SlowChange()
     {
-        Game.DataManager.PlayerData.HeadIcon = myIconIndex;
-        Messenger.Broadcast(MessageID.MSG_UPDATE_ROLE_INFO_PANEL);
-        IconMaskBg.SetActive(false);
-        headIcon.Load(myIconIndex);
+        if (UIToggle.current.value == true)
+        {
+            Game.DataManager.DialogSpeed =1.0f;
+        }
+
     }
 }

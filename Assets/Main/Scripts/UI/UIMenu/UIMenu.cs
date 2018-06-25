@@ -5,26 +5,23 @@ using UnityEngine;
 public class UIMenu : UIFormBase
 {
     GameObject btnKaku;
-
-    void Awake()
+    GameObject btnBattleSettings;
+    protected override void OnInit(object userdata)
     {
+        base.OnInit(userdata);
         btnKaku = transform.Find("btnKaku").gameObject;
-        UIEventListener.Get(btnKaku).onClick = btnMenuClick;
-
-    }
-    // Use this for initialization
-    void Start()
-    {
-
+        UIEventListener.Get(btnKaku).onClick = MenuClick;
+        btnBattleSettings = transform.Find("btnBattleSettings").gameObject;
+        UIEventListener.Get(btnBattleSettings).onClick = BattleSettingsClick;
     }
 
-    // Update is called once per frame
-    void Update()
-    {
 
-    }
-    void btnMenuClick(GameObject btn)
+    void MenuClick(GameObject btn)
     {
-        UIModule.Instance.OpenForm<WND_Kaku>();
+        Game.UI.OpenForm<WND_Kaku>();
+    }
+    void BattleSettingsClick(GameObject btn)
+    {
+        Game.UI.OpenForm<WND_BattleSettings>();
     }
 }

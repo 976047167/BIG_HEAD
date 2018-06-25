@@ -25,6 +25,8 @@ public class DataMgr
     //}
     public int Food;
     public int Coin;
+    public float DialogSpeed;
+
     public MyPlayer MyPlayer { get; private set; }
     public AccountData AccountData { get; private set; }
     public PlayerData PlayerData { get; private set; }
@@ -97,6 +99,7 @@ public class DataMgr
 
         Food = 20;
         Coin = 20;
+        DialogSpeed = 0.5f;
     }
 
 }
