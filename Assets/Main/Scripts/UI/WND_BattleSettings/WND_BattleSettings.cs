@@ -15,6 +15,7 @@ public class WND_BattleSettings : UIFormBase {
     private GameObject btnChangeIcon;
     private UITexture headIcon;
     private GameObject btnGiveUp;
+    private GameObject btnConfim;
     private int myIconIndex;
     private UIToggle Fast;
     private UIToggle Mid;
@@ -29,6 +30,7 @@ public class WND_BattleSettings : UIFormBase {
         spExit = transform.Find("bg/frame/spExit").gameObject;
         headIcon = transform.Find("bg/frame/texHead").GetComponent<UITexture>();
         btnGiveUp = transform.Find("bg/frame/btnGiveUp").gameObject;
+        btnConfim = transform.Find("bg/frame/btnConfim").gameObject;
         Fast = transform.Find("bg/frame/spDialogSpeed/toggleFast").GetComponent<UIToggle>();
         Mid = transform.Find("bg/frame/spDialogSpeed/toggleMid").GetComponent<UIToggle>();
         Slow = transform.Find("bg/frame/spDialogSpeed/toggleSlow").GetComponent<UIToggle>();
@@ -37,7 +39,7 @@ public class WND_BattleSettings : UIFormBase {
         UIEventListener.Get(btnGiveUp).onClick = GiveUpClick;
 
          UIEventListener.Get(spExit.gameObject).onClick = ExitClick;
-        
+        UIEventListener.Get(btnConfim).onClick = ExitClick;
         EventDelegate.Add(sliderMusic.onChange, MusicChange);
         EventDelegate.Add(sliderVoice.onChange, VoiceChange);
         EventDelegate.Add(Fast.onChange, FastChange);
