@@ -16,11 +16,18 @@ public class WND_ShowCard : UIFormBase
     private UISprite spSpending;
     private UISprite spItem;
     private UISprite spEquip;
-
-
-    void Awake()
+    private object Args;
+    private GameObject CardBg;
+    /// <summary>
+    /// 加载
+    /// </summary>
+    /// <param name="userdata"></param>数组[0]类型，数组[1]id
+    // Use this for initialization
+    protected override void OnInit(object userdata)
     {
+        base.OnInit(userdata);
         btnDestroy = transform.Find("btnDestroy").gameObject;
+        CardBg = transform.Find("CardBg").gameObject;
         icon = transform.Find("CardBg/iconFrame/icon").GetComponent<UITexture>();
         labName = transform.Find("CardBg/labName").GetComponent<UILabel>();
         spSpending = transform.Find("CardBg/describeFrame/spSpending").GetComponent<UISprite>();
@@ -34,16 +41,17 @@ public class WND_ShowCard : UIFormBase
 
         UIEventListener.Get(btnDestroy).onClick = Exit;
 
+
+        Args = userdata;
+
+
     }
-    /// <summary>
-    /// 加载
-    /// </summary>
-    /// <param name="userdata"></param>数组[0]类型，数组[1]id
-    // Use this for initialization
-    protected override void OnInit(object userdata)
+
+
+    protected override void OnOpen()
     {
-        base.OnInit(userdata);
-       int[] args = (int[]) userdata;
+        base.OnOpen();
+        int[] args = (int[])Args;
         if (args.Length < 2)
         {
             Debug.LogError("WND_ShowCard OnInit : wrong args!");
@@ -54,7 +62,7 @@ public class WND_ShowCard : UIFormBase
             case 0:
                 InitCard(args[1]);
                 break;
-             case 1:
+            case 1:
                 InitBuff(args[1]);
                 break;
             case 2:
@@ -62,9 +70,16 @@ public class WND_ShowCard : UIFormBase
                 break;
 
         }
-
+        ShowAnime();
 
     }
+    private void ShowAnime()
+    {
+        CardBg.transform.localScale = new Vector3(0.3f, 0.3f, 0.3f);
+        TweenScale.Begin(CardBg,0.1f,Vector3.one);
+    }
+
+
     /// <summary>
     /// 加载卡牌
     /// </summary>
