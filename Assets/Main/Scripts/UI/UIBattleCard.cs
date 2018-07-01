@@ -181,7 +181,7 @@ public class UIBattleCard : MonoBehaviour
         cacheForm = form;
         m_TexIconRight.Load(card.Data.IconRightID);
         m_TexIconLeft.Load(card.Data.IconLeftID);
-        m_lblName.text = CardData.Data.Name;
+        m_lblName.text = I18N.Get(CardData.Data.Name);
         if (CardData.Data.Type != 0)
         {
             m_spAttack.gameObject.SetActive(false);

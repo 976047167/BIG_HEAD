@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Collections;
 using UnityEngine;
 
 public class WND_Launch : UIFormBase
@@ -27,8 +28,15 @@ public class WND_Launch : UIFormBase
     protected override void OnOpen()
     {
         base.OnOpen();
-    }
+        StartCoroutine(InitMgr());
 
+    }
+    IEnumerator InitMgr()
+    {
+        yield return ResourceManager.Preload();
+        I18N.SetLanguage(Game.Instance.language);
+        yield return null;
+    }
     protected override void OnShow()
     {
         base.OnShow();

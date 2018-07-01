@@ -7,7 +7,7 @@ public class DataMgr
 {
     public DataMgr()
     {
-        AppSettings.SettingsManager.AllSettingsReload();
+        
     }
     //static DataMgr instance = null;
     //public static DataMgr Instance
@@ -38,6 +38,7 @@ public class DataMgr
     /// </summary>
     public void OnInit()
     {
+        AppSettings.SettingsManager.AllSettingsReload();
         AccountData = new AccountData();
         AccountData.Gold = 100;
         AccountData.Diamonds = 100;
