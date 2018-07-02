@@ -287,7 +287,10 @@ public class UIParticle : UIWidget
                 particle.Stop(true);
             }
 #if UNITY_EDITOR
-            particle.gameObject.AddComponent<ShaderFix>();
+            if (UnityEditor.EditorApplication.isPlaying)
+            {
+                particle.gameObject.AddComponent<ShaderFix>();
+            }
 #endif
             Particles[i].gameObject.SetActive(false);
         }

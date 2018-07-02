@@ -1,4 +1,4 @@
 Id	Name	Desc	ClassType	IconID	Image	ModelID	MapSkillId	BattleSkillId	ChooseText	DefaultCardList
 int	string 	string	int	int	int	int	int	int	int	List<int>
-1	战士	拥有强大力量的人类	1	47	47	1	1	1	1	1,1,1,1,2
-2	法师	拥有强大力量的人类	2	48	48	1	2	2	2	1,1,1,1,4
+1	战士	拥有强大力量的人类	1	47	100	1	1	1	1	1,1,1,1,2
+2	法师	拥有强大力量的人类	2	48	101	1	2	2	2	1,1,1,1,4

@@ -56,6 +56,7 @@ namespace AppSettings
                         BoxTableSettings._instance,
                         CharacterModelTableSettings._instance,
                         ClassCharacterTableSettings._instance,
+                        ClassTableSettings._instance,
                         DialogTableSettings._instance,
                         LevelTableSettings._instance,
                         LocalizationTableSettings._instance,
@@ -2087,6 +2088,229 @@ namespace AppSettings
             BattleSkillId = row.Get_int(row.Values[8], ""); 
             ChooseText = row.Get_int(row.Values[9], ""); 
             DefaultCardList = row.Get_List_int(row.Values[10], ""); 
+        }
+
+        /// <summary>
+        /// Get PrimaryKey from a table row
+        /// </summary>
+        /// <param name="row"></param>
+        /// <returns></returns>
+        public static int ParsePrimaryKey(TableFileRow row)
+        {
+            var primaryKey = row.Get_int(row.Values[0], "");
+            return primaryKey;
+        }
+	}
+
+	/// <summary>
+	/// Auto Generate for Tab File: "ClassTable.txt"
+    /// No use of generic and reflection, for better performance,  less IL code generating
+	/// </summary>>
+    public partial class ClassTableSettings : IReloadableSettings
+    {
+        /// <summary>
+        /// How many reload function load?
+        /// </summary>>
+        public static int ReloadCount { get; private set; }
+
+		public static readonly string[] TabFilePaths = 
+        {
+            "ClassTable.txt"
+        };
+        internal static ClassTableSettings _instance = new ClassTableSettings();
+        Dictionary<int, ClassTableSetting> _dict = new Dictionary<int, ClassTableSetting>();
+
+        /// <summary>
+        /// Trigger delegate when reload the Settings
+        /// </summary>>
+	    public static System.Action OnReload;
+
+        /// <summary>
+        /// Constructor, just reload(init)
+        /// When Unity Editor mode, will watch the file modification and auto reload
+        /// </summary>
+	    private ClassTableSettings()
+	    {
+        }
+
+        /// <summary>
+        /// Get the singleton
+        /// </summary>
+        /// <returns></returns>
+	    public static ClassTableSettings GetInstance()
+	    {
+            if (ReloadCount == 0)
+            {
+                _instance._ReloadAll(true);
+    #if UNITY_EDITOR
+                if (SettingModule.IsFileSystemMode)
+                {
+                    for (var j = 0; j < TabFilePaths.Length; j++)
+                    {
+                        var tabFilePath = TabFilePaths[j];
+                        SettingModule.WatchSetting(tabFilePath, (path) =>
+                        {
+                            if (path.Replace("\\", "/").EndsWith(path))
+                            {
+                                _instance.ReloadAll();
+                                Log.LogConsole_MultiThread("File Watcher! Reload success! -> " + path);
+                            }
+                        });
+                    }
+
+                }
+    #endif
+            }
+
+	        return _instance;
+	    }
+        
+        public int Count
+        {
+            get
+            {
+                return _dict.Count;
+            }
+        }
+
+        /// <summary>
+        /// Do reload the setting file: ClassTable, no exception when duplicate primary key
+        /// </summary>
+        public void ReloadAll()
+        {
+            _ReloadAll(false);
+        }
+
+        /// <summary>
+        /// Do reload the setting class : ClassTable, no exception when duplicate primary key, use custom string content
+        /// </summary>
+        public void ReloadAllWithString(string context)
+        {
+            _ReloadAll(false, context);
+        }
+
+        /// <summary>
+        /// Do reload the setting file: ClassTable
+        /// </summary>
+	    void _ReloadAll(bool throwWhenDuplicatePrimaryKey, string customContent = null)
+        {
+            for (var j = 0; j < TabFilePaths.Length; j++)
+            {
+                var tabFilePath = TabFilePaths[j];
+                TableFile tableFile;
+                if (customContent == null)
+                    tableFile = SettingModule.Get(tabFilePath, false);
+                else
+                    tableFile = TableFile.LoadFromString(customContent);
+
+                using (tableFile)
+                {
+                    foreach (var row in tableFile)
+                    {
+                        var pk = ClassTableSetting.ParsePrimaryKey(row);
+                        ClassTableSetting setting;
+                        if (!_dict.TryGetValue(pk, out setting))
+                        {
+                            setting = new ClassTableSetting(row);
+                            _dict[setting.Id] = setting;
+                        }
+                        else 
+                        {
+                            if (throwWhenDuplicatePrimaryKey) throw new System.Exception(string.Format("DuplicateKey, Class: {0}, File: {1}, Key: {2}", this.GetType().Name, tabFilePath, pk));
+                            else setting.Reload(row);
+                        }
+                    }
+                }
+            }
+
+	        if (OnReload != null)
+	        {
+	            OnReload();
+	        }
+
+            ReloadCount++;
+            Log.Info("Reload settings: {0}, Row Count: {1}, Reload Count: {2}", GetType(), Count, ReloadCount);
+        }
+
+	    /// <summary>
+        /// foreachable enumerable: ClassTable
+        /// </summary>
+        public static IEnumerable GetAll()
+        {
+            foreach (var row in GetInstance()._dict.Values)
+            {
+                yield return row;
+            }
+        }
+
+        /// <summary>
+        /// GetEnumerator for `MoveNext`: ClassTable
+        /// </summary> 
+	    public static IEnumerator GetEnumerator()
+	    {
+	        return GetInstance()._dict.Values.GetEnumerator();
+	    }
+         
+	    /// <summary>
+        /// Get class by primary key: ClassTable
+        /// </summary>
+        public static ClassTableSetting Get(int primaryKey)
+        {
+            ClassTableSetting setting;
+            if (GetInstance()._dict.TryGetValue(primaryKey, out setting)) return setting;
+            return null;
+        }
+
+        // ========= CustomExtraString begin ===========
+        
+        // ========= CustomExtraString end ===========
+    }
+
+	/// <summary>
+	/// Auto Generate for Tab File: "ClassTable.txt"
+    /// Singleton class for less memory use
+	/// </summary>
+	public partial class ClassTableSetting : TableRowFieldParser
+	{
+		
+        /// <summary>
+        /// #目录
+        /// </summary>
+        public int Id { get; private set;}
+        
+        /// <summary>
+        /// 职业名称
+        /// </summary>
+        public string  Name { get; private set;}
+        
+        /// <summary>
+        /// 职业描述
+        /// </summary>
+        public string Desc { get; private set;}
+        
+        /// <summary>
+        /// 职业icon
+        /// </summary>
+        public int IconID { get; private set;}
+        
+        /// <summary>
+        /// 职业贴图
+        /// </summary>
+        public int Image { get; private set;}
+        
+
+        internal ClassTableSetting(TableFileRow row)
+        {
+            Reload(row);
+        }
+
+        internal void Reload(TableFileRow row)
+        { 
+            Id = row.Get_int(row.Values[0], ""); 
+            Name = row.Get_string (row.Values[1], ""); 
+            Desc = row.Get_string(row.Values[2], ""); 
+            IconID = row.Get_int(row.Values[3], ""); 
+            Image = row.Get_int(row.Values[4], ""); 
         }
 
         /// <summary>
