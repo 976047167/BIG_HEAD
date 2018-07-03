@@ -7,7 +7,7 @@ public class DataMgr
 {
     public DataMgr()
     {
-        
+
     }
     //static DataMgr instance = null;
     //public static DataMgr Instance
@@ -39,21 +39,44 @@ public class DataMgr
     public void OnInit()
     {
         AppSettings.SettingsManager.AllSettingsReload();
+
+
+        DialogSpeed = 0.5f;
+    }
+
+    public void InitAccount()
+    {
         AccountData = new AccountData();
         AccountData.Gold = 100;
         AccountData.Diamonds = 100;
         AccountData.Uid = 0x1;
 
+    }
+
+    public void InitPlayer(int character)
+    {
+        ClassCharacterTableSetting characterData = ClassCharacterTableSettings.Get(character);
+        if (characterData == null)
+        {
+            return;
+        }
+
         MyPlayer = new MyPlayer();
         PlayerData = MyPlayer.Data;
-        MyPlayer.Data.Name = "大头";
-        MyPlayer.Data.Name = "player No.1";
-        MyPlayer.Data.HP = MyPlayer.Data.MaxHP = 10;
+        MyPlayer.Data.Level = 1;
+        MyPlayer.Data.ClassData = new ClassData(character);
+        LevelTableSetting levelData = LevelTableSettings.Get(MyPlayer.Data.Level);
+        if (levelData == null)
+        {
+            return;
+        }
+        MyPlayer.Data.Name = I18N.Get(characterData.Name);
+        MyPlayer.Data.HP = MyPlayer.Data.MaxHP = levelData.HP[(int)MyPlayer.Data.ClassData.Type];
         MyPlayer.Data.MP = MyPlayer.Data.MaxMP = 2;
         //MyPlayer.Data.AP = MyPlayer.Data.MaxAP = 1;
-        MyPlayer.Data.Level = 1;
+
         MyPlayer.Data.HeadIcon = 10008;
-        MyPlayer.Data.ClassData = new ClassData(3);
+
         MyPlayer.Data.CardList.Add(new NormalCard(1, uidIndex++));
         MyPlayer.Data.CardList.Add(new NormalCard(1, uidIndex++));
         MyPlayer.Data.CardList.Add(new NormalCard(1, uidIndex++));
@@ -88,19 +111,11 @@ public class DataMgr
         tmpDeck.AddCard(1);
         tmpDeck.AddCard(2);
         tmpDeck.AddCard(3);
-        PlayerDetailData.Deck=tmpDeck;
-
-
-
-
-
-
-
+        PlayerDetailData.Deck = tmpDeck;
 
 
         Food = 20;
         Coin = 20;
-        DialogSpeed = 0.5f;
     }
 
 }

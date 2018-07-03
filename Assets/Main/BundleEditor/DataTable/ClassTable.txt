@@ -1,4 +1,4 @@
 Id	Name	Desc	IconID	Image
-int	string 	string	int	int
-1	战士	拥有强大力量的人类	100	100
-2	法师	拥有强大力量的人类	101	101
+int	int	int	int	int
+1	50001	51001	100	100
+2	50002	51002	101	101

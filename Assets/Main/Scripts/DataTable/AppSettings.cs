@@ -2022,12 +2022,12 @@ namespace AppSettings
         /// <summary>
         /// 文本
         /// </summary>
-        public string  Name { get; private set;}
+        public int Name { get; private set;}
         
         /// <summary>
         /// 卡牌描述
         /// </summary>
-        public string Desc { get; private set;}
+        public int Desc { get; private set;}
         
         /// <summary>
         /// 当前职业
@@ -2078,8 +2078,8 @@ namespace AppSettings
         internal void Reload(TableFileRow row)
         { 
             Id = row.Get_int(row.Values[0], ""); 
-            Name = row.Get_string (row.Values[1], ""); 
-            Desc = row.Get_string(row.Values[2], ""); 
+            Name = row.Get_int(row.Values[1], ""); 
+            Desc = row.Get_int(row.Values[2], ""); 
             ClassType = row.Get_int(row.Values[3], ""); 
             IconID = row.Get_int(row.Values[4], ""); 
             Image = row.Get_int(row.Values[5], ""); 
@@ -2281,12 +2281,12 @@ namespace AppSettings
         /// <summary>
         /// 职业名称
         /// </summary>
-        public string  Name { get; private set;}
+        public int Name { get; private set;}
         
         /// <summary>
         /// 职业描述
         /// </summary>
-        public string Desc { get; private set;}
+        public int Desc { get; private set;}
         
         /// <summary>
         /// 职业icon
@@ -2307,8 +2307,8 @@ namespace AppSettings
         internal void Reload(TableFileRow row)
         { 
             Id = row.Get_int(row.Values[0], ""); 
-            Name = row.Get_string (row.Values[1], ""); 
-            Desc = row.Get_string(row.Values[2], ""); 
+            Name = row.Get_int(row.Values[1], ""); 
+            Desc = row.Get_int(row.Values[2], ""); 
             IconID = row.Get_int(row.Values[3], ""); 
             Image = row.Get_int(row.Values[4], ""); 
         }
@@ -2725,7 +2725,7 @@ namespace AppSettings
         public int Lv { get; private set;}
         
         /// <summary>
-        /// 最大血量
+        /// 最大血量(数组里是各个职业的值)
         /// </summary>
         public List<int> HP { get; private set;}
         

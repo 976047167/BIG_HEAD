@@ -9,7 +9,7 @@ public class Procedure_Login : ProcedureBase
         base.OnEnter(last);
 
         Messenger.AddListener(MessageID.UI_GAME_START, GameStart);
-
+        Messenger.AddListener(MessageID.UI_GAME_CREATE_CHARACTER, CreateCharacter);
         Game.UI.OpenForm<WND_Login>();
     }
 
@@ -17,8 +17,10 @@ public class Procedure_Login : ProcedureBase
     {
         base.OnExit(next);
         Messenger.RemoveListener(MessageID.UI_GAME_START, GameStart);
+        Messenger.RemoveListener(MessageID.UI_GAME_CREATE_CHARACTER, CreateCharacter);
         Game.UI.CloseForm<WND_Login>();
         Game.DataManager.OnInit();
+        Game.DataManager.InitAccount();
     }
 
     public override bool OnInit(object userdata = null)
@@ -34,6 +36,11 @@ public class Procedure_Login : ProcedureBase
     void GameStart()
     {
         //进入主界面
+        SceneMgr.ChangeScene(3);
+    }
+    void CreateCharacter()
+    {
+        //进入创角界面
         SceneMgr.ChangeScene(2);
     }
 }

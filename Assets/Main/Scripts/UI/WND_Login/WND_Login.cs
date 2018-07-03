@@ -43,6 +43,7 @@ public class WND_Login : UIFormBase
 
     void OnClick_GameStart()
     {
-        Messenger.Broadcast(MessageID.UI_GAME_START);
+        //Messenger.Broadcast(MessageID.UI_GAME_START);
+        Messenger.Broadcast(MessageID.UI_GAME_CREATE_CHARACTER);
     }
 }

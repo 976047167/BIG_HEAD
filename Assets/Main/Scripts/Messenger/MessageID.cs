@@ -11,6 +11,10 @@ public enum MessageID : uint
     /// </summary>
     UI_FORM_LOADED,
     /// <summary>
+    /// 创建角色
+    /// </summary>
+    UI_GAME_CREATE_CHARACTER,
+    /// <summary>
     /// 游戏开始
     /// </summary>
     UI_GAME_START,

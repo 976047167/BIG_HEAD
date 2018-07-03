@@ -8,9 +8,14 @@ using AppSettings;
 
 public class WND_CreateCharacter : UIFormBase
 {
+    [SerializeField]
     private GameObject mClassItemTemplate;
+    [SerializeField]
     private UIGrid mGridClassType;
-
+    [SerializeField]
+    private GameObject mBtnSelect;
+    [SerializeField]
+    private UILabel mLblDetail;
 
     Dictionary<string, GameObject> dicClassesGo = new Dictionary<string, GameObject>();
     string currentSelect = "";
@@ -30,6 +35,8 @@ public class WND_CreateCharacter : UIFormBase
         base.OnInit(userdata);
         mClassItemTemplate = transform.Find("Grid/Template").gameObject;
         mGridClassType = transform.Find("Grid").GetComponent<UIGrid>();
+        mBtnSelect = transform.Find("btnSelect").gameObject;
+        mLblDetail = transform.Find("Detail/Label").GetComponent<UILabel>();
     }
 
     protected override void OnOpen()
@@ -53,6 +60,8 @@ public class WND_CreateCharacter : UIFormBase
             UIEventListener.Get(go).onClick = OnClick_ClassItem;
         }
         mGridClassType.Reposition();
+        UIEventListener.Get(mBtnSelect).onClick = OnClick_BtnSelect;
+        mLblDetail.text = "";
     }
 
     protected override void OnShow()
@@ -73,7 +82,7 @@ public class WND_CreateCharacter : UIFormBase
         if (currentSelect != go.name)
         {
             Transform icon = go.transform.Find("icon");
-            DOTween.To(() => icon.localPosition, (v) => icon.localPosition = v, new Vector3(0f, -200f, 0f), 0.3f);
+            DOTween.To(() => icon.localPosition, (v) => icon.localPosition = v, new Vector3(0f, -150f, 0f), 0.3f);
             DOTween.To(() => icon.localScale, (v) => icon.localScale = v, new Vector3(1.4f, 1.4f, 1.4f), 0.3f);
             if (!string.IsNullOrEmpty(currentSelect))
             {
@@ -81,7 +90,23 @@ public class WND_CreateCharacter : UIFormBase
                 DOTween.To(() => lastIcon.localPosition, (v) => lastIcon.localPosition = v, new Vector3(0f, 0f, 0f), 0.3f);
                 DOTween.To(() => lastIcon.localScale, (v) => lastIcon.localScale = v, new Vector3(1f, 1f, 1f), 0.3f);
             }
+            ClassTableSetting classData = ClassTableSettings.Get((int)Enum.Parse(typeof(ClassType), go.name));
+            mLblDetail.text = I18N.Get(classData.Desc);
             currentSelect = go.name;
         }
+    }
+
+    private void OnClick_BtnSelect(GameObject go)
+    {
+        if (string.IsNullOrEmpty(currentSelect))
+        {
+            return;
+        }
+        ClassTableSetting classData = ClassTableSettings.Get((int)Enum.Parse(typeof(ClassType), currentSelect));
+        //目前没有皮肤了，暂时默认皮肤了
+        Game.DataManager.InitPlayer(classData.Id);
+
+        Messenger.Broadcast(MessageID.UI_GAME_START);
+
     }
 }
