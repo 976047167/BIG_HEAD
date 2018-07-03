@@ -15,18 +15,28 @@ public class KaKu {
     {
         return GetDicCards(Cards);
     }
-    
+
     static public Dictionary<int, List<NormalCard>> GetDicCards(List<NormalCard> normalCards)
     {
         Dictionary<int, List<NormalCard>> cardsDic = new Dictionary<int, List<NormalCard>>();
-        foreach (var card in normalCards)
+
+        for (int i = 0; i < normalCards.Count; i++)
         {
+            NormalCard card = normalCards[i];
             if (cardsDic.ContainsKey(card.CardId) == false)
             {
-                List<NormalCard> tempCards = normalCards.FindAll((tempCard) =>(tempCard.CardId == card.CardId));
+                List<NormalCard> tempCards = new List<NormalCard>();
+                for (int j = 0; j < normalCards.Count; j++)
+                {
+                    if (normalCards[j].CardId == card.CardId)
+                    {
+                        tempCards.Add(normalCards[j]);
+                    }
+                }
                 cardsDic.Add(card.CardId, tempCards);
-            } 
+            }
         }
+
         return cardsDic;
     }
 
@@ -41,7 +51,14 @@ public class KaKu {
     {
         Cards.Add(card);
     }
-
+    public void Add(List<NormalCard> cards)
+    {
+        for (int i =0; i < cards.Count; i++)
+        {
+            Cards.Add(cards[i]);
+        }
+        
+    }
     public List<NormalCard> GetClassTypeCards(ClassType classType, bool includeNone = false)
     {
         return GetClassTypeCards((int) classType,includeNone);

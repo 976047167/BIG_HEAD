@@ -12,7 +12,8 @@ public class PlayerDetailData
 
     public Deck Deck = new Deck();
     public KaKu Kaku = new KaKu();
-    
+    public KaKu ExtraKakuCards = new KaKu();
+    public Deck ExtraDeckCards = new Deck();
     public Dictionary<ClassType, ClassData> DicAllClassData = new Dictionary<ClassType, ClassData>();
 }
 
