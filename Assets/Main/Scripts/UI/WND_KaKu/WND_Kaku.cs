@@ -379,7 +379,7 @@ public class WND_Kaku : UIFormBase
         }
 
 
-        Game.DataManager.PlayerDetailData.Deck.Cards = tempDeck.Cards;
+        //Game.DataManager.PlayerDetailData.Deck.Cards = tempDeck.Cards;
     }
 
 
