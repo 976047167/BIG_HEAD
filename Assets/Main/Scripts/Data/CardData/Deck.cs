@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Deck {
 
-    public List<NormalCard> Cards;
+    public List<NormalCard> Cards { get; private set; }
 
     public Deck()
     {

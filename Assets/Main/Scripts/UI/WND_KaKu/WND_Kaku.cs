@@ -372,7 +372,14 @@ public class WND_Kaku : UIFormBase
 
     private void SaveDeck()
     {
-        Game.DataManager.PlayerDetailData.Deck = tempDeck;
+        
+        for (int i = 0; i < tempDeck.Cards.Count; i++)
+        {
+            
+        }
+
+
+        Game.DataManager.PlayerDetailData.Deck.Cards = tempDeck.Cards;
     }
 
 
