@@ -13,9 +13,6 @@ public class WND_Kaku : UIFormBase
     private GameObject btnCreateDeck;
     private GameObject btnExit;
     private GameObject deckInstence;
-    private bool isEditor;
-    private KaKu KaKu;
-    private Deck Deck;
     private Dictionary<int, List<NormalCard>>  tempKaKuCardsDic ;
     private Deck tempDeck;
     private KaKu ExtraKakuCards;
@@ -29,6 +26,7 @@ public class WND_Kaku : UIFormBase
     private UIToggle toggleEquip;
     private UIToggle toggleItem;
     private UITexture charaterIcon;
+    private bool isInBattle = false;
 
 
     /// <summary>
@@ -38,6 +36,11 @@ public class WND_Kaku : UIFormBase
     protected override void OnInit(object userdata)
     {
         base.OnInit(userdata);
+        isInBattle = (bool)userdata;
+
+
+
+
         deckGrid = transform.Find("ScrollViewDeck/Grid").GetComponent<UIGrid>();
         cardGrid = transform.Find("bgDeck/ScrollViewCard/Grid").GetComponent<UIGrid>();
         kakuGrid = transform.Find("bgKaku/ScrollViewKaku/Grid").GetComponent<UIGrid>();
@@ -54,22 +57,43 @@ public class WND_Kaku : UIFormBase
 
         UIEventListener.Get(btnExit).onClick = ExitClick;
         deckInstence = transform.Find("deckInstence").gameObject;
-        KaKu = Game.DataManager.PlayerDetailData.Kaku;
-        Deck = Game.DataManager.PlayerDetailData.Deck;
-        ExtraKakuCards = Game.DataManager.PlayerDetailData.ExtraKakuCards;
-        ExtraDeckCards = Game.DataManager.PlayerDetailData.ExtraDeckCards;
 
-        tempDeck = Deck.CloneSelf();
-        tempDeck.AddCards(ExtraDeckCards.Cards);
-        List<NormalCard> kakuCards = KaKu.GetCardsWithDeck((Deck));
-        List<NormalCard> extraKaku = ExtraKakuCards.GetCardsWithDeck((ExtraDeckCards));
-        for (int i = 0;i < extraKaku.Count; i++)
+        if (!isInBattle)
         {
-            kakuCards.Add(extraKaku[i]);
+            KaKu KaKu = Game.DataManager.PlayerDetailData.Kaku;
+            Deck Deck = Game.DataManager.PlayerDetailData.Deck;
+            ExtraKakuCards = Game.DataManager.PlayerDetailData.ExtraKakuCards;
+            ExtraDeckCards = Game.DataManager.PlayerDetailData.ExtraDeckCards;
+
+            tempDeck = Deck.CloneSelf();
+            tempDeck.AddCards(ExtraDeckCards.Cards);
+            List<NormalCard> kakuCards = KaKu.GetCardsWithDeck((Deck));
+            List<NormalCard> extraKaku = ExtraKakuCards.GetCardsWithDeck((ExtraDeckCards));
+            for (int i = 0; i < extraKaku.Count; i++)
+            {
+                kakuCards.Add(extraKaku[i]);
+            }
+            tempKaKuCardsDic = KaKu.GetDicCards(kakuCards);
         }
-        tempKaKuCardsDic = KaKu.GetDicCards(kakuCards);
+        else
+        {
+            Deck Deck = Game.DataManager.PlayerDetailData.Deck;
+            ExtraDeckCards = Game.DataManager.PlayerDetailData.ExtraDeckCards;
+
+            tempDeck = Deck.CloneSelf();
+            tempDeck.AddCards(ExtraDeckCards.Cards);
+            List<NormalCard> kakuCards = MapMgr.Instance.MyMapPlayer.Data.MapCardList;
+            List<NormalCard> extraKaku = ExtraKakuCards.GetCardsWithDeck((ExtraDeckCards));
+            for (int i = 0; i < extraKaku.Count; i++)
+            {
+                kakuCards.Add(extraKaku[i]);
+            }
+            tempKaKuCardsDic = KaKu.GetDicCards(kakuCards);
+        }
+
+
         
-        isEditor = true;
+ 
 
        
 
@@ -200,8 +224,6 @@ public class WND_Kaku : UIFormBase
     private void MoveCardFromDeckToKaKu(int cardId)
     {
 
-        if (isEditor)
-        {
             UINormalCard cardFromDeck =  cardGrid.transform.Find("" + cardId).GetComponent<UINormalCard>();
             if (cardFromDeck.CardNum <= 0 ){
                 Debug.LogError("Move failed, the Card has wrong num!");
@@ -216,7 +238,6 @@ public class WND_Kaku : UIFormBase
             cardGrid.repositionNow = true;
             tempKaKuCardsDic[cardId].Add(tempDeck.RemoveCard(cardId));
 
-        }
 
 
 
@@ -224,8 +245,7 @@ public class WND_Kaku : UIFormBase
     private void MoveCardFromKaKuToDeck(int cardId)
     {
 
-        if (isEditor)
-        {
+ 
             UINormalCard cardFromKaKu =  kakuGrid.transform.Find("" + cardId).GetComponent<UINormalCard>();
             if (cardFromKaKu.CardNum <= 0 ){
                 Debug.LogError("Move failed, the Card has wrong num!");
@@ -271,7 +291,7 @@ public class WND_Kaku : UIFormBase
             tempDeck.Cards.Add(tempKaKuCardsDic[cardId][0]);
             tempKaKuCardsDic[cardId].RemoveAt(0);
 
-        }
+ 
 
 
 
@@ -372,14 +392,24 @@ public class WND_Kaku : UIFormBase
 
     private void SaveDeck()
     {
-        
-        for (int i = 0; i < tempDeck.Cards.Count; i++)
+        if (isInBattle)
         {
-            
+            MapMgr.Instance.MyMapPlayer.Data.MapCardList.Clear();
+            for (int i = 0; i < tempDeck.Cards.Count; i++)
+            {
+                MapMgr.Instance.MyMapPlayer.Data.MapCardList.Add(tempDeck.Cards[i]);
+            }
+        }
+        else
+        {
+            Game.DataManager.PlayerDetailData.Deck.Cards.Clear();
+            Game.DataManager.PlayerDetailData.Deck.AddCards(tempDeck.Cards);
+
         }
 
 
-        //Game.DataManager.PlayerDetailData.Deck.Cards = tempDeck.Cards;
+
+
     }
 
 
