@@ -24,6 +24,7 @@ public class DataMgr
 
     //}
     public int Food;
+    public int MaxFood;
     public int Coin;
     public float DialogSpeed;
 
@@ -53,9 +54,9 @@ public class DataMgr
 
     }
 
-    public void InitPlayer(int character)
+    public void InitPlayer(int characterId)
     {
-        ClassCharacterTableSetting characterData = ClassCharacterTableSettings.Get(character);
+        ClassCharacterTableSetting characterData = ClassCharacterTableSettings.Get(characterId);
         if (characterData == null)
         {
             return;
@@ -64,58 +65,30 @@ public class DataMgr
         MyPlayer = new MyPlayer();
         PlayerData = MyPlayer.Data;
         MyPlayer.Data.Level = 1;
-        MyPlayer.Data.ClassData = new ClassData(character);
+
+        MyPlayer.Data.ClassData = new ClassData(characterId);
         LevelTableSetting levelData = LevelTableSettings.Get(MyPlayer.Data.Level);
         if (levelData == null)
         {
             return;
         }
+        Food = MaxFood = levelData.Food[MyPlayer.Data.Level];
+        Coin = AccountData.Gold;
         MyPlayer.Data.Name = I18N.Get(characterData.Name);
         MyPlayer.Data.HP = MyPlayer.Data.MaxHP = levelData.HP[(int)MyPlayer.Data.ClassData.Type];
-        MyPlayer.Data.MP = MyPlayer.Data.MaxMP = 2;
+        MyPlayer.Data.MP = MyPlayer.Data.MaxMP = levelData.MP[(int)MyPlayer.Data.ClassData.Type];
         //MyPlayer.Data.AP = MyPlayer.Data.MaxAP = 1;
 
-        MyPlayer.Data.HeadIcon = 10008;
-
-        MyPlayer.Data.CardList.Add(new NormalCard(1, uidIndex++));
-        MyPlayer.Data.CardList.Add(new NormalCard(1, uidIndex++));
-        MyPlayer.Data.CardList.Add(new NormalCard(1, uidIndex++));
-        MyPlayer.Data.CardList.Add(new NormalCard(1, uidIndex++));
-        MyPlayer.Data.CardList.Add(new NormalCard(2, uidIndex++));
-        MyPlayer.Data.CardList.Add(new NormalCard(2, uidIndex++));
-        MyPlayer.Data.CardList.Add(new NormalCard(3, uidIndex++));
-        MyPlayer.Data.CardList.Add(new NormalCard(4, uidIndex++));
-        MyPlayer.Data.CardList.Add(new NormalCard(5, uidIndex++));
-        MyPlayer.Data.CardList.Add(new NormalCard(6, uidIndex++));
-        MyPlayer.Data.CardList.Add(new NormalCard(7, uidIndex++));
-
-
-
-
+        MyPlayer.Data.HeadIcon = characterData.IconID;
         PlayerDetailData = MyPlayer.DetailData;
-        PlayerDetailData.Kaku.Add(new NormalCard(1));
-        PlayerDetailData.Kaku.Add(new NormalCard(2));
-        PlayerDetailData.Kaku.Add(new NormalCard(2));
-        PlayerDetailData.Kaku.Add(new NormalCard(3));
-        PlayerDetailData.Kaku.Add(new NormalCard(3));
-        PlayerDetailData.Kaku.Add(new NormalCard(4));
-        PlayerDetailData.Kaku.Add(new NormalCard(4));
-        PlayerDetailData.Kaku.Add(new NormalCard(5));
-        PlayerDetailData.Kaku.Add(new NormalCard(5));
-        PlayerDetailData.Kaku.Add(new NormalCard(7));
-        PlayerDetailData.Kaku.Add(new NormalCard(7));
+        PlayerDetailData.Deck = new Deck();
+        for (int i = 0; i < characterData.DefaultCardList.Count; i++)
+        {
+            MyPlayer.Data.CardList.Add(new NormalCard(characterData.DefaultCardList[i], uidIndex++));
+            PlayerDetailData.Kaku.Add(new NormalCard(characterData.DefaultCardList[i]));
+            PlayerDetailData.Deck.AddCard(characterData.DefaultCardList[i]);
+        }
 
-
-        Deck tmpDeck = new Deck();
-        tmpDeck.AddCard(1);
-        tmpDeck.AddCard(1);
-        tmpDeck.AddCard(2);
-        tmpDeck.AddCard(3);
-        PlayerDetailData.Deck = tmpDeck;
-
-
-        Food = 20;
-        Coin = 20;
     }
 
 }

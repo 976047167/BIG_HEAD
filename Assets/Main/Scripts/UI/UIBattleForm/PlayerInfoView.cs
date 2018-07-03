@@ -99,7 +99,7 @@ public class PlayerInfoView : MonoBehaviour
                 buffIcon = Instantiate(goBuffIconTemplete, gridBuffGrid.transform);
                 buffIcons.Add(buffData.BuffId, buffIcon);
                 buffIcon.GetComponent<UITexture>().Load(buffData.Data.IconID);
-                gridBuffGrid.Reposition();
+                
             }
             else
                 buffIcon = buffIcons[buffData.BuffId];
@@ -110,6 +110,11 @@ public class PlayerInfoView : MonoBehaviour
         {
             playerInfo.Buffs.Remove(removeList[i]);
         }
+        //if (removeList.Count > 0)
+        {
+            gridBuffGrid.Reposition();
+        }
+
     }
 
 

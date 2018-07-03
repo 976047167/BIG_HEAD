@@ -28,7 +28,7 @@ public class BattlePlayerAI
         {
             if (playerData.Data.HandCardList[i].Data.Spending <= playerData.Data.AP)
             {
-                Debug.LogError("自动使用:" + playerData.Data.HandCardList[i].Data.Name);
+                Debug.LogError("自动使用:" + I18N.Get(playerData.Data.HandCardList[i].Data.Name));
                 Game.BattleManager.UseCard(playerData.Data.HandCardList[i]);
                 count--;
                 i--;
