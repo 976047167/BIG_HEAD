@@ -79,15 +79,9 @@ public class WND_Kaku : UIFormBase
         {
             Deck Deck = Game.DataManager.PlayerDetailData.Deck;
             ExtraDeckCards = Game.DataManager.PlayerDetailData.ExtraDeckCards;
-
+            List<NormalCard> kakuCards = MapMgr.Instance.MyMapPlayer.Data.MapCardList;
             tempDeck = Deck.CloneSelf();
             tempDeck.AddCards(ExtraDeckCards.Cards);
-            List<NormalCard> kakuCards = MapMgr.Instance.MyMapPlayer.Data.MapCardList;
-            List<NormalCard> extraKaku = ExtraKakuCards.GetCardsWithDeck((ExtraDeckCards));
-            for (int i = 0; i < extraKaku.Count; i++)
-            {
-                kakuCards.Add(extraKaku[i]);
-            }
             tempKaKuCardsDic = KaKu.GetDicCards(kakuCards);
         }
 

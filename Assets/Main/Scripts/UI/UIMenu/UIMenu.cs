@@ -18,7 +18,7 @@ public class UIMenu : UIFormBase
 
     void MenuClick(GameObject btn)
     {
-        Game.UI.OpenForm<WND_Kaku>();
+        Game.UI.OpenForm<WND_Kaku>(true);
     }
     void BattleSettingsClick(GameObject btn)
     {

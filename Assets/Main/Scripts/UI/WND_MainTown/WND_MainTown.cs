@@ -59,7 +59,7 @@ public class WND_MainTown : UIFormBase
     }
     private void KakuClick(GameObject obj)
     {
-        Game.UI.OpenForm<WND_Kaku>(1);
+        Game.UI.OpenForm<WND_Kaku>(false);
     }
     private void DungeonClick(GameObject obj)
     {
