@@ -7,22 +7,24 @@ using UnityEngine.SceneManagement;
 public class Game : MonoBehaviour
 {
     public bool BundleEditorMode = true;
+    public LanguageType language = LanguageType.None;
 
+    public static Game Instance { get; private set; }
     private void Awake()
     {
+        Instance = this;
         DontDestroyOnLoad(gameObject);
     }
-    
+
     private void Start()
     {
-        
         StartCoroutine(Init());
         
     }
     IEnumerator Init()
     {
         //资源第一优先级初始化
-        yield return ResourceManager.Init(BundleEditorMode);
+        yield return ResourceManager.Init(Game.Instance.BundleEditorMode);
         dataMgr = new DataMgr();
         battleMgr = new BattleMgr();
         uiModule = UIModule.Instance;
@@ -42,7 +44,7 @@ public class Game : MonoBehaviour
     {
         ProcedureManager.ChangeProcedure<Procedure_Launch>();
 
-        
+
         //SceneManager.LoadScene("Init");
 
     }

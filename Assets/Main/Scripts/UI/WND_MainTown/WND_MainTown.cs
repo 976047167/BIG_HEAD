@@ -68,7 +68,7 @@ public class WND_MainTown : UIFormBase
 
     protected void Onclick_btnPlot(GameObject go)
     {
-        SceneMgr.ChangeScene(3);
+        SceneMgr.ChangeScene(4);
     }
     private void OnClick_HeadFrame(GameObject obj)
     {

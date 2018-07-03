@@ -76,7 +76,7 @@ public class WND_ShowCard : UIFormBase
     private void ShowAnime()
     {
         CardBg.transform.localScale = new Vector3(0.3f, 0.3f, 0.3f);
-        TweenScale.Begin(CardBg,0.1f,Vector3.one);
+        TweenScale.Begin(CardBg, 0.1f, Vector3.one);
     }
 
 
@@ -86,13 +86,13 @@ public class WND_ShowCard : UIFormBase
     /// <param name="id"></param>
     private void InitCard(int id)
     {
-        BattleCardTableSetting card =  BattleCardTableSettings.Get(id);
+        BattleCardTableSetting card = BattleCardTableSettings.Get(id);
         icon.Load(card.ShowID);
-        labName.text = card.Name;
+        labName.text = I18N.Get(card.Name);
         spendingNum.text = card.Spending.ToString();
-        describle.text = card.Desc;
+        describle.text = I18N.Get(card.Desc);
         ShowCardType(card.Type);
-        if (card.Type == 0&& card.ActionTypes[0] ==1)
+        if (card.Type == 0 && card.ActionTypes[0] == 1)
         {
             labAttack.text = card.ActionParams[0].ToString();
         }
@@ -102,8 +102,8 @@ public class WND_ShowCard : UIFormBase
     {
         BattleBuffTableSetting buff = BattleBuffTableSettings.Get(id);
         icon.Load(buff.IconID);
-        labName.text = buff.Name;
-        describle.text = buff.Desc;
+        labName.text = I18N.Get(buff.Name);
+        describle.text = I18N.Get(buff.Desc);
         spSpending.gameObject.SetActive(false);
 
     }
@@ -111,8 +111,8 @@ public class WND_ShowCard : UIFormBase
     {
         BattleEquipTableSetting equip = BattleEquipTableSettings.Get(id);
         icon.Load(equip.IconID);
-        labName.text = equip.Name;
-        describle.text = equip.Desc;
+        labName.text = I18N.Get(equip.Name);
+        describle.text = I18N.Get(equip.Desc);
         spSpending.gameObject.SetActive(false);
 
     }

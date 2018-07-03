@@ -23,7 +23,7 @@ public class WND_Reward : UIFormBase
 
 
         monsterId = (int)userdata;
-       
+
     }
 
     protected override void OnOpen()
@@ -40,7 +40,7 @@ public class WND_Reward : UIFormBase
 
     private void PlayShowAnime()
     {
-        frame.transform.localScale = new Vector3(0.3f,0.3f, 0.3f);
+        frame.transform.localScale = new Vector3(0.3f, 0.3f, 0.3f);
         TweenScale.Begin(frame, 0.1f, Vector3.one);
     }
 
@@ -97,7 +97,7 @@ public class WND_Reward : UIFormBase
             BattleCardTableSetting cardData = BattleCardTableSettings.Get(card);
             if (cardData == null) continue;
 
-            item.GetComponent<UILabel>().text = cardData.Name;
+            item.GetComponent<UILabel>().text = I18N.Get(cardData.Name);
             item.transform.Find("labNum").GetComponent<UILabel>().text = "";
             Color color = new Color();
             switch (cardData.Quality)

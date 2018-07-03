@@ -37,6 +37,10 @@ public class ResourceManager
                 yield return null;
             }
         }
+        
+    }
+    public static IEnumerator Preload()
+    {
         //if (!EditorMode)
         {
             SettingModule.CustomLoadSettingString = LoadSettingFromCache;
@@ -62,7 +66,7 @@ public class ResourceManager
         return string.Empty;
     }
 
-    public static void PreloadDataTables()
+    static void PreloadDataTables()
     {
         Type baseType = typeof(IReloadableSettings);
         Type[] types = Assembly.GetExecutingAssembly().GetExportedTypes();
