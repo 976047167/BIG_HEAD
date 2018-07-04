@@ -75,6 +75,8 @@ public class KaKu {
     }
     //从卡库中剔除卡组的卡片
     public List<NormalCard> GetCardsWithDeck(Deck deck) {
+        if (deck.Cards.Count == 0)
+            return Cards;
         List<NormalCard> result = new List<NormalCard>();
 
         for (int i = 0;i< Cards.Count; i++)
