@@ -8,52 +8,52 @@ public class BattlePlayer
     public BattlePlayerData Data { get; private set; }
     private BattlePlayerAI playerAI;
     public bool IsMe { get; private set; }
-    public Player Player { get; private set; }
+    public MapPlayer Player { get; private set; }
 
-    public BattlePlayer(Player player)
+    public BattlePlayer(MapPlayer mapPlayer)
     {
-        this.Player = player;
+        this.Player = mapPlayer;
         Data = new BattlePlayerData();
-        Data.Name = player.Data.Name;
-        Data.HP = player.Data.HP;
-        Data.MaxHP = player.Data.MaxHP;
-        Data.MP = player.Data.MP;
-        Data.MaxMP = player.Data.MaxMP;
+        Data.Name = mapPlayer.Data.Name;
+        Data.HP = mapPlayer.Data.HP;
+        Data.MaxHP = mapPlayer.Data.MaxHP;
+        Data.MP = mapPlayer.Data.MP;
+        Data.MaxMP = mapPlayer.Data.MaxMP;
         //玩家的行动值初始1
         Data.AP = Data.MaxAP = 0;
-        Data.Level = player.Data.Level;
-        Data.SkillId = player.Data.BattleSkillID;
-        Data.HeadIcon = player.Data.HeadIcon;
+        Data.Level = mapPlayer.Data.Level;
+        Data.SkillId = mapPlayer.Data.BattleSkillID;
+        Data.HeadIcon = mapPlayer.Data.HeadIcon;
         Data.CardList.Clear();
 
-        Data.EquipList = new List<BattleEquipData>(player.Data.EquipList.Count);
-        for (int i = 0; i < player.Data.EquipList.Count; i++)
+        Data.EquipList = new List<BattleEquipData>(mapPlayer.Data.EquipList.Count);
+        for (int i = 0; i < mapPlayer.Data.EquipList.Count; i++)
         {
-            List<int> actions = player.Data.EquipList[i].Data.ActionTypes;
+            List<int> actions = mapPlayer.Data.EquipList[i].Data.ActionTypes;
             for (int j = 0; j < actions.Count; j++)
             {
                 if (actions[i] == (int)BattleActionType.AddEquipment)
                 {
-                    Data.EquipList.Add(new BattleEquipData(player.Data.EquipList[j].Data.ActionParams[0], this));
+                    Data.EquipList.Add(new BattleEquipData(mapPlayer.Data.EquipList[j].Data.ActionParams[0], this));
                     break;
                 }
             }
         }
-        Data.CardList = new List<BattleCardData>(player.Data.CardList.Count);
-        for (int i = 0; i < player.Data.CardList.Count; i++)
+        Data.CardList = new List<BattleCardData>(mapPlayer.Data.CardList.Count);
+        for (int i = 0; i < mapPlayer.Data.CardList.Count; i++)
         {
-            Data.CardList.Add(new BattleCardData(player.Data.CardList[i].CardId, this));
+            Data.CardList.Add(new BattleCardData(mapPlayer.Data.CardList[i].CardId, this));
         }
-        Data.BuffList = new List<BattleBuffData>(player.Data.BuffList.Count);
-        for (int i = 0; i < player.Data.BuffList.Count; i++)
+        Data.BuffList = new List<BattleBuffData>(mapPlayer.Data.BuffList.Count);
+        for (int i = 0; i < mapPlayer.Data.BuffList.Count; i++)
         {
-            Data.BuffList.Add(new BattleBuffData(player.Data.BuffList[i].Data.ActionParams[0], -1, new BattleCardData(player.Data.BuffList[i].CardId, this), this, this));
+            Data.BuffList.Add(new BattleBuffData(mapPlayer.Data.BuffList[i].Data.ActionParams[0], -1, new BattleCardData(mapPlayer.Data.BuffList[i].CardId, this), this, this));
         }
 
 
 
         Data.CurrentCardList = new List<BattleCardData>(Data.CardList);
-        IsMe = player == Game.DataManager.MyPlayer;
+        IsMe = mapPlayer.Player == Game.DataManager.MyPlayer;
 
     }
     public BattlePlayer(int monsterId)

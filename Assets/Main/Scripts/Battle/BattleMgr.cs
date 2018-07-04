@@ -36,7 +36,7 @@ public class BattleMgr
         Debug.Log("StartBattle => " + monsterId);
         MonsterId = monsterId;
         SetOppData(monsterId);
-        MyPlayer = new BattlePlayer(Game.DataManager.MyPlayer);
+        MyPlayer = new BattlePlayer(MapMgr.Instance.MyMapPlayer);
         dicRoundCounter = new Dictionary<string, int>();
         dicBattleCounter = new Dictionary<string, int>();
         RoundCount = 0;

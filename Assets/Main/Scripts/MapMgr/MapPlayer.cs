@@ -11,7 +11,7 @@ public class MapPlayer
     public GameObject PlayerGO { get { return m_gameObject; } }
 
     private Player m_Player;
-
+    public Player Player { get { return m_Player; } }
     public MapCardPos CurPos;
 
     public MapPlayer(Player player)
