@@ -7,20 +7,28 @@ public class ClassData
 {
     private ClassType type = ClassType.None;
     private int characterID = 0;
-    private ClassCharacterTableSetting table;
+    private ClassTableSetting classTable;
+    private ClassCharacterTableSetting characterTable;
 
     public ClassType Type { get { return type; } }
     public int CharacterID { get { return characterID; } }
-    public ClassCharacterTableSetting Table { get { return table; } }
+    public ClassTableSetting ClassTable { get { return classTable; } }
+    public ClassCharacterTableSetting CharacterData { get { return characterTable; } }
 
     public ClassData(int characterID)
     {
         this.characterID = characterID;
-        ClassCharacterTableSetting setting = ClassCharacterTableSettings.Get(characterID);
-        if (setting!=null)
+        characterTable = ClassCharacterTableSettings.Get(characterID);
+        if (characterTable == null)
         {
-            table = setting;
-            type = (ClassType)table.ClassType;
+            Debug.LogError("character id = " + characterID + " is not exist!");
         }
+        type = (ClassType)characterTable.ClassType;
+        classTable = ClassTableSettings.Get((int)type);
+        if (classTable == null)
+        {
+            Debug.LogError("class type = [" + type.ToString() + "] is not exist!");
+        }
+
     }
 }

@@ -2,13 +2,14 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Deck {
+public class Deck
+{
 
     public List<NormalCard> Cards { get; private set; }
 
     public Deck()
     {
-        Cards = new List<NormalCard>();
+        
     }
     /// <summary>
     /// 返回cards的dictonar形式，
@@ -20,7 +21,7 @@ public class Deck {
         return GetDicCards(Cards);
     }
 
-    static public Dictionary<int, List<NormalCard>> GetDicCards(List<NormalCard> normalCards)
+    public Dictionary<int, List<NormalCard>> GetDicCards(List<NormalCard> normalCards)
     {
         Dictionary<int, List<NormalCard>> cardsDic = new Dictionary<int, List<NormalCard>>();
         for (int i = 0; i < normalCards.Count; i++)
@@ -39,21 +40,22 @@ public class Deck {
     /// </summary>
     /// <param name="cardId"></param>
     /// <returns></returns>
-     public List<NormalCard> GetOneCardList(int cardId){
+    public List<NormalCard> GetOneCardList(int cardId)
+    {
         return GetOneCardList(cardId, Cards);
-        }
+    }
 
 
 
-    static public List<NormalCard> GetOneCardList(int cardId,List<NormalCard>cardlist)
+    static public List<NormalCard> GetOneCardList(int cardId, List<NormalCard> cardlist)
     {
         List<NormalCard> result = new List<NormalCard>();
-        for (int i = 0;i< cardlist.Count; i++)
+        for (int i = 0; i < cardlist.Count; i++)
         {
-            if(cardlist[i].CardId == cardId)
+            if (cardlist[i].CardId == cardId)
             {
                 result.Add(cardlist[i]);
-            } 
+            }
         }
 
 
@@ -66,10 +68,10 @@ public class Deck {
     }
     public void AddCard(int cardId)
     {
-           NormalCard card = new NormalCard(cardId);
+        NormalCard card = new NormalCard(cardId);
         AddNormalCard(card);
     }
-    public void AddCards (List<int> cardIds)
+    public void AddCards(List<int> cardIds)
     {
         for (int i = 0; i < cardIds.Count; i++)
         {
@@ -91,14 +93,14 @@ public class Deck {
     public NormalCard RemoveCard(int cardId)
     {
         NormalCard card = Cards.Find(item => item.CardId == cardId);
-        return  RemoveCard(card);
+        return RemoveCard(card);
     }
     public NormalCard RemoveCard(NormalCard card)
     {
         if (card == null)
             return null;
-        if(Cards.Remove(card) == false)
-             return null;
+        if (Cards.Remove(card) == false)
+            return null;
         return card;
     }
 
