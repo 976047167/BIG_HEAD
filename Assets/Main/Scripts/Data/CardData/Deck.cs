@@ -9,7 +9,7 @@ public class Deck
 
     public Deck()
     {
-        
+        Cards = new List<NormalCard>();
     }
     /// <summary>
     /// 返回cards的dictonar形式，
