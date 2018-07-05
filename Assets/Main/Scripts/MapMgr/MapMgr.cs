@@ -35,8 +35,9 @@ public class MapMgr
         mainCamera = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();
         MapCardRoot = new GameObject("MapMgr");
         m_MyMapPlayer = new MapPlayer(Game.DataManager.MyPlayer);
-        MakeMap();
         MakePlayer();
+        MakeMap();
+        
     }
 
     public void Update()
@@ -70,8 +71,8 @@ public class MapMgr
             if (i == 0)
             {
                 mapCards.Add(MapCardBase.CreateMapCard<MapCardDoor>());
-                mapCards[i].X = Random.Range(0, 5);
-                mapCards[i].Y = Random.Range(0, 5);
+                mapCards[i].X = Random.Range(0, ConstValue.MAP_WIDTH);
+                mapCards[i].Y = Random.Range(0, ConstValue.MAP_WIDTH);
 
                 maplist[mapCards[i].X, mapCards[i].Y] = mapCards[i];
                 mapCards[i].State = MapCardBase.CardState.Behind;
@@ -101,13 +102,12 @@ public class MapMgr
 
     void MakePlayer()
     {
-        MapCardBase mapcard = mapCards[Random.Range(0, mapCards.Count)];
-        MapCardPos currentPos = new MapCardPos(mapcard.X, mapcard.Y);
+        //MapCardBase mapcard = mapCards[Random.Range(0, mapCards.Count)];
+        //MapCardPos currentPos = new MapCardPos(mapcard.X, mapcard.Y);
+        //m_MyMapPlayer.CreateModel(currentPos);
+        //mapcard.State = MapCardBase.CardState.Front;
+        MapCardPos currentPos = new MapCardPos(Random.Range(0, ConstValue.MAP_WIDTH), Random.Range(0, ConstValue.MAP_HEIGHT));
         m_MyMapPlayer.CreateModel(currentPos);
-        mapcard.State = MapCardBase.CardState.Front;
-        //ResourceManager.LoadGameObject("Character/Player/Player", LoadPlayerSuccess,
-        //    (str, obj) => { Debug.LogError("Load player Failed!"); }
-        //    );
 
     }
     //void LoadPlayerSuccess(string path, object[] userData, GameObject go)
