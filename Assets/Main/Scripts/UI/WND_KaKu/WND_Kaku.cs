@@ -13,8 +13,7 @@ public class WND_Kaku : UIFormBase
     private GameObject btnCreateDeck;
     private GameObject btnExit;
     private GameObject deckInstence;
-    private Dictionary<int, List<NormalCard>>  tempKaKuCardsDic ;
-    private Deck tempDeck;
+    private List<NormalCard> tempDeck = new List<NormalCard>();
     private KaKu ExtraKakuCards;
     private Deck ExtraDeckCards;
     private Vector3 offsetPos;
@@ -26,6 +25,9 @@ public class WND_Kaku : UIFormBase
     private UIToggle toggleEquip;
     private UIToggle toggleItem;
     private UITexture charaterIcon;
+    private KaKu KaKu;
+    private Deck Deck;
+
     private bool isInBattle = false;
 
 
@@ -57,32 +59,28 @@ public class WND_Kaku : UIFormBase
 
         UIEventListener.Get(btnExit).onClick = ExitClick;
         deckInstence = transform.Find("deckInstence").gameObject;
-
+        KaKu = Game.DataManager.PlayerDetailData.Kaku;
+        Deck = Game.DataManager.PlayerDetailData.Deck;
         if (!isInBattle)
         {
-            KaKu KaKu = Game.DataManager.PlayerDetailData.Kaku;
-            Deck Deck = Game.DataManager.PlayerDetailData.Deck;
+
             ExtraKakuCards = Game.DataManager.PlayerDetailData.ExtraKakuCards;
             ExtraDeckCards = Game.DataManager.PlayerDetailData.ExtraDeckCards;
-
-            tempDeck = Deck.CloneSelf();
-            tempDeck.AddCards(ExtraDeckCards.Cards);
-            List<NormalCard> kakuCards = KaKu.GetCardsWithDeck((Deck));
-            List<NormalCard> extraKaku = ExtraKakuCards.GetCardsWithDeck((ExtraDeckCards));
-            for (int i = 0; i < extraKaku.Count; i++)
+            for (int i = 0; i < Deck.Count; i++)
             {
-                kakuCards.Add(extraKaku[i]);
+                tempDeck.Add(Deck[i]);
             }
-            tempKaKuCardsDic = KaKu.GetDicCards(kakuCards);
+           // tempDeck.AddCards(ExtraDeckCards.Cards);
         }
         else
         {
             Deck Deck = Game.DataManager.PlayerDetailData.Deck;
             ExtraDeckCards = Game.DataManager.PlayerDetailData.ExtraDeckCards;
             List<NormalCard> kakuCards = MapMgr.Instance.MyMapPlayer.Data.MapCardList;
-            tempDeck = Deck.CloneSelf();
-            tempDeck.AddCards(ExtraDeckCards.Cards);
-            tempKaKuCardsDic = KaKu.GetDicCards(kakuCards);
+            for (int i = 0; i < Deck.Count; i++)
+            {
+                tempDeck.Add(Deck[i]);
+            }
         }
 
 
@@ -107,9 +105,9 @@ public class WND_Kaku : UIFormBase
         CardInstence.transform.SetParent(transform);
         CardInstence.transform.localScale = new Vector3(1, 1, 1);
         CardInstence.SetActive(false);
-        LoadDeckCard(tempDeck.GetDicCards());
+        LoadDeckCard();
 
-        LoadKaKuCard(tempKaKuCardsDic);
+        LoadKaKuCard();
     }
 
     private void SetCharacterIcon(int icon)
@@ -117,60 +115,96 @@ public class WND_Kaku : UIFormBase
         charaterIcon.Load(icon);
     }
 
-    private void LoadDeckCard(Dictionary<int, List<NormalCard>> cardsDic)
+    private void LoadDeckCard()
     {
-        foreach (var trans in cardGrid.GetChildList())
+        for (int i = 0; i < cardGrid.transform.childCount; i++)
         {
+            Transform trans = cardGrid.transform.GetChild(i);
             Destroy(trans.gameObject);
         }
-        foreach (var cardList in cardsDic)
+
+        for (int i = 0; i < tempDeck.Count; i++)
         {
 
-            GameObject item = Instantiate(CardInstence);
-            item.SetActive(true);
-            int id = cardList.Key;
-            item.name = "" + id;
-            item.GetComponent<UINormalCard>().SetCard(id);
-            item.GetComponent<UINormalCard>().CardNum = cardList.Value.Count;
-            item.AddComponent<UIDragScrollView>();
-            UIEventListener.Get(item).onDragStart = OnCardDragStart;
-            UIEventListener.Get(item).onDrag = OnCardDrag;
-            UIEventListener.Get(item).onDragEnd = OnCardDragEnd;
-            item.transform.SetParent(cardGrid.transform, false);
-            item.transform.localPosition = new Vector3();
-            item.transform.localScale = cardScale;
-            
 
+            int cardId = tempDeck[i].CardId;
+            if (cardGrid.transform.Find(cardId.ToString()) != null)
+            {
+                GameObject item = cardGrid.transform.Find(cardId.ToString()).gameObject;
+                item.GetComponent<UINormalCard>().CardNum++;
+            }
+            else
+            {
+                GameObject item = Instantiate(CardInstence);
+                item.SetActive(true);
+                int id = cardId;
+                item.name = "" + id;
+                item.GetComponent<UINormalCard>().SetCard(id);
+                item.GetComponent<UINormalCard>().CardNum = 1;
+                item.AddComponent<UIDragScrollView>();
+                UIEventListener.Get(item).onDragStart = OnCardDragStart;
+                UIEventListener.Get(item).onDrag = OnCardDrag;
+                UIEventListener.Get(item).onDragEnd = OnCardDragEnd;
+                item.transform.SetParent(cardGrid.transform, false);
+                item.transform.localPosition = new Vector3();
+                item.transform.localScale = cardScale;
+
+
+            }
         }
         cardGrid.repositionNow = true;
 
     }
-    private void LoadKaKuCard(Dictionary<int, List<NormalCard>> cardsDic)
+    private void LoadKaKuCard()
     {
-        foreach (var trans in kakuGrid.GetChildList())
+        for (int i = 0; i < kakuGrid.transform.childCount; i++)
         {
+            Transform trans = kakuGrid.transform.GetChild(i);
             Destroy(trans.gameObject);
         }
-        foreach (var cardList in cardsDic)
+
+        for (int i = 0; i < KaKu.Count;i++)
         {
+            bool isInDeck = false;
+            for(int j = 0; j < tempDeck.Count; j++)
+            {
+                if (KaKu[i] == tempDeck[j])
+                {
+                    isInDeck = true;
+                    break;
+                }
+                   
+            }
+            if (isInDeck)
+                continue;
 
-            GameObject item = Instantiate(CardInstence);
-            item.SetActive(true);
-            int id = cardList.Key;
 
-            item.GetComponent<UINormalCard>().SetCard(id);
-            item.GetComponent<UINormalCard>().CardNum = cardList.Value.Count;
-            item.name = "" + id;
-            item.AddComponent<UIDragScrollView>();
-            UIEventListener.Get(item).onDragStart = OnCardDragStart;
-            UIEventListener.Get(item).onDrag = OnCardDrag;
-            UIEventListener.Get(item).onDragEnd = OnCardDragEnd;
-            item.transform.SetParent(kakuGrid.transform, false);
-            item.transform.localPosition = new Vector3();
-            item.transform.localScale = cardScale;
-           
 
+            int cardId = KaKu[i].CardId;
+            if (kakuGrid.transform.Find(cardId.ToString()) != null)
+            {
+                GameObject item = kakuGrid.transform.Find(cardId.ToString()).gameObject;
+                item.GetComponent<UINormalCard>().CardNum++ ;
+            }
+            else
+            {
+                GameObject item = Instantiate(CardInstence);
+                item.SetActive(true);
+                int id = cardId;
+
+                item.GetComponent<UINormalCard>().SetCard(id);
+                item.GetComponent<UINormalCard>().CardNum = 1;
+                item.name = "" + id;
+                item.AddComponent<UIDragScrollView>();
+                UIEventListener.Get(item).onDragStart = OnCardDragStart;
+                UIEventListener.Get(item).onDrag = OnCardDrag;
+                UIEventListener.Get(item).onDragEnd = OnCardDragEnd;
+                item.transform.SetParent(kakuGrid.transform, false);
+                item.transform.localPosition = new Vector3();
+                item.transform.localScale = cardScale;
+            }
         }
+
         kakuGrid.repositionNow = true;
 
     }
@@ -230,7 +264,14 @@ public class WND_Kaku : UIFormBase
             cardToKaKu.CardNum += 1;
             kakuGrid.repositionNow = true;
             cardGrid.repositionNow = true;
-            tempKaKuCardsDic[cardId].Add(tempDeck.RemoveCard(cardId));
+            for (int i = 0; i < tempDeck.Count; i++)
+            {
+                if(tempDeck[i].CardId == cardId)
+                 {
+                tempDeck.RemoveAt(i);
+                 break;
+                 }
+            }
 
 
 
@@ -247,9 +288,9 @@ public class WND_Kaku : UIFormBase
             }
             cardFromKaKu.CardNum -= 1;
             bool isFoud = false;
-            for (int i = 0; i < tempDeck.Cards.Count; i++)
+            for (int i = 0; i < tempDeck.Count; i++)
             {
-                if (tempDeck.Cards[i].CardId == cardId)
+                if (tempDeck[i].CardId == cardId)
                 {
                     isFoud = true;
                     break;
@@ -282,8 +323,24 @@ public class WND_Kaku : UIFormBase
 
             kakuGrid.repositionNow = true;
             cardGrid.repositionNow = true;
-            tempDeck.Cards.Add(tempKaKuCardsDic[cardId][0]);
-            tempKaKuCardsDic[cardId].RemoveAt(0);
+            for(int i = 0; i < tempDeck.Count; i++)
+            {
+                bool isFind = false;
+                for (int j = 0; j < KaKu.Count; j++)
+                {
+                    if (KaKu[j].CardId ==cardId && KaKu[j] != tempDeck[i])
+                    {
+                        isFind = true;
+                        tempDeck.Add(KaKu[j]);
+                        break;
+                    }
+                }
+                if (isFind)
+                {
+                    break;
+                }
+            }
+          
 
  
 
@@ -389,15 +446,15 @@ public class WND_Kaku : UIFormBase
         if (isInBattle)
         {
             MapMgr.Instance.MyMapPlayer.Data.MapCardList.Clear();
-            for (int i = 0; i < tempDeck.Cards.Count; i++)
+            for (int i = 0; i < tempDeck.Count; i++)
             {
-                MapMgr.Instance.MyMapPlayer.Data.MapCardList.Add(tempDeck.Cards[i]);
+                MapMgr.Instance.MyMapPlayer.Data.MapCardList.Add(tempDeck[i]);
             }
         }
         else
         {
-            Game.DataManager.PlayerDetailData.Deck.Cards.Clear();
-            Game.DataManager.PlayerDetailData.Deck.AddCards(tempDeck.Cards);
+            Game.DataManager.PlayerDetailData.Deck.Clear();
+            Game.DataManager.PlayerDetailData.Deck.AddCards(tempDeck);
 
         }
 

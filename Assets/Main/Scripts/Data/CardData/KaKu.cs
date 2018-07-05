@@ -4,43 +4,33 @@ using UnityEngine;
 using AppSettings;
 
 public class KaKu {
-    public List<NormalCard> Cards { get; private set; }
- 
-    public KaKu(){
+    private List<NormalCard> Cards;
+
+    public KaKu() {
         Cards = new List<NormalCard>();
 
     }
-
-    public Dictionary<int, List<NormalCard>> GetDicCards()
+    /*
+    public List<NormalCard> GetCards(int cardId)
     {
-        return GetDicCards(Cards);
-    }
-
-    static public Dictionary<int, List<NormalCard>> GetDicCards(List<NormalCard> normalCards)
-    {
-        Dictionary<int, List<NormalCard>> cardsDic = new Dictionary<int, List<NormalCard>>();
-
-        for (int i = 0; i < normalCards.Count; i++)
+        List<NormalCard> result = new List<NormalCard>();
+        for (int i = 0; i < Cards.Count; i++)
         {
-            NormalCard card = normalCards[i];
-            if (cardsDic.ContainsKey(card.CardId) == false)
-            {
-                List<NormalCard> tempCards = new List<NormalCard>();
-                for (int j = 0; j < normalCards.Count; j++)
-                {
-                    if (normalCards[j].CardId == card.CardId)
-                    {
-                        tempCards.Add(normalCards[j]);
-                    }
-                }
-                cardsDic.Add(card.CardId, tempCards);
-            }
+            if (Cards[i].CardId == cardId)
+                result.Add(Cards[i]);
         }
-
-        return cardsDic;
+        return result;
     }
-
-
+    public List<NormalCard> GetCards()
+    {
+        List<NormalCard> result = new List<NormalCard>();
+        for (int i = 0; i < Cards.Count; i++)
+        {
+            result.Add(Cards[i]);
+        }
+        return result;
+    }
+    */
     public void Add(int cardId)
     {
 
@@ -53,46 +43,48 @@ public class KaKu {
     }
     public void Add(List<NormalCard> cards)
     {
-        for (int i =0; i < cards.Count; i++)
+        for (int i = 0; i < cards.Count; i++)
         {
             Cards.Add(cards[i]);
         }
+
+    }
+    /*
+ public List<NormalCard> GetClassTypeCards(ClassType classType, bool includeNone = false)
+ {
+     return GetClassTypeCards((int)classType, includeNone);
+ }
+ //检索职业卡
+ public List<NormalCard> GetClassTypeCards(int classType, bool includeNone = false)
+
+ {
+     if (classType == 0)
+         return GetCards();
+     //  return Cards.FindAll((card) => (card.Data.ClassLimit == classType || includeNone && card.Data.ClassLimit == 0));
+     List<NormalCard> result = new List<NormalCard>();
+     for (int i = 0; i < Cards.Count; i++)
+     {
+         if (Cards[i].Data.ClassLimit == classType || includeNone && Cards[i].Data.ClassLimit == 0)
+             result.Add(Cards[i]);
+     }
+     return result;
+
+ }
+    */
+    public int GetCardCounnt()
+    {
+        return Cards.Count;
+    }
+    public NormalCard this[int index]
+    {
+        get {
+            return Cards[index];
         
-    }
-    public List<NormalCard> GetClassTypeCards(ClassType classType, bool includeNone = false)
-    {
-        return GetClassTypeCards((int) classType,includeNone);
-    }
-    //检索职业卡
-    public List<NormalCard> GetClassTypeCards(int classType,bool includeNone = false)
-
-    {
-        if (classType == 0)
-            return Cards;
-        return Cards.FindAll((card) => (card.Data.ClassLimit == classType || includeNone && card.Data.ClassLimit == 0));
-
-
-    }
-    //从卡库中剔除卡组的卡片
-    public List<NormalCard> GetCardsWithDeck(Deck deck) {
-        if (deck.Cards.Count == 0)
-            return Cards;
-        List<NormalCard> result = new List<NormalCard>();
-
-        for (int i = 0;i< Cards.Count; i++)
-        {
-            for (int j = 0; j < deck.Cards.Count; j++)
-            {
-                if (Cards[i] == deck.Cards[j])
-                    break;
-                if (j == deck.Cards.Count - 1)
-                    result.Add(Cards[i]);
-            }
         }
-        return result;
-
+   }
+    public int Count
+    {
+        get { return Cards.Count; }
     }
-
-
 
 }
