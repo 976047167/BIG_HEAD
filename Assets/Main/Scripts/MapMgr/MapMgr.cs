@@ -44,6 +44,7 @@ public class MapMgr
         MakePlayer();
         MakeMap(1);
         m_Inited = true;
+        Messenger.Broadcast(MessageID.MAP_UPDATE_PLAYER_INFO);
     }
     public void Update()
     {
@@ -75,7 +76,6 @@ public class MapMgr
     }
     public void Clear()
     {
-
         m_Inited = false;
     }
 
@@ -91,28 +91,34 @@ public class MapMgr
     }
     void MakeMap(int layerId)
     {
-        if (lastMapLayerData != null)
+
+        MapCardBase playerDoorCard = null;
+        if (currentMapLayerData != null)
         {
-            for (int i = 0; i < ConstValue.MAP_WIDTH; i++)
+            if (lastMapLayerData != null)
             {
-                for (int j = 0; j < ConstValue.MAP_HEIGHT; j++)
+                for (int i = 0; i < ConstValue.MAP_WIDTH; i++)
                 {
-                    if (lastMapLayerData[i, j] != null)
+                    for (int j = 0; j < ConstValue.MAP_HEIGHT; j++)
                     {
-                        lastMapLayerData[i, j].Destory();
+                        if (lastMapLayerData[i, j] != null && lastMapLayerData[i, j] != currentMapLayerData[i, j])
+                        {
+                            lastMapLayerData[i, j].Destory();
+                        }
                     }
                 }
             }
-        }
-        lastMapLayerData = null;
-        if (currentMapLayerData != null)
-        {
             lastMapLayerData = currentMapLayerData;
             for (int i = 0; i < ConstValue.MAP_WIDTH; i++)
             {
                 for (int j = 0; j < ConstValue.MAP_HEIGHT; j++)
                 {
-                    if (lastMapLayerData[i, j] != null)
+                    //共用传送门
+                    if (i == m_MyMapPlayer.CurPos.X && j == m_MyMapPlayer.CurPos.Y)
+                    {
+                        playerDoorCard = lastMapLayerData[i, j];
+                    }
+                    else if (lastMapLayerData[i, j] != null)
                     {
                         lastMapLayerData[i, j].ExitMap();
                     }
@@ -124,20 +130,20 @@ public class MapMgr
         MapCardBase[,] maplist = layerData.MapCardDatas;
         List<MapCardBase> mapCards = new List<MapCardBase>();
         int cardCount = Random.Range(10, 15);
-
-        for (int i = 0; i < cardCount; i++)
+        //先确定出生点
         {
-            //先确定出生点
-            if (i == 0)
+            if (playerDoorCard == null)
             {
-                mapCards.Add(MapCardBase.CreateMapCard<MapCardDoor>(m_MyMapPlayer.CurPos));
-                maplist[mapCards[i].X, mapCards[i].Y] = mapCards[i];
-                mapCards[i].State = MapCardBase.CardState.Front;
-                mapCards[i].SetUsed(true);
-                mapCards[i].SetActive(true);
-                mapCards[i].SetParent(MapCardRoot.transform);
-                continue;
+                playerDoorCard = MapCardBase.CreateMapCard<MapCardDoor>(m_MyMapPlayer.CurPos, MapCardBase.CardState.Front);
             }
+            mapCards.Add(playerDoorCard);
+            maplist[playerDoorCard.X, playerDoorCard.Y] = playerDoorCard;
+            playerDoorCard.SetUsed(true);
+            playerDoorCard.SetActive(true);
+            playerDoorCard.SetParent(MapCardRoot.transform);
+        }
+        for (int i = 1; i < cardCount; i++)
+        {
             MapCardPos pos = mapCards[Random.Range(0, i)].Position;
 
             List<MapCardPos> poss = layerData.GetNearEmptyPoss(pos.X, pos.Y);
@@ -149,9 +155,8 @@ public class MapMgr
             }
             int count = Random.Range(0, poss.Count - 1);
             pos = poss[count];
-            mapCards.Add(MapCardBase.GetRandomMapCard(pos));
+            mapCards.Add(MapCardBase.GetRandomMapCard(pos, MapCardBase.CardState.Behind));
             maplist[mapCards[i].X, mapCards[i].Y] = mapCards[i];
-            mapCards[i].State = MapCardBase.CardState.Behind;
             mapCards[i].SetActive(true);
             mapCards[i].SetParent(MapCardRoot.transform);
         }
@@ -168,10 +173,9 @@ public class MapMgr
             }
             int count = Random.Range(0, poss.Count - 1);
             pos = poss[count];
-            MapCardBase door = MapCardBase.CreateMapCard<MapCardDoor>(pos);
+            MapCardBase door = MapCardBase.CreateMapCard<MapCardDoor>(pos, MapCardBase.CardState.Behind);
             mapCards.Add(door);
             maplist[door.X, door.Y] = door;
-            door.State = MapCardBase.CardState.Behind;
             door.SetActive(true);
             door.SetParent(MapCardRoot.transform);
         }

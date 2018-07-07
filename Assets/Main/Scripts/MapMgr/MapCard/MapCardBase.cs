@@ -22,7 +22,14 @@ public class MapCardBase
     private MapCardPos pos = new MapCardPos(0, 0);
     public MapCardPos Position { get { return pos; } }
     private CardState state;
+    /// <summary>
+    /// gameObject的状态
+    /// </summary>
     public bool Active { get; protected set; }
+    /// <summary>
+    /// 是否激活，处在可交互状态
+    /// </summary>
+    public bool Activating { get; protected set; }
     protected bool isFirstEnter = true;
     public bool Used { get; protected set; }
 
@@ -51,6 +58,7 @@ public class MapCardBase
     public MapCardBase()
     {
         Active = true;
+        Activating = false;
         state = CardState.None;
         Used = false;
     }
@@ -71,7 +79,7 @@ public class MapCardBase
     static string MapCardDoor = "MapCardDoor";
     static string MapCardPlayer = "MapCardPlayer";
 
-    public static MapCardBase CreateMapCard<T>(MapCardPos pos = null) where T : MapCardBase, new()
+    public static MapCardBase CreateMapCard<T>(MapCardPos pos = null, CardState defaultState = CardState.None) where T : MapCardBase, new()
     {
 
         MapCardBase mapCard = new T();
@@ -79,12 +87,16 @@ public class MapCardBase
         {
             mapCard.pos = new MapCardPos(pos.X, pos.Y);
         }
+        if (defaultState!= CardState.None)
+        {
+            mapCard.state = defaultState;
+        }
         ResourceManager.LoadGameObject("MapCard/" + typeof(T).ToString(), LoadAssetSuccessess, LoadAssetFailed, mapCard);
 
         return mapCard;
     }
 
-    public static MapCardBase GetRandomMapCard(MapCardPos pos = null)
+    public static MapCardBase GetRandomMapCard(MapCardPos pos = null, CardState defaultState = CardState.None)
     {
         string cardType = MapCardName[Random.Range(0, MapCardName.Length)];
         if (Random.Range(0, 100) % 3 == 0)
@@ -95,6 +107,10 @@ public class MapCardBase
         if (pos != null)
         {
             mapCard.pos = new MapCardPos(pos.X, pos.Y);
+        }
+        if (defaultState != CardState.None)
+        {
+            mapCard.state = defaultState;
         }
         ResourceManager.LoadGameObject("MapCard/" + cardType, LoadAssetSuccessess, LoadAssetFailed, mapCard);
         return mapCard;
@@ -212,8 +228,10 @@ public class MapCardBase
     void OnClick(GameObject go)
     {
         Debug.Log(gameObject.name + "  " + pos.X + ":" + pos.Y);
-        MapMgr.Instance.OnClickMapCard(this);
-
+        if (Activating)
+        {
+            MapMgr.Instance.OnClickMapCard(this);
+        }
     }
     #region 事件调用
 
@@ -235,7 +253,16 @@ public class MapCardBase
     /// </summary>
     public void Activate()
     {
-
+        Activating = true;
+        OnActivate();
+    }
+    /// <summary>
+    /// 被冻结
+    /// </summary>
+    public void Freeze()
+    {
+        Activating = false;
+        OnFreeze();
     }
     /// <summary>
     /// 被移出地图时触发
@@ -243,7 +270,8 @@ public class MapCardBase
     public void ExitMap()
     {
         isFirstEnter = false;
-        Vector3 target = transform.position + new Vector3(0f, -20f, 0f);
+        Freeze();
+        Vector3 target = transform.position + new Vector3(0f, 20f, 0f);
         DOTween.To(() => transform.position, (x) => transform.position = x, target, Random.Range(0.4f, 2f))
             .OnComplete(() => { OnExitMap(); });
     }
@@ -254,7 +282,11 @@ public class MapCardBase
     {
         if (Used == false)
         {
-            Used = true;
+            MapMgr.Instance.MyMapPlayer.Data.Food--;
+            if (MapMgr.Instance.MyMapPlayer.Data.HP < MapMgr.Instance.MyMapPlayer.Data.MaxHP)
+            {
+                MapMgr.Instance.MyMapPlayer.Data.HP++;
+            }
             OnPlayerEnter();
         }
         if (isFirstEnter)
@@ -315,11 +347,18 @@ public class MapCardBase
 
     }
     /// <summary>
+    /// 被冻结
+    /// </summary>
+    protected virtual void OnFreeze()
+    {
+
+    }
+    /// <summary>
     /// 被移出地图时触发
     /// </summary>
     protected virtual void OnExitMap()
     {
-
+        SetActive(false);
     }
 
 
@@ -328,11 +367,7 @@ public class MapCardBase
     /// </summary>
     protected virtual void OnPlayerEnter()
     {
-        MapMgr.Instance.MyMapPlayer.Data.Food--;
-        if (MapMgr.Instance.MyMapPlayer.Data.HP < MapMgr.Instance.MyMapPlayer.Data.MaxHP)
-        {
-            MapMgr.Instance.MyMapPlayer.Data.HP++;
-        }
+        
     }
     /// <summary>
     /// 与玩家互动时发生

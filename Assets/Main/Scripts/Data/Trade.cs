@@ -111,7 +111,7 @@ public class Trade
 
 
         }
-        Messenger.Broadcast(MessageID.MSG_UPDATE_ROLE_INFO_PANEL);
+        Messenger.Broadcast(MessageID.MAP_UPDATE_PLAYER_INFO);
         return 0;
     }
 

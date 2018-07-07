@@ -31,7 +31,7 @@ public class UIMapInfo : UIFormBase
         labGold = transform.Find("headFrame/gold/labgold").GetComponent<UILabel>();
         labFood = transform.Find("headFrame/food/labfood").GetComponent<UILabel>();
         playerInfo = Game.DataManager.MyPlayer;
-        Messenger.AddListener(MessageID.MSG_UPDATE_ROLE_INFO_PANEL, UpdatePlayerInfoPanel);
+        Messenger.AddListener(MessageID.MAP_UPDATE_PLAYER_INFO, UpdatePlayerInfoPanel);
 
     }
 
@@ -44,7 +44,7 @@ public class UIMapInfo : UIFormBase
     protected override void OnClose()
     {
         base.OnClose();
-        Messenger.RemoveListener(MessageID.MSG_UPDATE_ROLE_INFO_PANEL, UpdatePlayerInfoPanel);
+        Messenger.RemoveListener(MessageID.MAP_UPDATE_PLAYER_INFO, UpdatePlayerInfoPanel);
     }
     // Update is called once per frame
     void UpdatePlayerInfoPanel()

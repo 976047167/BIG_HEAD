@@ -17,11 +17,11 @@ public class WND_Dialog : UIFormBase
     private int MonsterId = 0;
     private enum DialogType
     {
-      Normal = 1,
-      Select,
-      Event,
-      Battle,
-      NextPass,
+        Normal = 1,
+        Select,
+        Event,
+        Battle,
+        NextPass,
 
     }
     // Use this for initialization
@@ -41,13 +41,14 @@ public class WND_Dialog : UIFormBase
         if (id.GetType() == typeof(int))
         {
             preserntIndex = (int)id;
-        }else if(id.GetType() == typeof(List<int>))
-            {
-           List<int> a = (List<int>)id;
+        }
+        else if (id.GetType() == typeof(List<int>))
+        {
+            List<int> a = (List<int>)id;
             preserntIndex = a[0];
             MonsterId = a[1];
         }
-        
+
     }
     protected override void OnOpen()
     {
@@ -62,14 +63,15 @@ public class WND_Dialog : UIFormBase
         if (Id == 0)
         {
 
-           Game.UI.CloseForm<WND_Dialog>();
+            Game.UI.CloseForm<WND_Dialog>();
             return;
         }
         preserntIndex = Id;
-        StopCoroutine("PrintStringByStep");
-        
 
-         printString = DialogTableSettings.Get(Id).Text;
+        //StopCoroutine("PrintStringByStep");
+        StopAllCoroutines();
+
+        printString = DialogTableSettings.Get(Id).Text;
         int path = DialogTableSettings.Get(Id).ImagePath;
         if (path == 0)
             imgHead.gameObject.SetActive(false);
@@ -78,14 +80,14 @@ public class WND_Dialog : UIFormBase
             imgHead.gameObject.SetActive(true);
             imgHead.Load(path);
         }
-           
+
 
         // printString = "你好5555555";
-        StartCoroutine("PrintStringByStep");
+        StartCoroutine(PrintStringByStep());
     }
     private void ClearGrid()
     {
-        for (int i =0; i<grid.transform.childCount;i++)
+        for (int i = 0; i < grid.transform.childCount; i++)
         {
             Transform trans = grid.transform.GetChild(i);
             Destroy(trans.gameObject);
@@ -93,7 +95,7 @@ public class WND_Dialog : UIFormBase
         }
 
         //暂时弃掉
-       // grid.repositionNow = true;
+        // grid.repositionNow = true;
     }
     private IEnumerator PrintStringByStep()
     {
@@ -112,7 +114,7 @@ public class WND_Dialog : UIFormBase
             yield return new WaitForSeconds(Game.DataManager.DialogSpeed);
         }
         isPrinting = false;
-        PrintStringAll(new GameObject());
+        PrintStringAll(null);
     }
     private void PrintStringAll(GameObject btn)
     {
@@ -124,8 +126,8 @@ public class WND_Dialog : UIFormBase
             isPrinting = false;
             return;
         }
-      
-       
+
+
         int type = DialogTableSettings.Get(preserntIndex).Type;
         List<int> NextIds = DialogTableSettings.Get(preserntIndex).NextIds;
         switch ((DialogType)type)
@@ -134,24 +136,26 @@ public class WND_Dialog : UIFormBase
                 ShowDialog(NextIds[0]);
                 break;
             case DialogType.Select:
-                if (isChosing) {
+                if (isChosing)
+                {
                     return;
                 }
                 isChosing = true;
                 int nums = NextIds.Count;
                 ClearGrid();
-                for(int i= 0; i<nums; i++)
+                for (int i = 0; i < nums; i++)
                 {
                     GameObject item = Instantiate(btnSelect.gameObject);
                     item.name = "option" + i;
-                    item.transform.Find("imgNum/labSelectNum").GetComponent<UILabel>().text = (i+1).ToString();
+                    item.transform.Find("imgNum/labSelectNum").GetComponent<UILabel>().text = (i + 1).ToString();
                     item.transform.Find("labSelectString").GetComponent<UILabel>().text = DialogTableSettings.Get(NextIds[i]).Text;
                     int nextId = NextIds[i];
-                    UIEventListener.Get(item.gameObject).onClick = (GameObject obj)=> {
+                    UIEventListener.Get(item.gameObject).onClick = (GameObject obj) =>
+                    {
                         isChosing = false;
                         ClearGrid();
                         ShowDialog(nextId);
-                  
+
                     };
 
                     item.transform.parent = grid.transform;
@@ -163,18 +167,25 @@ public class WND_Dialog : UIFormBase
                 break;
             case DialogType.Event:
                 int result = Trade.deal(NextIds[0]);
-               if (result == 0) 
-                   ShowDialog(NextIds[1]);
-               else if(result == 1)
+                if (result == 0)
+                    ShowDialog(NextIds[1]);
+                else if (result == 1)
                 {
                     ShowDialog(NextIds[2]);
                 }
-               else
+                else
                     Game.UI.CloseForm<WND_Dialog>();
                 break;
             case DialogType.Battle:
                 if (MonsterId != 0)
                     Game.BattleManager.StartBattle(MonsterId);
+                Game.UI.CloseForm<WND_Dialog>();
+                break;
+            case DialogType.NextPass:
+                if (MapMgr.Instance != null && MapMgr.Inited)
+                {
+                    MapMgr.Instance.NextMapLayer();
+                }
                 Game.UI.CloseForm<WND_Dialog>();
                 break;
             default:
@@ -183,5 +194,5 @@ public class WND_Dialog : UIFormBase
                 break;
         }
     }
-  
+
 }

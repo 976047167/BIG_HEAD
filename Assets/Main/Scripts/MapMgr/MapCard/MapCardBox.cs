@@ -17,6 +17,7 @@ public class MapCardBox : MapCardBase
 
         base.OnPlayerEnter();
         //进入商店
+        Used = true;
     }
     protected override void OnInit()
     {

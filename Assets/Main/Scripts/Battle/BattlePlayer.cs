@@ -154,7 +154,7 @@ public class BattlePlayer
     {
         if (target == null)
         {
-            target = IsMe ? Game.BattleManager.OppPlayer : this;
+            target = IsMe ? Game.BattleManager.OppPlayer : Game.BattleManager.MyPlayer;
         }
         BattleAction battleAction = BattleAction.CreateNew((BattleActionType)actionType, actionArg, actionArg2, cardData, owner, target);
         battleAction.Excute();

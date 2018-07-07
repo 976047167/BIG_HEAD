@@ -22,6 +22,7 @@ public class MapCardMonster : MapCardBase
             UIModule.Instance.OpenForm<WND_Dialog>(a);
         }
         base.OnPlayerEnter();
+        Used = true;
     }
 
     protected override void OnInit()

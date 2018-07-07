@@ -81,9 +81,10 @@ public class DataMgr
         PlayerDetailData.Deck = new Deck();
         for (int i = 0; i < characterData.DefaultCardList.Count; i++)
         {
-            MyPlayer.Data.CardList.Add(new NormalCard(characterData.DefaultCardList[i], uidIndex++));
-            PlayerDetailData.Kaku.Add(new NormalCard(characterData.DefaultCardList[i]));
-            PlayerDetailData.Deck.AddCard(characterData.DefaultCardList[i]);
+            NormalCard normalCard = new NormalCard(characterData.DefaultCardList[i], uidIndex++);
+            MyPlayer.Data.CardList.Add(normalCard);
+            PlayerDetailData.Kaku.Add(normalCard);
+            PlayerDetailData.Deck.AddCard(normalCard);
         }
 
     }
