@@ -28,17 +28,17 @@ public class Trade
             case TradeType.Unknow:
                 break;
             case TradeType.HP:
-                if (Game.DataManager.MyPlayer.Data.HP <= tmpEvent.CostNum)
+                if (MapMgr.Instance.MyMapPlayer.Data.HP <= tmpEvent.CostNum)
                     return 1;
                 else
                     Game.DataManager.MyPlayer.Data.HP -= tmpEvent.CostNum;
                 break;
 
             case TradeType.Food:
-                if (Game.DataManager.Food < tmpEvent.CostNum)
+                if (MapMgr.Instance.MyMapPlayer.Data.Food < tmpEvent.CostNum)
                     return 1;
                 else
-                    Game.DataManager.Food -= tmpEvent.CostNum;
+                    MapMgr.Instance.MyMapPlayer.Data.Food -= tmpEvent.CostNum;
                 break;
             case TradeType.MP:
                 if (Game.DataManager.MyPlayer.Data.MP < tmpEvent.CostNum)
@@ -47,10 +47,10 @@ public class Trade
                     Game.DataManager.MyPlayer.Data.MP -= tmpEvent.CostNum;
                 break;
             case TradeType.Coin:
-                if (Game.DataManager.Coin < tmpEvent.CostNum)
+                if (MapMgr.Instance.MyMapPlayer.Data.Coin < tmpEvent.CostNum)
                     return 1;
                 else
-                    Game.DataManager.Coin -= tmpEvent.CostNum;
+                    MapMgr.Instance.MyMapPlayer.Data.Coin -= tmpEvent.CostNum;
                 break;
             case TradeType.Equip:
                 for (int j = 0; j < tmpEvent.CostNum; j++)
@@ -87,7 +87,7 @@ public class Trade
                 break;
 
             case TradeType.Food:
-                Game.DataManager.Food += tmpEvent.Num;
+                MapMgr.Instance.MyMapPlayer.Data.Food += tmpEvent.Num;
                 break;
             case TradeType.MP:
                 Game.DataManager.MyPlayer.Data.MP += tmpEvent.Num;
@@ -95,13 +95,13 @@ public class Trade
                     Game.DataManager.MyPlayer.Data.MP = Game.DataManager.MyPlayer.Data.MaxMP;
                 break;
             case TradeType.Coin:
-                Game.DataManager.Coin += tmpEvent.Num;
+                MapMgr.Instance.MyMapPlayer.Data.Coin += tmpEvent.Num;
                 break;
             case TradeType.Equip:
                 for (int j = 0; j < tmpEvent.CostNum; j++)
                 {
                     //Game.DataManager.MyPlayer.DetailData.EquipList.Add(new BattleCardData(tmpEvent.ItemId, Game.DataManager.MyPlayer));
-          
+
                 }
                 break;
 

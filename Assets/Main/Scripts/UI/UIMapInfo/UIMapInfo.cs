@@ -17,13 +17,15 @@ public class UIMapInfo : UIFormBase
     private Player playerInfo = new Player();
     private int iconId = 0;
 
+
+
     protected override void OnInit(object userdata)
     {
         base.OnInit(userdata);
         Head = transform.Find("headFrame/texHead").GetComponent<UITexture>();
         sliderHp = transform.Find("headFrame/sliderHp").GetComponent<UIProgressBar>();
         sliderMp = transform.Find("headFrame/sliderMp").GetComponent<UIProgressBar>();
-        labName  = transform.Find("headFrame/labName").GetComponent<UILabel>();
+        labName = transform.Find("headFrame/labName").GetComponent<UILabel>();
         labHp = transform.Find("headFrame/sliderHp/labHp").GetComponent<UILabel>();
         labMp = transform.Find("headFrame/sliderMp/labMp").GetComponent<UILabel>();
         labGold = transform.Find("headFrame/gold/labgold").GetComponent<UILabel>();
@@ -39,6 +41,11 @@ public class UIMapInfo : UIFormBase
         base.OnOpen();
         UpdatePlayerInfoPanel();
     }
+    protected override void OnClose()
+    {
+        base.OnClose();
+        Messenger.RemoveListener(MessageID.MSG_UPDATE_ROLE_INFO_PANEL, UpdatePlayerInfoPanel);
+    }
     // Update is called once per frame
     void UpdatePlayerInfoPanel()
     {
@@ -47,14 +54,20 @@ public class UIMapInfo : UIFormBase
             iconId = playerInfo.Data.HeadIcon;
             Head.Load(iconId);
         }
-       
+
         labName.text = playerInfo.Data.Name;
         sliderHp.value = playerInfo.Data.HP / playerInfo.Data.MaxHP;
         labHp.text = string.Format("{0}/{1}", playerInfo.Data.HP, playerInfo.Data.MaxHP);
         sliderHp.value = playerInfo.Data.MP / playerInfo.Data.MaxMP;
         labMp.text = string.Format("{0}/{1}", playerInfo.Data.MP, playerInfo.Data.MaxMP);
-        labFood.text = (Game.DataManager.Food.ToString());
-        labGold.text = (Game.DataManager.Coin.ToString());
-  
-}
+        if (MapMgr.Inited == false)
+        {
+            labFood.text = "";
+            labGold.text = "";
+            return;
+        }
+        labFood.text = (MapMgr.Instance.MyMapPlayer.Data.Food.ToString());
+        labGold.text = (MapMgr.Instance.MyMapPlayer.Data.Coin.ToString());
+
+    }
 }

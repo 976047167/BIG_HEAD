@@ -13,6 +13,9 @@ public class PlayerData
     public int MaxHP;
     public int MP;
     public int MaxMP;
+    public int Food;
+    public int MaxFood;
+    public int Coin;
     public int HeadIcon;
     public int MapSkillID;
     public int BattleSkillID;

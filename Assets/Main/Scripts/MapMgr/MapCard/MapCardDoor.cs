@@ -5,7 +5,7 @@ using UnityEngine;
 public class MapCardDoor : MapCardBase
 {
 
-    public override void OnPlayerEnter()
+    protected override void OnPlayerEnter()
     {
         UIModule.Instance.OpenForm<WND_Dialog>(32);
         base.OnPlayerEnter();

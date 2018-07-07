@@ -5,6 +5,8 @@ using UnityEngine;
 using DG;
 using System.Reflection;
 using Type = System.Type;
+using DG.Tweening;
+using DG.Tweening.Plugins.Options;
 /// <summary>
 /// 地图上的那些背景地形卡牌，山河之类的
 /// </summary>
@@ -12,14 +14,17 @@ using Type = System.Type;
 public class MapCardBase
 {
     public TextMeshPro infoBoard;
-    public int X { get { return Pos.X; } set { Pos.X = value; RefreshPos(); } }
-    public int Y { get { return Pos.Y; } set { Pos.Y = value; RefreshPos(); } }
+    public int X { get { return pos.X; } set { pos.X = value; RefreshPos(); } }
+    public int Y { get { return pos.Y; } set { pos.Y = value; RefreshPos(); } }
     public GameObject gameObject { protected set; get; }
     public Transform transform { protected set; get; }
     public Transform parent { get; protected set; }
-    public MapCardPos Pos = new MapCardPos(0, 0);
+    private MapCardPos pos = new MapCardPos(0, 0);
+    public MapCardPos Position { get { return pos; } }
     private CardState state;
-    public bool Active { get; private set; }
+    public bool Active { get; protected set; }
+    protected bool isFirstEnter = true;
+    public bool Used { get; protected set; }
 
     public CardState State
     {
@@ -47,6 +52,7 @@ public class MapCardBase
     {
         Active = true;
         state = CardState.None;
+        Used = false;
     }
     public void Destory()
     {
@@ -65,27 +71,32 @@ public class MapCardBase
     static string MapCardDoor = "MapCardDoor";
     static string MapCardPlayer = "MapCardPlayer";
 
-    public static MapCardBase CreateMapCard<T>() where T : MapCardBase, new()
+    public static MapCardBase CreateMapCard<T>(MapCardPos pos = null) where T : MapCardBase, new()
     {
 
         MapCardBase mapCard = new T();
-
+        if (pos != null)
+        {
+            mapCard.pos = new MapCardPos(pos.X, pos.Y);
+        }
         ResourceManager.LoadGameObject("MapCard/" + typeof(T).ToString(), LoadAssetSuccessess, LoadAssetFailed, mapCard);
 
         return mapCard;
     }
 
-    public static MapCardBase GetRandomMapCard()
+    public static MapCardBase GetRandomMapCard(MapCardPos pos = null)
     {
         string cardType = MapCardName[Random.Range(0, MapCardName.Length)];
         if (Random.Range(0, 100) % 3 == 0)
         {
             cardType = "MapCardMonster";
         }
-        //Type type = Type.GetType("MapCardMonster");
         MapCardBase mapCard = Assembly.GetExecutingAssembly().CreateInstance(cardType) as MapCardBase;
+        if (pos != null)
+        {
+            mapCard.pos = new MapCardPos(pos.X, pos.Y);
+        }
         ResourceManager.LoadGameObject("MapCard/" + cardType, LoadAssetSuccessess, LoadAssetFailed, mapCard);
-        //return CreateMapCard<MapCardMonster>();
         return mapCard;
     }
 
@@ -120,7 +131,10 @@ public class MapCardBase
             transform.SetParent(parent);
         }
     }
-
+    public void SetUsed(bool used)
+    {
+        Used = used;
+    }
     /// <summary>
     /// 初始化
     /// </summary>
@@ -138,6 +152,7 @@ public class MapCardBase
         RefreshState();
         UIEventListener.Get(transform.Find("Card").gameObject).onClick = OnClick;
         OnInit();
+        EnterMap();
         return true;
     }
 
@@ -189,88 +204,168 @@ public class MapCardBase
                 break;
         }
     }
-    public virtual void OnInit()
+    protected virtual void OnInit()
     {
 
     }
 
     void OnClick(GameObject go)
     {
-        Debug.Log(gameObject.name + "  " + Pos.X + ":" + Pos.Y);
+        Debug.Log(gameObject.name + "  " + pos.X + ":" + pos.Y);
         MapMgr.Instance.OnClickMapCard(this);
 
     }
-    #region 地图事件响应
+    #region 事件调用
+
 
     /// <summary>
     /// 被放置到地图里
     /// </summary>
-    public virtual void OnEnter()
+    public void EnterMap()
     {
-
+        //Debug.LogError(gameObject.name + "[" + pos.X + "," + pos.Y + "]" + "=>" + transform.position.ToString());
+        isFirstEnter = true;
+        Vector3 target = transform.position;
+        transform.position = target + new Vector3(0f, 20f, 0f);
+        DOTween.To(() => transform.position, (x) => transform.position = x, target, Random.Range(0.4f, 2f))
+            .OnComplete(() => { Activate(); });
     }
     /// <summary>
     /// 被激活
     /// </summary>
-    public virtual void OnActive()
+    public void Activate()
     {
 
     }
     /// <summary>
     /// 被移出地图时触发
     /// </summary>
-    public virtual void OnExit()
+    public void ExitMap()
     {
-
+        isFirstEnter = false;
+        Vector3 target = transform.position + new Vector3(0f, -20f, 0f);
+        DOTween.To(() => transform.position, (x) => transform.position = x, target, Random.Range(0.4f, 2f))
+            .OnComplete(() => { OnExitMap(); });
     }
-    protected bool isFirstEnter = true;
     /// <summary>
     /// 玩家进入时发生
     /// </summary>
-    public virtual void OnPlayerEnter()
+    public void PlayerEnter()
     {
+        if (Used == false)
+        {
+            Used = true;
+            OnPlayerEnter();
+        }
         if (isFirstEnter)
         {
             isFirstEnter = false;
-        }
-        Game.DataManager.Food--;
-        if (Game.DataManager.MyPlayer.Data.HP < Game.DataManager.MyPlayer.Data.MaxHP)
-        {
-            Game.DataManager.MyPlayer.Data.HP++;
         }
     }
     /// <summary>
     /// 与玩家互动时发生
     /// </summary>
-    public virtual void OnPlayerInteract()
+    public void PlayerInteract()
     {
 
     }
     /// <summary>
     /// 玩家离开该方块时发生
     /// </summary>
-    public virtual void OnPlayerExit()
+    public void PlayerExit()
     {
 
     }
     /// <summary>
     /// 天气环境发生改变
     /// </summary>
-    public virtual void OnWeatherBeginChange()
+    public void WeatherBeginChange()
     {
 
     }
     /// <summary>
     /// 天气或者环境发生交互
     /// </summary>
-    public virtual void OnWeatherInteract()
+    public void WeatherInteract()
     {
 
     }
     /// <summary>
     /// 天气变化结束
     /// </summary>
-    public virtual void OnWeatherEnd()
+    public void WeatherEnd()
+    {
+
+    }
+    #endregion
+    #region 地图事件响应
+
+    /// <summary>
+    /// 被放置到地图里
+    /// </summary>
+    protected virtual void OnEnterMap()
+    {
+
+    }
+    /// <summary>
+    /// 被激活
+    /// </summary>
+    protected virtual void OnActivate()
+    {
+
+    }
+    /// <summary>
+    /// 被移出地图时触发
+    /// </summary>
+    protected virtual void OnExitMap()
+    {
+
+    }
+
+
+    /// <summary>
+    /// 玩家进入时发生
+    /// </summary>
+    protected virtual void OnPlayerEnter()
+    {
+        MapMgr.Instance.MyMapPlayer.Data.Food--;
+        if (MapMgr.Instance.MyMapPlayer.Data.HP < MapMgr.Instance.MyMapPlayer.Data.MaxHP)
+        {
+            MapMgr.Instance.MyMapPlayer.Data.HP++;
+        }
+    }
+    /// <summary>
+    /// 与玩家互动时发生
+    /// </summary>
+    protected virtual void OnPlayerInteract()
+    {
+
+    }
+    /// <summary>
+    /// 玩家离开该方块时发生
+    /// </summary>
+    protected virtual void OnPlayerExit()
+    {
+
+    }
+    /// <summary>
+    /// 天气环境发生改变
+    /// </summary>
+    protected virtual void OnWeatherBeginChange()
+    {
+
+    }
+    /// <summary>
+    /// 天气或者环境发生交互
+    /// </summary>
+    protected virtual void OnWeatherInteract()
+    {
+
+    }
+    /// <summary>
+    /// 天气变化结束
+    /// </summary>
+    protected virtual void OnWeatherEnd()
     {
 
     }

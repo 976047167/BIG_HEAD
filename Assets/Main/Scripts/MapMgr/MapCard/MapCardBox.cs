@@ -7,7 +7,7 @@ public class MapCardBox : MapCardBase
 {
     int boxId;
 
-    public override void OnPlayerEnter()
+    protected override void OnPlayerEnter()
     {
         if (isFirstEnter)
         {
@@ -18,7 +18,7 @@ public class MapCardBox : MapCardBase
         base.OnPlayerEnter();
         //进入商店
     }
-    public override void OnInit()
+    protected override void OnInit()
     {
         int count = BoxTableSettings.GetInstance().Count;
         boxId = Random.Range(1, count + 1);

@@ -6,7 +6,7 @@ using AppSettings;
 public class MapCardNpc : MapCardBase
 {
     int id;
-    public override void OnInit()
+    protected override void OnInit()
     {
         
         int NpcCount = NpcTableSettings.GetInstance().Count;
@@ -14,7 +14,7 @@ public class MapCardNpc : MapCardBase
         id = Random.Range(1, NpcCount + 1);
     }
 
-    public override void OnPlayerEnter()
+    protected override void OnPlayerEnter()
     {
         if (isFirstEnter)
         {

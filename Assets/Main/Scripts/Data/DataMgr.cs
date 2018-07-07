@@ -23,9 +23,6 @@ public class DataMgr
     //    }
 
     //}
-    public int Food;
-    public int MaxFood;
-    public int Coin;
     public float DialogSpeed;
 
     public MyPlayer MyPlayer { get; private set; }
@@ -72,8 +69,8 @@ public class DataMgr
         {
             return;
         }
-        Food = MaxFood = levelData.Food[MyPlayer.Data.Level];
-        Coin = AccountData.Gold;
+        MyPlayer.Data.Food = MyPlayer.Data.MaxFood = levelData.Food[MyPlayer.Data.Level];
+        MyPlayer.Data.Coin = AccountData.Gold;
         MyPlayer.Data.Name = I18N.Get(characterData.Name);
         MyPlayer.Data.HP = MyPlayer.Data.MaxHP = levelData.HP[(int)MyPlayer.Data.ClassData.Type];
         MyPlayer.Data.MP = MyPlayer.Data.MaxMP = levelData.MP[(int)MyPlayer.Data.ClassData.Type];

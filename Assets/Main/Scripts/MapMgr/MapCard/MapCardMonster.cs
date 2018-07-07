@@ -8,7 +8,7 @@ public class MapCardMonster : MapCardBase
     [SerializeField]
     int monsterId = 0;
 
-    public override void OnPlayerEnter()
+    protected override void OnPlayerEnter()
     {
         
         //进入战斗
@@ -24,7 +24,7 @@ public class MapCardMonster : MapCardBase
         base.OnPlayerEnter();
     }
 
-    public override void OnInit()
+    protected override void OnInit()
     {
         int count = BattleMonsterTableSettings.GetInstance().Count;
         monsterId = Random.Range(1, count + 1);

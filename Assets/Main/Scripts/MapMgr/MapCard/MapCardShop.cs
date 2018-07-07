@@ -7,7 +7,7 @@ public class MapCardShop : MapCardBase
 {
     int shopId;
 
-    public override void OnPlayerEnter()
+    protected override void OnPlayerEnter()
     {
 
         int DialogId = ShopTableSettings.Get(shopId).DialogId;
@@ -15,7 +15,7 @@ public class MapCardShop : MapCardBase
         base.OnPlayerEnter();
         //进入商店
     }
-    public override void OnInit()
+    protected override void OnInit()
     {
         int count = ShopTableSettings.GetInstance().Count;
         shopId = Random.Range(1, count + 1);

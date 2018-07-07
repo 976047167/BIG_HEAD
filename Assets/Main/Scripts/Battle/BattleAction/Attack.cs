@@ -124,7 +124,7 @@ public partial class BattleAction
                 }
             }
             //应用伤害
-            if (skipDamage)
+            if (!skipDamage)
             {
                 target.Data.HP -= finalDamage;
                 battleMgr.AddUIAction(new UIAction.UIHpDamage(target, finalDamage));
@@ -301,7 +301,7 @@ public partial class BattleAction
                 }
             }
             //应用附加伤害
-            if (skipDamage)
+            if (!skipDamage)
             {
                 target.Data.HP -= extraDamage;
                 battleMgr.AddUIAction(new UIAction.UIHpDamage(target, extraDamage));

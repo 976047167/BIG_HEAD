@@ -12,7 +12,7 @@ public class MapPlayer
 
     private Player m_Player;
     public Player Player { get { return m_Player; } }
-    public MapCardPos CurPos;
+    public MapCardPos CurPos { protected set; get; }
 
     public MapPlayer(Player player)
     {
@@ -36,7 +36,10 @@ public class MapPlayer
 
     public void MoveTo(MapCardPos pos)
     {
-        MapMgr.Instance.GetMapCard(CurPos.X, CurPos.Y).OnPlayerExit();
+        if (MapMgr.Instance.GetMapCard(CurPos.X, CurPos.Y) != null)
+        {
+            MapMgr.Instance.GetMapCard(CurPos.X, CurPos.Y).PlayerExit();
+        }
         Vector3 direction = (new Vector3(pos.X - CurPos.X, 0f, pos.Y - CurPos.Y)).normalized;
         CurPos = pos;
         TweenPosition.Begin(m_gameObject, 0.5f, MapMgr.Instance.GetTransfromByPos(pos), true);
@@ -46,7 +49,7 @@ public class MapPlayer
         if (mapcard != null)
         {
             mapcard.State = MapCardBase.CardState.Front;
-            mapcard.OnPlayerEnter();
+            mapcard.PlayerEnter();
         }
     }
 

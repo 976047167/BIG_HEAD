@@ -9,7 +9,7 @@ public class Procedure_BigPlain : ProcedureBase
         base.OnEnter(last);
         Game.UI.OpenForm<UIMapInfo>();
         Game.UI.OpenForm<UIMenu>();
-        MapMgr.Instance.Init();
+        MapMgr.Create();
     }
 
     public override void OnExit(ProcedureBase next)

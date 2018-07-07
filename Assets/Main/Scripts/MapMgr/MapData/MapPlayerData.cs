@@ -19,6 +19,9 @@ public class MapPlayerData : PlayerData
         BattleSkillID = playerData.BattleSkillID;
         UsingDeck = playerData.UsingDeck;
         UsingCharacter = playerData.UsingCharacter;
+        Food = playerData.Food;
+        MaxFood = playerData.MaxFood;
+        Coin = playerData.Coin;
         m_EquipList = new List<NormalCard>(playerData.EquipList);
         m_BuffList = new List<NormalCard>(playerData.BuffList);
         m_CardList = new List<NormalCard>(playerData.CardList);
