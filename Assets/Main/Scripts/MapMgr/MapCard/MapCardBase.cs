@@ -272,7 +272,7 @@ public class MapCardBase
         isFirstEnter = false;
         Freeze();
         Vector3 target = transform.position + new Vector3(0f, 20f, 0f);
-        DOTween.To(() => transform.position, (x) => transform.position = x, target, Random.Range(0.4f, 2f))
+        DOTween.To(() => transform.position, (x) => transform.position = x, target, Random.Range(0.4f, 0.5f))
             .OnComplete(() => { OnExitMap(); });
     }
     /// <summary>

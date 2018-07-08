@@ -4,6 +4,9 @@ using UnityEngine;
 
 public partial class UIAction
 {
+    /// <summary>
+    /// 每个玩家的回合开始
+    /// </summary>
     public class UIRoundStart : UIAction
     {
         public static UIActionType ActionType { get { return UIActionType.RoundStart; } }
@@ -16,7 +19,12 @@ public partial class UIAction
         public override IEnumerator Excute()
         {
             PlayerInfoView playerInfoView = BattleForm.GetPlayerInfoViewByPlayer(Player);
-            playerInfoView.PlayerInfo.AP = playerInfoView.PlayerInfo.MaxAP = playerInfoView.BindPlayerData.MaxAP;
+            //playerInfoView.PlayerInfo.AP = playerInfoView.PlayerInfo.MaxAP = playerInfoView.BindPlayerData.MaxAP;
+            BattleForm.UpdateRoundCount(Game.BattleManager.RoundCount);
+            if (Player.IsMe)
+            {
+                BattleForm.CanUseCard = true;
+            }
             yield return null;
         }
     }

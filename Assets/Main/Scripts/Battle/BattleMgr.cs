@@ -42,6 +42,9 @@ public class BattleMgr
         RoundCount = 0;
         OppPlayer.StartAI();
         Game.UI.OpenForm<UIBattleForm>();
+
+        MyPlayer.Data.MP = MyPlayer.Data.MaxMP = 100;
+        OppPlayer.Data.HP = 1;
     }
     public void StopBattle()
     {
@@ -65,18 +68,7 @@ public class BattleMgr
             return;
         }
         OppPlayer = new BattlePlayer(monsterId);
-        OppPlayer.Data.HP = monster.HP;
-        OppPlayer.Data.MaxHP = monster.MaxHp;
-        OppPlayer.Data.MP = monster.MP;
-        OppPlayer.Data.MaxMP = monster.MaxMP;
-        OppPlayer.Data.AP = monster.AP;
-        OppPlayer.Data.MaxAP = monster.MaxAP;
-        OppPlayer.Data.Level = monster.Level;
-        OppPlayer.Data.HeadIcon = monster.IconId;
-        for (int i = 0; i < monster.BattleCards.Count; i++)
-        {
-            OppPlayer.Data.CardList.Add(new BattleCardData(monster.BattleCards[i], OppPlayer));
-        }
+        
         //TODO: Buff Equip
     }
 
@@ -127,7 +119,7 @@ public class BattleMgr
             case BattleState.Ready:
                 break;
             case BattleState.MyRoundStart:
-                MyPlayer.Data.AP = MyPlayer.Data.MaxAP = MyPlayer.Data.MaxAP + 1;
+                //MyPlayer.Data.AP = MyPlayer.Data.MaxAP = MyPlayer.Data.MaxAP + 1;
                 RoundCount++;
                 State++;
                 break;
@@ -150,7 +142,7 @@ public class BattleMgr
                 State++;
                 break;
             case BattleState.OppRoundStart:
-                OppPlayer.Data.AP = OppPlayer.Data.MaxAP = OppPlayer.Data.MaxAP + 1;
+                //OppPlayer.Data.AP = OppPlayer.Data.MaxAP = OppPlayer.Data.MaxAP + 1;
                 State++;
                 break;
             case BattleState.OppDrawCard:
@@ -173,11 +165,11 @@ public class BattleMgr
                 State = BattleState.MyRoundStart;
                 break;
             case BattleState.BattleEnd_Win:
-                //battleForm.WinBattle();
+                battleForm.WinBattle();
                 StopBattle();
                 break;
             case BattleState.BattleEnd_Lose:
-                //battleForm.LoseBattle();
+                battleForm.LoseBattle();
                 StopBattle();
                 break;
             default:
@@ -274,16 +266,18 @@ public class BattleMgr
         if (State == BattleState.MyRound)
         {
             State = BattleState.MyRoundEnd;
+            dicRoundCounter.Clear();
         }
         else if (State == BattleState.OppRound)
         {
             State = BattleState.OppRoundEnd;
+            dicRoundCounter.Clear();
         }
-        dicRoundCounter.Clear();
+
     }
     public bool UseCard(BattleCardData battleCardData)
     {
-        if (battleCardData.Data.Spending <= battleCardData.Owner.Data.AP)
+        if (battleCardData.Data.Spending <= battleCardData.Owner.Data.MP)
         {
             battleCardData.Owner.Data.HandCardList.Remove(battleCardData);
             UIAction.UIUseCard useCard = new UIAction.UIUseCard(battleCardData);

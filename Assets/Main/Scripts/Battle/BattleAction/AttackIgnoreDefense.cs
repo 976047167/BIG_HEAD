@@ -1,4 +1,4 @@
-using System;
+ï»¿using System;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Collections;
@@ -18,7 +18,7 @@ public partial class BattleAction
                     switch ((BattleActionType)buff.Data.ActionTypes[j])
                     {
                         case BattleActionType.DodgeDamage:
-                            //²¥·ÅÉÁ±Ü¶¯»­
+                            //æ’­æ”¾é—ªé¿åŠ¨ç”»
                             buff.Layer--;
                             if (buff.Layer == 0)
                             {
@@ -39,7 +39,7 @@ public partial class BattleAction
                     switch ((BattleActionType)equip.Data.ActionTypes[j])
                     {
                         case BattleActionType.DodgeDamage:
-                            //²¥·ÅÉÁ±Ü¶¯»­
+                            //æ’­æ”¾é—ªé¿åŠ¨ç”»
                             battleMgr.AddUIAction(new UIAction.UIDodgeDamage());
                             return;
                         default:
@@ -48,6 +48,7 @@ public partial class BattleAction
                 }
             }
             target.Data.HP -= actionArg;
+            Debug.LogError((owner.IsMe ? "[æˆ‘]" : "[æ€ª]") + "æ— è§†é˜²å¾¡ä¼¤å®³" + (target.IsMe ? "[æˆ‘]" : "[æ€ª]") + "äº† " + actionArg + "[" + target.Data.HP + "/" + target.Data.MaxHP + "]");
             battleMgr.AddUIAction(new UIAction.UIHpDamage(target, actionArg));
         }
         public override int Excute(int damage)

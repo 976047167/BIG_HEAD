@@ -4,14 +4,14 @@ using UnityEngine;
 
 public class BattlePlayerAI
 {
-    BattlePlayer playerData;
+    BattlePlayer player;
     /// <summary>
     /// 初始化AI
     /// </summary>
-    /// <param name="playerData"></param>
-    public BattlePlayerAI(BattlePlayer playerData)
+    /// <param name="player"></param>
+    public BattlePlayerAI(BattlePlayer player)
     {
-        this.playerData = playerData;
+        this.player = player;
     }
 
     public void StartAI()
@@ -23,19 +23,19 @@ public class BattlePlayerAI
     {
         //每次决策执行
         int i = 0;
-        int count = playerData.Data.HandCardList.Count;
+        int count = player.Data.HandCardList.Count;
         while (i < count)
         {
-            if (playerData.Data.HandCardList[i].Data.Spending <= playerData.Data.AP)
+            if (player.Data.HandCardList[i].Data.Spending <= player.Data.AP)
             {
-                Debug.LogError("自动使用:" + I18N.Get(playerData.Data.HandCardList[i].Data.Name));
-                Game.BattleManager.UseCard(playerData.Data.HandCardList[i]);
+                Debug.LogError("自动使用:" + I18N.Get(player.Data.HandCardList[i].Data.Name));
+                Game.BattleManager.UseCard(player.Data.HandCardList[i]);
                 count--;
                 i--;
             }
             i++;
         }
-        Game.BattleManager.RoundEnd();
+        player.EndRound();
     }
 
     public void StopAI()

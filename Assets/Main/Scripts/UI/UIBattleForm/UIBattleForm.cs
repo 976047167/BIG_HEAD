@@ -53,7 +53,10 @@ public class UIBattleForm : UIFormBase
             return m_OppCardsGrid;
         }
     }
-
+    /// <summary>
+    /// 根据可否使用卡牌，判断可否结束回合
+    /// </summary>
+    public bool CanUseCard { get; set; }
 
     // Use this for initialization
     void Start()
@@ -67,6 +70,7 @@ public class UIBattleForm : UIFormBase
         resultInfo = transform.Find("ResultInfo").gameObject;
         lblResultInfo = transform.Find("ResultInfo/result").GetComponent<UILabel>();
         MovingPanel = transform.Find("MovingPanel").GetComponent<UIPanel>();
+        lblRoundCount = transform.Find("FlowPanel/split/lblRoundCount").GetComponent<UILabel>();
         UpdateInfo();
         monsterId = Game.BattleManager.MonsterId;
         Game.BattleManager.ReadyStart(this);
@@ -105,13 +109,21 @@ public class UIBattleForm : UIFormBase
         lblResultInfo.color = new Color32(150, 150, 150, 255);
         Application.Quit();
     }
+    public void UpdateRoundCount(int roundCount)
+    {
+        lblRoundCount.text = roundCount.ToString();
+    }
     /// <summary>
     /// 结束当前回合的按钮
     /// </summary>
     /// <param name="go"></param>
     void OnClick_RoundEnd(GameObject go)
     {
-        Game.BattleManager.RoundEnd();
+        if (CanUseCard)
+        {
+            CanUseCard = false;
+            Game.BattleManager.RoundEnd();
+        }
     }
     void Onclick_CloseUI(GameObject go)
     {
@@ -131,7 +143,7 @@ public class UIBattleForm : UIFormBase
         parentGrid.Reposition();
         return battleCard;
     }
-    
+
     public UIBattleCard GetUIBattleCard(BattleCardData cardData)
     {
         if (dicBattleCard.ContainsKey(cardData))
@@ -186,6 +198,8 @@ public class UIPlayerInfo
 {
     public int HP = 0;
     public int MaxHP = 0;
+    public int MP = 0;
+    public int MaxMP = 0;
     public int AP = 0;
     public int MaxAP = 0;
     public int Level = 0;

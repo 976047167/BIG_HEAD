@@ -77,7 +77,7 @@ public abstract partial class BattleAction
         {
             return Create(BattleActionType.None, 0, 0, null, null, null);
         }
-        BattleAction battleAction = Create(actionType, actionArg, actionArg2, sourceData, owner, target);
+        BattleAction battleAction = CreateNew(actionType, actionArg, actionArg2, sourceData, owner, target);
         //StackTrace st = new StackTrace();
         //执行深度
         battleAction.depth = depth + 1;

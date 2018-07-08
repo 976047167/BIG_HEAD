@@ -242,7 +242,7 @@ public class UIBattleCard : MonoBehaviour
     public bool UseCard()
     {
         //判断使用条件，不允许返回false
-        Debug.Log("释放卡牌: " + CardData.Data.Name);
+        Debug.Log("释放卡牌: " + I18N.Get(CardData.Data.Name));
         //if (CardData.Owner.AP < CardData.Data.Spending)
         //{
         //    return false;

@@ -11,6 +11,7 @@ public partial class BattleAction
         public static BattleActionType ActionType { get { return BattleActionType.AddBuff; } }
         public override void Excute()
         {
+            Debug.LogError((owner.IsMe ? "[我]" : "[怪]") + "添加了一个buff-> " + actionArg + "[" + actionArg2 + "]");
             bool added = false;
             for (int i = 0; i < owner.Data.BuffList.Count; i++)
             {
@@ -36,9 +37,11 @@ public partial class BattleAction
             }
             if (added == false)
             {
-                BattleBuffData buffData = new BattleBuffData(actionArg, 0, sourceData, owner, owner);
+                BattleBuffData buffData = new BattleBuffData(actionArg, actionArg2, sourceData, owner, owner);
                 owner.Data.BuffList.Add(buffData);
+                //UI用独立的buff数据，和血量什么的一样
                 battleMgr.AddUIAction(new UIAction.UIAddBuff(buffData));
+                //battleMgr.AddUIAction(new UIAction.UIAddBuff(new BattleBuffData(actionArg, actionArg2, sourceData, owner, owner)));
             }
         }
         public override int Excute(int damage)

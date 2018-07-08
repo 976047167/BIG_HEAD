@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using AppSettings;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -8,6 +9,9 @@ public class BattlePlayer
     public BattlePlayerData Data { get; private set; }
     private BattlePlayerAI playerAI;
     public bool IsMe { get; private set; }
+    /// <summary>
+    /// 如果不是玩家，这个是空的
+    /// </summary>
     public MapPlayer Player { get; private set; }
 
     public BattlePlayer(MapPlayer mapPlayer)
@@ -58,16 +62,29 @@ public class BattlePlayer
     }
     public BattlePlayer(int monsterId)
     {
+        BattleMonsterTableSetting monster = BattleMonsterTableSettings.Get(monsterId);
+        if (monster == null)
+        {
+            Debug.LogError("怪物表格配置错误");
+            return;
+        }
         Data = new BattlePlayerData();
-
-
-
-
-
         Data.CurrentCardList = new List<BattleCardData>(Data.CardList);
         Data.AP = 0;
         Data.MaxAP = 0;
         IsMe = false;
+        Data.HP = monster.HP;
+        Data.MaxHP = monster.MaxHp;
+        Data.MP = monster.MP;
+        Data.MaxMP = monster.MaxMP;
+        Data.AP = monster.AP;
+        Data.MaxAP = monster.MaxAP;
+        Data.Level = monster.Level;
+        Data.HeadIcon = monster.IconId;
+        for (int i = 0; i < monster.BattleCards.Count; i++)
+        {
+            Data.CardList.Add(new BattleCardData(monster.BattleCards[i], this));
+        }
 
     }
     /// <summary>
@@ -77,10 +94,10 @@ public class BattlePlayer
     public void ApplyCardEffect(BattleCardData cardData)
     {
         cardData.Owner.Data.UsedCardList.Add(cardData);
-        cardData.Owner.Data.AP -= cardData.Data.Spending;
+        cardData.Owner.Data.MP -= cardData.Data.Spending;
         for (int i = 0; i < cardData.Data.ActionTypes.Count; i++)
         {
-            ApplyAction(cardData.Data.ActionTypes[i], cardData.Data.ActionParams[i], cardData.Data.ActionParams[i], cardData, cardData.Owner, null);
+            ApplyAction(cardData.Data.ActionTypes[i], cardData.Data.ActionParams[i], cardData.Data.ActionParams2[i], cardData, cardData.Owner, null);
         }
     }
     /// <summary>

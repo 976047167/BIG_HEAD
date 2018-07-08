@@ -25,7 +25,8 @@ public partial class UIAction
 
         public override IEnumerator Excute()
         {
-            throw new System.NotImplementedException(typeof(UIRemoveBuff).ToString());
+            yield return null;
+            BattleForm.GetPlayerInfoViewByPlayer(target).RemoveBuff(buffId);
         }
     }
 }

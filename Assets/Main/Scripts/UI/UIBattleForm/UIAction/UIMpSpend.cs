@@ -22,7 +22,7 @@ public partial class UIAction
             yield return null;
             TweenScale.Begin(playerInfoView.lblMP.gameObject, 0.15f, new Vector3(1.2f, 1.2f, 1.2f));
             yield return new WaitForSeconds(0.15f);
-            playerInfoView.PlayerInfo.AP -= SpentAp;
+            playerInfoView.PlayerInfo.MP -= SpentAp;
             TweenScale.Begin(playerInfoView.lblMP.gameObject, 0.15f, Vector3.one);
             yield return new WaitForSeconds(0.15f);
             playerInfoView.lblMP.color = orginColor;

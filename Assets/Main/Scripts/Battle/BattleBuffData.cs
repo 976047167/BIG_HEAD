@@ -11,7 +11,7 @@ public class BattleBuffData : BattleEffectItemData
     /// </summary>
     public int Time { get; set; }
     /// <summary>
-    /// 叠加层数
+    /// 叠加层数,目前都是用Time表示
     /// </summary>
     public int Layer { get; set; }
     public BattleBuffTableSetting Data { get; private set; }
@@ -21,7 +21,7 @@ public class BattleBuffData : BattleEffectItemData
     public BattleEffectItemData CardData { get; private set; }
     public BattlePlayer Target { get; private set; }
 
-    public BattleBuffData(int buffId, int extTime, BattleEffectItemData cardData, BattlePlayer owner, BattlePlayer target)
+    public BattleBuffData(int buffId, int time, BattleEffectItemData cardData, BattlePlayer owner, BattlePlayer target)
     {
         BuffId = buffId;
 
@@ -32,7 +32,7 @@ public class BattleBuffData : BattleEffectItemData
             Debug.LogError("BuffId: " + buffId + " not exist!");
             return;
         }
-        Time = extTime + Data.Time;
+        Time = time == 0 ? Data.Time : time;
         CardData = cardData;
         Owner = owner;
         Target = target;

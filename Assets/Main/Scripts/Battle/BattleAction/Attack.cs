@@ -1,4 +1,4 @@
-using System;
+ï»¿using System;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Collections;
@@ -14,7 +14,7 @@ public partial class BattleAction
 
             int finalDamage = actionArg;
             bool skipDamage = false;
-            //ÏÈ¼ÆËã¼ÓÉË
+            //å…ˆè®¡ç®—åŠ ä¼¤
             for (int i = 0; i < owner.Data.BuffList.Count; i++)
             {
                 BattleBuffData buff = owner.Data.BuffList[i];
@@ -48,12 +48,12 @@ public partial class BattleAction
                     }
                 }
             }
-            //Ã»ÓÐÉËº¦£¬²»ÏûºÄÌØÐ§
+            //æ²¡æœ‰ä¼¤å®³ï¼Œä¸æ¶ˆè€—ç‰¹æ•ˆ
             if (finalDamage == 0)
             {
                 return;
             }
-            //¼ÆËã¼õÉË
+            //è®¡ç®—å‡ä¼¤
             for (int i = 0; i < target.Data.BuffList.Count; i++)
             {
                 BattleBuffData buff = target.Data.BuffList[i];
@@ -82,7 +82,7 @@ public partial class BattleAction
                             skipDamage = true;
                             break;
                         case BattleActionType.DodgeDamage:
-                            //²¥·ÅÉÁ±Ü¶¯»­
+                            //æ’­æ”¾é—ªé¿åŠ¨ç”»
                             buff.Layer--;
                             if (buff.Layer == 0)
                             {
@@ -114,7 +114,7 @@ public partial class BattleAction
                             skipDamage = true;
                             break;
                         case BattleActionType.DodgeDamage:
-                            //²¥·ÅÉÁ±Ü¶¯»­
+                            //æ’­æ”¾é—ªé¿åŠ¨ç”»
                             skipDamage = true;
                             battleMgr.AddUIAction(new UIAction.UIDodgeDamage());
                             break;
@@ -123,10 +123,11 @@ public partial class BattleAction
                     }
                 }
             }
-            //Ó¦ÓÃÉËº¦
+            //åº”ç”¨ä¼¤å®³
             if (!skipDamage)
             {
                 target.Data.HP -= finalDamage;
+                Debug.LogError((owner.IsMe ? "[æˆ‘]" : "[æ€ª]") + "ä¼¤å®³" + (target.IsMe ? "[æˆ‘]" : "[æ€ª]") + "äº† " + finalDamage + "[" + target.Data.HP + "/" + target.Data.MaxHP + "]");
                 battleMgr.AddUIAction(new UIAction.UIHpDamage(target, finalDamage));
                 for (int i = 0; i < target.Data.BuffList.Count; i++)
                 {
@@ -187,7 +188,7 @@ public partial class BattleAction
                 }
             }
 
-            //¼ÆËã¸½¼ÓÉËº¦
+            //è®¡ç®—é™„åŠ ä¼¤å®³
             int extraDamage = 0;
             skipDamage = false;
             for (int i = 0; i < owner.Data.BuffList.Count; i++)
@@ -225,12 +226,12 @@ public partial class BattleAction
                     }
                 }
             }
-            //Ã»ÓÐÉËº¦£¬²»ÏûºÄÌØÐ§
+            //æ²¡æœ‰ä¼¤å®³ï¼Œä¸æ¶ˆè€—ç‰¹æ•ˆ
             if (extraDamage == 0)
             {
                 return;
             }
-            //¸½¼ÓÉËº¦µÄ¼õÉË
+            //é™„åŠ ä¼¤å®³çš„å‡ä¼¤
             for (int i = 0; i < target.Data.BuffList.Count; i++)
             {
                 BattleBuffData buff = target.Data.BuffList[i];
@@ -259,7 +260,7 @@ public partial class BattleAction
                             skipDamage = true;
                             break;
                         case BattleActionType.DodgeDamage:
-                            //²¥·ÅÉÁ±Ü¶¯»­
+                            //æ’­æ”¾é—ªé¿åŠ¨ç”»
                             buff.Layer--;
                             if (buff.Layer == 0)
                             {
@@ -291,7 +292,7 @@ public partial class BattleAction
                             skipDamage = true;
                             break;
                         case BattleActionType.DodgeDamage:
-                            //²¥·ÅÉÁ±Ü¶¯»­
+                            //æ’­æ”¾é—ªé¿åŠ¨ç”»
                             skipDamage = true;
                             battleMgr.AddUIAction(new UIAction.UIDodgeDamage());
                             break;
@@ -300,10 +301,11 @@ public partial class BattleAction
                     }
                 }
             }
-            //Ó¦ÓÃ¸½¼ÓÉËº¦
+            //åº”ç”¨é™„åŠ ä¼¤å®³
             if (!skipDamage)
             {
                 target.Data.HP -= extraDamage;
+                Debug.LogError((owner.IsMe ? "[æˆ‘]" : "[æ€ª]") + "é¢å¤–ä¼¤å®³" + (target.IsMe ? "[æˆ‘]" : "[æ€ª]") + "äº† " + extraDamage + "[" + target.Data.HP + "/" + target.Data.MaxHP + "]");
                 battleMgr.AddUIAction(new UIAction.UIHpDamage(target, extraDamage));
                 for (int i = 0; i < target.Data.BuffList.Count; i++)
                 {

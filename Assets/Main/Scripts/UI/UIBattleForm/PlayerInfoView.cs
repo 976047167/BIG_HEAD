@@ -38,6 +38,8 @@ public class PlayerInfoView : MonoBehaviour
         this.playerInfo.MaxHP = bindPlayerData.MaxHP;
         this.playerInfo.AP = bindPlayerData.AP;
         this.playerInfo.MaxAP = bindPlayerData.MaxAP;
+        this.playerInfo.MP = bindPlayerData.MP;
+        this.playerInfo.MaxMP = bindPlayerData.MaxMP;
         this.playerInfo.CardCount = bindPlayerData.CurrentCardList.Count;
         this.playerInfo.CemeteryCount = bindPlayerData.UsedCardList.Count;
         GetUIController(transform);
@@ -69,9 +71,9 @@ public class PlayerInfoView : MonoBehaviour
         spHP_Progress.fillAmount = (float)playerInfo.HP / playerInfo.MaxHP;
         lblHP.text = playerInfo.HP.ToString();
         lblMaxHP.text = playerInfo.MaxHP.ToString();
-        lblMP.text = playerInfo.AP.ToString();
-        lblMaxMP.text = playerInfo.MaxAP.ToString();
-        spMP_Progress.fillAmount = (float)playerInfo.AP / playerInfo.MaxAP;
+        lblMP.text = playerInfo.MP.ToString();
+        lblMaxMP.text = playerInfo.MaxMP.ToString();
+        spMP_Progress.fillAmount = (float)playerInfo.MP / playerInfo.MaxMP;
         lblCardCount.text = playerInfo.CardCount.ToString();
         lblCemeteryCount.text = playerInfo.CemeteryCount.ToString();
         SetBuffUI();
@@ -97,9 +99,10 @@ public class PlayerInfoView : MonoBehaviour
             if (!buffIcons.ContainsKey(buffData.BuffId))
             {
                 buffIcon = Instantiate(goBuffIconTemplete, gridBuffGrid.transform);
+                buffIcon.name = buffData.BuffId.ToString();
                 buffIcons.Add(buffData.BuffId, buffIcon);
                 buffIcon.GetComponent<UITexture>().Load(buffData.Data.IconID);
-                
+
             }
             else
                 buffIcon = buffIcons[buffData.BuffId];
@@ -122,7 +125,17 @@ public class PlayerInfoView : MonoBehaviour
     {
         playerInfo.Buffs.Add(buffData);
     }
-
+    public void RemoveBuff(int buffId)
+    {
+        for (int i = 0; i < playerInfo.Buffs.Count; i++)
+        {
+            if (playerInfo.Buffs[i].BuffId == buffId)
+            {
+                playerInfo.Buffs.RemoveAt(i);
+                break;
+            }
+        }
+    }
     //public void SetEquipIcon(BattleEquipData equipData)
     //{
     //    BattleEquipData removedEquip = null;
