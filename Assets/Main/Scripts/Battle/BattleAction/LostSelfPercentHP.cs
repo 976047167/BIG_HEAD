@@ -11,7 +11,7 @@ public partial class BattleAction
         public override void Excute()
         {
             int damage = Mathf.RoundToInt(owner.Data.HP * (actionArg / 100f));
-            Create(BattleActionType.Attack, damage, 0, sourceData, owner, owner).Excute();
+            Create(BattleActionType.Attack, damage, 0, sourceData, owner, owner, null).Excute();
         }
 
         public override int Excute(int damage)

@@ -21,7 +21,7 @@ public class BattleBuffData : BattleEffectItemData
     public BattleEffectItemData CardData { get; private set; }
     public BattlePlayer Target { get; private set; }
 
-    public BattleBuffData(int buffId, int time, BattleEffectItemData cardData, BattlePlayer owner, BattlePlayer target)
+    public BattleBuffData(int buffId, int time, int layer, BattleEffectItemData cardData, BattlePlayer owner, BattlePlayer target)
     {
         BuffId = buffId;
 
@@ -33,6 +33,7 @@ public class BattleBuffData : BattleEffectItemData
             return;
         }
         Time = time == 0 ? Data.Time : time;
+        Layer = layer == 0 ? Data.DefaultLayer : layer;
         CardData = cardData;
         Owner = owner;
         Target = target;

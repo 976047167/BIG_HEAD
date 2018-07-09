@@ -14,6 +14,7 @@ public abstract partial class BattleAction
     protected BattleEffectItemData sourceData;
     protected BattlePlayer owner;
     protected BattlePlayer target;
+    protected object userdata;
     protected BattleMgr battleMgr;
     /// <summary>
     /// 执行深度,预防无限递归
@@ -52,8 +53,18 @@ public abstract partial class BattleAction
             }
         }
     }
-
-    public static BattleAction CreateNew(BattleActionType actionType, int actionArg, int actionArg2, BattleEffectItemData sourceData, BattlePlayer owner, BattlePlayer target)
+    /// <summary>
+    /// 创建新效果应用，新的递归深度
+    /// </summary>
+    /// <param name="actionType">效果类型</param>
+    /// <param name="actionArg">效果参数1</param>
+    /// <param name="actionArg2">效果参数2</param>
+    /// <param name="sourceData">效果来源</param>
+    /// <param name="owner">所有者</param>
+    /// <param name="target">目标</param>
+    /// <param name="userdata">携带的自定义参数</param>
+    /// <returns>创建的效果</returns>
+    public static BattleAction CreateNew(BattleActionType actionType, int actionArg, int actionArg2, BattleEffectItemData sourceData, BattlePlayer owner, BattlePlayer target, object userdata)
     {
         if (dicActionType == null)
         {
@@ -66,18 +77,30 @@ public abstract partial class BattleAction
         battleAction.owner = owner;
         battleAction.target = target;
         battleAction.battleMgr = Game.BattleManager;
+        battleAction.userdata = userdata;
         //StackTrace st = new StackTrace();
         //执行深度
         battleAction.depth = 1;
         return battleAction;
     }
-    protected BattleAction Create(BattleActionType actionType, int actionArg, int actionArg2, BattleEffectItemData sourceData, BattlePlayer owner, BattlePlayer target)
+    /// <summary>
+    /// 效果内部创建效果应用，递归深度+1
+    /// </summary>
+    /// <param name="actionType">效果类型</param>
+    /// <param name="actionArg">效果参数1</param>
+    /// <param name="actionArg2">效果参数2</param>
+    /// <param name="sourceData">效果来源</param>
+    /// <param name="owner">所有者</param>
+    /// <param name="target">目标</param>
+    /// <param name="userdata">携带的自定义参数</param>
+    /// <returns>创建的效果</returns>
+    protected BattleAction Create(BattleActionType actionType, int actionArg, int actionArg2, BattleEffectItemData sourceData, BattlePlayer owner, BattlePlayer target, object userdata)
     {
         if (depth > MAX_EXCUTE_DEPTH)
         {
-            return Create(BattleActionType.None, 0, 0, null, null, null);
+            return Create(BattleActionType.None, 0, 0, null, null, null, null);
         }
-        BattleAction battleAction = CreateNew(actionType, actionArg, actionArg2, sourceData, owner, target);
+        BattleAction battleAction = CreateNew(actionType, actionArg, actionArg2, sourceData, owner, target, userdata);
         //StackTrace st = new StackTrace();
         //执行深度
         battleAction.depth = depth + 1;

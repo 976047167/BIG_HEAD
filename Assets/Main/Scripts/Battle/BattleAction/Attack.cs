@@ -148,7 +148,7 @@ public partial class BattleAction
                                 }
                                 if (actionArg > UnityEngine.Random.Range(0, 100))
                                 {
-                                    Create(BattleActionType.Attack, finalDamage, 0, buff.CardData, target, owner);
+                                    Create(BattleActionType.Attack, finalDamage, 0, buff.CardData, target, owner, buff).Excute();
                                 }
                                 break;
                             case BattleActionType.GetOppHandCardByAttack:
@@ -157,7 +157,7 @@ public partial class BattleAction
                                 {
                                     target.Data.BuffList.RemoveAt(i);
                                 }
-                                Create(BattleActionType.GetOppHandCardByAttack, buff.Data.ActionParams[j], buff.Data.ActionParams2[j], buff.CardData, owner, target);
+                                Create(BattleActionType.GetOppHandCardByAttack, buff.Data.ActionParams[j], buff.Data.ActionParams2[j], buff.CardData, owner, target, buff).Excute();
                                 break;
                             default:
                                 break;
@@ -178,7 +178,7 @@ public partial class BattleAction
                                 }
                                 if (actionArg > UnityEngine.Random.Range(0, 100))
                                 {
-                                    Create(BattleActionType.Attack, finalDamage, 0, equip.CardData, target, owner);
+                                    Create(BattleActionType.Attack, finalDamage, 0, equip.CardData, target, owner, equip).Excute();
                                 }
                                 break;
                             default:
@@ -326,7 +326,7 @@ public partial class BattleAction
                                 }
                                 if (actionArg > UnityEngine.Random.Range(0, 100))
                                 {
-                                    Create(BattleActionType.Attack, extraDamage, 0, buff.CardData, target, owner);
+                                    Create(BattleActionType.Attack, extraDamage, 0, buff.CardData, target, owner, buff).Excute();
                                 }
                                 break;
                             default:
@@ -348,7 +348,7 @@ public partial class BattleAction
                                 }
                                 if (actionArg > UnityEngine.Random.Range(0, 100))
                                 {
-                                    Create(BattleActionType.Attack, extraDamage, 0, equip.CardData, target, owner);
+                                    Create(BattleActionType.Attack, extraDamage, 0, equip.CardData, target, owner, equip).Excute();
                                 }
                                 break;
                             default:
