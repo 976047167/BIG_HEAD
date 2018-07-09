@@ -165,6 +165,7 @@ public class WND_Kaku : UIFormBase
 
         for (int i = 0; i < KaKu.Count;i++)
         {
+            int cardId = KaKu[i].CardId;
             if (kakuGrid.transform.Find(cardId.ToString()) == null)
             {
                 GameObject item = Instantiate(CardInstence);
@@ -197,10 +198,10 @@ public class WND_Kaku : UIFormBase
 
 
 
-            int cardId = KaKu[i].CardId;
+           
 
-            GameObject item = kakuGrid.transform.Find(cardId.ToString()).gameObject;
-            item.GetComponent<UINormalCard>().CardNum++ ;
+            GameObject itemCard = kakuGrid.transform.Find(cardId.ToString()).gameObject;
+            itemCard.GetComponent<UINormalCard>().CardNum++ ;
 
 
         }
