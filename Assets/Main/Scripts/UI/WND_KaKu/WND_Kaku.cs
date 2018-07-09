@@ -165,6 +165,23 @@ public class WND_Kaku : UIFormBase
 
         for (int i = 0; i < KaKu.Count;i++)
         {
+            if (kakuGrid.transform.Find(cardId.ToString()) == null)
+            {
+                GameObject item = Instantiate(CardInstence);
+                item.SetActive(true);
+                int id = cardId;
+
+                item.GetComponent<UINormalCard>().SetCard(id);
+                item.GetComponent<UINormalCard>().CardNum = 0;
+                item.name = "" + id;
+                item.AddComponent<UIDragScrollView>();
+                UIEventListener.Get(item).onDragStart = OnCardDragStart;
+                UIEventListener.Get(item).onDrag = OnCardDrag;
+                UIEventListener.Get(item).onDragEnd = OnCardDragEnd;
+                item.transform.SetParent(kakuGrid.transform, false);
+                item.transform.localPosition = new Vector3();
+                item.transform.localScale = cardScale;
+            }
             bool isInDeck = false;
             for(int j = 0; j < tempDeck.Count; j++)
             {
@@ -181,28 +198,11 @@ public class WND_Kaku : UIFormBase
 
 
             int cardId = KaKu[i].CardId;
-            if (kakuGrid.transform.Find(cardId.ToString()) != null)
-            {
-                GameObject item = kakuGrid.transform.Find(cardId.ToString()).gameObject;
-                item.GetComponent<UINormalCard>().CardNum++ ;
-            }
-            else
-            {
-                GameObject item = Instantiate(CardInstence);
-                item.SetActive(true);
-                int id = cardId;
 
-                item.GetComponent<UINormalCard>().SetCard(id);
-                item.GetComponent<UINormalCard>().CardNum = 1;
-                item.name = "" + id;
-                item.AddComponent<UIDragScrollView>();
-                UIEventListener.Get(item).onDragStart = OnCardDragStart;
-                UIEventListener.Get(item).onDrag = OnCardDrag;
-                UIEventListener.Get(item).onDragEnd = OnCardDragEnd;
-                item.transform.SetParent(kakuGrid.transform, false);
-                item.transform.localPosition = new Vector3();
-                item.transform.localScale = cardScale;
-            }
+            GameObject item = kakuGrid.transform.Find(cardId.ToString()).gameObject;
+            item.GetComponent<UINormalCard>().CardNum++ ;
+
+
         }
 
         kakuGrid.repositionNow = true;
