@@ -6,6 +6,7 @@ using AppSettings;
 public class BattleCardData : BattleEffectItemData
 {
     public int CardId { get; private set; }
+    public int Uid { get; private set; }
     static int uniqueId = 0;
 
     public BattleCardTableSetting Data { get; private set; }
@@ -16,7 +17,8 @@ public class BattleCardData : BattleEffectItemData
         {
             uniqueId = int.MinValue;
         }
-        CardId = uniqueId;
+        Uid = uniqueId;
+        CardId = cardId;
         Data = BattleCardTableSettings.Get(cardId);
         if (Data == null)
         {

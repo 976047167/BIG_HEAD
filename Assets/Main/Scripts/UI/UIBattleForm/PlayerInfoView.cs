@@ -90,7 +90,7 @@ public class PlayerInfoView : MonoBehaviour
         for (int i = 0; i < playerInfo.Buffs.Count; i++)
         {
             BattleBuffData buffData = playerInfo.Buffs[i];
-            if (buffData.Time <= 0)
+            if (buffData.Time == 0)
             {
                 removeList.Add(buffData);
                 continue;

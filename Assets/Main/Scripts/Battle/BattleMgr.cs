@@ -35,7 +35,7 @@ public class BattleMgr
         State = BattleState.Loading;
         Debug.Log("StartBattle => " + monsterId);
         MonsterId = monsterId;
-        SetOppData(monsterId);
+        OppPlayer = new BattlePlayer(monsterId);
         MyPlayer = new BattlePlayer(MapMgr.Instance.MyMapPlayer);
         dicRoundCounter = new Dictionary<string, int>();
         dicBattleCounter = new Dictionary<string, int>();
@@ -46,7 +46,27 @@ public class BattleMgr
         MyPlayer.Data.MP = MyPlayer.Data.MaxMP = 100;
         OppPlayer.Data.HP = 1;
     }
-    public void StopBattle()
+    public void ExitBattle()
+    {
+        if (State == BattleState.BattleEnd_Win)
+        {
+            //发奖励
+
+            if (MapMgr.Inited)
+            {
+                MyPlayer.Data.Save(MapMgr.Instance.MyMapPlayer.Data);
+            }
+        }
+        else if (State == BattleState.BattleEnd_Lose)
+        {
+            //退出战斗
+            if (MapMgr.Inited)
+            {
+                MyPlayer.Data.Save(MapMgr.Instance.MyMapPlayer.Data);
+            }
+        }
+    }
+    public void Clear()
     {
         //Game.UI.CloseForm<UIBattleForm>();
         OppPlayer.StopAI();
@@ -58,18 +78,6 @@ public class BattleMgr
         dicRoundCounter = null;
         dicBattleCounter = null;
         State = BattleState.None;
-    }
-    public void SetOppData(int monsterId)
-    {
-        BattleMonsterTableSetting monster = BattleMonsterTableSettings.Get(monsterId);
-        if (monster == null)
-        {
-            Debug.LogError("怪物表格配置错误");
-            return;
-        }
-        OppPlayer = new BattlePlayer(monsterId);
-        
-        //TODO: Buff Equip
     }
 
 
@@ -165,12 +173,12 @@ public class BattleMgr
                 State = BattleState.MyRoundStart;
                 break;
             case BattleState.BattleEnd_Win:
-                battleForm.WinBattle();
-                StopBattle();
+                //battleForm.WinBattle();
+                ExitBattle();
                 break;
             case BattleState.BattleEnd_Lose:
-                battleForm.LoseBattle();
-                StopBattle();
+                //battleForm.LoseBattle();
+                ExitBattle();
                 break;
             default:
                 break;
@@ -332,7 +340,7 @@ public class BattleMgr
         }
         return null;
     }
-    
+
     /// <summary>
     /// -1取消计数，0归零，大于0，增加这么多
     /// </summary>
@@ -451,7 +459,7 @@ public class BattleMgr
         /// </summary>
         OppRoundEnd,
         /// <summary>
-        /// 战斗结束，胜利
+        /// 战斗结束，胜利，发奖励
         /// </summary>
         BattleEnd_Win,
         /// <summary>

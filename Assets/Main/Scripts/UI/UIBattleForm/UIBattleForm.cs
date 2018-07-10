@@ -99,6 +99,7 @@ public class UIBattleForm : UIFormBase
         //lblResultInfo.text = "WIN!";
         //lblResultInfo.color = new Color32(255, 0, 0, 255);
         UIModule.Instance.OpenForm<WND_Reward>(monsterId);
+        Game.BattleManager.Clear();
     }
     public void LoseBattle()
     {
@@ -107,7 +108,7 @@ public class UIBattleForm : UIFormBase
         lblResultInfo.gameObject.SetActive(true);
         lblResultInfo.text = "LOSE!";
         lblResultInfo.color = new Color32(150, 150, 150, 255);
-        Application.Quit();
+        Game.BattleManager.Clear();
     }
     public void UpdateRoundCount(int roundCount)
     {

@@ -17,75 +17,15 @@ public class BattlePlayer
     public BattlePlayer(MapPlayer mapPlayer)
     {
         this.Player = mapPlayer;
-        Data = new BattlePlayerData();
-        Data.Name = mapPlayer.Data.Name;
-        Data.HP = mapPlayer.Data.HP;
-        Data.MaxHP = mapPlayer.Data.MaxHP;
-        Data.MP = mapPlayer.Data.MP;
-        Data.MaxMP = mapPlayer.Data.MaxMP;
-        //玩家的行动值初始1
-        Data.AP = Data.MaxAP = 0;
-        Data.Level = mapPlayer.Data.Level;
-        Data.SkillId = mapPlayer.Data.BattleSkillID;
-        Data.HeadIcon = mapPlayer.Data.HeadIcon;
-        Data.CardList.Clear();
+        Data = new BattlePlayerData(mapPlayer.Data, this);
 
-        Data.EquipList = new List<BattleEquipData>(mapPlayer.Data.EquipList.Count);
-        for (int i = 0; i < mapPlayer.Data.EquipList.Count; i++)
-        {
-            List<int> actions = mapPlayer.Data.EquipList[i].Data.ActionTypes;
-            for (int j = 0; j < actions.Count; j++)
-            {
-                if (actions[i] == (int)BattleActionType.AddEquipment)
-                {
-                    Data.EquipList.Add(new BattleEquipData(mapPlayer.Data.EquipList[j].Data.ActionParams[0], this));
-                    break;
-                }
-            }
-        }
-        Data.CardList = new List<BattleCardData>(mapPlayer.Data.CardList.Count);
-        for (int i = 0; i < mapPlayer.Data.CardList.Count; i++)
-        {
-            Data.CardList.Add(new BattleCardData(mapPlayer.Data.CardList[i].CardId, this));
-        }
-        Data.BuffList = new List<BattleBuffData>(mapPlayer.Data.BuffList.Count);
-        for (int i = 0; i < mapPlayer.Data.BuffList.Count; i++)
-        {
-            Data.BuffList.Add(new BattleBuffData(mapPlayer.Data.BuffList[i].Data.ActionParams[0], -1, 0, new BattleCardData(mapPlayer.Data.BuffList[i].CardId, this), this, this));
-        }
-
-
-
-        Data.CurrentCardList = new List<BattleCardData>(Data.CardList);
         IsMe = mapPlayer.Player == Game.DataManager.MyPlayer;
 
     }
     public BattlePlayer(int monsterId)
     {
-        BattleMonsterTableSetting monster = BattleMonsterTableSettings.Get(monsterId);
-        if (monster == null)
-        {
-            Debug.LogError("怪物表格配置错误");
-            return;
-        }
-        Data = new BattlePlayerData();
-        Data.CurrentCardList = new List<BattleCardData>(Data.CardList);
-        Data.AP = 0;
-        Data.MaxAP = 0;
+        Data = new BattlePlayerData(monsterId, this);
         IsMe = false;
-        Data.HP = monster.HP;
-        Data.MaxHP = monster.MaxHp;
-        Data.MP = monster.MP;
-        Data.MaxMP = monster.MaxMP;
-        Data.AP = monster.AP;
-        Data.MaxAP = monster.MaxAP;
-        Data.Level = monster.Level;
-        Data.HeadIcon = monster.IconId;
-        for (int i = 0; i < monster.BattleCards.Count; i++)
-        {
-            Data.CardList.Add(new BattleCardData(monster.BattleCards[i], this));
-        }
-
     }
     /// <summary>
     /// 应用卡牌的效果

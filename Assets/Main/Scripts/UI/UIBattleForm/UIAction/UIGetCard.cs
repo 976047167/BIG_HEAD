@@ -15,7 +15,22 @@ public partial class UIAction
 
         public override IEnumerator Excute()
         {
-            throw new System.NotImplementedException(typeof(UIGetCard).ToString());
+            yield return null;
+            if (CardData.Owner == Game.BattleManager.MyPlayer)
+            {
+                BattleForm.CreateBattleCard(CardData, BattleForm.MyCardsGrid);
+            }
+            else
+            {
+                BattleForm.CreateBattleCard(CardData, BattleForm.OppCardsGrid);
+            }
+            PlayerInfoView playerInfoView = BattleForm.GetPlayerInfoViewByPlayer(CardData.Owner);
+            //playerInfoView.PlayerInfo.CardCount--;
+            if (playerInfoView.PlayerInfo.CardCount <= 0)
+            {
+                playerInfoView.PlayerInfo.CardCount = playerInfoView.BindPlayerData.CurrentCardList.Count;
+            }
+            yield return new WaitForSeconds(0.5f);
         }
     }
 }

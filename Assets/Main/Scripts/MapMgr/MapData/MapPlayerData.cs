@@ -8,6 +8,10 @@ public class MapPlayerData : PlayerData
 {
     public MapPlayerData(PlayerData playerData)
     {
+        if (playerData==null)
+        {
+            return;
+        }
         Name = playerData.Name;
         Level = playerData.Level;
         HP = playerData.HP;
