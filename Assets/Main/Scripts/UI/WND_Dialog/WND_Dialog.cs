@@ -110,25 +110,32 @@ public class WND_Dialog : UIFormBase
         print("pintStringByStep is printing" + printString);
         for (int i = 1; i <= printString.Length; i++)
         {
+            if (isPrinting == false)
+            {
+                yield break;
+            }
             labTips.text = printString.Substring(0, i);
             yield return new WaitForSeconds(Game.DataManager.DialogSpeed);
+
         }
         isPrinting = false;
         PrintStringAll(null);
     }
     private void PrintStringAll(GameObject btn)
     {
+        int type = DialogTableSettings.Get(preserntIndex).Type;
         if (isPrinting)
         {
             StopCoroutine("PrintStringByStep");
             print("PrintStringByStep is stop");
             labTips.text = printString;
             isPrinting = false;
-            return;
+            if (type == (int)DialogType.Normal)
+                return;
         }
 
 
-        int type = DialogTableSettings.Get(preserntIndex).Type;
+        
         List<int> NextIds = DialogTableSettings.Get(preserntIndex).NextIds;
         switch ((DialogType)type)
         {
