@@ -22,8 +22,8 @@ public partial class BattleAction
             for (int i = 0; i < canRemoveList.Count; i++)
             {
                 //owner.Data.BuffList.Remove(canRemoveList[i]);
-                Create(BattleActionType.RemoveBuff, canRemoveList[i].BuffId, 0, sourceData, owner, owner).Excute();
-                Create(BattleActionType.AddBuff, canRemoveList[i].BuffId, canRemoveList[i].Layer, sourceData, target, target).Excute();
+                Create(BattleActionType.RemoveBuff, canRemoveList[i].BuffId, 0, sourceData, owner, owner, canRemoveList[i]).Excute();
+                Create(BattleActionType.AddBuff, canRemoveList[i].BuffId, canRemoveList[i].Layer, sourceData, target, target, canRemoveList[i]).Excute();
             }
         }
 

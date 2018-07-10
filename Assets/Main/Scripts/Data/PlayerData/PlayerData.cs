@@ -34,7 +34,9 @@ public class PlayerData
     protected List<NormalCard> m_CardList = new List<NormalCard>();
 
     public List<NormalCard> EquipList { get { return m_EquipList; } }
-
+    /// <summary>
+    /// 身上自带的永久性buff
+    /// </summary>
     public List<NormalCard> BuffList { get { return m_BuffList; } }
 
     public List<NormalCard> CardList { get { return m_CardList; } }

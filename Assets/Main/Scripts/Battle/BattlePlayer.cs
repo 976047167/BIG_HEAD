@@ -51,7 +51,7 @@ public class BattlePlayer
         Data.BuffList = new List<BattleBuffData>(mapPlayer.Data.BuffList.Count);
         for (int i = 0; i < mapPlayer.Data.BuffList.Count; i++)
         {
-            Data.BuffList.Add(new BattleBuffData(mapPlayer.Data.BuffList[i].Data.ActionParams[0], -1, new BattleCardData(mapPlayer.Data.BuffList[i].CardId, this), this, this));
+            Data.BuffList.Add(new BattleBuffData(mapPlayer.Data.BuffList[i].Data.ActionParams[0], -1, 0, new BattleCardData(mapPlayer.Data.BuffList[i].CardId, this), this, this));
         }
 
 
@@ -97,7 +97,7 @@ public class BattlePlayer
         cardData.Owner.Data.MP -= cardData.Data.Spending;
         for (int i = 0; i < cardData.Data.ActionTypes.Count; i++)
         {
-            ApplyAction(cardData.Data.ActionTypes[i], cardData.Data.ActionParams[i], cardData.Data.ActionParams2[i], cardData, cardData.Owner, null);
+            ApplyAction(cardData.Data.ActionTypes[i], cardData.Data.ActionParams[i], cardData.Data.ActionParams2[i], cardData, cardData.Owner, null, cardData);
         }
     }
     /// <summary>
@@ -116,25 +116,42 @@ public class BattlePlayer
     public void ApplyBuffs(BattleActionTime actionTime)
     {
         List<BattleBuffData> removeList = new List<BattleBuffData>();
+        bool remove = false;
         foreach (var buff in this.Data.BuffList)
         {
             for (int i = 0; i < buff.Data.ActionTimes.Count; i++)
             {
                 if (buff.Data.ActionTimes[i] == (int)actionTime)
                 {
-                    ApplyAction(buff.Data.ActionTypes[i], buff.Data.ActionParams[i], buff.Data.ActionParams2[i], buff, this, this);
-                    buff.Time--;
-                    if (buff.Time == 0)
+                    ApplyAction(buff.Data.ActionTypes[i], buff.Data.ActionParams[i], buff.Data.ActionParams2[i], buff, this, this, buff);
+                    if (buff.Layer > 0)
                     {
-                        removeList.Add(buff);
+                        buff.Layer--;
                     }
-                    if (buff.Time < 0)
+                    if (buff.Layer == 0)
                     {
-                        buff.Time = -1;
+                        remove = true;
                     }
                 }
             }
+            if (actionTime == BattleActionTime.RoundEnd)
+            {
+                if (buff.Time > 0)
+                {
+                    buff.Time--;
+                }
+                if (buff.Time == 0)
+                {
+                    remove = true;
+                }
+            }
+            if (remove)
+            {
+                removeList.Add(buff);
+                remove = false;
+            }
         }
+
         foreach (var item in removeList)
         {
             this.Data.BuffList.Remove(item);
@@ -149,7 +166,7 @@ public class BattlePlayer
             {
                 if (equip.Data.ActionTimes[i] == (int)actionTime)
                 {
-                    ApplyAction(equip.Data.ActionTypes[i], equip.Data.ActionPrarms[i], equip.Data.ActionParams2[i], equip, this);
+                    ApplyAction(equip.Data.ActionTypes[i], equip.Data.ActionPrarms[i], equip.Data.ActionParams2[i], equip, this, null, equip);
                     //equip.Time--;
                     //if (equip.Time == 0)
                     //{
@@ -167,13 +184,13 @@ public class BattlePlayer
             this.Data.EquipList.Remove(item);
         }
     }
-    void ApplyAction(int actionType, int actionArg, int actionArg2, BattleEffectItemData cardData, BattlePlayer owner, BattlePlayer target = null)
+    void ApplyAction(int actionType, int actionArg, int actionArg2, BattleEffectItemData cardData, BattlePlayer owner, BattlePlayer target, object userdata)
     {
         if (target == null)
         {
             target = IsMe ? Game.BattleManager.OppPlayer : Game.BattleManager.MyPlayer;
         }
-        BattleAction battleAction = BattleAction.CreateNew((BattleActionType)actionType, actionArg, actionArg2, cardData, owner, target);
+        BattleAction battleAction = BattleAction.CreateNew((BattleActionType)actionType, actionArg, actionArg2, cardData, owner, target, userdata);
         battleAction.Excute();
     }
     /// <summary>
@@ -181,7 +198,7 @@ public class BattlePlayer
     /// </summary>
     public void ApplyAction(BattleActionType actionType, int actionArg, int actionArg2 = 0)
     {
-        ApplyAction((int)actionType, actionArg, actionArg2, null, this, this);
+        ApplyAction((int)actionType, actionArg, actionArg2, null, this, this, null);
     }
     public void EndRound()
     {

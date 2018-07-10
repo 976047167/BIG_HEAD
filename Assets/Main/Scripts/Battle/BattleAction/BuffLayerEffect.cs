@@ -14,8 +14,8 @@ public partial class BattleAction
             {
                 if (actionArg == owner.Data.BuffList[i].BuffId)
                 {
-                    Create(BattleActionType.RecoverMP, owner.Data.BuffList[i].Layer * actionArg2, 0, sourceData, owner, owner);
-                    Create(BattleActionType.RemoveBuff, actionArg, 0, sourceData, owner, owner);
+                    Create(BattleActionType.RecoverMP, owner.Data.BuffList[i].Layer * actionArg2, 0, sourceData, owner, owner, owner.Data.BuffList[i]).Excute();
+                    Create(BattleActionType.RemoveBuff, actionArg, 0, sourceData, owner, owner, owner.Data.BuffList[i]).Excute();
                 }
             }
         }

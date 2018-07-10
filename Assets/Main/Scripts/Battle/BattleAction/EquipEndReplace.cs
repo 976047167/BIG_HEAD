@@ -10,9 +10,9 @@ public partial class BattleAction
         public static BattleActionType ActionType { get { return BattleActionType.EquipEndReplace; } }
         public override void Excute()
         {
-            if (actionArg>0)
+            if (actionArg > 0)
             {
-                Create(BattleActionType.AddEquipment, actionArg, actionArg2, sourceData, owner, owner);
+                Create(BattleActionType.AddEquipment, actionArg, actionArg2, sourceData, owner, owner, null).Excute();
             }
         }
 

@@ -12,7 +12,7 @@ public partial class BattleAction
         public override void Excute()
         {
             target = owner.IsMe ? battleMgr.OppPlayer : battleMgr.MyPlayer;
-            Create(BattleActionType.AddBuff, actionArg, actionArg2, sourceData, owner, target);
+            Create(BattleActionType.AddBuff, actionArg, actionArg2, sourceData, owner, target, null);
         }
         public override int Excute(int damage)
         {

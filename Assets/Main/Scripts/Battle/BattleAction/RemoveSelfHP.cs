@@ -10,7 +10,7 @@ public partial class BattleAction
         public static BattleActionType ActionType { get { return BattleActionType.RemoveSelfHP; } }
         public override void Excute()
         {
-            Create(BattleActionType.RemoveHP, actionArg, actionArg2, sourceData, owner, owner).Excute();
+            Create(BattleActionType.RemoveHP, actionArg, actionArg2, sourceData, owner, owner, null).Excute();
         }
 
         public override int Excute(int damage)

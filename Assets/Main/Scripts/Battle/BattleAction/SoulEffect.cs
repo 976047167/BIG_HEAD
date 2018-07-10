@@ -35,7 +35,7 @@ public partial class BattleAction
                 {
                     owner.Data.MP = owner.Data.MaxMP;
                 }
-                Create(BattleActionType.Attack, 1, 0, sourceData, owner, target).Excute();
+                Create(BattleActionType.Attack, 1, 0, sourceData, owner, target, null).Excute();
             }
         }
 
