@@ -57,7 +57,7 @@ public class WND_Reward : UIFormBase
             item.GetComponent<UILabel>().gradientBottom = Color.green;
             item.transform.Find("labNum").GetComponent<UILabel>().text = string.Format("X{0}", reward.exp);
             item.transform.Find("labNum").GetComponent<UILabel>().gradientBottom = Color.green;
-            item.transform.parent = grid.transform;
+            item.transform.SetParent(grid.transform, false);
             item.transform.localPosition = new Vector3();
             item.transform.localScale = new Vector3(1, 1, 1);
             item.SetActive(true);
@@ -69,7 +69,7 @@ public class WND_Reward : UIFormBase
             item.GetComponent<UILabel>().gradientBottom = Color.yellow;
             item.transform.Find("labNum").GetComponent<UILabel>().text = string.Format("X{0}", reward.gold);
             item.transform.Find("labNum").GetComponent<UILabel>().gradientBottom = Color.yellow;
-            item.transform.parent = grid.transform;
+            item.transform.SetParent (grid.transform,false) ;
             item.transform.localPosition = new Vector3();
             item.transform.localScale = new Vector3(1, 1, 1);
             item.SetActive(true);
@@ -81,7 +81,7 @@ public class WND_Reward : UIFormBase
             item.GetComponent<UILabel>().gradientBottom = Color.blue;
             item.transform.Find("labNum").GetComponent<UILabel>().text = string.Format("X{0}", reward.diamond);
             item.transform.Find("labNum").GetComponent<UILabel>().gradientBottom = Color.blue;
-            item.transform.parent = grid.transform;
+            item.transform.SetParent(grid.transform, false);
             item.transform.localPosition = new Vector3();
             item.transform.localScale = new Vector3(1, 1, 1);
             item.SetActive(true);
@@ -124,7 +124,7 @@ public class WND_Reward : UIFormBase
             UITexture icon = item.transform.Find("texReward").GetComponent<UITexture>();
             icon.gameObject.SetActive(true);
             icon.Load(cardData.ShowID);
-            item.transform.parent = grid.transform;
+            item.transform.SetParent(grid.transform, false);
             item.transform.localPosition = new Vector3();
             item.transform.localScale = new Vector3(1, 1, 1);
             item.SetActive(true);
