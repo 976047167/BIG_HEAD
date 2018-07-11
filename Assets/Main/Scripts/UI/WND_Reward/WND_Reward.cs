@@ -8,10 +8,9 @@ public class WND_Reward : UIFormBase
     private UILabel labRewardText;
     private GameObject btnCommond;
     private UIGrid grid;
-    private int rewardId;
+    private int monsterId;
     private GameObject frame;
-    // Use this for initialization
-    // Update is called once per frame
+
     protected override void OnInit(object userdata)
     {
         labRewardText = transform.Find("bg/frame/labReward").GetComponent<UILabel>();
@@ -22,14 +21,17 @@ public class WND_Reward : UIFormBase
         base.OnInit(userdata);
 
 
-        rewardId = (int)userdata;
+        monsterId = (int)userdata;
 
     }
 
     protected override void OnOpen()
     {
         base.OnOpen();
-        
+        BattleMonsterTableSetting monster = BattleMonsterTableSettings.Get(monsterId);
+        List<int> rewardList = monster.RewardIds;
+
+        int rewardId = rewardList[Random.Range(0, rewardList.Count)];
         LoadRewardList(rewardId);
         PlayShowAnime();
 
@@ -50,10 +52,12 @@ public class WND_Reward : UIFormBase
         if (reward.exp != 0)
         {
             GameObject item = Instantiate(labRewardText.gameObject);
-            item.GetComponent<UILabel>().text = "经验";
-            item.GetComponent<UILabel>().gradientBottom = Color.green;
-            item.transform.Find("labNum").GetComponent<UILabel>().text = string.Format("X{0}", reward.exp);
-            item.transform.Find("labNum").GetComponent<UILabel>().gradientBottom = Color.green;
+            item.GetComponent<UILabel>().text = I18N.Get(1002003);
+            item.GetComponent<UILabel>().color = Color.green;
+            //item.transform.Find("labNum").GetComponent<UILabel>().text = string.Format("X{0}", reward.exp);
+            UILabel label = item.transform.Find("labNum").GetComponent<UILabel>();
+            NumberJumpAnime(label, reward.exp);
+            item.transform.Find("labNum").GetComponent<UILabel>().color = Color.green;
             item.transform.SetParent(grid.transform, false);
             item.transform.localPosition = new Vector3();
             item.transform.localScale = new Vector3(1, 1, 1);
@@ -62,11 +66,13 @@ public class WND_Reward : UIFormBase
         if (reward.gold != 0)
         {
             GameObject item = Instantiate(labRewardText.gameObject);
-            item.GetComponent<UILabel>().text = "黄金";
-            item.GetComponent<UILabel>().gradientBottom = Color.yellow;
-            item.transform.Find("labNum").GetComponent<UILabel>().text = string.Format("X{0}", reward.gold);
-            item.transform.Find("labNum").GetComponent<UILabel>().gradientBottom = Color.yellow;
-            item.transform.SetParent (grid.transform,false) ;
+            item.GetComponent<UILabel>().text = I18N.Get(1002001);
+            item.GetComponent<UILabel>().color = Color.yellow;
+            //item.transform.Find("labNum").GetComponent<UILabel>().text = string.Format("X{0}", reward.gold);
+            UILabel label = item.transform.Find("labNum").GetComponent<UILabel>();
+            NumberJumpAnime(label, reward.gold);
+            item.transform.Find("labNum").GetComponent<UILabel>().color = Color.yellow;
+            item.transform.SetParent(grid.transform, false);
             item.transform.localPosition = new Vector3();
             item.transform.localScale = new Vector3(1, 1, 1);
             item.SetActive(true);
@@ -74,10 +80,12 @@ public class WND_Reward : UIFormBase
         if (reward.diamond != 0)
         {
             GameObject item = Instantiate(labRewardText.gameObject);
-            item.GetComponent<UILabel>().text = "钻石";
-            item.GetComponent<UILabel>().gradientBottom = Color.blue;
-            item.transform.Find("labNum").GetComponent<UILabel>().text = string.Format("X{0}", reward.diamond);
-            item.transform.Find("labNum").GetComponent<UILabel>().gradientBottom = Color.blue;
+            item.GetComponent<UILabel>().text = I18N.Get(1002002);
+            item.GetComponent<UILabel>().color = Color.blue;
+            //item.transform.Find("labNum").GetComponent<UILabel>().text = string.Format("X{0}", reward.diamond);
+            UILabel label = item.transform.Find("labNum").GetComponent<UILabel>();
+            NumberJumpAnime(label, reward.diamond);
+            item.transform.Find("labNum").GetComponent<UILabel>().color = Color.blue;
             item.transform.SetParent(grid.transform, false);
             item.transform.localPosition = new Vector3();
             item.transform.localScale = new Vector3(1, 1, 1);
@@ -87,12 +95,12 @@ public class WND_Reward : UIFormBase
         foreach (var card in reward.CardList)
         {
             if (card == 0) continue;
-
+            BattleCardTableSetting cardData = BattleCardTableSettings.Get(card);
+            if (cardData == null) continue;
             GameObject item = Instantiate(labRewardText.gameObject);
 
 
-            BattleCardTableSetting cardData = BattleCardTableSettings.Get(card);
-            if (cardData == null) continue;
+
 
             item.GetComponent<UILabel>().text = I18N.Get(cardData.Name);
             item.transform.Find("labNum").GetComponent<UILabel>().text = "";
@@ -116,7 +124,7 @@ public class WND_Reward : UIFormBase
                     break;
             }
 
-            item.GetComponent<UILabel>().gradientBottom = color;
+            item.GetComponent<UILabel>().color = color;
             UIUtility.SetCardTips(item, cardData.Id);
             UITexture icon = item.transform.Find("texReward").GetComponent<UITexture>();
             icon.gameObject.SetActive(true);
@@ -128,7 +136,25 @@ public class WND_Reward : UIFormBase
         }
         grid.repositionNow = true;
     }
+    private void NumberJumpAnime(UILabel label, int num)
+    {
 
+        IEnumerator ie = JumpNum(label, num);
+        StartCoroutine(ie);
+    }
+    private IEnumerator JumpNum(UILabel label, int num)
+    {
+        int perNum = 20;
+        if (num / 15 > perNum)
+            perNum = num / 15;
+
+        for (int i = 0; i < num; i += perNum)
+        {
+            yield return new WaitForSeconds(0.1f);
+            label.text = i.ToString();
+        }
+        label.text = num.ToString();
+    }
 
     private void exitClick(GameObject obj)
     {
