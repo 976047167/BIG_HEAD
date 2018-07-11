@@ -48,22 +48,10 @@ public class BattleMgr
     }
     public void ExitBattle()
     {
-        if (State == BattleState.BattleEnd_Win)
+        //退出战斗
+        if (MapMgr.Inited)
         {
-            //发奖励
-
-            if (MapMgr.Inited)
-            {
-                MyPlayer.Data.Save(MapMgr.Instance.MyMapPlayer.Data);
-            }
-        }
-        else if (State == BattleState.BattleEnd_Lose)
-        {
-            //退出战斗
-            if (MapMgr.Inited)
-            {
-                MyPlayer.Data.Save(MapMgr.Instance.MyMapPlayer.Data);
-            }
+            MyPlayer.Data.Save(MapMgr.Instance.MyMapPlayer.Data);
         }
     }
     public void Clear()
@@ -96,7 +84,11 @@ public class BattleMgr
     BattleState lastState = BattleState.Loading;
     public void UpdateScope()
     {
-        if (State == BattleState.BattleEnd_Win || State == BattleState.BattleEnd_Lose || State == BattleState.None)
+        if (State == BattleState.BattleEnd_Win
+            || State == BattleState.BattleEnd_Lose
+            || State == BattleState.None
+            || State == BattleState.BattleEnd_MyEscape
+            || State == BattleState.BattleEnd_OppEscape)
         {
             return;
         }
@@ -172,12 +164,25 @@ public class BattleMgr
                 OppPlayer.ApplyTimeEffects(BattleActionTime.RoundEnd);
                 State = BattleState.MyRoundStart;
                 break;
+            case BattleState.BattleEnd_MyEscape:
+                uiActions.Enqueue(new UIAction.UIMeEscapeBattle());
+                ExitBattle();
+                break;
+            case BattleState.BattleEnd_OppEscape:
+                uiActions.Enqueue(new UIAction.UIOppEscapeBattle());
+                ExitBattle();
+                break;
             case BattleState.BattleEnd_Win:
-                //battleForm.WinBattle();
+                //发奖励
+                BattleMonsterTableSetting monster = BattleMonsterTableSettings.Get(MonsterId);
+                List<int> rewardList = monster.RewardIds;
+                int rewardId = rewardList[UnityEngine.Random.Range(0, rewardList.Count)];
+                uiActions.Enqueue(new UIAction.UIWinBattle(rewardId));
                 ExitBattle();
                 break;
             case BattleState.BattleEnd_Lose:
                 //battleForm.LoseBattle();
+                uiActions.Enqueue(new UIAction.UILoseBattle());
                 ExitBattle();
                 break;
             default:
@@ -211,6 +216,10 @@ public class BattleMgr
             case BattleState.OppUsingCard:
                 break;
             case BattleState.OppRoundEnd:
+                break;
+            case BattleState.BattleEnd_MyEscape:
+                break;
+            case BattleState.BattleEnd_OppEscape:
                 break;
             case BattleState.BattleEnd_Win:
                 break;
@@ -258,6 +267,10 @@ public class BattleMgr
                 AddUIAction(new UIAction.UIRoundEnd(OppPlayer));
                 //battleForm.ClearUsedCards();
                 break;
+            case BattleState.BattleEnd_MyEscape:
+                break;
+            case BattleState.BattleEnd_OppEscape:
+                break;
             case BattleState.BattleEnd_Win:
                 break;
             case BattleState.BattleEnd_Lose:
@@ -282,6 +295,22 @@ public class BattleMgr
             dicRoundCounter.Clear();
         }
 
+    }
+    /// <summary>
+    /// 逃离战斗
+    /// </summary>
+    public void EscapeBattle()
+    {
+        if (State == BattleState.MyRound)
+        {
+            State = BattleState.BattleEnd_MyEscape;
+            dicRoundCounter.Clear();
+        }
+        else if (State == BattleState.OppRound)
+        {
+            State = BattleState.BattleEnd_OppEscape;
+            dicRoundCounter.Clear();
+        }
     }
     public bool UseCard(BattleCardData battleCardData)
     {
@@ -458,6 +487,14 @@ public class BattleMgr
         /// 敌方回合结束
         /// </summary>
         OppRoundEnd,
+        /// <summary>
+        /// 我方逃离战斗
+        /// </summary>
+        BattleEnd_MyEscape,
+        /// <summary>
+        /// 敌方逃离战斗
+        /// </summary>
+        BattleEnd_OppEscape,
         /// <summary>
         /// 战斗结束，胜利，发奖励
         /// </summary>

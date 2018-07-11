@@ -8,7 +8,7 @@ public class WND_Reward : UIFormBase
     private UILabel labRewardText;
     private GameObject btnCommond;
     private UIGrid grid;
-    private int monsterId;
+    private int rewardId;
     private GameObject frame;
     // Use this for initialization
     // Update is called once per frame
@@ -22,17 +22,14 @@ public class WND_Reward : UIFormBase
         base.OnInit(userdata);
 
 
-        monsterId = (int)userdata;
+        rewardId = (int)userdata;
 
     }
 
     protected override void OnOpen()
     {
         base.OnOpen();
-        BattleMonsterTableSetting monster = BattleMonsterTableSettings.Get(monsterId);
-        List<int> rewardList = monster.RewardIds;
-
-        int rewardId = rewardList[Random.Range(0, rewardList.Count)];
+        
         LoadRewardList(rewardId);
         PlayShowAnime();
 

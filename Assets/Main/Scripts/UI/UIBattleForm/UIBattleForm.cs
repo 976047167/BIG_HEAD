@@ -58,6 +58,7 @@ public class UIBattleForm : UIFormBase
     /// </summary>
     public bool CanUseCard { get; set; }
 
+
     // Use this for initialization
     void Start()
     {
@@ -98,8 +99,8 @@ public class UIBattleForm : UIFormBase
         lblResultInfo.gameObject.SetActive(false);
         //lblResultInfo.text = "WIN!";
         //lblResultInfo.color = new Color32(255, 0, 0, 255);
-        UIModule.Instance.OpenForm<WND_Reward>(monsterId);
-        Game.BattleManager.Clear();
+        
+
     }
     public void LoseBattle()
     {
@@ -108,7 +109,25 @@ public class UIBattleForm : UIFormBase
         lblResultInfo.gameObject.SetActive(true);
         lblResultInfo.text = "LOSE!";
         lblResultInfo.color = new Color32(150, 150, 150, 255);
-        Game.BattleManager.Clear();
+
+    }
+    public void MeEscapeBattle()
+    {
+        resultInfo.SetActive(true);
+        resultInfo.transform.Find("bg").gameObject.SetActive(true);
+        lblResultInfo.gameObject.SetActive(true);
+        lblResultInfo.text = "我跑!";
+        lblResultInfo.color = new Color32(150, 150, 150, 255);
+
+    }
+    public void OppEscapeBattle()
+    {
+        resultInfo.SetActive(true);
+        resultInfo.transform.Find("bg").gameObject.SetActive(true);
+        lblResultInfo.gameObject.SetActive(true);
+        lblResultInfo.text = "快追!";
+        lblResultInfo.color = new Color32(150, 150, 150, 255);
+
     }
     public void UpdateRoundCount(int roundCount)
     {
@@ -189,10 +208,11 @@ public class UIBattleForm : UIFormBase
 
     }
 
-
-
-
-
+    protected override void OnClose()
+    {
+        base.OnClose();
+        Game.BattleManager.Clear();
+    }
 }
 
 public class UIPlayerInfo

@@ -32,4 +32,20 @@ public enum UIActionType
     /// 抽对面的卡
     /// </summary>
     DrawOppCard,
+    /// <summary>
+    /// 我逃离战斗
+    /// </summary>
+    MeEscapeBattle,
+    /// <summary>
+    /// 对面逃离战斗
+    /// </summary>
+    OppEscapeBattle,
+    /// <summary>
+    /// 赢的战斗
+    /// </summary>
+    WinBattle,
+    /// <summary>
+    /// 输了战斗
+    /// </summary>
+    LoseBattle,
 }

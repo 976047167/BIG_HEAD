@@ -24,17 +24,7 @@ public partial class UIAction
             TweenScale.Begin(playerInfoView.lblHP.gameObject, 0.15f, new Vector3(1.2f, 1.2f, 1.2f));
             yield return new WaitForSeconds(0.15f);
             playerInfoView.PlayerInfo.HP -= Damage;
-            if (playerInfoView.PlayerInfo.HP <= 0)
-            {
-                if (playerInfoView.BindPlayerData == Game.BattleManager.MyPlayer.Data)
-                {
-                    Game.BattleManager.BattleForm.LoseBattle();
-                }
-                else
-                {
-                    Game.BattleManager.BattleForm.WinBattle();
-                }
-            }
+            
             TweenScale.Begin(playerInfoView.lblHP.gameObject, 0.15f, Vector3.one);
             yield return new WaitForSeconds(0.15f);
             playerInfoView.lblHP.color = orginColor;
