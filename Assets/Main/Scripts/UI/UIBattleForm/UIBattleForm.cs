@@ -60,7 +60,7 @@ public class UIBattleForm : UIFormBase
 
 
     // Use this for initialization
-    void Start()
+    protected override void OnOpen()
     {
         myPlayerViews = transform.Find("BattleInfo/MeInfo").gameObject.AddComponent<PlayerInfoView>();
         myPlayerViews.InitData(Game.BattleManager.MyPlayer.Data);
@@ -80,9 +80,10 @@ public class UIBattleForm : UIFormBase
 
         StartCoroutine(CoroutineUseCard());
     }
-    // Update is called once per frame
-    void Update()
+
+    protected override void OnUpdate()
     {
+        base.OnUpdate();
         Game.BattleManager.UpdateScope();
         UpdateInfo();
     }
@@ -213,6 +214,8 @@ public class UIBattleForm : UIFormBase
         base.OnClose();
         Game.BattleManager.Clear();
     }
+
+    
 }
 
 public class UIPlayerInfo

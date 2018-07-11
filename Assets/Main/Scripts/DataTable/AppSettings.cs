@@ -530,7 +530,7 @@ namespace AppSettings
         public int Time { get; private set;}
         
         /// <summary>
-        /// Buff的效果触发时机
+        /// Buff的效果触发时机 1游戏开始,2回合开始,3回合结束,4受到伤害,5发起伤害，6发起伤害后,7使用卡牌,8抽卡
         /// </summary>
         public List<int> ActionTimes { get; private set;}
         

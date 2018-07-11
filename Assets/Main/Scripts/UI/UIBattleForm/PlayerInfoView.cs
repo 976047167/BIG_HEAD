@@ -101,13 +101,14 @@ public class PlayerInfoView : MonoBehaviour
                 buffIcon = Instantiate(goBuffIconTemplete, gridBuffGrid.transform);
                 buffIcon.name = buffData.BuffId.ToString();
                 buffIcons.Add(buffData.BuffId, buffIcon);
-                buffIcon.GetComponent<UITexture>().Load(buffData.Data.IconID);
-
+                buffIcon.transform.Find("icon").GetComponent<UITexture>().Load(buffData.Data.IconID);
+                UIUtility.SetBuffTips(buffIcon, buffData.BuffId);
             }
             else
                 buffIcon = buffIcons[buffData.BuffId];
             buffIcon.SetActive(true);
-            buffIcon.transform.Find("Label").GetComponent<UILabel>().text = buffData.Time.ToString();
+            buffIcon.transform.Find("Label").GetComponent<UILabel>().text = buffData.Layer > 1 ? buffData.Layer.ToString() : "";
+            buffIcon.transform.Find("border").GetComponent<UITexture>().fillAmount = buffData.Time == -1 ? 1f : ((float)buffData.Time / (float)buffData.Data.Time);
         }
         for (int i = 0; i < removeList.Count; i++)
         {
