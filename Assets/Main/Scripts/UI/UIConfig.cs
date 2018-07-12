@@ -21,7 +21,8 @@ public partial class UIModule
         {typeof(WND_Launch),new UIConfig("Internal/WND_Launch") },
         {typeof(WND_Login),new UIConfig("Internal/WND_Login") },
         {typeof(WND_Settings),new UIConfig("WND_Settings") },
-        {typeof(WND_BattleSettings),new UIConfig("WND_BattleSettings") },
+        {typeof(WND_BattleSetting),new UIConfig("Instance/WND_BattleSetting") },
+        {typeof(WND_InstanceSetting),new UIConfig("WND_InstanceSetting") },
         {typeof(WND_CreateCharacter),new UIConfig("WND_CreateCharacter") },
     };
 }

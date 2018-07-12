@@ -22,6 +22,8 @@ public class UIBattleForm : UIFormBase
     private UILabel lblResultInfo;
     [SerializeField]
     private UILabel lblRoundCount;
+    [SerializeField]
+    private GameObject btnBattleSetting;
 
 
     int monsterId = 0;
@@ -72,6 +74,7 @@ public class UIBattleForm : UIFormBase
         lblResultInfo = transform.Find("ResultInfo/result").GetComponent<UILabel>();
         MovingPanel = transform.Find("MovingPanel").GetComponent<UIPanel>();
         lblRoundCount = transform.Find("FlowPanel/split/lblRoundCount").GetComponent<UILabel>();
+        btnBattleSetting = transform.Find("FlowPanel/btnSetting").gameObject;
         UpdateInfo();
         monsterId = Game.BattleManager.MonsterId;
         Game.BattleManager.ReadyStart(this);

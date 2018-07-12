@@ -22,6 +22,6 @@ public class UIMenu : UIFormBase
     }
     void BattleSettingsClick(GameObject btn)
     {
-        Game.UI.OpenForm<WND_BattleSettings>();
+        Game.UI.OpenForm<WND_InstanceSetting>();
     }
 }

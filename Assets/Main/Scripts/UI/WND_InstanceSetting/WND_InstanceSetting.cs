@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using AppSettings;
 
-public class WND_BattleSettings : UIFormBase {
+public class WND_InstanceSetting : UIFormBase {
 
     // Use this for initialization
 
@@ -72,7 +72,7 @@ public class WND_BattleSettings : UIFormBase {
     }
     private void ExitClick(GameObject obj)
     {
-        Game.UI.CloseForm<WND_BattleSettings>();
+        Game.UI.CloseForm<WND_InstanceSetting>();
 
     }
     private void GiveUpClick(GameObject obj)
