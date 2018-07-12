@@ -129,3 +129,9 @@ int	string	string	string
 1001002	确定	確定	OK
 1001003	返回	返回	Return
 1001004	取消	取消	Cancel
+1002000	WND_Reward	WND_Reward	WND_Reward
+1002001	金条	金條	Gold
+1002002	元宝	元寶	YuanBao
+1002003	修为	修為	Exp
+1003000	WND_BattleForm	WND_BattleForm	WND_BattleForm
+1003001	回合 :	回合 :	Round :
