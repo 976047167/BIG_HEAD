@@ -4,3 +4,6 @@
 ui层级管理
 网络模块接入
 数据持久化保存
+
+
+git config core.ignorecase false
