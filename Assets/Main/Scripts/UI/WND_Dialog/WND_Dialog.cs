@@ -83,7 +83,7 @@ public class WND_Dialog : UIFormBase
 
 
         // printString = "你好5555555";
-        StartCoroutine(PrintStringByStep());
+        StartCoroutine("PrintStringByStep");
     }
     private void ClearGrid()
     {
