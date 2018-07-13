@@ -27,7 +27,7 @@ public partial class UIModule
     }
 
     Dictionary<int, UIFormBase> DicOpenedUIForm = new Dictionary<int, UIFormBase>();
-    static int baseDepth = 0;
+
     bool isLoadingRoot = false;
     List<int> waitLoadList = new List<int>();
     UIModelCameraHelper uiCameraHelper = null;
@@ -101,27 +101,18 @@ public partial class UIModule
             Debug.LogError("The UI prefab[" + config.Path + "] is not exist!");
             return;
         }
-        GameObject form = uiForm;
-        form.transform.SetParent(uiCamera);
-        form.transform.localPosition = Vector3.zero;
-        form.transform.localScale = Vector3.one;
-        form.transform.localEulerAngles = Vector3.zero;
-        form.SetActive(true);
-        UIPanel[] panels = form.transform.GetComponentsInChildren<UIPanel>(true);
-        List<UIPanel> sortedPanels = new List<UIPanel>(panels);
-        sortedPanels.Sort((p1, p2) => p1.depth.CompareTo(p2.depth));
-        for (int i = 0; i < sortedPanels.Count; i++)
-        {
-            sortedPanels[i].depth = baseDepth + i;
-        }
-        baseDepth += panels.Length;
-        UIFormBase script = form.GetComponent<UIFormBase>();
+        UIFormBase script = uiForm.GetComponent<UIFormBase>();
         if (script == null)
         {
             Debug.LogError("The UI need a script[" + typeof(UIFormBase).ToString() + "]!");
-            GameObject.Destroy(form);
+            GameObject.Destroy(uiForm);
             return;
         }
+        uiForm.transform.SetParent(uiCamera);
+        uiForm.transform.localPosition = Vector3.zero;
+        uiForm.transform.localScale = Vector3.one;
+        uiForm.transform.localEulerAngles = Vector3.zero;
+        uiForm.SetActive(true);
         DicOpenedUIForm[config.Id] = script;
         script.Init(userData[1]);
         Messenger.Broadcast<UIFormBase>(MessageID.UI_FORM_LOADED, script);
@@ -275,10 +266,10 @@ public enum UIFormsGroup : int
 {
     /// <summary>默认</summary>
     Default = 0,
-    /// <summary>提示</summary>
+    /// <summary>提示，可重复打开多个</summary>
     Toast = 1,
     /// <summary>
-    /// 对话框
+    /// 对话框，可重复打开多个
     /// </summary>
     Dialog = 2,
     /// <summary>

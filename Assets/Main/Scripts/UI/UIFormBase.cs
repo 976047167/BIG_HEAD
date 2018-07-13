@@ -6,12 +6,21 @@ using UnityEngine;
 /// </summary>
 public abstract class UIFormBase : MonoBehaviour
 {
-
+    static int baseDepth = 0;
     /// <summary>
     /// 这个方法不允许调用，uimodule专用
     /// </summary>
     public void Init(object userdata)
     {
+        UIPanel[] panels = transform.GetComponentsInChildren<UIPanel>(true);
+        List<UIPanel> sortedPanels = new List<UIPanel>(panels);
+        sortedPanels.Sort((p1, p2) => p1.depth.CompareTo(p2.depth));
+        for (int i = 0; i < sortedPanels.Count; i++)
+        {
+            sortedPanels[i].depth = baseDepth + i;
+        }
+        baseDepth += panels.Length;
+
         OnInit(userdata);
         OnOpen();
         OnShow();
