@@ -232,4 +232,30 @@ public partial class UIModule
             PrefabName = prefabName;
         }
     }
+    /// <summary>
+    /// UI窗口分组
+    /// </summary>
+    public enum UIFormsGroup
+    {
+        /// <summary>默认</summary>
+        Default = 0,
+        /// <summary></summary>
+        Toast = 1,
+        /// <summary>
+        /// 
+        /// </summary>
+        Dialog = 2,
+    }
+    /// <summary>
+    /// UI窗体显示类型
+    /// </summary>
+    public enum UIFormsShowMode
+    {
+        /// <summary>普通显示</summary>
+        Normal,
+        /// <summary>反向切换</summary>
+        ReverseChange,
+        /// <summary>隐藏其他界面</summary>
+        HideOther,
+    }
 }

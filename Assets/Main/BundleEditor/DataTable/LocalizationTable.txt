@@ -135,5 +135,3 @@ int	string	string	string
 1002003	修为	修為	Exp
 1003000	WND_BattleForm	WND_BattleForm	WND_BattleForm
 1003001	回合 :	回合 :	Round :
-1003002	逃跑	逃跑	Escape
-1003003	声音	聲音	Sound

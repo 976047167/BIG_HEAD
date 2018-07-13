@@ -67,6 +67,7 @@ namespace AppSettings
                         ShopTableSettings._instance,
                         TextureTableSettings._instance,
                         TradeTableSettings._instance,
+                        UIFormTableSettings._instance,
                     };
                 }
                 return _settingsList;
@@ -4499,6 +4500,229 @@ namespace AppSettings
             CostType = row.Get_int(row.Values[4], ""); 
             CostItemId = row.Get_int(row.Values[5], ""); 
             CostNum = row.Get_int(row.Values[6], ""); 
+        }
+
+        /// <summary>
+        /// Get PrimaryKey from a table row
+        /// </summary>
+        /// <param name="row"></param>
+        /// <returns></returns>
+        public static int ParsePrimaryKey(TableFileRow row)
+        {
+            var primaryKey = row.Get_int(row.Values[0], "");
+            return primaryKey;
+        }
+	}
+
+	/// <summary>
+	/// Auto Generate for Tab File: "UIFormTable.txt"
+    /// No use of generic and reflection, for better performance,  less IL code generating
+	/// </summary>>
+    public partial class UIFormTableSettings : IReloadableSettings
+    {
+        /// <summary>
+        /// How many reload function load?
+        /// </summary>>
+        public static int ReloadCount { get; private set; }
+
+		public static readonly string[] TabFilePaths = 
+        {
+            "UIFormTable.txt"
+        };
+        internal static UIFormTableSettings _instance = new UIFormTableSettings();
+        Dictionary<int, UIFormTableSetting> _dict = new Dictionary<int, UIFormTableSetting>();
+
+        /// <summary>
+        /// Trigger delegate when reload the Settings
+        /// </summary>>
+	    public static System.Action OnReload;
+
+        /// <summary>
+        /// Constructor, just reload(init)
+        /// When Unity Editor mode, will watch the file modification and auto reload
+        /// </summary>
+	    private UIFormTableSettings()
+	    {
+        }
+
+        /// <summary>
+        /// Get the singleton
+        /// </summary>
+        /// <returns></returns>
+	    public static UIFormTableSettings GetInstance()
+	    {
+            if (ReloadCount == 0)
+            {
+                _instance._ReloadAll(true);
+    #if UNITY_EDITOR
+                if (SettingModule.IsFileSystemMode)
+                {
+                    for (var j = 0; j < TabFilePaths.Length; j++)
+                    {
+                        var tabFilePath = TabFilePaths[j];
+                        SettingModule.WatchSetting(tabFilePath, (path) =>
+                        {
+                            if (path.Replace("\\", "/").EndsWith(path))
+                            {
+                                _instance.ReloadAll();
+                                Log.LogConsole_MultiThread("File Watcher! Reload success! -> " + path);
+                            }
+                        });
+                    }
+
+                }
+    #endif
+            }
+
+	        return _instance;
+	    }
+        
+        public int Count
+        {
+            get
+            {
+                return _dict.Count;
+            }
+        }
+
+        /// <summary>
+        /// Do reload the setting file: UIFormTable, no exception when duplicate primary key
+        /// </summary>
+        public void ReloadAll()
+        {
+            _ReloadAll(false);
+        }
+
+        /// <summary>
+        /// Do reload the setting class : UIFormTable, no exception when duplicate primary key, use custom string content
+        /// </summary>
+        public void ReloadAllWithString(string context)
+        {
+            _ReloadAll(false, context);
+        }
+
+        /// <summary>
+        /// Do reload the setting file: UIFormTable
+        /// </summary>
+	    void _ReloadAll(bool throwWhenDuplicatePrimaryKey, string customContent = null)
+        {
+            for (var j = 0; j < TabFilePaths.Length; j++)
+            {
+                var tabFilePath = TabFilePaths[j];
+                TableFile tableFile;
+                if (customContent == null)
+                    tableFile = SettingModule.Get(tabFilePath, false);
+                else
+                    tableFile = TableFile.LoadFromString(customContent);
+
+                using (tableFile)
+                {
+                    foreach (var row in tableFile)
+                    {
+                        var pk = UIFormTableSetting.ParsePrimaryKey(row);
+                        UIFormTableSetting setting;
+                        if (!_dict.TryGetValue(pk, out setting))
+                        {
+                            setting = new UIFormTableSetting(row);
+                            _dict[setting.Lv] = setting;
+                        }
+                        else 
+                        {
+                            if (throwWhenDuplicatePrimaryKey) throw new System.Exception(string.Format("DuplicateKey, Class: {0}, File: {1}, Key: {2}", this.GetType().Name, tabFilePath, pk));
+                            else setting.Reload(row);
+                        }
+                    }
+                }
+            }
+
+	        if (OnReload != null)
+	        {
+	            OnReload();
+	        }
+
+            ReloadCount++;
+            Log.Info("Reload settings: {0}, Row Count: {1}, Reload Count: {2}", GetType(), Count, ReloadCount);
+        }
+
+	    /// <summary>
+        /// foreachable enumerable: UIFormTable
+        /// </summary>
+        public static IEnumerable GetAll()
+        {
+            foreach (var row in GetInstance()._dict.Values)
+            {
+                yield return row;
+            }
+        }
+
+        /// <summary>
+        /// GetEnumerator for `MoveNext`: UIFormTable
+        /// </summary> 
+	    public static IEnumerator GetEnumerator()
+	    {
+	        return GetInstance()._dict.Values.GetEnumerator();
+	    }
+         
+	    /// <summary>
+        /// Get class by primary key: UIFormTable
+        /// </summary>
+        public static UIFormTableSetting Get(int primaryKey)
+        {
+            UIFormTableSetting setting;
+            if (GetInstance()._dict.TryGetValue(primaryKey, out setting)) return setting;
+            return null;
+        }
+
+        // ========= CustomExtraString begin ===========
+        
+        // ========= CustomExtraString end ===========
+    }
+
+	/// <summary>
+	/// Auto Generate for Tab File: "UIFormTable.txt"
+    /// Singleton class for less memory use
+	/// </summary>
+	public partial class UIFormTableSetting : TableRowFieldParser
+	{
+		
+        /// <summary>
+        /// #Level
+        /// </summary>
+        public int Lv { get; private set;}
+        
+        /// <summary>
+        /// 窗口名(程序类名)
+        /// </summary>
+        public string Name { get; private set;}
+        
+        /// <summary>
+        /// 路径
+        /// </summary>
+        public string Path { get; private set;}
+        
+        /// <summary>
+        /// UI窗口分组(0默认1提示2对话框)
+        /// </summary>
+        public int Group { get; private set;}
+        
+        /// <summary>
+        /// UI窗体显示类型(0普通1弹出2独占)
+        /// </summary>
+        public string ShowMode { get; private set;}
+        
+
+        internal UIFormTableSetting(TableFileRow row)
+        {
+            Reload(row);
+        }
+
+        internal void Reload(TableFileRow row)
+        { 
+            Lv = row.Get_int(row.Values[0], ""); 
+            Name = row.Get_string(row.Values[1], ""); 
+            Path = row.Get_string(row.Values[2], ""); 
+            Group = row.Get_int(row.Values[3], ""); 
+            ShowMode = row.Get_string(row.Values[4], ""); 
         }
 
         /// <summary>

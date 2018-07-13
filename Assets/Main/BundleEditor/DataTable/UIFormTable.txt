@@ -1,0 +1,4 @@
+Lv	Name	Path	Group	ShowMode
+int	string	string	int	
+1	WND_Launch	Internal/WND_Launch	0	0
+2	WND_Login	Internal/WND_Login	0	0
