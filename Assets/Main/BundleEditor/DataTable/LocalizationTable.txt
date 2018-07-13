@@ -133,5 +133,8 @@ int	string	string	string
 1002001	金条	金條	Gold
 1002002	元宝	元寶	YuanBao
 1002003	修为	修為	Exp
+1002004	结算奖励	結算獎勵	Reward
 1003000	WND_BattleForm	WND_BattleForm	WND_BattleForm
 1003001	回合 :	回合 :	Round :
+1003002	逃跑	逃跑	Escape
+1003003	声音	聲音	Sound

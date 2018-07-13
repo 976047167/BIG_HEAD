@@ -2,6 +2,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using AppSettings;
+using System.Reflection;
 
 public partial class UIModule
 {
@@ -24,20 +26,20 @@ public partial class UIModule
         }
     }
 
-    Dictionary<Type, UIFormBase> DicOpenedUIForm = new Dictionary<Type, UIFormBase>();
+    Dictionary<int, UIFormBase> DicOpenedUIForm = new Dictionary<int, UIFormBase>();
     static int baseDepth = 0;
     bool isLoadingRoot = false;
-    List<Type> waitLoadList = new List<Type>();
+    List<int> waitLoadList = new List<int>();
     UIModelCameraHelper uiCameraHelper = null;
-    void LoadUIRoot(Type formType)
+    void LoadUIRoot(int formId)
     {
         if (isLoadingRoot)
         {
-            waitLoadList.Add(formType);
+            waitLoadList.Add(formId);
             Debug.LogError("拥挤加载!");
             return;
         }
-        waitLoadList.Add(formType);
+        waitLoadList.Add(formId);
         isLoadingRoot = true;
         ResourceManager.LoadGameObject("UI/UI Root", (path, args, root) =>
         {
@@ -57,7 +59,7 @@ public partial class UIModule
             isLoadingRoot = false;
             for (int i = 0; i < waitLoadList.Count; i++)
             {
-                Type form = waitLoadList[i];
+                int form = waitLoadList[i];
                 OpenForm(form);
             }
         }, (path, args) => { Debug.LogError("没有找到uiRoot->" + path); });
@@ -65,35 +67,38 @@ public partial class UIModule
 
     public void OpenForm<T>(object userdata = null) where T : UIFormBase
     {
-        OpenForm(typeof(T), userdata);
+        OpenForm((int)Enum.Parse(typeof(FormId), typeof(T).Name), userdata);
     }
-    void OpenForm(Type formType, object userdata = null)
+    public void OpenForm(FormId formId, object userdata = null)
+    {
+        OpenForm((int)formId, userdata);
+    }
+    public void OpenForm(int formId, object userdata = null)
     {
         if (uiCamera == null)
         {
-            LoadUIRoot(formType);
+            LoadUIRoot(formId);
             return;
         }
-        if (DicOpenedUIForm.ContainsKey(formType) && DicOpenedUIForm[formType] != null)
+        if (DicOpenedUIForm.ContainsKey(formId) && DicOpenedUIForm[formId] != null)
         {
-            DicOpenedUIForm[formType].gameObject.SetActive(true);
+            DicOpenedUIForm[formId].Show();
             return;
         }
-        UIConfig config = DicUIConfig[formType];
+        UIFormTableSetting config = UIFormTableSettings.Get((int)formId);
         if (config == null)
         {
-            Debug.LogError("The UI[" + formType.ToString() + "] is not configed!");
+            Debug.LogError("The UI[" + formId.ToString() + "] is not configed!");
             return;
         }
-        ResourceManager.LoadGameObject("UI/" + config.PrefabName, LoadFormSuccess, LoadFormFailed, formType, userdata);
-
+        ResourceManager.LoadGameObject("UI/" + config.Path, LoadFormSuccess, LoadFormFailed, config, userdata);
     }
     void LoadFormSuccess(string path, object[] userData, GameObject uiForm)
     {
-        UIConfig config = DicUIConfig[(userData[0] as Type)];
+        UIFormTableSetting config = (userData[0] as UIFormTableSetting);
         if (uiForm == null)
         {
-            Debug.LogError("The UI prefab[" + config.PrefabName + "] is not exist!");
+            Debug.LogError("The UI prefab[" + config.Path + "] is not exist!");
             return;
         }
         GameObject form = uiForm;
@@ -110,50 +115,80 @@ public partial class UIModule
             sortedPanels[i].depth = baseDepth + i;
         }
         baseDepth += panels.Length;
-        UIFormBase script = form.GetComponent((userData[0] as Type)) as UIFormBase;
+        UIFormBase script = form.GetComponent<UIFormBase>();
         if (script == null)
         {
             Debug.LogError("The UI need a script[" + typeof(UIFormBase).ToString() + "]!");
             GameObject.Destroy(form);
             return;
         }
-        DicOpenedUIForm[(userData[0] as Type)] = script;
+        DicOpenedUIForm[config.Id] = script;
         script.Init(userData[1]);
         Messenger.Broadcast<UIFormBase>(MessageID.UI_FORM_LOADED, script);
     }
     void LoadFormFailed(string path, object[] userData)
     {
-        Debug.LogError("Open UIForm " + userData[0] + " Failed!");
+        Debug.LogError("Open UIForm " + (userData[0] as UIFormTableSetting).Path + " Failed!");
     }
     public T GetForm<T>() where T : UIFormBase
     {
-        if (DicOpenedUIForm.ContainsKey(typeof(T)) == false)
+        FormId formId = (FormId)Enum.Parse(typeof(FormId), typeof(T).Name);
+        return GetForm((int)formId) as T;
+    }
+    public UIFormBase GetForm(FormId formId)
+    {
+        return GetForm((int)formId);
+    }
+    public UIFormBase GetForm(int formId)
+    {
+        if (DicOpenedUIForm.ContainsKey(formId) == false)
         {
             return null;
         }
-        return DicOpenedUIForm[typeof(T)] as T;
+        return DicOpenedUIForm[formId];
     }
-
     public void CloseForm<T>() where T : UIFormBase
     {
-        CloseForm(typeof(T));
+        FormId formId = (FormId)Enum.Parse(typeof(FormId), typeof(T).Name);
+        CloseForm((int)formId);
     }
-    void CloseForm(Type formType)
+    public void CloseForm(FormId formId)
     {
-        if (DicOpenedUIForm.ContainsKey(formType) == false || DicOpenedUIForm[formType] == null)
+        CloseForm((int)formId);
+    }
+    public void CloseForm(int formId)
+    {
+        if (DicOpenedUIForm.ContainsKey(formId) == false || DicOpenedUIForm[formId] == null)
         {
             return;
         }
-        DicOpenedUIForm[formType].Close();
-        GameObject.Destroy(DicOpenedUIForm[formType].gameObject);
-        DicOpenedUIForm.Remove(formType);
+        DicOpenedUIForm[formId].Close();
+        GameObject.Destroy(DicOpenedUIForm[formId].gameObject);
+        DicOpenedUIForm.Remove(formId);
         Resources.UnloadUnusedAssets();
         GC.Collect();
     }
-
     public void CloaseAllForm(params Type[] exceptForms)
     {
-        List<Type> removeList = new List<Type>();
+        int[] formIds = new int[exceptForms.Length];
+        for (int i = 0; i < exceptForms.Length; i++)
+        {
+            formIds[i] = (int)Enum.Parse(typeof(FormId), exceptForms[i].Name);
+        }
+        CloaseAllForm(formIds);
+    }
+    public void CloaseAllForm(params FormId[] exceptForms)
+    {
+        int[] formIds = new int[exceptForms.Length];
+        for (int i = 0; i < exceptForms.Length; i++)
+        {
+            formIds[i] = (int)exceptForms[i];
+        }
+        CloaseAllForm(formIds);
+    }
+    public void CloaseAllForm(params int[] exceptForms)
+    {
+        List<int> removeList = new List<int>();
         foreach (var form in DicOpenedUIForm)
         {
             if (form.Value == null)
@@ -180,8 +215,7 @@ public partial class UIModule
             CloseForm(removeList[i]);
         }
     }
-
-    List<Type> m_RemoveList = new List<Type>();
+    List<int> m_RemoveList = new List<int>();
     List<UIFormBase> m_RormList = new List<UIFormBase>();
     public void UpdateForms()
     {
@@ -223,39 +257,44 @@ public partial class UIModule
         GameObject.Destroy(uiCameraHelper.gameObject);
         return false;
     }
-    class UIConfig
-    {
-        public string PrefabName;
+    //class UIConfig
+    //{
+    //    public string PrefabName;
 
-        public UIConfig(string prefabName)
-        {
-            PrefabName = prefabName;
-        }
-    }
+    //    public UIConfig(string prefabName)
+    //    {
+    //        PrefabName = prefabName;
+    //    }
+    //}
+
+}
+/// <summary>
+/// UI窗口分组
+/// </summary>
+public enum UIFormsGroup : int
+{
+    /// <summary>默认</summary>
+    Default = 0,
+    /// <summary>提示</summary>
+    Toast = 1,
     /// <summary>
-    /// UI窗口分组
+    /// 对话框
     /// </summary>
-    public enum UIFormsGroup
-    {
-        /// <summary>默认</summary>
-        Default = 0,
-        /// <summary></summary>
-        Toast = 1,
-        /// <summary>
-        /// 
-        /// </summary>
-        Dialog = 2,
-    }
+    Dialog = 2,
     /// <summary>
-    /// UI窗体显示类型
+    /// 顶层窗口
     /// </summary>
-    public enum UIFormsShowMode
-    {
-        /// <summary>普通显示</summary>
-        Normal,
-        /// <summary>反向切换</summary>
-        ReverseChange,
-        /// <summary>隐藏其他界面</summary>
-        HideOther,
-    }
+    Top = 3,
+}
+/// <summary>
+/// UI窗体显示类型
+/// </summary>
+public enum UIFormsShowMode : int
+{
+    /// <summary>普通显示</summary>
+    Normal,
+    /// <summary>反向切换</summary>
+    ReverseChange,
+    /// <summary>隐藏其他界面</summary>
+    HideOther,
 }

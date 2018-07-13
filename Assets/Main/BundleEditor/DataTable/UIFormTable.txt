@@ -1,4 +1,20 @@
-Lv	Name	Path	Group	ShowMode
+Id	Name	Path	Group	ShowMode
 int	string	string	int	
-1	WND_Launch	Internal/WND_Launch	0	0
-2	WND_Login	Internal/WND_Login	0	0
+1	WND_Launch	Internal/WND_Launch	0	2
+2	WND_Login	Internal/WND_Login	0	7
+3	UIBattleForm	Instance/WND_BattleForm	0	2
+4	UIMapInfo	WND_MapInfo	0	0
+5	WND_Dialog	WND_Dialog	0	1
+6	WND_Bag	WND_Bag	0	2
+7	WND_ShowCard	WND_ShowCard	1	1
+8	WND_Kaku	WND_Kaku	0	2
+9	UIMenu	WND_Menu	0	0
+10	WND_Reward	WND_Reward	0	1
+11	WND_MainTown	Lobby/WND_MainTown	0	0
+12	WND_ChoseDeck	WND_ChoseDeck	0	1
+13	WND_Loading	Internal/WND_Loading	0	2
+14	WND_Settings	WND_Settings	0	1
+15	WND_BattleSetting	Instance/WND_BattleSetting	0	1
+16	WND_InstanceSetting	WND_InstanceSetting	0	1
+17	WND_CreateCharacter	WND_CreateCharacter	0	2
+18	WND_MessageBox	Internal/WND_MessageBox	2	1

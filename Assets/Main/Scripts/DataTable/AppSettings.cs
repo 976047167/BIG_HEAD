@@ -4624,7 +4624,7 @@ namespace AppSettings
                         if (!_dict.TryGetValue(pk, out setting))
                         {
                             setting = new UIFormTableSetting(row);
-                            _dict[setting.Lv] = setting;
+                            _dict[setting.Id] = setting;
                         }
                         else 
                         {
@@ -4688,7 +4688,7 @@ namespace AppSettings
         /// <summary>
         /// #Level
         /// </summary>
-        public int Lv { get; private set;}
+        public int Id { get; private set;}
         
         /// <summary>
         /// 窗口名(程序类名)
@@ -4701,7 +4701,7 @@ namespace AppSettings
         public string Path { get; private set;}
         
         /// <summary>
-        /// UI窗口分组(0默认1提示2对话框)
+        /// UI窗口分组(0默认1提示2对话框3Top)
         /// </summary>
         public int Group { get; private set;}
         
@@ -4718,7 +4718,7 @@ namespace AppSettings
 
         internal void Reload(TableFileRow row)
         { 
-            Lv = row.Get_int(row.Values[0], ""); 
+            Id = row.Get_int(row.Values[0], ""); 
             Name = row.Get_string(row.Values[1], ""); 
             Path = row.Get_string(row.Values[2], ""); 
             Group = row.Get_int(row.Values[3], ""); 
