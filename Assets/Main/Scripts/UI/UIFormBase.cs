@@ -1,29 +1,25 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using AppSettings;
 /// <summary>
 /// 每个子类都要写注释说明，userdata是什么
 /// </summary>
 public abstract class UIFormBase : MonoBehaviour
 {
-    static int baseDepth = 0;
+    public UIFormTableSetting Table { get; private set; }
+    private UIFormState state;
+    public UIFormState State { get { return state; } }
     /// <summary>
     /// 这个方法不允许调用，uimodule专用
     /// </summary>
-    public void Init(object userdata)
+    public void Open(UIFormTableSetting table, object userdata)
     {
-        UIPanel[] panels = transform.GetComponentsInChildren<UIPanel>(true);
-        List<UIPanel> sortedPanels = new List<UIPanel>(panels);
-        sortedPanels.Sort((p1, p2) => p1.depth.CompareTo(p2.depth));
-        for (int i = 0; i < sortedPanels.Count; i++)
-        {
-            sortedPanels[i].depth = baseDepth + i;
-        }
-        baseDepth += panels.Length;
-
+        Table = table;
+        state = UIFormState.Hide;
         OnInit(userdata);
         OnOpen();
-        OnShow();
+        Show();
     }
     /// <summary>
     /// 这个方法不允许调用，uimodule专用
@@ -43,21 +39,45 @@ public abstract class UIFormBase : MonoBehaviour
 
     public void Show()
     {
-        if (gameObject.activeInHierarchy)
+        if (State == UIFormState.Show)
         {
             return;
         }
+        state = UIFormState.Show;
         gameObject.SetActive(true);
         OnShow();
     }
     public void Hide()
     {
-        if (!gameObject.activeInHierarchy)
+        if (State == UIFormState.Hide)
         {
             return;
         }
+        state = UIFormState.Hide;
         OnHide();
         gameObject.SetActive(false);
+    }
+    /// <summary>
+    /// 因UI规则进行隐藏
+    /// </summary>
+    public void Cover()
+    {
+        if (gameObject.activeSelf)
+        {
+            OnHide();
+        }
+        gameObject.SetActive(false);
+    }
+    /// <summary>
+    /// 因UI规则进行显示
+    /// </summary>
+    public void Resume()
+    {
+        if (gameObject.activeSelf == false && state == UIFormState.Show)
+        {
+            OnShow();
+        }
+        gameObject.SetActive(state == UIFormState.Show);
     }
     #region override
     /// <summary>

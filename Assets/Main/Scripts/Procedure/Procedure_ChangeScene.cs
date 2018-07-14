@@ -11,7 +11,7 @@ public class Procedure_ChangeScene : ProcedureBase
     public override void OnEnter(ProcedureBase last)
     {
         base.OnEnter(last);
-        Game.UI.CloaseAllForm(typeof(WND_Loading));
+        Game.UI.CloaseAllForm();
         Game.UI.OpenForm<WND_Loading>(sceneID);
     }
 

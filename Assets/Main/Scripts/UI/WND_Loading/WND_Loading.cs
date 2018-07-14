@@ -24,7 +24,7 @@ public class WND_Loading : UIFormBase
     protected override void OnOpen()
     {
         base.OnOpen();
-        Game.UI.CloaseAllForm(GetType());
+        Game.UI.CloaseAllForm(Table.Id);
         LoadScene(nextSceneID);
     }
 

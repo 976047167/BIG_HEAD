@@ -23,11 +23,13 @@ public class Game : MonoBehaviour
     }
     IEnumerator Init()
     {
+        uiModule = UIModule.Instance;
         //资源第一优先级初始化
         yield return ResourceManager.Init(Game.Instance.BundleEditorMode);
+        yield return uiModule.Init();
         dataMgr = new DataMgr();
         battleMgr = new BattleMgr();
-        uiModule = UIModule.Instance;
+        
         StartGame();
     }
     private void Update()

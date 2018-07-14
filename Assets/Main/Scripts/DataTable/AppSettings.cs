@@ -4708,7 +4708,7 @@ namespace AppSettings
         /// <summary>
         /// UI窗体显示类型(0普通1弹出2独占)
         /// </summary>
-        public string ShowMode { get; private set;}
+        public int ShowMode { get; private set;}
         
 
         internal UIFormTableSetting(TableFileRow row)
@@ -4722,7 +4722,7 @@ namespace AppSettings
             Name = row.Get_string(row.Values[1], ""); 
             Path = row.Get_string(row.Values[2], ""); 
             Group = row.Get_int(row.Values[3], ""); 
-            ShowMode = row.Get_string(row.Values[4], ""); 
+            ShowMode = row.Get_int(row.Values[4], ""); 
         }
 
         /// <summary>

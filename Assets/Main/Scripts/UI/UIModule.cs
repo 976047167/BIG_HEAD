@@ -26,21 +26,20 @@ public partial class UIModule
         }
     }
 
-    Dictionary<int, UIFormBase> DicOpenedUIForm = new Dictionary<int, UIFormBase>();
+    bool inited = false;
+    bool isRootLoaded = false;
 
-    bool isLoadingRoot = false;
-    List<int> waitLoadList = new List<int>();
     UIModelCameraHelper uiCameraHelper = null;
-    void LoadUIRoot(int formId)
+    void LoadUIRoot()
     {
-        if (isLoadingRoot)
+        if (uiCamera != null)
         {
-            waitLoadList.Add(formId);
-            Debug.LogError("拥挤加载!");
+            isRootLoaded = true;
+        }
+        if (isRootLoaded)
+        {
             return;
         }
-        waitLoadList.Add(formId);
-        isLoadingRoot = true;
         ResourceManager.LoadGameObject("UI/UI Root", (path, args, root) =>
         {
             if (uiCamera == null)
@@ -56,12 +55,7 @@ public partial class UIModule
             }
             else if (root.transform != uiRoot)
                 GameObject.Destroy(root);
-            isLoadingRoot = false;
-            for (int i = 0; i < waitLoadList.Count; i++)
-            {
-                int form = waitLoadList[i];
-                OpenForm(form);
-            }
+            isRootLoaded = true;
         }, (path, args) => { Debug.LogError("没有找到uiRoot->" + path); });
     }
 
@@ -77,21 +71,24 @@ public partial class UIModule
     {
         if (uiCamera == null)
         {
-            LoadUIRoot(formId);
+            Debug.LogError("请先初始化UI模块!");
             return;
         }
-        if (DicOpenedUIForm.ContainsKey(formId) && DicOpenedUIForm[formId] != null)
-        {
-            DicOpenedUIForm[formId].Show();
-            return;
-        }
+
         UIFormTableSetting config = UIFormTableSettings.Get((int)formId);
         if (config == null)
         {
             Debug.LogError("The UI[" + formId.ToString() + "] is not configed!");
             return;
         }
-        ResourceManager.LoadGameObject("UI/" + config.Path, LoadFormSuccess, LoadFormFailed, config, userdata);
+        UIFormBase form = GetForm(formId);
+        if (form == null)
+        {
+            ResourceManager.LoadGameObject("UI/" + config.Path, LoadFormSuccess, LoadFormFailed, config, userdata);
+            return;
+        }
+        ProcessForm(form, config, userdata, true);
+
     }
     void LoadFormSuccess(string path, object[] userData, GameObject uiForm)
     {
@@ -108,14 +105,129 @@ public partial class UIModule
             GameObject.Destroy(uiForm);
             return;
         }
-        uiForm.transform.SetParent(uiCamera);
-        uiForm.transform.localPosition = Vector3.zero;
-        uiForm.transform.localScale = Vector3.one;
-        uiForm.transform.localEulerAngles = Vector3.zero;
-        uiForm.SetActive(true);
-        DicOpenedUIForm[config.Id] = script;
-        script.Init(userData[1]);
+        ProcessForm(script, config, userData[1], false);
         Messenger.Broadcast<UIFormBase>(MessageID.UI_FORM_LOADED, script);
+    }
+
+    Dictionary<UIFormsGroup, int> baseDepths = new Dictionary<UIFormsGroup, int>();
+    Dictionary<UIFormsShowMode, List<UIFormBase>> dicForms = new Dictionary<UIFormsShowMode, List<UIFormBase>>();
+    Dictionary<UIFormsShowMode, GameObject> dicFormRoots = new Dictionary<UIFormsShowMode, GameObject>();
+    public IEnumerator Init()
+    {
+        if (inited)
+        {
+            yield return null;
+        }
+        LoadUIRoot();
+        while (isRootLoaded == false)
+        {
+            yield return null;
+        }
+        string[] showModes = Enum.GetNames(typeof(UIFormsShowMode));
+        for (int i = 0; i < showModes.Length; i++)
+        {
+            UIFormsShowMode mode = (UIFormsShowMode)Enum.Parse(typeof(UIFormsShowMode), showModes[i]);
+            if (!dicForms.ContainsKey(mode))
+            {
+                dicForms[mode] = new List<UIFormBase>();
+                GameObject modeRoot = new GameObject(mode.ToString());
+                modeRoot.transform.SetParent(uiCamera);
+                modeRoot.transform.localPosition = Vector3.zero;
+                modeRoot.transform.localScale = Vector3.one;
+                modeRoot.transform.localEulerAngles = Vector3.zero;
+                dicFormRoots.Add(mode, modeRoot);
+            }
+        }
+        inited = true;
+    }
+    void ProcessForm(UIFormBase form, UIFormTableSetting config, object userdata, bool isOld)
+    {
+        //设置层级
+        UIPanel[] panels = form.transform.GetComponentsInChildren<UIPanel>(true);
+        List<UIPanel> sortedPanels = new List<UIPanel>(panels);
+        sortedPanels.Sort((p1, p2) => p1.depth.CompareTo(p2.depth));
+        UIFormsGroup group = (UIFormsGroup)config.Group;
+        for (int i = 0; i < sortedPanels.Count; i++)
+        {
+            if (!baseDepths.ContainsKey(group))
+            {
+                baseDepths[group] = config.Group * 1000 * 1000;
+            }
+            sortedPanels[i].depth = baseDepths[group] + i;
+        }
+        baseDepths[group] += panels.Length;
+        //设置显示逻辑
+        UIFormsShowMode mode = (UIFormsShowMode)config.ShowMode;
+
+        form.transform.SetParent(dicFormRoots[mode].transform);
+        form.transform.localPosition = Vector3.zero;
+        form.transform.localScale = Vector3.one;
+        form.transform.localEulerAngles = Vector3.zero;
+        List<UIFormBase> formList = null;
+        switch (mode)
+        {
+            case UIFormsShowMode.Pop:
+                formList = dicForms[mode];
+                if (formList.Count > 0 && formList[formList.Count - 1] != null)
+                {
+                    formList[formList.Count - 1].Cover();
+                }
+                form.Open(config, userdata);
+                formList.Add(form);
+                if (dicForms[UIFormsShowMode.Single].Count > 0)
+                {
+                    form.Cover();
+                }
+                break;
+            case UIFormsShowMode.HideOther:
+                formList = dicForms[mode];
+                for (int i = 0; i < dicForms[UIFormsShowMode.HideOther].Count; i++)
+                {
+                    dicForms[UIFormsShowMode.HideOther][i].Cover();
+                }
+                for (int i = 0; i < dicForms[UIFormsShowMode.Normal].Count; i++)
+                {
+                    dicForms[UIFormsShowMode.Normal][i].Cover();
+                }
+                form.Open(config, userdata);
+                formList.Add(form);
+                if (dicForms[UIFormsShowMode.Single].Count > 0)
+                {
+                    form.Cover();
+                }
+                break;
+            case UIFormsShowMode.Single:
+                formList = dicForms[mode];
+                for (int i = 0; i < dicForms[UIFormsShowMode.HideOther].Count; i++)
+                {
+                    dicForms[UIFormsShowMode.HideOther][i].Cover();
+                }
+                for (int i = 0; i < dicForms[UIFormsShowMode.Normal].Count; i++)
+                {
+                    dicForms[UIFormsShowMode.Normal][i].Cover();
+                }
+                for (int i = 0; i < dicForms[UIFormsShowMode.Pop].Count; i++)
+                {
+                    dicForms[UIFormsShowMode.Pop][i].Cover();
+                }
+                form.Open(config, userdata);
+                formList.Add(form);
+                break;
+            case UIFormsShowMode.Normal:
+            default:
+                formList = dicForms[UIFormsShowMode.Normal];
+                form.Open(config, userdata);
+                formList.Add(form);
+                if (dicForms[UIFormsShowMode.HideOther].Count > 0)
+                {
+                    form.Cover();
+                }
+                if (dicForms[UIFormsShowMode.Single].Count > 0)
+                {
+                    form.Cover();
+                }
+                break;
+        }
     }
     void LoadFormFailed(string path, object[] userData)
     {
@@ -132,11 +244,59 @@ public partial class UIModule
     }
     public UIFormBase GetForm(int formId)
     {
-        if (DicOpenedUIForm.ContainsKey(formId) == false)
+        UIFormTableSetting config = UIFormTableSettings.Get((int)formId);
+        if (config == null)
+        {
+            Debug.LogError("The UI[" + formId.ToString() + "] is not configed!");
+            return null;
+        }
+        //可以重复打开多个
+        if ((UIFormsGroup)config.Group == UIFormsGroup.Toast || (UIFormsGroup)config.Group == UIFormsGroup.Dialog)
         {
             return null;
         }
-        return DicOpenedUIForm[formId];
+        UIFormBase form = null;
+        switch ((UIFormsShowMode)config.ShowMode)
+        {
+            case UIFormsShowMode.Pop:
+                foreach (var item in dicForms[UIFormsShowMode.Pop])
+                {
+                    if (item != null && item.Table.Id == config.Id)
+                    {
+                        form = item;
+                    }
+                }
+                break;
+            case UIFormsShowMode.HideOther:
+                foreach (var item in dicForms[UIFormsShowMode.HideOther])
+                {
+                    if (item != null && item.Table.Id == config.Id)
+                    {
+                        form = item;
+                    }
+                }
+                break;
+            case UIFormsShowMode.Single:
+                foreach (var item in dicForms[UIFormsShowMode.Single])
+                {
+                    if (item != null && item.Table.Id == config.Id)
+                    {
+                        form = item;
+                    }
+                }
+                break;
+            case UIFormsShowMode.Normal:
+            default:
+                foreach (var item in dicForms[UIFormsShowMode.Normal])
+                {
+                    if (item != null && item.Table.Id == config.Id)
+                    {
+                        form = item;
+                    }
+                }
+                break;
+        }
+        return form;
     }
     public void CloseForm<T>() where T : UIFormBase
     {
@@ -149,17 +309,231 @@ public partial class UIModule
     }
     public void CloseForm(int formId)
     {
-        if (DicOpenedUIForm.ContainsKey(formId) == false || DicOpenedUIForm[formId] == null)
+        UIFormBase form = FindForm(formId);
+        CloseForm(form);
+    }
+    public void CloseForm(UIFormBase form)
+    {
+        if (form == null)
         {
             return;
         }
-        DicOpenedUIForm[formId].Close();
-        GameObject.Destroy(DicOpenedUIForm[formId].gameObject);
-        DicOpenedUIForm.Remove(formId);
-        Resources.UnloadUnusedAssets();
-        GC.Collect();
+        UIFormTableSetting config = form.Table;
+        //设置显示逻辑
+        UIFormsShowMode mode = (UIFormsShowMode)config.ShowMode;
+        if (!dicForms.ContainsKey(mode))
+        {
+            dicForms[mode] = new List<UIFormBase>();
+            GameObject modeRoot = new GameObject(mode.ToString());
+            modeRoot.transform.SetParent(uiCamera);
+            modeRoot.transform.localPosition = Vector3.zero;
+            modeRoot.transform.localScale = Vector3.one;
+            modeRoot.transform.localEulerAngles = Vector3.zero;
+            dicFormRoots.Add(mode, modeRoot);
+        }
+        List<UIFormBase> formList = null;
+        UIFormBase nextForm = null;
+        int index = 1;
+        switch (mode)
+        {
+            case UIFormsShowMode.Pop:
+                formList = dicForms[mode];
+                //关闭的窗口并不是当前显示的窗口
+                if (form.State == UIFormState.Hide || form.gameObject.activeSelf == false)
+                {
+                    break;
+                }
+                //寻找下个可以显示的窗口
+                while (nextForm == null && formList.Count > index)
+                {
+                    if (formList[formList.Count - 1 - index] != null && formList[formList.Count - 1 - index].State == UIFormState.Show)
+                    {
+                        nextForm = formList[formList.Count - 1 - index];
+                    }
+                    else
+                    {
+                        index++;
+                    }
+                }
+                if (nextForm != null)
+                {
+                    nextForm.Resume();
+                }
+                break;
+            case UIFormsShowMode.HideOther:
+                formList = dicForms[mode];
+                //关闭的窗口并不是当前显示的窗口
+                if (form.State == UIFormState.Hide || form.gameObject.activeSelf == false)
+                {
+                    break;
+                }
+                //寻找下个可以显示的窗口
+                while (nextForm == null && formList.Count > index)
+                {
+                    if (formList[formList.Count - 1 - index] != null && formList[formList.Count - 1 - index].State == UIFormState.Show)
+                    {
+                        nextForm = formList[formList.Count - 1 - index];
+                    }
+                    else
+                    {
+                        index++;
+                    }
+                }
+                if (nextForm == null)
+                {
+                    for (int i = 0; i < dicForms[UIFormsShowMode.Normal].Count; i++)
+                    {
+                        dicForms[UIFormsShowMode.Normal][i].Resume();
+                    }
+                }
+                if (nextForm != null)
+                {
+                    nextForm.Resume();
+                }
+                break;
+            case UIFormsShowMode.Single:
+                formList = dicForms[mode];
+                //关闭的窗口并不是当前显示的窗口
+                if (form.State == UIFormState.Hide || form.gameObject.activeSelf == false)
+                {
+                    break;
+                }
+                while (nextForm == null && formList.Count > index)
+                {
+                    if (formList[formList.Count - 1 - index] != null && formList[formList.Count - 1 - index].State == UIFormState.Show)
+                    {
+                        nextForm = formList[formList.Count - 1 - index];
+                    }
+                    else
+                    {
+                        index++;
+                    }
+                }
+                //非独占，都显示弹窗
+                if (nextForm == null)
+                {
+                    if (dicForms[UIFormsShowMode.Pop].Count > 0)
+                    {
+                        dicForms[UIFormsShowMode.Pop][dicForms[UIFormsShowMode.Pop].Count - 1].Resume();
+                    }
+                }
+                //寻找模式窗口
+                while (nextForm == null && dicForms[UIFormsShowMode.HideOther].Count > index)
+                {
+                    UIFormBase formBase = dicForms[UIFormsShowMode.HideOther][formList.Count - 1 - index];
+                    if (formBase != null && formBase.State == UIFormState.Show)
+                    {
+                        nextForm = formBase;
+                    }
+                    else
+                    {
+                        index++;
+                    }
+                }
+                //没有模式窗口，显示普通窗口
+                if (nextForm == null)
+                {
+                    for (int i = 0; i < dicForms[UIFormsShowMode.Normal].Count; i++)
+                    {
+                        dicForms[UIFormsShowMode.Normal][i].Resume();
+                    }
+                }
+                if (nextForm != null)
+                {
+                    nextForm.Resume();
+                }
+                break;
+            case UIFormsShowMode.Normal:
+            default:
+                formList = dicForms[UIFormsShowMode.Normal];
+                //关闭的窗口并不是当前显示的窗口
+                if (form.State == UIFormState.Hide || form.gameObject.activeSelf == false)
+                {
+                    break;
+                }
+                while (nextForm == null && formList.Count > index)
+                {
+                    if (formList[formList.Count - 1 - index] != null && formList[formList.Count - 1 - index].State == UIFormState.Show)
+                    {
+                        nextForm = formList[formList.Count - 1 - index];
+                    }
+                    else
+                    {
+                        index++;
+                    }
+                }
+                if (nextForm != null)
+                {
+                    nextForm.Resume();
+                }
+                break;
+        }
+
+        //寻找剩下的有没有相同的，有就不销毁
+        int count = 0;
+        index = 0;
+        for (int i = 0; i < formList.Count; i++)
+        {
+            if (formList[i] == form)
+            {
+                count++;
+                index = i;
+            }
+        }
+        formList.RemoveAt(index);
+        if (count > 1)
+        {
+            //Debug.LogError(form.Table.Id + ":" + form.Table.Name + "被重复打开了!");
+            form.Cover();
+        }
+        else
+        {
+            form.Close();
+            GameObject.Destroy(form.gameObject);
+            Resources.UnloadUnusedAssets();
+            GC.Collect();
+        }
     }
-    public void CloaseAllForm(params Type[] exceptForms)
+    /// <summary>
+    /// 获取最新的一个打开的这个ID的窗口
+    /// </summary>
+    UIFormBase FindForm(int formId)
+    {
+        UIFormTableSetting config = UIFormTableSettings.Get((int)formId);
+        if (config == null)
+        {
+            Debug.LogError("The UI[" + formId.ToString() + "] is not configed!");
+            return null;
+        }
+        UIFormBase form = null;
+        List<UIFormBase> list = null;
+        switch ((UIFormsShowMode)config.ShowMode)
+        {
+            case UIFormsShowMode.Pop:
+                list = dicForms[UIFormsShowMode.Pop];
+                break;
+            case UIFormsShowMode.HideOther:
+                list = dicForms[UIFormsShowMode.HideOther];
+                break;
+            case UIFormsShowMode.Single:
+                list = dicForms[UIFormsShowMode.Single];
+                break;
+            case UIFormsShowMode.Normal:
+            default:
+                list = dicForms[UIFormsShowMode.Normal];
+                break;
+        }
+        for (int i = list.Count - 1; i >= 0; i--)
+        {
+            if (list[i] != null && list[i].Table.Id == config.Id)
+            {
+                form = list[i];
+                break;
+            }
+        }
+        return form;
+    }
+    public void CloaseAllForm(Type[] exceptForms)
     {
         int[] formIds = new int[exceptForms.Length];
         for (int i = 0; i < exceptForms.Length; i++)
@@ -168,7 +542,7 @@ public partial class UIModule
         }
         CloaseAllForm(formIds);
     }
-    public void CloaseAllForm(params FormId[] exceptForms)
+    public void CloaseAllForm(FormId[] exceptForms)
     {
         int[] formIds = new int[exceptForms.Length];
         for (int i = 0; i < exceptForms.Length; i++)
@@ -179,56 +553,62 @@ public partial class UIModule
     }
     public void CloaseAllForm(params int[] exceptForms)
     {
-        List<int> removeList = new List<int>();
-        foreach (var form in DicOpenedUIForm)
+        foreach (var formList in dicForms)
         {
-            if (form.Value == null)
+            List<UIFormBase> removeList = new List<UIFormBase>();
+            foreach (var form in formList.Value)
             {
-                removeList.Add(form.Key);
-                continue;
-            }
-            bool except = false;
-            for (int i = 0; i < exceptForms.Length; i++)
-            {
-                if (form.Key == exceptForms[i])
+                if (form == null)
                 {
-                    except = true;
-                    break;
+                    removeList.Add(form);
+                    continue;
+                }
+                bool except = false;
+                for (int i = 0; i < exceptForms.Length; i++)
+                {
+                    if (form.Table.Id == exceptForms[i])
+                    {
+                        except = true;
+                        break;
+                    }
+                }
+                if (except == false)
+                {
+                    removeList.Add(form);
                 }
             }
-            if (except == false)
+            for (int i = 0; i < removeList.Count; i++)
             {
-                removeList.Add(form.Key);
+                CloseForm(removeList[i]);
             }
         }
-        for (int i = 0; i < removeList.Count; i++)
-        {
-            CloseForm(removeList[i]);
-        }
+
     }
-    List<int> m_RemoveList = new List<int>();
-    List<UIFormBase> m_RormList = new List<UIFormBase>();
+
     public void UpdateForms()
     {
-        foreach (var form in DicOpenedUIForm)
+        foreach (var formList in dicForms)
         {
-            if (form.Value == null)
+            List<int> removeList = new List<int>();
+            for (int i = 0; i < formList.Value.Count; i++)
             {
-                m_RemoveList.Add(form.Key);
-                continue;
+                UIFormBase form = formList.Value[i];
+                if (form == null)
+                {
+                    removeList.Add(i);
+                    continue;
+                }
+                if (form.State == UIFormState.Show && form.gameObject.activeInHierarchy)
+                {
+                    form.FormUpdate();
+                }
+
             }
-            m_RormList.Add(form.Value);
+            for (int i = 0; i < removeList.Count; i++)
+            {
+                formList.Value.RemoveAt(removeList[i]);
+            }
         }
-        for (int i = 0; i < m_RormList.Count; i++)
-        {
-            m_RormList[i].FormUpdate();
-        }
-        for (int i = 0; i < m_RemoveList.Count; i++)
-        {
-            CloseForm(m_RemoveList[i]);
-        }
-        m_RemoveList.Clear();
-        m_RormList.Clear();
     }
 
 
@@ -284,8 +664,18 @@ public enum UIFormsShowMode : int
 {
     /// <summary>普通显示</summary>
     Normal,
-    /// <summary>反向切换</summary>
-    ReverseChange,
-    /// <summary>隐藏其他界面</summary>
+    /// <summary>按照堆栈规则弹出，不可以隐藏</summary>
+    Pop,
+    /// <summary>隐藏其他HideOther和普通界面</summary>
     HideOther,
+    /// <summary>
+    /// 唯一存在的窗口
+    /// </summary>
+    Single,
+}
+
+public enum UIFormState
+{
+    Hide = 0,
+    Show = 1,
 }

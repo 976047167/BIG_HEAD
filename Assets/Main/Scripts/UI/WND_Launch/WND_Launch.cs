@@ -33,6 +33,7 @@ public class WND_Launch : UIFormBase
     }
     IEnumerator InitMgr()
     {
+        
         yield return ResourceManager.Preload();
         I18N.SetLanguage(Game.Instance.language);
         yield return null;

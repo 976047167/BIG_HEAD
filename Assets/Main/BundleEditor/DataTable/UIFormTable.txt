@@ -1,7 +1,7 @@
 Id	Name	Path	Group	ShowMode
-int	string	string	int	
+int	string	string	int	int
 1	WND_Launch	Internal/WND_Launch	0	2
-2	WND_Login	Internal/WND_Login	0	7
+2	WND_Login	Internal/WND_Login	0	2
 3	UIBattleForm	Instance/WND_BattleForm	0	2
 4	UIMapInfo	WND_MapInfo	0	0
 5	WND_Dialog	WND_Dialog	0	1
