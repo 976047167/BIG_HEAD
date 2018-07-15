@@ -116,7 +116,7 @@ public class MapCardBase
         return mapCard;
     }
 
-    static void LoadAssetSuccessess(string path, object[] args, GameObject go)
+    static void LoadAssetSuccessess(string path, object[] args, GameObject go )
     {
         MapCardBase mapCard = args[0] as MapCardBase;
         go.AddComponent<MapCardHelper>().MapCardData = mapCard;

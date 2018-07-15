@@ -31,7 +31,7 @@ public class ResourceManagerHelperEditor : Editor
                 GUI.color = Color.blue;
             }
 
-            GUILayout.Label(item.Value.AssetPath.Replace(ResourceManager.BUNDLE_SUFFIX, "") + "  [" + item.Value.LoadState.ToString() + "]");
+            GUILayout.Label(item.Value.AssetPath.Replace(ResourceManager.BUNDLE_SUFFIX, "") + "  [" + item.Value.LoadState.ToString() + "](" + item.Value.RefrenceCount + ")");
             GUI.color = Color.white;
             GUILayout.EndHorizontal();
         }

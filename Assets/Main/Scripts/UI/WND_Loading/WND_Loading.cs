@@ -13,6 +13,7 @@ public class WND_Loading : UIFormBase
     protected float progress = 0f;
     protected SceneTableSetting sceneTable = null;
     protected bool isLoadSceneSuccess = false;
+    static OnAssetDestory lastSceneDestory = null;
     protected override void OnInit(object userdata)
     {
         base.OnInit(userdata);
@@ -33,6 +34,7 @@ public class WND_Loading : UIFormBase
         base.OnUpdate();
         if (progress >= 100 && isLoadSceneSuccess)
         {
+            ClearMemery();
             if (sceneTable.Procedure != "NULL")
             {
                 ProcedureManager.ChangeProcedure(sceneTable.Procedure);
@@ -63,13 +65,24 @@ public class WND_Loading : UIFormBase
         ResourceManager.LoadScene(setting.Path, LoadSceneSuccess, LoadSceneFailed, false);
     }
 
-    protected void LoadSceneSuccess(string path, object[] args)
+    protected void LoadSceneSuccess(string path, object[] args, OnAssetDestory onAssetDestory)
     {
+        if (lastSceneDestory != null)
+        {
+            lastSceneDestory();
+        }
         isLoadSceneSuccess = true;
+        lastSceneDestory = onAssetDestory;
+
     }
     protected void LoadSceneFailed(string path, object[] args)
     {
         Debug.LogError("要加载的场景不存在->" + path);
+    }
+
+    protected void ClearMemery()
+    {
+        ResourceManager.ReleaseBundle();
     }
 
 }

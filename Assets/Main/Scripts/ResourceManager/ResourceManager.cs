@@ -37,7 +37,7 @@ public class ResourceManager
                 yield return null;
             }
         }
-        
+
     }
     public static IEnumerator Preload()
     {
@@ -92,9 +92,10 @@ public class ResourceManager
             {
                 string tableName = paths[j].Split('.')[0];
                 LoadDataTable(tableName,
-                    (str, userData, data) =>
+                    (str, userData, data, onDestory) =>
                     {
                         TableCache.Add(userData[0] as string, data);
+                        onDestory();
                         if (TableCount == TableCache.Count)
                             TablePreloaded = true;
                     },
@@ -111,7 +112,7 @@ public class ResourceManager
     /// <param name="callback">加载成功的回调，成功了拿到的是Prefab</param>
     /// <param name="failure">失败的通知</param>
     /// <param name="userData">用户自定义数据数组</param>
-    static void Load<T>(string path, AssetType assetType, Action<string, object[], T> callback, Action<string, object[]> failure, params object[] userData) where T : Object
+    static void Load<T>(string path, AssetType assetType, Action<string, object[], T, OnAssetDestory> callback, Action<string, object[]> failure, params object[] userData) where T : Object
     {
         AssetLoader assetLoader = AssetLoader.Get(path, AssetType.UnityAsset);
         if (assetType == AssetType.UnityAsset)
@@ -125,34 +126,24 @@ public class ResourceManager
         helper.StartCoroutine(assetLoader.Load());
     }
 
-    public static void LoadTexture(string path, Action<string, object[], Texture2D> callback, Action<string, object[]> failure, params object[] userData)
+    public static void LoadTexture(string path, Action<string, object[], Texture2D, OnAssetDestory> callback, Action<string, object[]> failure, params object[] userData)
     {
         Load<Texture2D>("UITexture/" + path + (EditorMode ? ".png" : BUNDLE_SUFFIX), AssetType.UnityAsset, callback, failure, userData);
     }
     public static void LoadGameObject(string path, Action<string, object[], GameObject> callback, Action<string, object[]> failure, params object[] userData)
     {
-        Load<GameObject>("Prefabs/" + path + (EditorMode ? ".prefab" : BUNDLE_SUFFIX), AssetType.UnityAsset, (str, args, go) => callback(str, args, GameObject.Instantiate(go)), failure, userData);
+        Load<GameObject>("Prefabs/" + path + (EditorMode ? ".prefab" : BUNDLE_SUFFIX), AssetType.UnityAsset, (p, data, go, onDestory) => callback(p, data, go), failure, userData);
     }
-    public static void LoadDataTable(string path, Action<string, object[], string> callback, Action<string, object[]> failure, params object[] userData)
+    public static void LoadDataTable(string path, Action<string, object[], string, OnAssetDestory> callback, Action<string, object[]> failure, params object[] userData)
     {
         path = "DataTable/" + path + (EditorMode ? ".txt" : BUNDLE_SUFFIX);
-        Load<TextAsset>(path, AssetType.UnityAsset, (str, userdata, ta) => { callback(str, userData, ta.text); }, failure, userData);
-        //AssetLoader assetLoader;
-        //if (dicAssetLoader.ContainsKey(path))
-        //    assetLoader = dicAssetLoader[path];
-        //else
-        //{
-        //    assetLoader = new AssetLoader(path, AssetType.Byte);
-        //    dicAssetLoader.Add(path, assetLoader);
-        //}
-        //assetLoader.AddLoadRequest(new LoadRequestBytes(callback, failure, userData));
-        //helper.StartCoroutine(assetLoader.Load());
+        Load<TextAsset>(path, AssetType.UnityAsset, (str, userdata, ta, destory) => { callback(str, userData, ta.text, destory); }, failure, userData);
     }
 
     /// <summary>
     /// 场景需要专门去处理，暂不管
     /// </summary>
-    public static void LoadScene(string path, Action<string, object[]> callback, Action<string, object[]> failure, params object[] userData)
+    public static void LoadScene(string path, Action<string, object[], OnAssetDestory> callback, Action<string, object[]> failure, params object[] userData)
     {
         path = "Scenes/" + path + (EditorMode ? "" : BUNDLE_SUFFIX);
         if (EditorMode)
@@ -162,7 +153,7 @@ public class ResourceManager
                 SceneManager.LoadScene(System.IO.Path.Combine(Application.dataPath, "Main/BundleEditor/" + path), LoadSceneMode.Additive);
             else
                 SceneManager.LoadScene(System.IO.Path.Combine("", "Main/BundleEditor/" + path), LoadSceneMode.Single);
-            callback(path, userData);
+            callback(path, userData, () => { });
             return;
         }
         AssetLoader assetLoader = AssetLoader.Get(path, AssetType.Scene);
@@ -172,13 +163,13 @@ public class ResourceManager
     public static void LoadBundleManifest()
     {
         Load<AssetBundleManifest>(GetPlatformName(), AssetType.UnityAsset,
-            (path, userData, bundleManifest) =>
+            (path, userData, bundleManifest, destory) =>
             {
                 BundleManifest = bundleManifest;
             },
             (path, userdata) =>
             {
-
+                Debug.LogError("find no AssetBundleManifest!");
             }, null);
     }
     public static string GetPlatformName()
@@ -221,6 +212,21 @@ public class ResourceManager
                 return "";
         }
     }
+    public static void ReleaseBundle()
+    {
+        List<AssetLoader> removeList = new List<AssetLoader>();
+        foreach (var item in AssetLoader.DicAssetLoader)
+        {
+            if (item.Value.CanDestory())
+            {
+                removeList.Add(item.Value);
+            }
+        }
+        for (int i = 0; i < removeList.Count; i++)
+        {
+            removeList[i].Destory();
+        }
+    }
 }
 public interface ILoadRequest
 {
@@ -229,10 +235,10 @@ public interface ILoadRequest
 }
 public class LoadRequestBytes : ILoadRequest
 {
-    protected Action<string, object[], byte[]> callback;
+    protected Action<string, object[], byte[], OnAssetDestory> callback;
     protected Action<string, object[]> failure;
     protected object[] userData;
-    public LoadRequestBytes(Action<string, object[], byte[]> callback, Action<string, object[]> failure, params object[] userData)
+    public LoadRequestBytes(Action<string, object[], byte[], OnAssetDestory> callback, Action<string, object[]> failure, params object[] userData)
     {
         this.userData = userData;
         this.callback = callback;
@@ -243,7 +249,7 @@ public class LoadRequestBytes : ILoadRequest
         byte[] data = loader.GetBytes();
         if (callback != null)
         {
-            callback(loader.AssetPath, userData, data);
+            callback(loader.AssetPath, userData, data, () => loader.RemoveRefrence(this));
         }
     }
     public void LoadFailed(AssetLoader loader)
@@ -253,12 +259,25 @@ public class LoadRequestBytes : ILoadRequest
             failure(loader.AssetPath, userData);
         }
     }
+    //public int GetRefrenceCount()
+    //{
+    //    int count = 0;
+    //    Delegate[] delegates = callback.GetInvocationList();
+    //    for (int i = 0; i < delegates.Length; i++)
+    //    {
+    //        if (delegates[i] != null && delegates[i].Target.ToString() != "null")
+    //        {
+    //            count++;
+    //        }
+    //    }
+    //    return count;
+    //}
 }
 public class LoadRequestScene : ILoadRequest
 {
-    protected Action<string, object[]> callback;
+    protected Action<string, object[], OnAssetDestory> callback;
     protected Action<string, object[]> failure;
-    public LoadRequestScene(Action<string, object[]> callback, Action<string, object[]> failure, params object[] userData)
+    public LoadRequestScene(Action<string, object[], OnAssetDestory> callback, Action<string, object[]> failure, params object[] userData)
     {
         this.userData = userData;
         this.callback = callback;
@@ -270,7 +289,7 @@ public class LoadRequestScene : ILoadRequest
         loader.ShowLoadedScene();
         if (callback != null)
         {
-            callback(loader.AssetPath, userData);
+            callback(loader.AssetPath, userData, () => loader.RemoveRefrence(this));
         }
     }
     public void LoadFailed(AssetLoader loader)
@@ -287,11 +306,12 @@ public class LoadRequestScene : ILoadRequest
 /// <typeparam name="T"></typeparam>
 public class LoadRequest<T> : ILoadRequest where T : Object
 {
-    protected Action<string, object[], T> callback;
+    protected Action<string, object[], T, OnAssetDestory> callback;
     protected Action<string, object[]> failure;
     protected object[] userData;
+    protected AssetLoader mLoader = null;
 
-    public LoadRequest(Action<string, object[], T> callback, Action<string, object[]> failure, params object[] userData)
+    public LoadRequest(Action<string, object[], T, OnAssetDestory> callback, Action<string, object[]> failure, params object[] userData)
     {
         this.userData = userData;
         this.callback = callback;
@@ -307,12 +327,20 @@ public class LoadRequest<T> : ILoadRequest where T : Object
 
     public void LoadSuccess(AssetLoader loader)
     {
+        mLoader = loader;
         T prefab = loader.GetAsset<T>();
         if (prefab != null)
         {
             if (callback != null)
             {
-                callback(loader.AssetPath, userData, prefab);
+                if (typeof(T) == typeof(GameObject))
+                {
+                    GameObject obj = GameObject.Instantiate(prefab) as GameObject;
+                    obj.AddComponent<ResourceAssetHelper>().Init(OnGameObjectDestory);
+                    callback(loader.AssetPath, userData, obj as T, () => { });
+                }
+                else
+                    callback(loader.AssetPath, userData, prefab, () => loader.RemoveRefrence(this));
             }
             return;
         }
@@ -322,8 +350,12 @@ public class LoadRequest<T> : ILoadRequest where T : Object
             failure(loader.AssetPath, userData);
         }
     }
+    void OnGameObjectDestory()
+    {
+        mLoader.RemoveRefrence(this);
+    }
 }
-
+public delegate void OnAssetDestory();
 public class AssetLoader
 {
     static Dictionary<string, AssetLoader> dicAssetLoader = new Dictionary<string, AssetLoader>();
@@ -334,6 +366,12 @@ public class AssetLoader
     public AssetBundle assetBundle { get; private set; }
     public WWW www { get; private set; }
     public float progress { get; private set; }
+
+    public int RefrenceCount { get { return loadedRequests.Count; } }
+    /// <summary>
+    /// 是否持久
+    /// </summary>
+    public bool IsPermanent { get; private set; }
 
     public static Dictionary<string, AssetLoader> DicAssetLoader
     {
@@ -349,8 +387,10 @@ public class AssetLoader
     }
 
     protected Dictionary<string, AssetLoader> dicDependenceLoader;
+    protected Dictionary<string, OnAssetDestory> dicDependenceOnDestory;
 
     Queue<ILoadRequest> requests = new Queue<ILoadRequest>();
+    List<ILoadRequest> loadedRequests = new List<ILoadRequest>();
 
     protected Object[] assets;
     protected byte[] bytes;
@@ -376,7 +416,7 @@ public class AssetLoader
             FullPath = "Assets/Main/BundleEditor/" + AssetPath;
         else
             FullPath = GetRemotePath(Application.streamingAssetsPath, ResourceManager.GetPlatformName().ToLower(), AssetPath);
-
+        IsPermanent = false;
         LoadState = AssetLoadState.None;
     }
 
@@ -390,7 +430,9 @@ public class AssetLoader
         {
             while (requests.Count > 0)
             {
-                requests.Dequeue().LoadSuccess(this);
+                ILoadRequest request = requests.Dequeue();
+                loadedRequests.Add(request);
+                request.LoadSuccess(this);
             }
             yield break;
         }
@@ -461,6 +503,7 @@ public class AssetLoader
                 {
                     LoadState = AssetLoadState.LoadDenpendence;
                     dicDependenceLoader = new Dictionary<string, AssetLoader>(denpendence.Length);
+                    dicDependenceOnDestory = new Dictionary<string, OnAssetDestory>(denpendence.Length);
                     for (int i = 0; i < denpendence.Length; i++)
                     {
                         if (dicDependenceLoader.ContainsKey(denpendence[i]))
@@ -502,12 +545,14 @@ public class AssetLoader
         LoadState = AssetLoadState.Loaded;
         while (requests.Count > 0)
         {
-            requests.Dequeue().LoadSuccess(this);
+            ILoadRequest request = requests.Dequeue();
+            loadedRequests.Add(request);
+            request.LoadSuccess(this);
         }
     }
-    public void LoadDependenceSuccess(string path, object[] userData, Object loader)
+    public void LoadDependenceSuccess(string path, object[] userData, Object loader, OnAssetDestory onDestory)
     {
-
+        dicDependenceOnDestory.Add(path, onDestory);
         bool loadDenpendenceEnd = true;
         foreach (var item in dicDependenceLoader)
         {
@@ -552,7 +597,9 @@ public class AssetLoader
             LoadState = AssetLoadState.LoadFail;
             while (requests.Count > 0)
             {
-                requests.Dequeue().LoadFailed(this);
+                ILoadRequest request = requests.Dequeue();
+                loadedRequests.Add(request);
+                request.LoadSuccess(this);
             }
             yield break;
         }
@@ -614,6 +661,52 @@ public class AssetLoader
         {
             assetBundleRequest.allowSceneActivation = true;
             assetBundleRequest = null;
+        }
+    }
+    public void RemoveRefrence(ILoadRequest request)
+    {
+        loadedRequests.Remove(request);
+    }
+    public bool CanDestory()
+    {
+        if (IsPermanent)
+        {
+            return false;
+        }
+        if (RefrenceCount > 0)
+        {
+            return false;
+        }
+        return true;
+    }
+    public void Destory()
+    {
+        Debug.LogError("释放" + AssetPath);
+        if (dicDependenceOnDestory != null)
+        {
+            foreach (var item in dicDependenceOnDestory)
+            {
+                item.Value();
+            }
+            dicDependenceOnDestory.Clear();
+        }
+
+        assets = null;
+        bytes = null;
+        if (assetBundle != null)
+        {
+            assetBundle.Unload(true);
+        }
+        if (www != null)
+        {
+            www.Dispose();
+        }
+
+        www = null;
+        dicAssetLoader.Remove(AssetPath);
+        if (dicDependenceLoader != null)
+        {
+            dicDependenceLoader.Clear();
         }
     }
     /// <summary>

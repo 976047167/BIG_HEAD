@@ -376,6 +376,7 @@ public class UITexture : UIBasicSprite
         ResourceManager.LoadTexture(path, LoadCallback, LoadFailed);
     }
     protected int TextureId;
+    protected OnAssetDestory assetDestory = null;
     public void Load(int textureId)
     {
         if (mainTexture != null && TextureId == textureId)
@@ -390,12 +391,25 @@ public class UITexture : UIBasicSprite
         }
 
     }
-    void LoadCallback(string path, object[] args, Texture2D texture)
+    void LoadCallback(string path, object[] args, Texture2D texture, OnAssetDestory destory)
     {
         mainTexture = texture;
+        if (assetDestory != null)
+        {
+            assetDestory();
+        }
+        assetDestory = destory;
     }
     void LoadFailed(string path, object[] args)
     {
 
+    }
+    private void OnDestroy()
+    {
+        RemoveFromPanel();
+        if (assetDestory != null)
+        {
+            assetDestory();
+        }
     }
 }
