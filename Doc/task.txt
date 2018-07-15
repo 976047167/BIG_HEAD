@@ -8,3 +8,4 @@ ui≤„º∂π‹¿Ì
 
 
 git config core.ignorecase false
+git push -u origin master -f 

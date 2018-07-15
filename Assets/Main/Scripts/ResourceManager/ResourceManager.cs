@@ -681,7 +681,7 @@ public class AssetLoader
     }
     public void Destory()
     {
-        Debug.LogError("释放" + AssetPath);
+        Debug.Log("释放" + AssetPath);
         if (dicDependenceOnDestory != null)
         {
             foreach (var item in dicDependenceOnDestory)
