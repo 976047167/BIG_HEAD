@@ -138,3 +138,9 @@ int	string	string	string
 1003001	回合 :	回合 :	Round :
 1003002	逃跑	逃跑	Escape
 1003003	声音	聲音	Sound
+1002000	WND_Kaku	WND_Kaku	WND_Kaku
+1002001	 技能卡	技能卡	Skills
+1002002	装备卡	裝備卡	equipment
+1002003	道具卡	道具卡	Item
+1002004	结算奖励	結算獎勵	Reward
+1002005	返回	返回	Exit

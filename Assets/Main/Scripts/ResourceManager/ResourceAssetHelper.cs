@@ -11,6 +11,7 @@ public class ResourceAssetHelper : MonoBehaviour
     }
     private void OnDestroy()
     {
-        destory();
+        if (destory != null)
+            destory();
     }
 }

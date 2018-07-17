@@ -50,7 +50,7 @@ public class WND_Dialog : UIFormBase
         }
 
     }
-    protected override void OnOpen()
+    protected override void OnShow()
     {
 
         ShowDialog(preserntIndex);
