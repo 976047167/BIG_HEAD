@@ -24,8 +24,12 @@ public class ProcedureManager
         {
             helper = new GameObject("[ProcedureManagerHelper]").AddComponent<ProcedureManagerHelper>();
         }
+        if (procedureType == null)
+        {
+            Debug.LogError("不存在的流程");
+        }
         ProcedureBase next = System.Activator.CreateInstance(procedureType) as ProcedureBase;
-        if (next==null)
+        if (next == null)
         {
             return;
         }

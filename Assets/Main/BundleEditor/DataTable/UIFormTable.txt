@@ -4,7 +4,7 @@ int	string	string	int	int
 2	WND_Login	Internal/WND_Login	0	2
 3	UIBattleForm	Instance/WND_BattleForm	0	2
 4	UIMapInfo	WND_MapInfo	0	0
-5	WND_Dialog	WND_Dialog	0	1
+5	WND_Dialog	WND_Dialog	0	2
 6	WND_Bag	WND_Bag	0	2
 7	WND_ShowCard	WND_ShowCard	1	1
 8	WND_Kaku	WND_Kaku	0	2
