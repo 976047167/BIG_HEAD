@@ -3,26 +3,17 @@ using System.Collections.Generic;
 using UnityEngine;
 using AppSettings;
 
-public class UIPromptBox : MonoBehaviour {
+public class UIPromptBox : UIFormBase {
     UITexture icon;
     UILabel describe;
 
-
-    private void Awake()
+    protected override void OnInit(object userdata)
     {
+        base.OnInit(userdata);
         icon = transform.Find("icon").GetComponent<UITexture>();
         describe = transform.Find("describe").GetComponent<UILabel>();
     }
 
-    // Use this for initialization
-    void Start () {
-		
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
     public void  SetData(int id)
     {
        PromptTableSetting prompt =   PromptTableSettings.Get(id);
