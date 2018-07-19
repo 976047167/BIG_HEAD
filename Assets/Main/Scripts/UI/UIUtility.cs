@@ -32,4 +32,12 @@ public class UIUtility
     {
         go.AddComponent<ShowCard>().SetShow(2, equipId);
     }
+    public static void ShowMessageBox(MessageBoxType messageBoxType, int contentId, WND_MessageBox.MessageBoxCallback messageBoxCallback)
+    {
+        ShowMessageBox(messageBoxType, I18N.Get(contentId), messageBoxCallback);
+    }
+    public static void ShowMessageBox(MessageBoxType messageBoxType, string content, WND_MessageBox.MessageBoxCallback messageBoxCallback)
+    {
+        UIModule.Instance.OpenForm<WND_MessageBox>(new object[] { messageBoxType, content, messageBoxCallback });
+    }
 }

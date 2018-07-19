@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class WND_MessageBox : UIFormBase
 {
+
+
     [SerializeField]
     protected GameObject btnMask;
     [SerializeField]
@@ -12,6 +14,12 @@ public class WND_MessageBox : UIFormBase
     protected GameObject btnNo;
     [SerializeField]
     protected GameObject btnCancel;
+
+    protected MessageBoxType messageBoxType = MessageBoxType.Confirm;
+
+    protected MessageBoxCallback messageBoxCallback = null;
+
+    protected string content = "";
 
     private void Awake()
     {
@@ -25,6 +33,11 @@ public class WND_MessageBox : UIFormBase
         btnYes = transform.Find("Yes").gameObject;
         btnNo = transform.Find("NO").gameObject;
         btnCancel = transform.Find("Cancel").gameObject;
+        object[] args = (object[])userdata;
+        messageBoxType = (MessageBoxType)args[0];
+        content = args[1].ToString();
+        messageBoxCallback = (MessageBoxCallback)args[2];
+
     }
 
     protected override void OnOpen()
@@ -51,4 +64,20 @@ public class WND_MessageBox : UIFormBase
     {
         base.OnClose();
     }
+
+
+    public delegate void MessageBoxCallback(MessageBoxReturnType returnType);
+
+}
+public enum MessageBoxType
+{
+    Confirm = 0,
+    YesNo = 1,
+    YesNoCancel = 2,
+}
+public enum MessageBoxReturnType
+{
+    Cancel = 0,
+    Yes = 1,
+    No = 2,
 }
