@@ -1,20 +1,20 @@
-Id	Name	Path	Group	ShowMode
-int	string	string	int	int
-1	WND_Launch	Internal/WND_Launch	0	2
-2	WND_Login	Internal/WND_Login	0	2
-3	UIBattleForm	Instance/WND_BattleForm	0	2
-4	UIMapInfo	WND_MapInfo	0	0
-5	WND_Dialog	WND_Dialog	0	2
-6	WND_Bag	WND_Bag	0	2
-7	WND_ShowCard	WND_ShowCard	1	1
-8	WND_Kaku	WND_Kaku	0	2
-9	UIMenu	WND_Menu	0	0
-10	WND_Reward	WND_Reward	0	1
-11	WND_MainTown	Lobby/WND_MainTown	0	0
-12	WND_ChoseDeck	WND_ChoseDeck	0	1
-13	WND_Loading	Internal/WND_Loading	0	2
-14	WND_Settings	WND_Settings	0	1
-15	WND_BattleSetting	Instance/WND_BattleSetting	0	1
-16	WND_InstanceSetting	WND_InstanceSetting	0	1
-17	WND_CreateCharacter	WND_CreateCharacter	0	2
-18	WND_MessageBox	Internal/WND_MessageBox	2	1
+Id	Desc	Name	Path	Group	ShowMode
+int	string	string	string	int	int
+1	启动	WND_Launch	Internal/WND_Launch	0	2
+2	登录	WND_Login	Internal/WND_Login	0	2
+3	战斗界面	UIBattleForm	Instance/WND_BattleForm	0	2
+4	地图信息	UIMapInfo	WND_MapInfo	0	0
+5	对话选择	WND_Dialog	WND_Dialog	0	2
+6	背包	WND_Bag	WND_Bag	0	2
+7	卡牌详细信息	WND_ShowCard	WND_ShowCard	1	1
+8	卡库	WND_Kaku	WND_Kaku	0	2
+9	地图菜单	UIMenu	WND_Menu	0	0
+10	奖励发放	WND_Reward	WND_Reward	0	1
+11	主城	WND_MainTown	Lobby/WND_MainTown	0	0
+12	选择卡组	WND_ChoseDeck	WND_ChoseDeck	0	1
+13	加载界面	WND_Loading	Internal/WND_Loading	0	2
+14	设置界面	WND_Settings	WND_Settings	0	1
+15	战斗设置界面	WND_BattleSetting	Instance/WND_BattleSetting	0	1
+16	副本设置界面	WND_InstanceSetting	WND_InstanceSetting	0	2
+17	创角界面	WND_CreateCharacter	WND_CreateCharacter	0	2
+18	消息框	WND_MessageBox	Internal/WND_MessageBox	2	1

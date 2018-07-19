@@ -80,6 +80,7 @@ public class UIBattleForm : UIFormBase
         Game.BattleManager.ReadyStart(this);
         UIEventListener.Get(transform.Find("FlowPanel/btnRoundEnd").gameObject).onClick = OnClick_RoundEnd;
         UIEventListener.Get(transform.Find("ResultInfo/mask").gameObject).onClick = Onclick_CloseUI;
+        UIEventListener.Get(btnBattleSetting).onClick = Onclick_Setting;
 
         StartCoroutine(CoroutineUseCard());
     }
@@ -103,7 +104,7 @@ public class UIBattleForm : UIFormBase
         lblResultInfo.gameObject.SetActive(false);
         //lblResultInfo.text = "WIN!";
         //lblResultInfo.color = new Color32(255, 0, 0, 255);
-        
+
 
     }
     public void LoseBattle()
@@ -151,7 +152,17 @@ public class UIBattleForm : UIFormBase
     }
     void Onclick_CloseUI(GameObject go)
     {
-        Game.UI.CloseForm<UIBattleForm>();
+        Game.UI.CloseForm(this);
+    }
+    void Onclick_Setting(GameObject go)
+    {
+        UIUtility.ShowMessageBox(MessageBoxType.YesNo, 1003004, (result) =>
+        {
+            if (result == MessageBoxReturnType.Yes)
+            {
+                Game.BattleManager.MyPlayer.EscapeBattle();
+            }
+        });
     }
     public void ClearUsedCards()
     {
@@ -218,7 +229,7 @@ public class UIBattleForm : UIFormBase
         Game.BattleManager.Clear();
     }
 
-    
+
 }
 
 public class UIPlayerInfo

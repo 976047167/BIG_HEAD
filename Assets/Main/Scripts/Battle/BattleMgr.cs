@@ -41,7 +41,7 @@ public class BattleMgr
         dicBattleCounter = new Dictionary<string, int>();
         RoundCount = 0;
         OppPlayer.StartAI();
-        
+
 
         MyPlayer.Data.MP = MyPlayer.Data.MaxMP = 100;
         OppPlayer.Data.HP = 1;
@@ -357,6 +357,18 @@ public class BattleMgr
         }
     }
 
+    public void EscapeBattle(BattlePlayer player)
+    {
+        Debug.LogError((player.IsMe ? "[我]" : "[怪]") + "逃跑了");
+        if (player.IsMe)
+        {
+            State = BattleState.BattleEnd_MyEscape;
+        }
+        else
+        {
+            State = BattleState.BattleEnd_OppEscape;
+        }
+    }
     public void AddUIAction(UIAction uiAction)
     {
         uiActions.Enqueue(uiAction);

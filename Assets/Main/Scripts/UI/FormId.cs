@@ -42,4 +42,5 @@ public enum FormId : int
     WND_CreateCharacter = 17,
     ///<summary>消息框</summary>
     WND_MessageBox = 18,
+
 }

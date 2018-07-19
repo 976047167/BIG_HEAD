@@ -144,7 +144,10 @@ public class BattlePlayer
     {
         Game.BattleManager.RoundEnd();
     }
-
+    public void EscapeBattle()
+    {
+        Game.BattleManager.EscapeBattle(this);
+    }
     public void StartAI()
     {
         if (playerAI == null)

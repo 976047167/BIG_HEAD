@@ -4691,6 +4691,11 @@ namespace AppSettings
         public int Id { get; private set;}
         
         /// <summary>
+        /// 编辑器用
+        /// </summary>
+        public string Desc { get; private set;}
+        
+        /// <summary>
         /// 窗口名(程序类名)
         /// </summary>
         public string Name { get; private set;}
@@ -4701,12 +4706,12 @@ namespace AppSettings
         public string Path { get; private set;}
         
         /// <summary>
-        /// UI窗口分组(0默认1提示2对话框3Top)
+        /// UI窗口分组(0默认1提示2对话框3死亡)
         /// </summary>
         public int Group { get; private set;}
         
         /// <summary>
-        /// UI窗体显示类型(0普通1弹出2独占)
+        /// UI窗体显示类型(0普通1弹出2隐藏普通3独占)
         /// </summary>
         public int ShowMode { get; private set;}
         
@@ -4719,10 +4724,11 @@ namespace AppSettings
         internal void Reload(TableFileRow row)
         { 
             Id = row.Get_int(row.Values[0], ""); 
-            Name = row.Get_string(row.Values[1], ""); 
-            Path = row.Get_string(row.Values[2], ""); 
-            Group = row.Get_int(row.Values[3], ""); 
-            ShowMode = row.Get_int(row.Values[4], ""); 
+            Desc = row.Get_string(row.Values[1], ""); 
+            Name = row.Get_string(row.Values[2], ""); 
+            Path = row.Get_string(row.Values[3], ""); 
+            Group = row.Get_int(row.Values[4], ""); 
+            ShowMode = row.Get_int(row.Values[5], ""); 
         }
 
         /// <summary>

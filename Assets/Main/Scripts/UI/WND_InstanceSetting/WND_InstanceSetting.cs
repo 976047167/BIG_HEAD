@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using AppSettings;
 
-public class WND_InstanceSetting : UIFormBase {
+public class WND_InstanceSetting : UIFormBase
+{
 
     // Use this for initialization
 
@@ -38,7 +39,7 @@ public class WND_InstanceSetting : UIFormBase {
 
         UIEventListener.Get(btnGiveUp).onClick = GiveUpClick;
 
-         UIEventListener.Get(spExit.gameObject).onClick = ExitClick;
+        UIEventListener.Get(spExit.gameObject).onClick = ExitClick;
         UIEventListener.Get(btnConfim).onClick = ExitClick;
         EventDelegate.Add(sliderMusic.onChange, MusicChange);
         EventDelegate.Add(sliderVoice.onChange, VoiceChange);
@@ -51,13 +52,13 @@ public class WND_InstanceSetting : UIFormBase {
     protected override void OnOpen()
     {
         base.OnOpen();
-        
+
         headIcon.Load(myIconIndex);
         if (Game.DataManager.DialogSpeed == 0.1f)
             Fast.value = true;
         else if (Game.DataManager.DialogSpeed == 0.5f)
             Mid.value = true;
-        else if(Game.DataManager.DialogSpeed == 1.0f)
+        else if (Game.DataManager.DialogSpeed == 1.0f)
             Slow.value = true;
 
 
@@ -77,14 +78,21 @@ public class WND_InstanceSetting : UIFormBase {
     }
     private void GiveUpClick(GameObject obj)
     {
-        Game.DataManager.MyPlayer.Data.HP = Game.DataManager.MyPlayer.Data.MaxHP ;
-        Game.DataManager.MyPlayer.Data.MP = Game.DataManager.MyPlayer.Data.MaxMP;
-        SceneMgr.ChangeScene(3);
+        UIUtility.ShowMessageBox(MessageBoxType.YesNo, 1003005, (result) =>
+        {
+            if (result == MessageBoxReturnType.Yes)
+            {
+                Game.DataManager.MyPlayer.Data.HP = Game.DataManager.MyPlayer.Data.MaxHP;
+                Game.DataManager.MyPlayer.Data.MP = Game.DataManager.MyPlayer.Data.MaxMP;
+                SceneMgr.ChangeScene(3);
+            }
+        });
+
     }
 
     private void FastChange()
     {
-        if(UIToggle.current.value == true)
+        if (UIToggle.current.value == true)
         {
             Game.DataManager.DialogSpeed = 0.1f;
         }
@@ -102,7 +110,7 @@ public class WND_InstanceSetting : UIFormBase {
     {
         if (UIToggle.current.value == true)
         {
-            Game.DataManager.DialogSpeed =1.0f;
+            Game.DataManager.DialogSpeed = 1.0f;
         }
 
     }
