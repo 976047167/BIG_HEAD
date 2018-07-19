@@ -9,3 +9,5 @@ ui≤„º∂π‹¿Ì
 
 git config core.ignorecase false
 git push -u origin master -f 
+
+@"^([A-Za-z0-9\._-]+/)*[A-Za-z0-9\._-]+$"
