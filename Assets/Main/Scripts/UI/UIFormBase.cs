@@ -10,14 +10,22 @@ public abstract class UIFormBase : MonoBehaviour
     public UIFormTableSetting Table { get; private set; }
     private UIFormState state;
     public UIFormState State { get { return state; } }
+    private bool isOpen = false;
+    public bool IsOpen { get { return isOpen; } }
     /// <summary>
     /// 这个方法不允许调用，uimodule专用
     /// </summary>
-    public void Open(UIFormTableSetting table, object userdata)
+    public void Init(UIFormTableSetting table, object userdata)
     {
         Table = table;
         state = UIFormState.Hide;
         OnInit(userdata);
+        isOpen = false;
+    }
+    public void Open()
+    {
+        isOpen = true;
+        gameObject.SetActive(true);
         OnOpen();
         Show();
     }

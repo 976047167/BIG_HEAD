@@ -17,6 +17,7 @@ public class Procedure_BigPlain : ProcedureBase
         base.OnExit(next);
         Game.UI.CloseForm<UIMapInfo>();
         Game.UI.CloseForm<UIMenu>();
+        MapMgr.Instance.MyMapPlayer.Save();
         MapMgr.Instance.Clear();
     }
 

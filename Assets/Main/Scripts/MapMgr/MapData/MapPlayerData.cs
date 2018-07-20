@@ -1,19 +1,24 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using AppSettings;
 /// <summary>
 /// 地图玩家数据类
 /// </summary>
 public class MapPlayerData : PlayerData
 {
+    protected PlayerData playerData;
+
     public MapPlayerData(PlayerData playerData)
     {
-        if (playerData==null)
+        if (playerData == null)
         {
             return;
         }
+        this.playerData = playerData;
         Name = playerData.Name;
         Level = playerData.Level;
+        Exp = playerData.Exp;
         HP = playerData.HP;
         MaxHP = playerData.MaxHP;
         MP = playerData.MP;
@@ -34,6 +39,7 @@ public class MapPlayerData : PlayerData
         m_MapEquipList = new List<NormalCard>(m_EquipList);
         m_MapBuffList = new List<NormalCard>(m_BuffList);
         m_MapCardList = new List<NormalCard>(m_CardList);
+
     }
     protected List<NormalCard> m_MapEquipList = new List<NormalCard>();
     /// <summary>
@@ -50,4 +56,5 @@ public class MapPlayerData : PlayerData
     public List<NormalCard> MapBuffList { get { return m_MapBuffList; } }
 
     public List<NormalCard> MapCardList { get { return m_MapCardList; } }
+
 }

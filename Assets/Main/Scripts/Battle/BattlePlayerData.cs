@@ -9,6 +9,7 @@ public class BattlePlayerData : MapPlayerData
     public int AP = 0;
     public int MaxAP = 0;
 
+
     //public BattleCardData
     protected new List<BattleEquipData> m_EquipList = new List<BattleEquipData>();
     protected new List<BattleBuffData> m_BuffList = new List<BattleBuffData>();
@@ -120,23 +121,5 @@ public class BattlePlayerData : MapPlayerData
         }
     }
 
-    public void Save(MapPlayerData mapPlayerData)
-    {
-        mapPlayerData.Name = Name;
-        mapPlayerData.Level = Level;
-        mapPlayerData.HP = HP;
-        mapPlayerData.MaxHP = MaxHP;
-        mapPlayerData.MP = MP;
-        mapPlayerData.MaxMP = MaxMP;
-        mapPlayerData.HeadIcon = HeadIcon;
-        mapPlayerData.MapSkillID = MapSkillID;
-        mapPlayerData.BattleSkillID = BattleSkillID;
-        mapPlayerData.UsingDeck = UsingDeck;
-        mapPlayerData.UsingCharacter = UsingCharacter;
-        mapPlayerData.Food = Food;
-        mapPlayerData.MaxFood = MaxFood;
-        mapPlayerData.Coin = Coin;
-        mapPlayerData.BattleSkillID = SkillId;
-        mapPlayerData.ClassData = ClassData;
-    }
+    
 }

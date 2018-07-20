@@ -22,7 +22,7 @@ public class WND_MessageBox : UIFormBase
     [SerializeField]
     protected GameObject aniRoot;
 
-    protected MessageBoxType messageBoxType = MessageBoxType.Confirm;
+    protected MessageBoxType messageBoxType = MessageBoxType.Yes;
 
     protected MessageBoxCallback messageBoxCallback = null;
 
@@ -59,8 +59,9 @@ public class WND_MessageBox : UIFormBase
         lblContent.text = content;
         switch (messageBoxType)
         {
-            case MessageBoxType.Confirm:
+            case MessageBoxType.Yes:
                 btnYes.SetActive(true);
+                btnYes.transform.localPosition = new Vector3(0f, btnYes.transform.localPosition.y, 0f);
                 btnNo.SetActive(false);
                 btnCancel.SetActive(false);
                 break;
@@ -144,15 +145,4 @@ public class WND_MessageBox : UIFormBase
     public delegate void MessageBoxCallback(MessageBoxReturnType returnType);
 
 }
-public enum MessageBoxType
-{
-    Confirm = 0,
-    YesNo = 1,
-    YesNoCancel = 2,
-}
-public enum MessageBoxReturnType
-{
-    Cancel = 0,
-    Yes = 1,
-    No = 2,
-}
+

@@ -148,6 +148,23 @@ public class BattlePlayer
     {
         Game.BattleManager.EscapeBattle(this);
     }
+    public void Save(int rewardId = 0)
+    {
+        if (Player == null)
+        {
+            Debug.LogError("怪物不需要保存数据!");
+            return;
+        }
+        Player.Data.HP = Data.HP;
+        Player.Data.MaxHP = Data.MaxHP;
+        Player.Data.MP = Data.MP;
+        Player.Data.MaxMP = Data.MaxMP;
+        if (rewardId != 0)
+        {
+            Player.AddReward(rewardId);
+        }
+
+    }
     public void StartAI()
     {
         if (playerAI == null)

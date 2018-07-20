@@ -115,13 +115,14 @@ public class UIBattleForm : UIFormBase
         lblResultInfo.text = "LOSE!";
         lblResultInfo.color = new Color32(150, 150, 150, 255);
 
+
     }
     public void MeEscapeBattle()
     {
         resultInfo.SetActive(true);
         resultInfo.transform.Find("bg").gameObject.SetActive(true);
         lblResultInfo.gameObject.SetActive(true);
-        lblResultInfo.text = "我跑!";
+        lblResultInfo.text = I18N.Get(1003007); //"我跑!";
         lblResultInfo.color = new Color32(150, 150, 150, 255);
 
     }
@@ -130,7 +131,7 @@ public class UIBattleForm : UIFormBase
         resultInfo.SetActive(true);
         resultInfo.transform.Find("bg").gameObject.SetActive(true);
         lblResultInfo.gameObject.SetActive(true);
-        lblResultInfo.text = "快追!";
+        lblResultInfo.text = I18N.Get(1003008);// "快追!";
         lblResultInfo.color = new Color32(150, 150, 150, 255);
 
     }
@@ -152,7 +153,18 @@ public class UIBattleForm : UIFormBase
     }
     void Onclick_CloseUI(GameObject go)
     {
-        Game.UI.CloseForm(this);
+
+        if (Game.BattleManager.State == BattleMgr.BattleState.BattleEnd_Lose)
+        {
+            UIUtility.ShowMessageBox(MessageBoxType.Yes, 1003006, (result) =>
+              {
+                  Game.UI.CloseForm(this);
+                  //回主城
+                  SceneMgr.ChangeScene(3);
+              });
+        }
+        else
+            Game.UI.CloseForm(this);
     }
     void Onclick_Setting(GameObject go)
     {

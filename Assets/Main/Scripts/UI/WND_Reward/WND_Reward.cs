@@ -92,7 +92,7 @@ public class WND_Reward : UIFormBase
             item.SetActive(true);
         }
 
-        foreach (var card in reward.CardList)
+        foreach (var card in reward.ItemList)
         {
             if (card == 0) continue;
             BattleCardTableSetting cardData = BattleCardTableSettings.Get(card);

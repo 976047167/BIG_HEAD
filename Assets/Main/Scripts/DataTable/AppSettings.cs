@@ -58,6 +58,7 @@ namespace AppSettings
                         ClassCharacterTableSettings._instance,
                         ClassTableSettings._instance,
                         DialogTableSettings._instance,
+                        ItemTableSettings._instance,
                         LevelTableSettings._instance,
                         LocalizationTableSettings._instance,
                         NpcTableSettings._instance,
@@ -2550,6 +2551,241 @@ namespace AppSettings
 	}
 
 	/// <summary>
+	/// Auto Generate for Tab File: "ItemTable.txt"
+    /// No use of generic and reflection, for better performance,  less IL code generating
+	/// </summary>>
+    public partial class ItemTableSettings : IReloadableSettings
+    {
+        /// <summary>
+        /// How many reload function load?
+        /// </summary>>
+        public static int ReloadCount { get; private set; }
+
+		public static readonly string[] TabFilePaths = 
+        {
+            "ItemTable.txt"
+        };
+        internal static ItemTableSettings _instance = new ItemTableSettings();
+        Dictionary<int, ItemTableSetting> _dict = new Dictionary<int, ItemTableSetting>();
+
+        /// <summary>
+        /// Trigger delegate when reload the Settings
+        /// </summary>>
+	    public static System.Action OnReload;
+
+        /// <summary>
+        /// Constructor, just reload(init)
+        /// When Unity Editor mode, will watch the file modification and auto reload
+        /// </summary>
+	    private ItemTableSettings()
+	    {
+        }
+
+        /// <summary>
+        /// Get the singleton
+        /// </summary>
+        /// <returns></returns>
+	    public static ItemTableSettings GetInstance()
+	    {
+            if (ReloadCount == 0)
+            {
+                _instance._ReloadAll(true);
+    #if UNITY_EDITOR
+                if (SettingModule.IsFileSystemMode)
+                {
+                    for (var j = 0; j < TabFilePaths.Length; j++)
+                    {
+                        var tabFilePath = TabFilePaths[j];
+                        SettingModule.WatchSetting(tabFilePath, (path) =>
+                        {
+                            if (path.Replace("\\", "/").EndsWith(path))
+                            {
+                                _instance.ReloadAll();
+                                Log.LogConsole_MultiThread("File Watcher! Reload success! -> " + path);
+                            }
+                        });
+                    }
+
+                }
+    #endif
+            }
+
+	        return _instance;
+	    }
+        
+        public int Count
+        {
+            get
+            {
+                return _dict.Count;
+            }
+        }
+
+        /// <summary>
+        /// Do reload the setting file: ItemTable, no exception when duplicate primary key
+        /// </summary>
+        public void ReloadAll()
+        {
+            _ReloadAll(false);
+        }
+
+        /// <summary>
+        /// Do reload the setting class : ItemTable, no exception when duplicate primary key, use custom string content
+        /// </summary>
+        public void ReloadAllWithString(string context)
+        {
+            _ReloadAll(false, context);
+        }
+
+        /// <summary>
+        /// Do reload the setting file: ItemTable
+        /// </summary>
+	    void _ReloadAll(bool throwWhenDuplicatePrimaryKey, string customContent = null)
+        {
+            for (var j = 0; j < TabFilePaths.Length; j++)
+            {
+                var tabFilePath = TabFilePaths[j];
+                TableFile tableFile;
+                if (customContent == null)
+                    tableFile = SettingModule.Get(tabFilePath, false);
+                else
+                    tableFile = TableFile.LoadFromString(customContent);
+
+                using (tableFile)
+                {
+                    foreach (var row in tableFile)
+                    {
+                        var pk = ItemTableSetting.ParsePrimaryKey(row);
+                        ItemTableSetting setting;
+                        if (!_dict.TryGetValue(pk, out setting))
+                        {
+                            setting = new ItemTableSetting(row);
+                            _dict[setting.Id] = setting;
+                        }
+                        else 
+                        {
+                            if (throwWhenDuplicatePrimaryKey) throw new System.Exception(string.Format("DuplicateKey, Class: {0}, File: {1}, Key: {2}", this.GetType().Name, tabFilePath, pk));
+                            else setting.Reload(row);
+                        }
+                    }
+                }
+            }
+
+	        if (OnReload != null)
+	        {
+	            OnReload();
+	        }
+
+            ReloadCount++;
+            Log.Info("Reload settings: {0}, Row Count: {1}, Reload Count: {2}", GetType(), Count, ReloadCount);
+        }
+
+	    /// <summary>
+        /// foreachable enumerable: ItemTable
+        /// </summary>
+        public static IEnumerable GetAll()
+        {
+            foreach (var row in GetInstance()._dict.Values)
+            {
+                yield return row;
+            }
+        }
+
+        /// <summary>
+        /// GetEnumerator for `MoveNext`: ItemTable
+        /// </summary> 
+	    public static IEnumerator GetEnumerator()
+	    {
+	        return GetInstance()._dict.Values.GetEnumerator();
+	    }
+         
+	    /// <summary>
+        /// Get class by primary key: ItemTable
+        /// </summary>
+        public static ItemTableSetting Get(int primaryKey)
+        {
+            ItemTableSetting setting;
+            if (GetInstance()._dict.TryGetValue(primaryKey, out setting)) return setting;
+            return null;
+        }
+
+        // ========= CustomExtraString begin ===========
+        
+        // ========= CustomExtraString end ===========
+    }
+
+	/// <summary>
+	/// Auto Generate for Tab File: "ItemTable.txt"
+    /// Singleton class for less memory use
+	/// </summary>
+	public partial class ItemTableSetting : TableRowFieldParser
+	{
+		
+        /// <summary>
+        /// #目录
+        /// </summary>
+        public int Id { get; private set;}
+        
+        /// <summary>
+        /// 文本
+        /// </summary>
+        public int Name { get; private set;}
+        
+        /// <summary>
+        /// 卡牌描述
+        /// </summary>
+        public int Desc { get; private set;}
+        
+        /// <summary>
+        /// 物品类型(卡牌0,装备1,技能2,消耗品3)
+        /// </summary>
+        public int Type { get; private set;}
+        
+        /// <summary>
+        /// 品质(白绿蓝紫橙)0开始
+        /// </summary>
+        public int Quality { get; private set;}
+        
+        /// <summary>
+        /// 卡片展示ID
+        /// </summary>
+        public int ShowID { get; private set;}
+        
+        /// <summary>
+        /// 购买开销
+        /// </summary>
+        public int Price { get; private set;}
+        
+
+        internal ItemTableSetting(TableFileRow row)
+        {
+            Reload(row);
+        }
+
+        internal void Reload(TableFileRow row)
+        { 
+            Id = row.Get_int(row.Values[0], ""); 
+            Name = row.Get_int(row.Values[1], ""); 
+            Desc = row.Get_int(row.Values[2], ""); 
+            Type = row.Get_int(row.Values[3], ""); 
+            Quality = row.Get_int(row.Values[4], ""); 
+            ShowID = row.Get_int(row.Values[5], ""); 
+            Price = row.Get_int(row.Values[6], ""); 
+        }
+
+        /// <summary>
+        /// Get PrimaryKey from a table row
+        /// </summary>
+        /// <param name="row"></param>
+        /// <returns></returns>
+        public static int ParsePrimaryKey(TableFileRow row)
+        {
+            var primaryKey = row.Get_int(row.Values[0], "");
+            return primaryKey;
+        }
+	}
+
+	/// <summary>
 	/// Auto Generate for Tab File: "LevelTable.txt"
     /// No use of generic and reflection, for better performance,  less IL code generating
 	/// </summary>>
@@ -3622,7 +3858,7 @@ namespace AppSettings
         /// <summary>
         /// 奖励物品
         /// </summary>
-        public List<int> CardList { get; private set;}
+        public List<int> ItemList { get; private set;}
         
 
         internal RewardTableSetting(TableFileRow row)
@@ -3637,7 +3873,7 @@ namespace AppSettings
             gold = row.Get_int(row.Values[2], ""); 
             diamond = row.Get_int(row.Values[3], ""); 
             exp = row.Get_int(row.Values[4], ""); 
-            CardList = row.Get_List_int(row.Values[5], ""); 
+            ItemList = row.Get_List_int(row.Values[5], ""); 
         }
 
         /// <summary>

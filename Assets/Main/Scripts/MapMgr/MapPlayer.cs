@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using AppSettings;
+using System;
 
 public class MapPlayer
 {
@@ -53,4 +54,60 @@ public class MapPlayer
         }
     }
 
+    public void AddReward(int rewardId)
+    {
+        RewardTableSetting rewardTable = RewardTableSettings.Get(rewardId);
+        if (rewardTable != null)
+        {
+            AddExp(rewardTable.exp);
+            Data.Coin += rewardTable.gold;
+            Data.Diamond += rewardTable.diamond;
+            for (int i = 0; i < rewardTable.ItemList.Count; i++)
+            {
+                //卡牌类型(攻击0,装备1,法术2,消耗品3)
+                ItemTableSetting itemTable = ItemTableSettings.Get(rewardTable.ItemList[i]);
+                if (itemTable == null)
+                {
+                    Debug.LogError("物品不存在=" + rewardTable.ItemList[i]);
+                    continue;
+                }
+                //TODO: 瞎jb写的
+                switch ((ItemType)itemTable.Type)
+                {
+                    case ItemType.Card:
+                        Data.CardList.Add(new NormalCard(itemTable.Id));
+                        break;
+                    case ItemType.Equip:
+                        Data.EquipList.Add(new NormalCard(itemTable.Id));
+                        break;
+                    case ItemType.Skill:
+                        Data.BuffList.Add(new NormalCard(itemTable.Id));
+                        break;
+                    case ItemType.Consumable:
+                        Data.ItemList.Add(new ItemData(itemTable.Id));
+                        break;
+                    default:
+                        break;
+                }
+
+            }
+
+        }
+    }
+    public void AddExp(int exp)
+    {
+        LevelTableSetting levelTable = LevelTableSettings.Get(Data.Level);
+        Data.Exp += exp;
+        while (Data.Exp >= levelTable.Exp[(int)Data.ClassData.Type])
+        {
+            Data.Level++;
+            Data.Exp -= levelTable.Exp[(int)Data.ClassData.Type];
+            levelTable = LevelTableSettings.Get(Data.Level);
+        }
+    }
+    public void Save()
+    {
+        m_Player.Data.Level = Data.Level;
+        m_Player.Data.Exp = Data.Exp;
+    }
 }

@@ -123,6 +123,8 @@ int	string	string	string
 50002	法师	法師	None
 51001	拥有强大力量的人类	擁有強大力量的人類	None
 51002	拥有强大魔力的人类	擁有強大魔力的人類	None
+60000	物品	物品	Item
+60001	面包	面包	bread
 100000	UI	UI	UI
 1001000	WND_Launch	WND_Launch	WND_Launch
 1001001	进入游戏	進入遊戲	EnterGame
@@ -140,6 +142,9 @@ int	string	string	string
 1003003	声音	聲音	Sound
 1003004	是否[ff0001]退出[-]战斗?	是否[ff0001]退出[-]戰鬥?	[ff0000]Exit[-] the battle?
 1003005	是否[ff0000]退出[-]副本?	是否[ff0001]退出[-]副本?	[ff0000]Exit[-] the instance?
+1003006	即将返回主城	即將返回主城	Return to Lobby
+1003007	我跑	我跑	Run
+1003008	快追	快追	Chase
 1004000	WND_Kaku	WND_Kaku	WND_Kaku
 1004001	 技能卡	技能卡	Skills
 1004002	装备卡	裝備卡	equipment

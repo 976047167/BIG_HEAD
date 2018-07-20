@@ -172,7 +172,7 @@ public partial class UIModule
                 {
                     formList[formList.Count - 1].Cover();
                 }
-                form.Open(config, userdata);
+                form.Init(config, userdata);
                 formList.Add(form);
                 if (dicForms[UIFormsShowMode.Single].Count > 0)
                 {
@@ -189,7 +189,7 @@ public partial class UIModule
                 {
                     dicForms[UIFormsShowMode.Normal][i].Cover();
                 }
-                form.Open(config, userdata);
+                form.Init(config, userdata);
                 formList.Add(form);
                 if (dicForms[UIFormsShowMode.Single].Count > 0)
                 {
@@ -210,13 +210,13 @@ public partial class UIModule
                 {
                     dicForms[UIFormsShowMode.Pop][i].Cover();
                 }
-                form.Open(config, userdata);
+                form.Init(config, userdata);
                 formList.Add(form);
                 break;
             case UIFormsShowMode.Normal:
             default:
                 formList = dicForms[UIFormsShowMode.Normal];
-                form.Open(config, userdata);
+                form.Init(config, userdata);
                 formList.Add(form);
                 if (dicForms[UIFormsShowMode.HideOther].Count > 0)
                 {
@@ -597,6 +597,10 @@ public partial class UIModule
                 {
                     removeList.Add(i);
                     continue;
+                }
+                if (form.IsOpen == false)
+                {
+                    form.Open();
                 }
                 if (form.State == UIFormState.Show && form.gameObject.activeInHierarchy)
                 {
