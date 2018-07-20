@@ -33,6 +33,7 @@ public class BattleMgr
     public void StartBattle(int monsterId)
     {
         State = BattleState.Loading;
+        lastState = BattleState.Loading;
         Debug.Log("StartBattle => " + monsterId);
         MonsterId = monsterId;
         OppPlayer = new BattlePlayer(monsterId);
@@ -41,7 +42,7 @@ public class BattleMgr
         dicBattleCounter = new Dictionary<string, int>();
         RoundCount = 0;
         OppPlayer.StartAI();
-
+        uiActions.Clear();
 
         MyPlayer.Data.MP = MyPlayer.Data.MaxMP = 100;
         OppPlayer.Data.HP = 1;
@@ -67,6 +68,7 @@ public class BattleMgr
         dicRoundCounter = null;
         dicBattleCounter = null;
         State = BattleState.None;
+        lastState = BattleState.None;
     }
 
 
@@ -85,11 +87,11 @@ public class BattleMgr
     BattleState lastState = BattleState.Loading;
     public void UpdateScope()
     {
-        if (State == BattleState.BattleEnd_Win
-            || State == BattleState.BattleEnd_Lose
-            || State == BattleState.None
-            || State == BattleState.BattleEnd_MyEscape
-            || State == BattleState.BattleEnd_OppEscape)
+        if (lastState == BattleState.BattleEnd_Win
+            || lastState == BattleState.BattleEnd_Lose
+            || lastState == BattleState.None
+            || lastState == BattleState.BattleEnd_MyEscape
+            || lastState == BattleState.BattleEnd_OppEscape)
         {
             return;
         }
@@ -297,22 +299,7 @@ public class BattleMgr
         }
 
     }
-    /// <summary>
-    /// 逃离战斗
-    /// </summary>
-    public void EscapeBattle()
-    {
-        if (State == BattleState.MyRound)
-        {
-            State = BattleState.BattleEnd_MyEscape;
-            dicRoundCounter.Clear();
-        }
-        else if (State == BattleState.OppRound)
-        {
-            State = BattleState.BattleEnd_OppEscape;
-            dicRoundCounter.Clear();
-        }
-    }
+
     public bool UseCard(BattleCardData battleCardData)
     {
         if (battleCardData.Data.Spending <= battleCardData.Owner.Data.MP)
@@ -356,7 +343,9 @@ public class BattleMgr
             AddUIAction(new UIAction.UIDrawCard(card));
         }
     }
-
+    /// <summary>
+    /// 逃离战斗
+    /// </summary>
     public void EscapeBattle(BattlePlayer player)
     {
         Debug.LogError((player.IsMe ? "[我]" : "[怪]") + "逃跑了");
