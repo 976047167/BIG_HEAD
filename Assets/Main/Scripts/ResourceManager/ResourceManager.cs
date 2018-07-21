@@ -25,6 +25,7 @@ public class ResourceManager
 #if UNITY_EDITOR
         EditorMode = isEditorMode;
 #endif
+        SettingModule.CustomLoadSettingString = LoadSettingFromCache;
         if (helper == null)
         {
             helper = new GameObject().AddComponent<ResourceManagerHelper>();
@@ -43,7 +44,7 @@ public class ResourceManager
     {
         //if (!EditorMode)
         {
-            SettingModule.CustomLoadSettingString = LoadSettingFromCache;
+            
             TablePreloaded = false;
             PreloadDataTables();
         }

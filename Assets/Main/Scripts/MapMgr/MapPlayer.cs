@@ -93,6 +93,7 @@ public class MapPlayer
             }
 
         }
+        Messenger.Broadcast(MessageID.MAP_UPDATE_PLAYER_INFO);
     }
     public void AddExp(int exp)
     {
@@ -104,7 +105,11 @@ public class MapPlayer
             Data.Exp -= levelTable.Exp[(int)Data.ClassData.Type];
             levelTable = LevelTableSettings.Get(Data.Level);
         }
+        Messenger.Broadcast(MessageID.MAP_UPDATE_PLAYER_EXP);
     }
+    /// <summary>
+    /// 保存到全局角色
+    /// </summary>
     public void Save()
     {
         m_Player.Data.Level = Data.Level;

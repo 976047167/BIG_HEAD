@@ -19,17 +19,18 @@ public class Game : MonoBehaviour
     private void Start()
     {
         StartCoroutine(Init());
-        
+
     }
     IEnumerator Init()
     {
         uiModule = UIModule.Instance;
         //资源第一优先级初始化
         yield return ResourceManager.Init(Game.Instance.BundleEditorMode);
+        yield return ResourceManager.Preload();
         yield return uiModule.Init();
         dataMgr = new DataMgr();
         battleMgr = new BattleMgr();
-        
+
         StartGame();
     }
     private void Update()

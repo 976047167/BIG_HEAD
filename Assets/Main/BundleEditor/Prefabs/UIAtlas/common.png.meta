@@ -1,6 +1,6 @@
 fileFormatVersion: 2
 guid: d3845f8e219fb9241a29a2d80a4acda5
-timeCreated: 1531985172
+timeCreated: 1532180087
 licenseType: Pro
 TextureImporter:
   fileIDToRecycleName: {}
@@ -64,5 +64,5 @@ TextureImporter:
     outline: []
   spritePackingTag: 
   userData: 
-  assetBundleName: 
+  assetBundleName: prefabs/uiatlas/common.bundle
   assetBundleVariant: 

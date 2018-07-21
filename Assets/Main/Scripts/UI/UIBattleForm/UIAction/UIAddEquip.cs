@@ -32,6 +32,8 @@ public partial class UIAction
             if (goEquip == null)
             {
                 goEquip = GameObject.Instantiate(playerInfoView.goEquipTemplete);
+                playerInfoView.EquipIcons.Add(EquipData.EquipId, goEquip);
+                goEquip.transform.parent = playerInfoView.gridEquipGrid.transform;
             }
             goEquip.SetActive(true);
             goEquip.name = EquipData.EquipId.ToString();

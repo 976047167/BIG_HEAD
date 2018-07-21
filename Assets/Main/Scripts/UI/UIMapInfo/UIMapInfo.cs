@@ -14,7 +14,7 @@ public class UIMapInfo : UIFormBase
     private UILabel labMp;
     private UILabel labFood;
     private UILabel labGold;
-    private Player playerInfo = new Player();
+    private MapPlayer playerInfo;
     private int iconId = 0;
 
 
@@ -28,9 +28,9 @@ public class UIMapInfo : UIFormBase
         labName = transform.Find("headFrame/labName").GetComponent<UILabel>();
         labHp = transform.Find("headFrame/sliderHp/labHp").GetComponent<UILabel>();
         labMp = transform.Find("headFrame/sliderMp/labMp").GetComponent<UILabel>();
-        labGold = transform.Find("headFrame/gold/labgold").GetComponent<UILabel>();
-        labFood = transform.Find("headFrame/food/labfood").GetComponent<UILabel>();
-        playerInfo = Game.DataManager.MyPlayer;
+        labGold = transform.Find("gold/num").GetComponent<UILabel>();
+        labFood = transform.Find("food/num").GetComponent<UILabel>();
+
         Messenger.AddListener(MessageID.MAP_UPDATE_PLAYER_INFO, UpdatePlayerInfoPanel);
 
     }
@@ -49,6 +49,11 @@ public class UIMapInfo : UIFormBase
     // Update is called once per frame
     void UpdatePlayerInfoPanel()
     {
+        if (MapMgr.Inited == false)
+        {
+            return;
+        }
+        playerInfo = MapMgr.Instance.MyMapPlayer;
         if (iconId != playerInfo.Data.HeadIcon)
         {
             iconId = playerInfo.Data.HeadIcon;
@@ -56,16 +61,10 @@ public class UIMapInfo : UIFormBase
         }
 
         labName.text = playerInfo.Data.Name;
-        sliderHp.value = playerInfo.Data.HP / playerInfo.Data.MaxHP;
+        sliderHp.value = (float)playerInfo.Data.HP / (float)playerInfo.Data.MaxHP;
         labHp.text = string.Format("{0}/{1}", playerInfo.Data.HP, playerInfo.Data.MaxHP);
-        sliderHp.value = playerInfo.Data.MP / playerInfo.Data.MaxMP;
+        sliderMp.value = (float)playerInfo.Data.MP / (float)playerInfo.Data.MaxMP;
         labMp.text = string.Format("{0}/{1}", playerInfo.Data.MP, playerInfo.Data.MaxMP);
-        if (MapMgr.Inited == false)
-        {
-            labFood.text = "";
-            labGold.text = "";
-            return;
-        }
         labFood.text = (MapMgr.Instance.MyMapPlayer.Data.Food.ToString());
         labGold.text = (MapMgr.Instance.MyMapPlayer.Data.Coin.ToString());
 

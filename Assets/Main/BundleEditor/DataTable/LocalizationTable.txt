@@ -125,7 +125,9 @@ int	string	string	string
 51002	拥有强大魔力的人类	擁有強大魔力的人類	None
 60000	物品	物品	Item
 60001	面包	面包	bread
-100000	UI	UI	UI
+1000000	UI	UI	UI
+1000001	血	血	HP
+1000002	魔	魔	MP
 1001000	WND_Launch	WND_Launch	WND_Launch
 1001001	进入游戏	進入遊戲	EnterGame
 1001002	确定	確定	OK

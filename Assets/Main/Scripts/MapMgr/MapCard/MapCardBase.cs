@@ -287,6 +287,7 @@ public class MapCardBase
             {
                 MapMgr.Instance.MyMapPlayer.Data.HP++;
             }
+            Messenger.Broadcast(MessageID.MAP_UPDATE_PLAYER_INFO);
             OnPlayerEnter();
         }
         if (isFirstEnter)

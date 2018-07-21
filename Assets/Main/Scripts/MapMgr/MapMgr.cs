@@ -16,7 +16,7 @@ public class MapMgr
     protected MapPlayer m_MyMapPlayer;
 
     public MapPlayer MyMapPlayer { get { return m_MyMapPlayer; } }
-    public static bool Inited { get { return m_Inited; } }
+    public static bool Inited { get { return m_Instance != null && m_Inited; } }
 
     private MapMgr()
     {

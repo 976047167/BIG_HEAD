@@ -26,6 +26,19 @@ public enum MessageID : uint
     /// 地图界面更新角色信息
     /// </summary>
     MAP_UPDATE_PLAYER_INFO,
+    /// <summary>
+    /// 地图界面更新角色经验
+    /// </summary>
+    MAP_UPDATE_PLAYER_EXP,
+
+    /// <summary>
+    /// 地图界面更新角色信息
+    /// </summary>
+    GAME_UPDATE_PLAYER_INFO,
+    /// <summary>
+    /// 地图界面更新角色经验
+    /// </summary>
+    GAME_UPDATE_PLAYER_EXP,
 
 
 
