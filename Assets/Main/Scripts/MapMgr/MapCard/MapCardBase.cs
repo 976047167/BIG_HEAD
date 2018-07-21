@@ -77,7 +77,7 @@ public class MapCardBase
         "MapCardNpc"
     };
     static string MapCardDoor = "MapCardDoor";
-    static string MapCardPlayer = "MapCardPlayer";
+    //static string MapCardPlayer = "MapCardPlayer";
 
     public static MapCardBase CreateMapCard<T>(MapCardPos pos = null, CardState defaultState = CardState.None) where T : MapCardBase, new()
     {
