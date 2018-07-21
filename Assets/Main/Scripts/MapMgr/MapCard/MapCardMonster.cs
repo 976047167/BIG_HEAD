@@ -21,7 +21,11 @@ public class MapCardMonster : MapCardBase
             a.Add(monsterId);
             UIModule.Instance.OpenForm<WND_Dialog>(a);
         }
-        base.OnPlayerEnter();
+        else
+        {
+            UIModule.Instance.OpenForm<WND_Dialog>(32);
+        }
+        
         Used = true;
     }
 

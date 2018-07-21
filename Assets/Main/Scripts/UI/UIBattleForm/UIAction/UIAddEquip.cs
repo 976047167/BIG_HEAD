@@ -34,11 +34,15 @@ public partial class UIAction
                 goEquip = GameObject.Instantiate(playerInfoView.goEquipTemplete);
                 playerInfoView.EquipIcons.Add(EquipData.EquipId, goEquip);
                 goEquip.transform.parent = playerInfoView.gridEquipGrid.transform;
+                goEquip.transform.localScale = Vector3.one;
+
             }
             goEquip.SetActive(true);
             goEquip.name = EquipData.EquipId.ToString();
             UIUtility.SetEquipTips(goEquip, EquipData.EquipId);
             goEquip.transform.Find("Icon").GetComponent<UITexture>().Load(EquipData.Data.IconID);
+            yield return null;
+            playerInfoView.gridEquipGrid.Reposition();
         }
     }
 }

@@ -77,6 +77,7 @@ public class MapCardBase
         "MapCardNpc"
     };
     static string MapCardDoor = "MapCardDoor";
+    static string MapCardBoss = "MapCardBoss";
     //static string MapCardPlayer = "MapCardPlayer";
 
     public static MapCardBase CreateMapCard<T>(MapCardPos pos = null, CardState defaultState = CardState.None) where T : MapCardBase, new()
@@ -87,7 +88,7 @@ public class MapCardBase
         {
             mapCard.pos = new MapCardPos(pos.X, pos.Y);
         }
-        if (defaultState!= CardState.None)
+        if (defaultState != CardState.None)
         {
             mapCard.state = defaultState;
         }
@@ -116,7 +117,7 @@ public class MapCardBase
         return mapCard;
     }
 
-    static void LoadAssetSuccessess(string path, object[] args, GameObject go )
+    static void LoadAssetSuccessess(string path, object[] args, GameObject go)
     {
         MapCardBase mapCard = args[0] as MapCardBase;
         go.AddComponent<MapCardHelper>().MapCardData = mapCard;
@@ -368,7 +369,7 @@ public class MapCardBase
     /// </summary>
     protected virtual void OnPlayerEnter()
     {
-        
+
     }
     /// <summary>
     /// 与玩家互动时发生
