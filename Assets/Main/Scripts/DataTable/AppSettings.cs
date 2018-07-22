@@ -1322,6 +1322,16 @@ namespace AppSettings
         public string Desc { get; private set;}
         
         /// <summary>
+        /// 怪物品级(0普通1小头目2舵主3护法4教主)
+        /// </summary>
+        public int Rarity { get; private set;}
+        
+        /// <summary>
+        /// 地图卡模型
+        /// </summary>
+        public int ModelId { get; private set;}
+        
+        /// <summary>
         /// 怪物等级
         /// </summary>
         public int Level { get; private set;}
@@ -1407,21 +1417,23 @@ namespace AppSettings
             Id = row.Get_int(row.Values[0], ""); 
             Name = row.Get_string (row.Values[1], ""); 
             Desc = row.Get_string(row.Values[2], ""); 
-            Level = row.Get_int(row.Values[3], ""); 
-            HP = row.Get_int(row.Values[4], ""); 
-            MaxHp = row.Get_int(row.Values[5], ""); 
-            MP = row.Get_int(row.Values[6], ""); 
-            MaxMP = row.Get_int(row.Values[7], ""); 
-            AP = row.Get_int(row.Values[8], ""); 
-            MaxAP = row.Get_int(row.Values[9], ""); 
-            SkillId = row.Get_int(row.Values[10], ""); 
-            IconId = row.Get_int(row.Values[11], ""); 
-            BattleCards = row.Get_List_int(row.Values[12], ""); 
-            BuffIds = row.Get_List_int(row.Values[13], ""); 
-            BuffParams = row.Get_List_int(row.Values[14], ""); 
-            EquipIds = row.Get_List_int(row.Values[15], ""); 
-            DialogId = row.Get_int(row.Values[16], ""); 
-            RewardIds = row.Get_List_int(row.Values[17], ""); 
+            Rarity = row.Get_int(row.Values[3], ""); 
+            ModelId = row.Get_int(row.Values[4], ""); 
+            Level = row.Get_int(row.Values[5], ""); 
+            HP = row.Get_int(row.Values[6], ""); 
+            MaxHp = row.Get_int(row.Values[7], ""); 
+            MP = row.Get_int(row.Values[8], ""); 
+            MaxMP = row.Get_int(row.Values[9], ""); 
+            AP = row.Get_int(row.Values[10], ""); 
+            MaxAP = row.Get_int(row.Values[11], ""); 
+            SkillId = row.Get_int(row.Values[12], ""); 
+            IconId = row.Get_int(row.Values[13], ""); 
+            BattleCards = row.Get_List_int(row.Values[14], ""); 
+            BuffIds = row.Get_List_int(row.Values[15], ""); 
+            BuffParams = row.Get_List_int(row.Values[16], ""); 
+            EquipIds = row.Get_List_int(row.Values[17], ""); 
+            DialogId = row.Get_int(row.Values[18], ""); 
+            RewardIds = row.Get_List_int(row.Values[19], ""); 
         }
 
         /// <summary>

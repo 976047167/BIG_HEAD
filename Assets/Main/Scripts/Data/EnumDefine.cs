@@ -54,7 +54,32 @@ public enum CardType
     /// </summary>
     Consumable,
 }
-
+/// <summary>
+/// 怪物稀有度 0普通1小头目2舵主3护法4教主
+/// </summary>
+public enum MonsterRarity
+{
+    /// <summary>
+    /// 普通
+    /// </summary>
+    Ordinary = 0,
+    /// <summary>
+    /// 小头目
+    /// </summary>
+    SmallHead,
+    /// <summary>
+    /// 舵主
+    /// </summary>
+    Duozhu,
+    /// <summary>
+    /// 护法
+    /// </summary>
+    Custodian,
+    /// <summary>
+    /// 教主
+    /// </summary>
+    Leader,
+}
 public enum MessageBoxType
 {
     Yes = 0,

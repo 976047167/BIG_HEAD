@@ -82,7 +82,6 @@ public class MapCardBase
 
     public static MapCardBase CreateMapCard<T>(MapCardPos pos = null, CardState defaultState = CardState.None) where T : MapCardBase, new()
     {
-
         MapCardBase mapCard = new T();
         if (pos != null)
         {
