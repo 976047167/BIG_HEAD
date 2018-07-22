@@ -15,6 +15,9 @@ public class UIMapInfo : UIFormBase
     private UILabel labFood;
     private UILabel labGold;
     private MapPlayer playerInfo;
+    private UISprite spExp;
+    private UILabel lblLevel;
+
     private int iconId = 0;
 
 
@@ -30,6 +33,8 @@ public class UIMapInfo : UIFormBase
         labMp = transform.Find("headFrame/sliderMp/labMp").GetComponent<UILabel>();
         labGold = transform.Find("gold/num").GetComponent<UILabel>();
         labFood = transform.Find("food/num").GetComponent<UILabel>();
+        spExp = transform.Find("headFrame/spExp").GetComponent<UISprite>();
+        lblLevel = transform.Find("headFrame/spExp/lblLevel").GetComponent<UILabel>();
 
         Messenger.AddListener(MessageID.MAP_UPDATE_PLAYER_INFO, UpdatePlayerInfoPanel);
 
@@ -67,6 +72,7 @@ public class UIMapInfo : UIFormBase
         labMp.text = string.Format("{0}/{1}", playerInfo.Data.MP, playerInfo.Data.MaxMP);
         labFood.text = (MapMgr.Instance.MyMapPlayer.Data.Food.ToString());
         labGold.text = (MapMgr.Instance.MyMapPlayer.Data.Coin.ToString());
-
+        spExp.fillAmount = (float)playerInfo.Data.Exp / (float)playerInfo.Data.MaxExp;
+        lblLevel.text = playerInfo.Data.Level.ToString();
     }
 }

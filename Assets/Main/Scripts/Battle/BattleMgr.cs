@@ -44,8 +44,8 @@ public class BattleMgr
         OppPlayer.StartAI();
         uiActions.Clear();
 
-        //MyPlayer.Data.MP = MyPlayer.Data.MaxMP = 100;
-        //OppPlayer.Data.HP = 1;
+        MyPlayer.Data.MP = MyPlayer.Data.MaxMP = 100;
+        OppPlayer.Data.HP = 1;
         Game.UI.OpenForm<UIBattleForm>();
     }
     public void SaveData(int rewardId = 0)

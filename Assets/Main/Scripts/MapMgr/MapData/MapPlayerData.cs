@@ -19,6 +19,11 @@ public class MapPlayerData : PlayerData
         Name = playerData.Name;
         Level = playerData.Level;
         Exp = playerData.Exp;
+        LevelTableSetting levelTable = LevelTableSettings.Get(Level);
+        if (levelTable != null)
+        {
+            MaxExp = levelTable.Exp[(int)playerData.ClassData.Type];
+        }
         HP = playerData.HP;
         MaxHP = playerData.MaxHP;
         MP = playerData.MP;

@@ -6,18 +6,18 @@ using AppSettings;
 public class MapCardMonster : MapCardBase
 {
     [SerializeField]
-    int monsterId = 0;
+    protected int monsterId = 0;
 
     protected override void OnPlayerEnter()
     {
-        
+
         //进入战斗
         if (isFirstEnter)
         {
-            
+
             int DialogId = BattleMonsterTableSettings.Get(monsterId).DialogId;
             List<int> a = new List<int>();
-            a.Add( DialogId);
+            a.Add(DialogId);
             a.Add(monsterId);
             UIModule.Instance.OpenForm<WND_Dialog>(a);
         }
@@ -25,7 +25,7 @@ public class MapCardMonster : MapCardBase
         {
             UIModule.Instance.OpenForm<WND_Dialog>(32);
         }
-        
+
         Used = true;
     }
 

@@ -105,6 +105,7 @@ public class MapPlayer
             Data.Exp -= levelTable.Exp[(int)Data.ClassData.Type];
             levelTable = LevelTableSettings.Get(Data.Level);
         }
+        Data.MaxExp = levelTable.Exp[(int)Data.ClassData.Type];
         Messenger.Broadcast(MessageID.MAP_UPDATE_PLAYER_EXP);
     }
     /// <summary>
@@ -114,5 +115,6 @@ public class MapPlayer
     {
         m_Player.Data.Level = Data.Level;
         m_Player.Data.Exp = Data.Exp;
+        m_Player.Data.MaxExp = Data.MaxExp;
     }
 }

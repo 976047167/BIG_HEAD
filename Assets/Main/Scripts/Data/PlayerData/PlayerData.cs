@@ -7,6 +7,7 @@ public class PlayerData
     public string Name;
     public int Level;
     public int Exp = 0;
+    public int MaxExp = 1;
     /// <summary>
     /// 血量
     /// </summary>
