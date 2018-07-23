@@ -54,7 +54,6 @@ namespace AppSettings
                         BattleEquipTableSettings._instance,
                         BattleMonsterTableSettings._instance,
                         BoxTableSettings._instance,
-                        CharacterModelTableSettings._instance,
                         ClassCharacterTableSettings._instance,
                         ClassTableSettings._instance,
                         DialogTableSettings._instance,
@@ -62,6 +61,7 @@ namespace AppSettings
                         ItemTableSettings._instance,
                         LevelTableSettings._instance,
                         LocalizationTableSettings._instance,
+                        ModelTableSettings._instance,
                         NpcTableSettings._instance,
                         PromptTableSettings._instance,
                         RewardTableSettings._instance,
@@ -1402,9 +1402,14 @@ namespace AppSettings
         public int DialogId { get; private set;}
         
         /// <summary>
-        /// 奖励
+        /// 奖励(物品ID)
         /// </summary>
         public List<int> RewardIds { get; private set;}
+        
+        /// <summary>
+        /// 各个奖励的概率(万分制)
+        /// </summary>
+        public List<int> RewardProbability { get; private set;}
         
 
         internal BattleMonsterTableSetting(TableFileRow row)
@@ -1434,6 +1439,7 @@ namespace AppSettings
             EquipIds = row.Get_List_int(row.Values[17], ""); 
             DialogId = row.Get_int(row.Values[18], ""); 
             RewardIds = row.Get_List_int(row.Values[19], ""); 
+            RewardProbability = row.Get_List_int(row.Values[20], ""); 
         }
 
         /// <summary>
@@ -1629,6 +1635,11 @@ namespace AppSettings
         /// </summary>
         public int DialogId { get; private set;}
         
+        /// <summary>
+        /// 地图卡模型
+        /// </summary>
+        public int ModelId { get; private set;}
+        
 
         internal BoxTableSetting(TableFileRow row)
         {
@@ -1639,211 +1650,7 @@ namespace AppSettings
         { 
             Id = row.Get_int(row.Values[0], ""); 
             DialogId = row.Get_int(row.Values[1], ""); 
-        }
-
-        /// <summary>
-        /// Get PrimaryKey from a table row
-        /// </summary>
-        /// <param name="row"></param>
-        /// <returns></returns>
-        public static int ParsePrimaryKey(TableFileRow row)
-        {
-            var primaryKey = row.Get_int(row.Values[0], "");
-            return primaryKey;
-        }
-	}
-
-	/// <summary>
-	/// Auto Generate for Tab File: "CharacterModelTable.txt"
-    /// No use of generic and reflection, for better performance,  less IL code generating
-	/// </summary>>
-    public partial class CharacterModelTableSettings : IReloadableSettings
-    {
-        /// <summary>
-        /// How many reload function load?
-        /// </summary>>
-        public static int ReloadCount { get; private set; }
-
-		public static readonly string[] TabFilePaths = 
-        {
-            "CharacterModelTable.txt"
-        };
-        internal static CharacterModelTableSettings _instance = new CharacterModelTableSettings();
-        Dictionary<int, CharacterModelTableSetting> _dict = new Dictionary<int, CharacterModelTableSetting>();
-
-        /// <summary>
-        /// Trigger delegate when reload the Settings
-        /// </summary>>
-	    public static System.Action OnReload;
-
-        /// <summary>
-        /// Constructor, just reload(init)
-        /// When Unity Editor mode, will watch the file modification and auto reload
-        /// </summary>
-	    private CharacterModelTableSettings()
-	    {
-        }
-
-        /// <summary>
-        /// Get the singleton
-        /// </summary>
-        /// <returns></returns>
-	    public static CharacterModelTableSettings GetInstance()
-	    {
-            if (ReloadCount == 0)
-            {
-                _instance._ReloadAll(true);
-    #if UNITY_EDITOR
-                if (SettingModule.IsFileSystemMode)
-                {
-                    for (var j = 0; j < TabFilePaths.Length; j++)
-                    {
-                        var tabFilePath = TabFilePaths[j];
-                        SettingModule.WatchSetting(tabFilePath, (path) =>
-                        {
-                            if (path.Replace("\\", "/").EndsWith(path))
-                            {
-                                _instance.ReloadAll();
-                                Log.LogConsole_MultiThread("File Watcher! Reload success! -> " + path);
-                            }
-                        });
-                    }
-
-                }
-    #endif
-            }
-
-	        return _instance;
-	    }
-        
-        public int Count
-        {
-            get
-            {
-                return _dict.Count;
-            }
-        }
-
-        /// <summary>
-        /// Do reload the setting file: CharacterModelTable, no exception when duplicate primary key
-        /// </summary>
-        public void ReloadAll()
-        {
-            _ReloadAll(false);
-        }
-
-        /// <summary>
-        /// Do reload the setting class : CharacterModelTable, no exception when duplicate primary key, use custom string content
-        /// </summary>
-        public void ReloadAllWithString(string context)
-        {
-            _ReloadAll(false, context);
-        }
-
-        /// <summary>
-        /// Do reload the setting file: CharacterModelTable
-        /// </summary>
-	    void _ReloadAll(bool throwWhenDuplicatePrimaryKey, string customContent = null)
-        {
-            for (var j = 0; j < TabFilePaths.Length; j++)
-            {
-                var tabFilePath = TabFilePaths[j];
-                TableFile tableFile;
-                if (customContent == null)
-                    tableFile = SettingModule.Get(tabFilePath, false);
-                else
-                    tableFile = TableFile.LoadFromString(customContent);
-
-                using (tableFile)
-                {
-                    foreach (var row in tableFile)
-                    {
-                        var pk = CharacterModelTableSetting.ParsePrimaryKey(row);
-                        CharacterModelTableSetting setting;
-                        if (!_dict.TryGetValue(pk, out setting))
-                        {
-                            setting = new CharacterModelTableSetting(row);
-                            _dict[setting.Id] = setting;
-                        }
-                        else 
-                        {
-                            if (throwWhenDuplicatePrimaryKey) throw new System.Exception(string.Format("DuplicateKey, Class: {0}, File: {1}, Key: {2}", this.GetType().Name, tabFilePath, pk));
-                            else setting.Reload(row);
-                        }
-                    }
-                }
-            }
-
-	        if (OnReload != null)
-	        {
-	            OnReload();
-	        }
-
-            ReloadCount++;
-            Log.Info("Reload settings: {0}, Row Count: {1}, Reload Count: {2}", GetType(), Count, ReloadCount);
-        }
-
-	    /// <summary>
-        /// foreachable enumerable: CharacterModelTable
-        /// </summary>
-        public static IEnumerable GetAll()
-        {
-            foreach (var row in GetInstance()._dict.Values)
-            {
-                yield return row;
-            }
-        }
-
-        /// <summary>
-        /// GetEnumerator for `MoveNext`: CharacterModelTable
-        /// </summary> 
-	    public static IEnumerator GetEnumerator()
-	    {
-	        return GetInstance()._dict.Values.GetEnumerator();
-	    }
-         
-	    /// <summary>
-        /// Get class by primary key: CharacterModelTable
-        /// </summary>
-        public static CharacterModelTableSetting Get(int primaryKey)
-        {
-            CharacterModelTableSetting setting;
-            if (GetInstance()._dict.TryGetValue(primaryKey, out setting)) return setting;
-            return null;
-        }
-
-        // ========= CustomExtraString begin ===========
-        
-        // ========= CustomExtraString end ===========
-    }
-
-	/// <summary>
-	/// Auto Generate for Tab File: "CharacterModelTable.txt"
-    /// Singleton class for less memory use
-	/// </summary>
-	public partial class CharacterModelTableSetting : TableRowFieldParser
-	{
-		
-        /// <summary>
-        /// #目录
-        /// </summary>
-        public int Id { get; private set;}
-        
-        /// <summary>
-        /// 路径
-        /// </summary>
-        public string Path { get; private set;}
-        
-
-        internal CharacterModelTableSetting(TableFileRow row)
-        {
-            Reload(row);
-        }
-
-        internal void Reload(TableFileRow row)
-        { 
-            Id = row.Get_int(row.Values[0], ""); 
-            Path = row.Get_string(row.Values[1], ""); 
+            ModelId = row.Get_int(row.Values[2], ""); 
         }
 
         /// <summary>
@@ -3456,6 +3263,211 @@ namespace AppSettings
 	}
 
 	/// <summary>
+	/// Auto Generate for Tab File: "ModelTable.txt"
+    /// No use of generic and reflection, for better performance,  less IL code generating
+	/// </summary>>
+    public partial class ModelTableSettings : IReloadableSettings
+    {
+        /// <summary>
+        /// How many reload function load?
+        /// </summary>>
+        public static int ReloadCount { get; private set; }
+
+		public static readonly string[] TabFilePaths = 
+        {
+            "ModelTable.txt"
+        };
+        internal static ModelTableSettings _instance = new ModelTableSettings();
+        Dictionary<int, ModelTableSetting> _dict = new Dictionary<int, ModelTableSetting>();
+
+        /// <summary>
+        /// Trigger delegate when reload the Settings
+        /// </summary>>
+	    public static System.Action OnReload;
+
+        /// <summary>
+        /// Constructor, just reload(init)
+        /// When Unity Editor mode, will watch the file modification and auto reload
+        /// </summary>
+	    private ModelTableSettings()
+	    {
+        }
+
+        /// <summary>
+        /// Get the singleton
+        /// </summary>
+        /// <returns></returns>
+	    public static ModelTableSettings GetInstance()
+	    {
+            if (ReloadCount == 0)
+            {
+                _instance._ReloadAll(true);
+    #if UNITY_EDITOR
+                if (SettingModule.IsFileSystemMode)
+                {
+                    for (var j = 0; j < TabFilePaths.Length; j++)
+                    {
+                        var tabFilePath = TabFilePaths[j];
+                        SettingModule.WatchSetting(tabFilePath, (path) =>
+                        {
+                            if (path.Replace("\\", "/").EndsWith(path))
+                            {
+                                _instance.ReloadAll();
+                                Log.LogConsole_MultiThread("File Watcher! Reload success! -> " + path);
+                            }
+                        });
+                    }
+
+                }
+    #endif
+            }
+
+	        return _instance;
+	    }
+        
+        public int Count
+        {
+            get
+            {
+                return _dict.Count;
+            }
+        }
+
+        /// <summary>
+        /// Do reload the setting file: ModelTable, no exception when duplicate primary key
+        /// </summary>
+        public void ReloadAll()
+        {
+            _ReloadAll(false);
+        }
+
+        /// <summary>
+        /// Do reload the setting class : ModelTable, no exception when duplicate primary key, use custom string content
+        /// </summary>
+        public void ReloadAllWithString(string context)
+        {
+            _ReloadAll(false, context);
+        }
+
+        /// <summary>
+        /// Do reload the setting file: ModelTable
+        /// </summary>
+	    void _ReloadAll(bool throwWhenDuplicatePrimaryKey, string customContent = null)
+        {
+            for (var j = 0; j < TabFilePaths.Length; j++)
+            {
+                var tabFilePath = TabFilePaths[j];
+                TableFile tableFile;
+                if (customContent == null)
+                    tableFile = SettingModule.Get(tabFilePath, false);
+                else
+                    tableFile = TableFile.LoadFromString(customContent);
+
+                using (tableFile)
+                {
+                    foreach (var row in tableFile)
+                    {
+                        var pk = ModelTableSetting.ParsePrimaryKey(row);
+                        ModelTableSetting setting;
+                        if (!_dict.TryGetValue(pk, out setting))
+                        {
+                            setting = new ModelTableSetting(row);
+                            _dict[setting.Id] = setting;
+                        }
+                        else 
+                        {
+                            if (throwWhenDuplicatePrimaryKey) throw new System.Exception(string.Format("DuplicateKey, Class: {0}, File: {1}, Key: {2}", this.GetType().Name, tabFilePath, pk));
+                            else setting.Reload(row);
+                        }
+                    }
+                }
+            }
+
+	        if (OnReload != null)
+	        {
+	            OnReload();
+	        }
+
+            ReloadCount++;
+            Log.Info("Reload settings: {0}, Row Count: {1}, Reload Count: {2}", GetType(), Count, ReloadCount);
+        }
+
+	    /// <summary>
+        /// foreachable enumerable: ModelTable
+        /// </summary>
+        public static IEnumerable GetAll()
+        {
+            foreach (var row in GetInstance()._dict.Values)
+            {
+                yield return row;
+            }
+        }
+
+        /// <summary>
+        /// GetEnumerator for `MoveNext`: ModelTable
+        /// </summary> 
+	    public static IEnumerator GetEnumerator()
+	    {
+	        return GetInstance()._dict.Values.GetEnumerator();
+	    }
+         
+	    /// <summary>
+        /// Get class by primary key: ModelTable
+        /// </summary>
+        public static ModelTableSetting Get(int primaryKey)
+        {
+            ModelTableSetting setting;
+            if (GetInstance()._dict.TryGetValue(primaryKey, out setting)) return setting;
+            return null;
+        }
+
+        // ========= CustomExtraString begin ===========
+        
+        // ========= CustomExtraString end ===========
+    }
+
+	/// <summary>
+	/// Auto Generate for Tab File: "ModelTable.txt"
+    /// Singleton class for less memory use
+	/// </summary>
+	public partial class ModelTableSetting : TableRowFieldParser
+	{
+		
+        /// <summary>
+        /// #目录
+        /// </summary>
+        public int Id { get; private set;}
+        
+        /// <summary>
+        /// 路径
+        /// </summary>
+        public string Path { get; private set;}
+        
+
+        internal ModelTableSetting(TableFileRow row)
+        {
+            Reload(row);
+        }
+
+        internal void Reload(TableFileRow row)
+        { 
+            Id = row.Get_int(row.Values[0], ""); 
+            Path = row.Get_string(row.Values[1], ""); 
+        }
+
+        /// <summary>
+        /// Get PrimaryKey from a table row
+        /// </summary>
+        /// <param name="row"></param>
+        /// <returns></returns>
+        public static int ParsePrimaryKey(TableFileRow row)
+        {
+            var primaryKey = row.Get_int(row.Values[0], "");
+            return primaryKey;
+        }
+	}
+
+	/// <summary>
 	/// Auto Generate for Tab File: "NpcTable.txt"
     /// No use of generic and reflection, for better performance,  less IL code generating
 	/// </summary>>
@@ -3636,6 +3648,11 @@ namespace AppSettings
         /// </summary>
         public int DialogId { get; private set;}
         
+        /// <summary>
+        /// 地图卡模型
+        /// </summary>
+        public int ModelId { get; private set;}
+        
 
         internal NpcTableSetting(TableFileRow row)
         {
@@ -3646,6 +3663,7 @@ namespace AppSettings
         { 
             Id = row.Get_int(row.Values[0], ""); 
             DialogId = row.Get_int(row.Values[1], ""); 
+            ModelId = row.Get_int(row.Values[2], ""); 
         }
 
         /// <summary>
@@ -4510,6 +4528,11 @@ namespace AppSettings
         /// </summary>
         public int DialogId { get; private set;}
         
+        /// <summary>
+        /// 地图卡模型
+        /// </summary>
+        public int ModelId { get; private set;}
+        
 
         internal ShopTableSetting(TableFileRow row)
         {
@@ -4520,6 +4543,7 @@ namespace AppSettings
         { 
             Id = row.Get_int(row.Values[0], ""); 
             DialogId = row.Get_int(row.Values[1], ""); 
+            ModelId = row.Get_int(row.Values[2], ""); 
         }
 
         /// <summary>
