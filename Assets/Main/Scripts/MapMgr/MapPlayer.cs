@@ -24,7 +24,7 @@ public class MapPlayer
     public void CreateModel(MapCardPos pos)
     {
         CurPos = pos;
-        ResourceManager.LoadGameObject(CharacterModelTableSettings.Get(ClassCharacterTableSettings.Get(m_Data.ClassData.CharacterID).ModelID).Path, LoadPlayerSuccess,
+        ResourceManager.LoadGameObject(ModelTableSettings.Get(ClassCharacterTableSettings.Get(m_Data.ClassData.CharacterID).ModelID).Path, LoadPlayerSuccess,
             (str, obj) => { Debug.LogError("Load player Failed!"); }
             );
     }

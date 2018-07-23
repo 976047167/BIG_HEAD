@@ -1,10 +1,10 @@
-Id	Name	Desc	Rarity	ModelId	Level	HP	MaxHp	MP	MaxMP	AP	MaxAP	SkillId	IconId	BattleCards	BuffIds	BuffParams	EquipIds	DialogId	RewardIds
-int	string 	string	int	int	int	int	int	int	int	int	int	int	int	List<int>	List<int>	List<int>	List<int>	int	List<int>
-1	兔子	兔子	0	6	1	10	10	2	2	1	1	0	10034	1,1,1,1,2,2,5,6	0	0	0	14	1
-2	狗	狗	0	6	1	11	11	2	2	1	1	0	10035	1,1,1,1,2,2,5,6	0	0	0	14	1
-3	牛	牛	0	6	1	12	12	2	2	1	1	0	10036	1,1,1,1,2,2,5,6	0	0	0	14	1
-4	猪	猪	0	6	2	13	13	2	2	1	1	0	10037	1,1,1,1,2,2,5,6	0	0	0	14	1
-5	羊	羊	0	6	2	14	14	2	2	1	1	0	10038	1,1,1,1,2,2,5,6	0	0	0	14	2
-6	马	马	0	6	2	15	15	2	2	1	1	0	10039	1,1,1,1,2,2,5,6	0	0	0	14	2
-7	鹿	鹿	0	6	3	1000	1000	1000	1000	1000	1000	0	10040	1,1,1,1,2,2,5,6	0	0	0	14	2
-8	虎	虎	4	3															
+Id	Name	Desc	Rarity	ModelId	Level	HP	MaxHp	MP	MaxMP	AP	MaxAP	SkillId	IconId	BattleCards	BuffIds	BuffParams	EquipIds	DialogId	RewardIds	RewardProbability
+int	string 	string	int	int	int	int	int	int	int	int	int	int	int	List<int>	List<int>	List<int>	List<int>	int	List<int>	List<int>
+1	兔子	兔子	0	6	1	10	10	2	2	1	1	0	10034	1,1,1,1,2,2,5,6	0	0	0	14	1	10000
+2	狗	狗	0	6	1	11	11	2	2	1	1	0	10035	1,1,1,1,2,2,5,6	0	0	0	14	1	10000
+3	牛	牛	0	6	1	12	12	2	2	1	1	0	10036	1,1,1,1,2,2,5,6	0	0	0	14	1	10000
+4	猪	猪	0	6	2	13	13	2	2	1	1	0	10037	1,1,1,1,2,2,5,6	0	0	0	14	1	10000
+5	羊	羊	0	6	2	14	14	2	2	1	1	0	10038	1,1,1,1,2,2,5,6	0	0	0	14	2	10000
+6	马	马	0	6	2	15	15	2	2	1	1	0	10039	1,1,1,1,2,2,5,6	0	0	0	14	2	10000
+7	鹿	鹿	0	6	3	16	16	2	2	1	1	0	10040	1,1,1,1,2,2,5,6	0	0	0	14	2	10000
+8	虎	虎	4	3	5	1000	1000	1000	1000	1000	1000	0	10041	1,1,1,1,2,2,5,7	0	0	0	14	2	10000
