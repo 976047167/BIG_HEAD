@@ -5,11 +5,13 @@ using UnityEngine;
 public class ShowCard : MonoBehaviour {
     private int Type;
     private int Id;
+    private int Num;
 
-    public void SetShow(int type,int id)
+    public void SetShow(int type,int id,int num)
     {
         Type = type;
         Id = id;
+        Num = num;
         UIEventListener.Get(gameObject).onClick += Show;
     }
     private void Show(GameObject obj)
@@ -17,6 +19,7 @@ public class ShowCard : MonoBehaviour {
         int[] args = new int[2];
         args[0] = Type;
         args[1] = Id;
+        args[2] = Num;
         Game.UI.OpenForm<WND_ShowCard>(args);
     }
 

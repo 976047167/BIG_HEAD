@@ -9,28 +9,51 @@ public class UIUtility
     /// </summary>
     /// <param name="go"></param>需要添加脚本的go
     /// <param name="cardId"></param>
-    public static void SetCardTips(GameObject go, int cardId)
+    public static void SetCardTips(GameObject go, int cardId,int cardNum =1)
     {
-        go.AddComponent<ShowCard>().SetShow(0, cardId);
+        ShowCard ShowCard = go.GetComponent<ShowCard>();
+        if (ShowCard == null)
+        {
+            go.AddComponent<ShowCard>().SetShow(0, cardId, cardNum);
+        }
+       else
+        {
+            ShowCard.SetShow(0, cardId, cardNum);
+        }
     }
     /// <summary>
     /// 展示buff
     /// </summary>
     /// <param name="go"></param>需要添加脚本的go
     /// <param name="cardId"></param>
-    public static void SetBuffTips(GameObject go, int buffId)
+    public static void SetBuffTips(GameObject go, int buffId, int cardNum = 1)
     {
-
-        go.AddComponent<ShowCard>().SetShow(1, buffId);
+        ShowCard ShowCard = go.GetComponent<ShowCard>();
+        if (ShowCard == null)
+        {
+            go.AddComponent<ShowCard>().SetShow(0, buffId, cardNum);
+        }
+        else
+        {
+            ShowCard.SetShow(0, buffId, cardNum);
+        }
     }
     /// <summary>
     /// 展示装备
     /// </summary>
     /// <param name="go"></param>需要添加脚本的go
     /// <param name="cardId"></param>
-    public static void SetEquipTips(GameObject go, int equipId)
+    public static void SetEquipTips(GameObject go, int equipId, int cardNum = 1)
     {
-        go.AddComponent<ShowCard>().SetShow(2, equipId);
+        ShowCard ShowCard = go.GetComponent<ShowCard>();
+        if (ShowCard == null)
+        {
+            go.AddComponent<ShowCard>().SetShow(0, equipId, cardNum);
+        }
+        else
+        {
+            ShowCard.SetShow(0, equipId, cardNum);
+        }
     }
     public static void ShowMessageBox(MessageBoxType messageBoxType, int contentId, WND_MessageBox.MessageBoxCallback messageBoxCallback)
     {

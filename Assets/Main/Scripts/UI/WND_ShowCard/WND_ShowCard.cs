@@ -8,6 +8,7 @@ public class WND_ShowCard : UIFormBase
     private GameObject btnDestroy;
     private UITexture icon;
     private UILabel labName;
+    private UILabel labNum;
     private UILabel spendingNum;
     private UILabel describle;
     private UILabel labAttack;
@@ -18,6 +19,7 @@ public class WND_ShowCard : UIFormBase
     private UISprite spEquip;
     private object Args;
     private GameObject CardBg;
+    private int CardId = -1;
     /// <summary>
     /// 加载
     /// </summary>
@@ -30,6 +32,7 @@ public class WND_ShowCard : UIFormBase
         CardBg = transform.Find("CardBg").gameObject;
         icon = transform.Find("CardBg/iconFrame/icon").GetComponent<UITexture>();
         labName = transform.Find("CardBg/labName").GetComponent<UILabel>();
+        labNum = transform.Find("CardBg/spNumFrame/labNum").GetComponent<UILabel>();
         spSpending = transform.Find("CardBg/describeFrame/spSpending").GetComponent<UISprite>();
         spendingNum = spSpending.transform.Find("labSpending").GetComponent<UILabel>();
         describle = transform.Find("CardBg/describeFrame/ScrollView/labDescribe").GetComponent<UILabel>();
@@ -52,9 +55,9 @@ public class WND_ShowCard : UIFormBase
     {
         base.OnOpen();
         int[] args = (int[])Args;
-        if (args.Length < 2)
+        if (args.Length != 3)
         {
-            Debug.LogError("WND_ShowCard OnInit : wrong args!");
+            Debug.LogError("WND_ShowCard OnOpen : wrong args!");
             return;
         }
         switch (args[0])
@@ -70,9 +73,17 @@ public class WND_ShowCard : UIFormBase
                 break;
 
         }
-        ShowAnime();
+        SetNum(args[2]);
+       
 
     }
+    protected override void OnShow()
+    {
+        base.OnShow();
+        ShowAnime();
+    }
+
+
     private void ShowAnime()
     {
         CardBg.transform.localScale = new Vector3(0.3f, 0.3f, 0.3f);
@@ -86,6 +97,9 @@ public class WND_ShowCard : UIFormBase
     /// <param name="id"></param>
     private void InitCard(int id)
     {
+        if (CardId == id)
+            return;
+        CardId = id;
         BattleCardTableSetting card = BattleCardTableSettings.Get(id);
         icon.Load(card.ShowID);
         labName.text = I18N.Get(card.Name);
@@ -100,6 +114,9 @@ public class WND_ShowCard : UIFormBase
 
     private void InitBuff(int id)
     {
+        if (CardId == id)
+            return;
+        CardId = id;
         BattleBuffTableSetting buff = BattleBuffTableSettings.Get(id);
         icon.Load(buff.IconID);
         labName.text = I18N.Get(buff.Name);
@@ -109,6 +126,9 @@ public class WND_ShowCard : UIFormBase
     }
     private void InitEquip(int id)
     {
+        if (CardId == id)
+            return;
+        CardId = id;
         BattleEquipTableSetting equip = BattleEquipTableSettings.Get(id);
         icon.Load(equip.IconID);
         labName.text = I18N.Get(equip.Name);
@@ -125,7 +145,10 @@ public class WND_ShowCard : UIFormBase
         spItem.gameObject.SetActive(cardType == 3);
         */
     }
-
+    private void SetNum(int num)
+    {
+        labNum.text = num.ToString();
+    }
 
     /// <summary>
     /// 退出
@@ -133,6 +156,6 @@ public class WND_ShowCard : UIFormBase
     /// <param name="obj"></param>
     private void Exit(GameObject obj)
     {
-        UIModule.Instance.CloseForm<WND_ShowCard>();
+        Game.UI.CloseForm<WND_ShowCard>();
     }
 }

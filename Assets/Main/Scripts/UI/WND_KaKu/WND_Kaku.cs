@@ -21,10 +21,11 @@ public class WND_Kaku : UIFormBase
     private bool isDraging = false;
     private Vector3 cardScale = new Vector3(0.5f, 0.5f, 0.5f);
     private UIGrid startDragGrid;
-    private UIToggle toggleSkill;
-    private UIToggle toggleEquip;
-    private UIToggle toggleItem;
+    private UIToggle toggleAll;
+    private UIToggle toggleCommon;
+    private UIToggle toggleClassType;
     private UITexture charaterIcon;
+    private ClassType currentClassType;
     private KaKu KaKu;
     private Deck Deck;
 
@@ -50,12 +51,13 @@ public class WND_Kaku : UIFormBase
         MovingPanel = transform.Find("MovingPanel").GetComponent<UIPanel>();
         btnExit = transform.Find("btnExit").gameObject;
         charaterIcon = transform.Find("texClassCharacter").GetComponent<UITexture>();
-        toggleSkill = transform.Find("bgKaku/toggleSkill").GetComponent<UIToggle>();
-        toggleEquip = transform.Find("bgKaku/toggleEquip").GetComponent<UIToggle>();
-        toggleItem = transform.Find("bgKaku/toggleItem").GetComponent<UIToggle>();
-        EventDelegate.Add(toggleSkill.onChange, SkillChose);
-        EventDelegate.Add(toggleEquip.onChange, EquipChose);
-        EventDelegate.Add(toggleItem.onChange, ItemChose);
+        toggleAll = transform.Find("bgKaku/toggleAll").GetComponent<UIToggle>(); 
+         toggleCommon = transform.Find("bgKaku/toggleCommon").GetComponent<UIToggle>();
+        toggleClassType = transform.Find("bgKaku/toggleClassType").GetComponent<UIToggle>();
+        currentClassType = Game.DataManager.MyPlayer.Data.ClassData.Type;
+        EventDelegate.Add(toggleAll.onChange, AllChose);
+        EventDelegate.Add(toggleCommon.onChange, CommonChose);
+        EventDelegate.Add(toggleClassType.onChange, ClassTypeChose);
 
         UIEventListener.Get(btnExit).onClick = ExitClick;
         deckInstence = transform.Find("deckInstence").gameObject;
@@ -210,36 +212,35 @@ public class WND_Kaku : UIFormBase
 
     }
 
-    private void SkillChose()
+    private void AllChose()
     {
         //直接用Grid的GetChild会出问题。改用transfom的
         for (int i = 0;i<kakuGrid.transform.childCount;i++)
         {
             Transform trans = kakuGrid.transform.GetChild(i);
-            if (trans.GetComponent<UINormalCard>().CardData.Type != 2)
-                trans.gameObject.SetActive(!UIToggle.current.value);
+            trans.gameObject.SetActive(UIToggle.current.value);
         }
     
        
         kakuGrid.repositionNow = true;
     }
 
-    private void EquipChose()
+    private void CommonChose()
     {
         for (int i = 0; i < kakuGrid.transform.childCount; i++)
         {
             Transform trans = kakuGrid.transform.GetChild(i);
-            if (trans.GetComponent<UINormalCard>().CardData.Type != 1)
+            if (trans.GetComponent<UINormalCard>().CardData.ClassLimit != (int)ClassType.None)
                 trans.gameObject.SetActive(!UIToggle.current.value);
         }
         kakuGrid.repositionNow = true;
     }
-    private void ItemChose()
+    private void ClassTypeChose()
     {
         for (int i = 0; i < kakuGrid.transform.childCount; i++)
         {
             Transform trans = kakuGrid.transform.GetChild(i);
-            if (trans.GetComponent<UINormalCard>().CardData.Type != 3)
+            if (trans.GetComponent<UINormalCard>().CardData.ClassLimit != (int)currentClassType)
                 trans.gameObject.SetActive(!UIToggle.current.value);
         }
         kakuGrid.repositionNow = true;

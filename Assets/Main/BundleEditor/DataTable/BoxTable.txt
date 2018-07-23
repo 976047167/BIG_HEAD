@@ -1,3 +1,3 @@
-Id	DialogId
-int	int
-1	35
+Id	DialogId	ModelId
+int	int	int
+1	35	4

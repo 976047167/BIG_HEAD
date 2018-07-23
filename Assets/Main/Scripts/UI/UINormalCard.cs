@@ -48,7 +48,7 @@ public class UINormalCard : MonoBehaviour
             labAttack.text = CardData.ActionParams[0].ToString();
         }
 
-        UIUtility.SetCardTips(gameObject,CardId);
+        UIUtility.SetCardTips(gameObject,CardId, CardNum);
 
 
     }
@@ -73,6 +73,7 @@ public class UINormalCard : MonoBehaviour
 
             cardNum = value;
             labCardNum.text = "" + cardNum;
+            UIUtility.SetCardTips(gameObject, CardId, cardNum);
         }
         get{
           return   cardNum ;
