@@ -7,7 +7,7 @@ public class Procedure_CreateCharacter : ProcedureBase
     public override void OnEnter(ProcedureBase last)
     {
         base.OnEnter(last);
-        Messenger.AddListener(MessageID.UI_GAME_START, GameStart);
+        Messenger.AddListener(MessageId.UI_GAME_START, GameStart);
 
         Game.UI.OpenForm<WND_CreateCharacter>();
     }
@@ -16,7 +16,7 @@ public class Procedure_CreateCharacter : ProcedureBase
     {
         base.OnExit(next);
         Game.UI.CloseForm<WND_CreateCharacter>();
-        Messenger.RemoveListener(MessageID.UI_GAME_START, GameStart);
+        Messenger.RemoveListener(MessageId.UI_GAME_START, GameStart);
     }
 
     public override bool OnInit(object userdata = null)

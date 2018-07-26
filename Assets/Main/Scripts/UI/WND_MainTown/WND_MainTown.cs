@@ -35,7 +35,7 @@ public class WND_MainTown : UIFormBase
         UIEventListener.Get(btnDungeon).onClick = DungeonClick;
         UIEventListener.Get(btnPlot).onClick = Onclick_btnPlot;
         UIEventListener.Get(headFrame).onClick = OnClick_HeadFrame;
-        Messenger.AddListener(MessageID.MAP_UPDATE_PLAYER_INFO, UpdatePlayerInfoPanel);
+        Messenger.AddListener(MessageId.MAP_UPDATE_PLAYER_INFO, UpdatePlayerInfoPanel);
     }
     protected override void OnOpen()
     {

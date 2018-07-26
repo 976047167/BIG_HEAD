@@ -44,7 +44,7 @@ public class MapMgr
         MakePlayer();
         MakeMap(1);
         m_Inited = true;
-        Messenger.Broadcast(MessageID.MAP_UPDATE_PLAYER_INFO);
+        Messenger.Broadcast(MessageId.MAP_UPDATE_PLAYER_INFO);
     }
     public void Update()
     {

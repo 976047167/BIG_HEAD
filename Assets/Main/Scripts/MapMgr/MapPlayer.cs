@@ -93,7 +93,7 @@ public class MapPlayer
             }
 
         }
-        Messenger.Broadcast(MessageID.MAP_UPDATE_PLAYER_INFO);
+        Messenger.Broadcast(MessageId.MAP_UPDATE_PLAYER_INFO);
     }
     public void AddExp(int exp)
     {
@@ -106,7 +106,7 @@ public class MapPlayer
             levelTable = LevelTableSettings.Get(Data.Level);
         }
         Data.MaxExp = levelTable.Exp[(int)Data.ClassData.Type];
-        Messenger.Broadcast(MessageID.MAP_UPDATE_PLAYER_EXP);
+        Messenger.Broadcast(MessageId.MAP_UPDATE_PLAYER_EXP);
     }
     /// <summary>
     /// 保存到全局角色

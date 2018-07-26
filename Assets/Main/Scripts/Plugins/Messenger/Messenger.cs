@@ -25,7 +25,7 @@
 //#define LOG_BROADCAST_MESSAGE
 //#define LOG_BROADCAST_PROCESS
 //#define REQUIRE_LISTENER
-#define MESSAGE_ID
+
 
 using System;
 using System.Collections.Generic;
@@ -36,7 +36,7 @@ public delegate void Callback<T>(T arg1);
 public delegate void Callback<T, U>(T arg1, U arg2);
 public delegate void Callback<T, U, V>(T arg1, U arg2, V arg3);
 
-static public class Messenger
+static public partial class Messenger
 {
     #region Internal variables
 
@@ -379,39 +379,6 @@ static public class Messenger
         OnListenerAdding(eventType, handler);
         m_eventListenTable[eventType] = (Callback<T, U, V>)m_eventListenTable[eventType] + handler;
     }
-#if MESSAGE_ID
-    //No parameters
-    static public void AddListener(MessageID messageID, Callback handler)
-    {
-        uint eventType = (uint)messageID;
-        OnListenerAdding(eventType, handler);
-        m_eventListenTable[eventType] = (Callback)m_eventListenTable[eventType] + handler;
-    }
-
-    //Single parameter
-    static public void AddListener<T>(MessageID messageID, Callback<T> handler)
-    {
-        uint eventType = (uint)messageID;
-        OnListenerAdding(eventType, handler);
-        m_eventListenTable[eventType] = (Callback<T>)m_eventListenTable[eventType] + handler;
-    }
-
-    //Two parameters
-    static public void AddListener<T, U>(MessageID messageID, Callback<T, U> handler)
-    {
-        uint eventType = (uint)messageID;
-        OnListenerAdding(eventType, handler);
-        m_eventListenTable[eventType] = (Callback<T, U>)m_eventListenTable[eventType] + handler;
-    }
-
-    //Three parameters
-    static public void AddListener<T, U, V>(MessageID messageID, Callback<T, U, V> handler)
-    {
-        uint eventType = (uint)messageID;
-        OnListenerAdding(eventType, handler);
-        m_eventListenTable[eventType] = (Callback<T, U, V>)m_eventListenTable[eventType] + handler;
-    }
-#endif
     #endregion
 
     #region RemoveListener
@@ -466,63 +433,6 @@ static public class Messenger
             }
         }
     }
-#if MESSAGE_ID
-    //No parameters
-    static public void RemoveListener(MessageID messageID, Callback handler)
-    {
-        uint eventType = (uint)messageID;
-        if (OnListenerRemoving(eventType, handler))
-        {
-            m_eventListenTable[eventType] = (Callback)m_eventListenTable[eventType] - handler;
-            if (m_eventListenTable[eventType] == null)
-            {
-                Remove(eventType);
-            }
-        }
-    }
-
-    //Single parameter
-    static public void RemoveListener<T>(MessageID messageID, Callback<T> handler)
-    {
-        uint eventType = (uint)messageID;
-        if (OnListenerRemoving(eventType, handler))
-        {
-            m_eventListenTable[eventType] = (Callback<T>)m_eventListenTable[eventType] - handler;
-            if (m_eventListenTable[eventType] == null)
-            {
-                Remove(eventType);
-            }
-        }
-    }
-
-    //Two parameters
-    static public void RemoveListener<T, U>(MessageID messageID, Callback<T, U> handler)
-    {
-        uint eventType = (uint)messageID;
-        if (OnListenerRemoving(eventType, handler))
-        {
-            m_eventListenTable[eventType] = (Callback<T, U>)m_eventListenTable[eventType] - handler;
-            if (m_eventListenTable[eventType] == null)
-            {
-                Remove(eventType);
-            }
-        }
-    }
-
-    //Three parameters
-    static public void RemoveListener<T, U, V>(MessageID messageID, Callback<T, U, V> handler)
-    {
-        uint eventType = (uint)messageID;
-        if (OnListenerRemoving(eventType, handler))
-        {
-            m_eventListenTable[eventType] = (Callback<T, U, V>)m_eventListenTable[eventType] - handler;
-            if (m_eventListenTable[eventType] == null)
-            {
-                Remove(eventType);
-            }
-        }
-    }
-#endif
     #endregion
 
     #region Broadcast definition
@@ -566,45 +476,6 @@ static public class Messenger
     {
         DoBroadcast<T, U, V>(eventType, arg1, arg2, arg3, true);
     }
-#if MESSAGE_ID
-    static public void Broadcast(MessageID eventType)
-    {
-        DoBroadcast((uint)eventType, false);
-    }
-    static public void BroadcastAsync(MessageID eventType)
-    {
-        DoBroadcast((uint)eventType, true);
-    }
-    //Single parameter
-    static public void Broadcast<T>(MessageID eventType, T arg1)
-    {
-        DoBroadcast<T>((uint)eventType, arg1, false);
-    }
-    static public void BroadcastAsync<T>(MessageID eventType, T arg1)
-    {
-        DoBroadcast<T>((uint)eventType, arg1, true);
-    }
-
-    //Two parameters
-    static public void Broadcast<T, U>(MessageID eventType, T arg1, U arg2)
-    {
-        DoBroadcast<T, U>((uint)eventType, arg1, arg2, false);
-    }
-    static public void BroadcastAsync<T, U>(MessageID eventType, T arg1, U arg2)
-    {
-        DoBroadcast<T, U>((uint)eventType, arg1, arg2, true);
-    }
-
-    //Three parameters
-    static public void Broadcast<T, U, V>(MessageID eventType, T arg1, U arg2, V arg3)
-    {
-        DoBroadcast<T, U, V>((uint)eventType, arg1, arg2, arg3, false);
-    }
-    static public void BroadcastAsync<T, U, V>(MessageID eventType, T arg1, U arg2, V arg3)
-    {
-        DoBroadcast<T, U, V>((uint)eventType, arg1, arg2, arg3, true);
-    }
-#endif
     #endregion
 
     #region Broadcast implementation

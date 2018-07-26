@@ -106,7 +106,7 @@ public class WND_CreateCharacter : UIFormBase
         //目前没有皮肤了，暂时默认皮肤了
         Game.DataManager.InitPlayer(classData.Id);
 
-        Messenger.Broadcast(MessageID.UI_GAME_START);
+        Messenger.Broadcast(MessageId.UI_GAME_START);
 
     }
 }

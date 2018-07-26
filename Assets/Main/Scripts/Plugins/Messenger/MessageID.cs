@@ -1,11 +1,11 @@
-﻿
-public enum MessageID : uint
+﻿using BigHead.Net;
+public enum MessageId : uint
 {
-
+    MIN = NetworkMessageId.MAX + 1,
     /// <summary>
     /// UI编号从10000开始
     /// </summary>
-    UI_START = 10000,
+    UI_START = 100000,
     /// <summary>
     /// UI窗口加载完成
     /// </summary>

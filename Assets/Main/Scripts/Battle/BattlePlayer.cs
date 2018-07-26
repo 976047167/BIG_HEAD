@@ -170,7 +170,7 @@ public class BattlePlayer
             Player.AddReward(rewardId);
         }
         else
-            Messenger.Broadcast(MessageID.MAP_UPDATE_PLAYER_INFO);
+            Messenger.Broadcast(MessageId.MAP_UPDATE_PLAYER_INFO);
     }
     public void StartAI()
     {

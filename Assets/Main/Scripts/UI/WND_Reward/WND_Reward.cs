@@ -8,7 +8,7 @@ public class WND_Reward : UIFormBase
     private UILabel labRewardText;
     private GameObject btnCommond;
     private UIGrid grid;
-    protected List<int> rewardList;
+    protected RewardData rewardData;
     private GameObject frame;
 
     protected override void OnInit(object userdata)
@@ -21,7 +21,7 @@ public class WND_Reward : UIFormBase
         base.OnInit(userdata);
 
 
-        rewardList = (List<int>)userdata;
+        rewardData = (RewardData)userdata;
 
     }
 
@@ -29,7 +29,7 @@ public class WND_Reward : UIFormBase
     {
         base.OnOpen();
 
-        LoadRewardList(rewardId);
+        LoadRewardList();
         PlayShowAnime();
 
     }
@@ -41,46 +41,50 @@ public class WND_Reward : UIFormBase
     }
 
 
-    private void LoadRewardList(int rewardId)
+    private void LoadRewardList()
     {
+        if (rewardData == null)
+        {
+            Debug.LogError("没有奖励!");
+            return;
+        }
 
-
-        if (reward.exp != 0)
+        if (rewardData.Exp != 0)
         {
             GameObject item = Instantiate(labRewardText.gameObject);
             item.GetComponent<UILabel>().text = I18N.Get(1002003);
             item.GetComponent<UILabel>().color = Color.green;
             //item.transform.Find("labNum").GetComponent<UILabel>().text = string.Format("X{0}", reward.exp);
             UILabel label = item.transform.Find("labNum").GetComponent<UILabel>();
-            NumberJumpAnime(label, reward.exp);
+            NumberJumpAnime(label, rewardData.Exp);
             item.transform.Find("labNum").GetComponent<UILabel>().color = Color.green;
             item.transform.SetParent(grid.transform, false);
             item.transform.localPosition = new Vector3();
             item.transform.localScale = new Vector3(1, 1, 1);
             item.SetActive(true);
         }
-        if (reward.gold != 0)
+        if (rewardData.Gold != 0)
         {
             GameObject item = Instantiate(labRewardText.gameObject);
             item.GetComponent<UILabel>().text = I18N.Get(1002001);
             item.GetComponent<UILabel>().color = Color.yellow;
             //item.transform.Find("labNum").GetComponent<UILabel>().text = string.Format("X{0}", reward.gold);
             UILabel label = item.transform.Find("labNum").GetComponent<UILabel>();
-            NumberJumpAnime(label, reward.gold);
+            NumberJumpAnime(label, rewardData.Gold);
             item.transform.Find("labNum").GetComponent<UILabel>().color = Color.yellow;
             item.transform.SetParent(grid.transform, false);
             item.transform.localPosition = new Vector3();
             item.transform.localScale = new Vector3(1, 1, 1);
             item.SetActive(true);
         }
-        if (reward.diamond != 0)
+        if (rewardData.Diamond != 0)
         {
             GameObject item = Instantiate(labRewardText.gameObject);
             item.GetComponent<UILabel>().text = I18N.Get(1002002);
             item.GetComponent<UILabel>().color = Color.blue;
             //item.transform.Find("labNum").GetComponent<UILabel>().text = string.Format("X{0}", reward.diamond);
             UILabel label = item.transform.Find("labNum").GetComponent<UILabel>();
-            NumberJumpAnime(label, reward.diamond);
+            NumberJumpAnime(label, rewardData.Diamond);
             item.transform.Find("labNum").GetComponent<UILabel>().color = Color.blue;
             item.transform.SetParent(grid.transform, false);
             item.transform.localPosition = new Vector3();
@@ -88,10 +92,10 @@ public class WND_Reward : UIFormBase
             item.SetActive(true);
         }
 
-        foreach (var card in reward.ItemList)
+        foreach (var card in rewardData.Items)
         {
             if (card == 0) continue;
-            BattleCardTableSetting cardData = BattleCardTableSettings.Get(card);
+            ItemTableSetting cardData = ItemTableSettings.Get(card);
             if (cardData == null) continue;
             GameObject item = Instantiate(labRewardText.gameObject);
 

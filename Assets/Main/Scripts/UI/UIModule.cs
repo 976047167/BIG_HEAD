@@ -106,7 +106,7 @@ public partial class UIModule
             return;
         }
         ProcessForm(script, config, userData[1], false);
-        Messenger.Broadcast<UIFormBase>(MessageID.UI_FORM_LOADED, script);
+        Messenger.Broadcast<UIFormBase>(MessageId.UI_FORM_LOADED, script);
     }
 
     Dictionary<UIFormsGroup, int> baseDepths = new Dictionary<UIFormsGroup, int>();

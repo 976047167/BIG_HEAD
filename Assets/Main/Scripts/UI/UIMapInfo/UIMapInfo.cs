@@ -36,7 +36,7 @@ public class UIMapInfo : UIFormBase
         spExp = transform.Find("headFrame/spExp").GetComponent<UISprite>();
         lblLevel = transform.Find("headFrame/spExp/lblLevel").GetComponent<UILabel>();
 
-        Messenger.AddListener(MessageID.MAP_UPDATE_PLAYER_INFO, UpdatePlayerInfoPanel);
+        Messenger.AddListener(MessageId.MAP_UPDATE_PLAYER_INFO, UpdatePlayerInfoPanel);
 
     }
 
@@ -49,7 +49,7 @@ public class UIMapInfo : UIFormBase
     protected override void OnClose()
     {
         base.OnClose();
-        Messenger.RemoveListener(MessageID.MAP_UPDATE_PLAYER_INFO, UpdatePlayerInfoPanel);
+        Messenger.RemoveListener(MessageId.MAP_UPDATE_PLAYER_INFO, UpdatePlayerInfoPanel);
     }
     // Update is called once per frame
     void UpdatePlayerInfoPanel()

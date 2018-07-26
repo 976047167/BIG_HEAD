@@ -106,7 +106,7 @@ public class WND_Settings : UIFormBase {
     private void CommandClick(GameObject obj)
     {
         Game.DataManager.PlayerData.HeadIcon = myIconIndex;
-        Messenger.Broadcast(MessageID.MAP_UPDATE_PLAYER_INFO);
+        Messenger.Broadcast(MessageId.MAP_UPDATE_PLAYER_INFO);
         IconMaskBg.SetActive(false);
         headIcon.Load(myIconIndex);
     }
