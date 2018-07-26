@@ -1,0 +1,3 @@
+Id	Monsters	MonsterProbability	Shop	ShopProbability	Box	BoxProbability	NPC	NPCProbability	Boss
+int	List<int>	List<int>	List<int>	List<int>	List<int>	List<int>	List<int>	List<int>	int
+1	1	10000	1	10000	1	10000	1	10000	0

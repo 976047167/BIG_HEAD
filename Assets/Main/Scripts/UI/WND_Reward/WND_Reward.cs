@@ -8,7 +8,7 @@ public class WND_Reward : UIFormBase
     private UILabel labRewardText;
     private GameObject btnCommond;
     private UIGrid grid;
-    private int monsterId;
+    protected List<int> rewardList;
     private GameObject frame;
 
     protected override void OnInit(object userdata)
@@ -21,17 +21,14 @@ public class WND_Reward : UIFormBase
         base.OnInit(userdata);
 
 
-        monsterId = (int)userdata;
+        rewardList = (List<int>)userdata;
 
     }
 
     protected override void OnOpen()
     {
         base.OnOpen();
-        BattleMonsterTableSetting monster = BattleMonsterTableSettings.Get(monsterId);
-        List<int> rewardList = monster.RewardIds;
 
-        int rewardId = rewardList[Random.Range(0, rewardList.Count)];
         LoadRewardList(rewardId);
         PlayShowAnime();
 
@@ -46,7 +43,6 @@ public class WND_Reward : UIFormBase
 
     private void LoadRewardList(int rewardId)
     {
-        RewardTableSetting reward = RewardTableSettings.Get(rewardId);
 
 
         if (reward.exp != 0)

@@ -148,7 +148,7 @@ public class BattlePlayer
     {
         Game.BattleManager.EscapeBattle(this);
     }
-    public void Save(int rewardId = 0)
+    public void Save(int monsterId = 0)
     {
         if (Player == null)
         {
@@ -159,8 +159,14 @@ public class BattlePlayer
         Player.Data.MaxHP = Data.MaxHP;
         Player.Data.MP = Data.MP;
         Player.Data.MaxMP = Data.MaxMP;
-        if (rewardId != 0)
+        if (monsterId != 0)
         {
+            //发奖励
+            BattleMonsterTableSetting monster = BattleMonsterTableSettings.Get(monsterId);
+            List<int> rewardList = new List<int>();
+            int rewardId = monster.RewardId;
+
+            Game.BattleManager.AddUIAction(new UIAction.UIWinBattle(rewardList));
             Player.AddReward(rewardId);
         }
         else

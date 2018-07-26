@@ -57,6 +57,7 @@ namespace AppSettings
                         ClassCharacterTableSettings._instance,
                         ClassTableSettings._instance,
                         DialogTableSettings._instance,
+                        InstanceLayerTableSettings._instance,
                         InstanceTableSettings._instance,
                         ItemTableSettings._instance,
                         LevelTableSettings._instance,
@@ -799,7 +800,7 @@ namespace AppSettings
         public int Spending { get; private set;}
         
         /// <summary>
-        /// 职业限制0通用
+        /// 职业限制0通用负数为怪物
         /// </summary>
         public int ClassLimit { get; private set;}
         
@@ -1404,12 +1405,7 @@ namespace AppSettings
         /// <summary>
         /// 奖励(物品ID)
         /// </summary>
-        public List<int> RewardIds { get; private set;}
-        
-        /// <summary>
-        /// 各个奖励的概率(万分制)
-        /// </summary>
-        public List<int> RewardProbability { get; private set;}
+        public int RewardId { get; private set;}
         
 
         internal BattleMonsterTableSetting(TableFileRow row)
@@ -1438,8 +1434,7 @@ namespace AppSettings
             BuffParams = row.Get_List_int(row.Values[16], ""); 
             EquipIds = row.Get_List_int(row.Values[17], ""); 
             DialogId = row.Get_int(row.Values[18], ""); 
-            RewardIds = row.Get_List_int(row.Values[19], ""); 
-            RewardProbability = row.Get_List_int(row.Values[20], ""); 
+            RewardId = row.Get_int(row.Values[19], ""); 
         }
 
         /// <summary>
@@ -1640,6 +1635,11 @@ namespace AppSettings
         /// </summary>
         public int ModelId { get; private set;}
         
+        /// <summary>
+        /// 奖励
+        /// </summary>
+        public int RewardId { get; private set;}
+        
 
         internal BoxTableSetting(TableFileRow row)
         {
@@ -1651,6 +1651,7 @@ namespace AppSettings
             Id = row.Get_int(row.Values[0], ""); 
             DialogId = row.Get_int(row.Values[1], ""); 
             ModelId = row.Get_int(row.Values[2], ""); 
+            RewardId = row.Get_int(row.Values[3], ""); 
         }
 
         /// <summary>
@@ -2371,6 +2372,259 @@ namespace AppSettings
 	}
 
 	/// <summary>
+	/// Auto Generate for Tab File: "InstanceLayerTable.txt"
+    /// No use of generic and reflection, for better performance,  less IL code generating
+	/// </summary>>
+    public partial class InstanceLayerTableSettings : IReloadableSettings
+    {
+        /// <summary>
+        /// How many reload function load?
+        /// </summary>>
+        public static int ReloadCount { get; private set; }
+
+		public static readonly string[] TabFilePaths = 
+        {
+            "InstanceLayerTable.txt"
+        };
+        internal static InstanceLayerTableSettings _instance = new InstanceLayerTableSettings();
+        Dictionary<int, InstanceLayerTableSetting> _dict = new Dictionary<int, InstanceLayerTableSetting>();
+
+        /// <summary>
+        /// Trigger delegate when reload the Settings
+        /// </summary>>
+	    public static System.Action OnReload;
+
+        /// <summary>
+        /// Constructor, just reload(init)
+        /// When Unity Editor mode, will watch the file modification and auto reload
+        /// </summary>
+	    private InstanceLayerTableSettings()
+	    {
+        }
+
+        /// <summary>
+        /// Get the singleton
+        /// </summary>
+        /// <returns></returns>
+	    public static InstanceLayerTableSettings GetInstance()
+	    {
+            if (ReloadCount == 0)
+            {
+                _instance._ReloadAll(true);
+    #if UNITY_EDITOR
+                if (SettingModule.IsFileSystemMode)
+                {
+                    for (var j = 0; j < TabFilePaths.Length; j++)
+                    {
+                        var tabFilePath = TabFilePaths[j];
+                        SettingModule.WatchSetting(tabFilePath, (path) =>
+                        {
+                            if (path.Replace("\\", "/").EndsWith(path))
+                            {
+                                _instance.ReloadAll();
+                                Log.LogConsole_MultiThread("File Watcher! Reload success! -> " + path);
+                            }
+                        });
+                    }
+
+                }
+    #endif
+            }
+
+	        return _instance;
+	    }
+        
+        public int Count
+        {
+            get
+            {
+                return _dict.Count;
+            }
+        }
+
+        /// <summary>
+        /// Do reload the setting file: InstanceLayerTable, no exception when duplicate primary key
+        /// </summary>
+        public void ReloadAll()
+        {
+            _ReloadAll(false);
+        }
+
+        /// <summary>
+        /// Do reload the setting class : InstanceLayerTable, no exception when duplicate primary key, use custom string content
+        /// </summary>
+        public void ReloadAllWithString(string context)
+        {
+            _ReloadAll(false, context);
+        }
+
+        /// <summary>
+        /// Do reload the setting file: InstanceLayerTable
+        /// </summary>
+	    void _ReloadAll(bool throwWhenDuplicatePrimaryKey, string customContent = null)
+        {
+            for (var j = 0; j < TabFilePaths.Length; j++)
+            {
+                var tabFilePath = TabFilePaths[j];
+                TableFile tableFile;
+                if (customContent == null)
+                    tableFile = SettingModule.Get(tabFilePath, false);
+                else
+                    tableFile = TableFile.LoadFromString(customContent);
+
+                using (tableFile)
+                {
+                    foreach (var row in tableFile)
+                    {
+                        var pk = InstanceLayerTableSetting.ParsePrimaryKey(row);
+                        InstanceLayerTableSetting setting;
+                        if (!_dict.TryGetValue(pk, out setting))
+                        {
+                            setting = new InstanceLayerTableSetting(row);
+                            _dict[setting.Id] = setting;
+                        }
+                        else 
+                        {
+                            if (throwWhenDuplicatePrimaryKey) throw new System.Exception(string.Format("DuplicateKey, Class: {0}, File: {1}, Key: {2}", this.GetType().Name, tabFilePath, pk));
+                            else setting.Reload(row);
+                        }
+                    }
+                }
+            }
+
+	        if (OnReload != null)
+	        {
+	            OnReload();
+	        }
+
+            ReloadCount++;
+            Log.Info("Reload settings: {0}, Row Count: {1}, Reload Count: {2}", GetType(), Count, ReloadCount);
+        }
+
+	    /// <summary>
+        /// foreachable enumerable: InstanceLayerTable
+        /// </summary>
+        public static IEnumerable GetAll()
+        {
+            foreach (var row in GetInstance()._dict.Values)
+            {
+                yield return row;
+            }
+        }
+
+        /// <summary>
+        /// GetEnumerator for `MoveNext`: InstanceLayerTable
+        /// </summary> 
+	    public static IEnumerator GetEnumerator()
+	    {
+	        return GetInstance()._dict.Values.GetEnumerator();
+	    }
+         
+	    /// <summary>
+        /// Get class by primary key: InstanceLayerTable
+        /// </summary>
+        public static InstanceLayerTableSetting Get(int primaryKey)
+        {
+            InstanceLayerTableSetting setting;
+            if (GetInstance()._dict.TryGetValue(primaryKey, out setting)) return setting;
+            return null;
+        }
+
+        // ========= CustomExtraString begin ===========
+        
+        // ========= CustomExtraString end ===========
+    }
+
+	/// <summary>
+	/// Auto Generate for Tab File: "InstanceLayerTable.txt"
+    /// Singleton class for less memory use
+	/// </summary>
+	public partial class InstanceLayerTableSetting : TableRowFieldParser
+	{
+		
+        /// <summary>
+        /// #目录
+        /// </summary>
+        public int Id { get; private set;}
+        
+        /// <summary>
+        /// 怪物
+        /// </summary>
+        public List<int> Monsters { get; private set;}
+        
+        /// <summary>
+        /// 怪物概率
+        /// </summary>
+        public List<int> MonsterProbability { get; private set;}
+        
+        /// <summary>
+        /// 商店
+        /// </summary>
+        public List<int> Shop { get; private set;}
+        
+        /// <summary>
+        /// 商店概率
+        /// </summary>
+        public List<int> ShopProbability { get; private set;}
+        
+        /// <summary>
+        /// 宝箱
+        /// </summary>
+        public List<int> Box { get; private set;}
+        
+        /// <summary>
+        /// 宝箱概率
+        /// </summary>
+        public List<int> BoxProbability { get; private set;}
+        
+        /// <summary>
+        /// NPC
+        /// </summary>
+        public List<int> NPC { get; private set;}
+        
+        /// <summary>
+        /// 概率
+        /// </summary>
+        public List<int> NPCProbability { get; private set;}
+        
+        /// <summary>
+        /// boss的ID
+        /// </summary>
+        public int Boss { get; private set;}
+        
+
+        internal InstanceLayerTableSetting(TableFileRow row)
+        {
+            Reload(row);
+        }
+
+        internal void Reload(TableFileRow row)
+        { 
+            Id = row.Get_int(row.Values[0], ""); 
+            Monsters = row.Get_List_int(row.Values[1], ""); 
+            MonsterProbability = row.Get_List_int(row.Values[2], ""); 
+            Shop = row.Get_List_int(row.Values[3], ""); 
+            ShopProbability = row.Get_List_int(row.Values[4], ""); 
+            Box = row.Get_List_int(row.Values[5], ""); 
+            BoxProbability = row.Get_List_int(row.Values[6], ""); 
+            NPC = row.Get_List_int(row.Values[7], ""); 
+            NPCProbability = row.Get_List_int(row.Values[8], ""); 
+            Boss = row.Get_int(row.Values[9], ""); 
+        }
+
+        /// <summary>
+        /// Get PrimaryKey from a table row
+        /// </summary>
+        /// <param name="row"></param>
+        /// <returns></returns>
+        public static int ParsePrimaryKey(TableFileRow row)
+        {
+            var primaryKey = row.Get_int(row.Values[0], "");
+            return primaryKey;
+        }
+	}
+
+	/// <summary>
 	/// Auto Generate for Tab File: "InstanceTable.txt"
     /// No use of generic and reflection, for better performance,  less IL code generating
 	/// </summary>>
@@ -2547,14 +2801,34 @@ namespace AppSettings
         public int Id { get; private set;}
         
         /// <summary>
-        /// (0空1门2怪3店4宝箱5NPC)一个25个节点
+        /// 层数
         /// </summary>
-        public List<int> MapData { get; private set;}
+        public List<int> Layers { get; private set;}
         
         /// <summary>
-        /// (如果前一个配置为怪则为怪物ID，如果是NPC则为NPCID，如果是宝箱就是宝箱ID，如果是店就是店ID)
+        /// 最大层数
         /// </summary>
-        public List<int> MonstarData { get; private set;}
+        public int LayerMax { get; private set;}
+        
+        /// <summary>
+        /// 守关boss层
+        /// </summary>
+        public int BossLayer { get; private set;}
+        
+        /// <summary>
+        /// 卡牌上线
+        /// </summary>
+        public int CardMax { get; private set;}
+        
+        /// <summary>
+        /// 食物上限
+        /// </summary>
+        public int FoodMax { get; private set;}
+        
+        /// <summary>
+        /// 道具上限
+        /// </summary>
+        public int ItemMax { get; private set;}
         
 
         internal InstanceTableSetting(TableFileRow row)
@@ -2565,8 +2839,12 @@ namespace AppSettings
         internal void Reload(TableFileRow row)
         { 
             Id = row.Get_int(row.Values[0], ""); 
-            MapData = row.Get_List_int(row.Values[1], ""); 
-            MonstarData = row.Get_List_int(row.Values[2], ""); 
+            Layers = row.Get_List_int(row.Values[1], ""); 
+            LayerMax = row.Get_int(row.Values[2], ""); 
+            BossLayer = row.Get_int(row.Values[3], ""); 
+            CardMax = row.Get_int(row.Values[4], ""); 
+            FoodMax = row.Get_int(row.Values[5], ""); 
+            ItemMax = row.Get_int(row.Values[6], ""); 
         }
 
         /// <summary>
@@ -4078,11 +4356,6 @@ namespace AppSettings
         public int Id { get; private set;}
         
         /// <summary>
-        /// 奖励文本，富文本形式
-        /// </summary>
-        public string Text { get; private set;}
-        
-        /// <summary>
         /// 金币
         /// </summary>
         public int gold { get; private set;}
@@ -4098,9 +4371,24 @@ namespace AppSettings
         public int exp { get; private set;}
         
         /// <summary>
+        /// 食物
+        /// </summary>
+        public int food { get; private set;}
+        
+        /// <summary>
         /// 奖励物品
         /// </summary>
         public List<int> ItemList { get; private set;}
+        
+        /// <summary>
+        /// 奖励物品掉落概率
+        /// </summary>
+        public List<int> RewardProbability { get; private set;}
+        
+        /// <summary>
+        /// 是否可以带出副本
+        /// </summary>
+        public List<int> Permanent { get; private set;}
         
 
         internal RewardTableSetting(TableFileRow row)
@@ -4111,11 +4399,13 @@ namespace AppSettings
         internal void Reload(TableFileRow row)
         { 
             Id = row.Get_int(row.Values[0], ""); 
-            Text = row.Get_string(row.Values[1], ""); 
-            gold = row.Get_int(row.Values[2], ""); 
-            diamond = row.Get_int(row.Values[3], ""); 
-            exp = row.Get_int(row.Values[4], ""); 
+            gold = row.Get_int(row.Values[1], ""); 
+            diamond = row.Get_int(row.Values[2], ""); 
+            exp = row.Get_int(row.Values[3], ""); 
+            food = row.Get_int(row.Values[4], ""); 
             ItemList = row.Get_List_int(row.Values[5], ""); 
+            RewardProbability = row.Get_List_int(row.Values[6], ""); 
+            Permanent = row.Get_List_int(row.Values[7], ""); 
         }
 
         /// <summary>

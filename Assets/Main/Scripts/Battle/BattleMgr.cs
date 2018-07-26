@@ -48,12 +48,12 @@ public class BattleMgr
         OppPlayer.Data.HP = 1;
         Game.UI.OpenForm<UIBattleForm>();
     }
-    public void SaveData(int rewardId = 0)
+    public void SaveData()
     {
         //退出战斗
         if (MapMgr.Inited)
         {
-            MyPlayer.Save(rewardId);
+            MyPlayer.Save(State == BattleState.BattleEnd_Win ? MonsterId : 0);
         }
     }
     public void Clear()
@@ -177,18 +177,14 @@ public class BattleMgr
                 SaveData();
                 break;
             case BattleState.BattleEnd_Win:
-                //发奖励
-                BattleMonsterTableSetting monster = BattleMonsterTableSettings.Get(MonsterId);
-                List<int> rewardList = monster.RewardIds;
-                int rewardId = rewardList[UnityEngine.Random.Range(0, rewardList.Count)];
-                uiActions.Enqueue(new UIAction.UIWinBattle(rewardId));
-                SaveData(rewardId);
+
+                SaveData();
                 break;
             case BattleState.BattleEnd_Lose:
                 //battleForm.LoseBattle();
                 uiActions.Enqueue(new UIAction.UILoseBattle());
                 SaveData();
-                
+
                 break;
             default:
                 break;
