@@ -47,7 +47,7 @@ namespace BigHead.protocol {
   }
   #region Messages
   /// <summary>
-  ///  创建门派请求
+  /// 创建门派请求
   /// </summary>
   public sealed partial class ReqCreatSectMessage : pb::IMessage<ReqCreatSectMessage> {
     private static readonly pb::MessageParser<ReqCreatSectMessage> _parser = new pb::MessageParser<ReqCreatSectMessage>(() => new ReqCreatSectMessage());
@@ -167,7 +167,7 @@ namespace BigHead.protocol {
   }
 
   /// <summary>
-  ///  创建门派响应
+  /// 创建门派响应
   /// </summary>
   public sealed partial class ResCreatSectMessage : pb::IMessage<ResCreatSectMessage> {
     private static readonly pb::MessageParser<ResCreatSectMessage> _parser = new pb::MessageParser<ResCreatSectMessage>(() => new ResCreatSectMessage());
@@ -321,7 +321,7 @@ namespace BigHead.protocol {
   }
 
   /// <summary>
-  ///  同步请求
+  /// 同步请求
   /// </summary>
   public sealed partial class SectInfo : pb::IMessage<SectInfo> {
     private static readonly pb::MessageParser<SectInfo> _parser = new pb::MessageParser<SectInfo>(() => new SectInfo());
@@ -389,7 +389,7 @@ namespace BigHead.protocol {
     public const int NameFieldNumber = 3;
     private string name_ = "";
     /// <summary>
-    /// 门派名称
+    ///门派名称
     /// </summary>
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public string Name {
@@ -403,7 +403,7 @@ namespace BigHead.protocol {
     public const int LevelFieldNumber = 4;
     private int level_;
     /// <summary>
-    /// 等级
+    ///等级
     /// </summary>
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public int Level {
@@ -417,7 +417,7 @@ namespace BigHead.protocol {
     public const int ExpFieldNumber = 5;
     private long exp_;
     /// <summary>
-    /// 经验
+    ///经验
     /// </summary>
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public long Exp {
@@ -431,7 +431,7 @@ namespace BigHead.protocol {
     public const int PrestigeFieldNumber = 6;
     private int prestige_;
     /// <summary>
-    /// 门派威望
+    ///门派威望
     /// </summary>
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public int Prestige {
@@ -445,7 +445,7 @@ namespace BigHead.protocol {
     public const int GoldFieldNumber = 7;
     private long gold_;
     /// <summary>
-    /// 金币
+    ///金币
     /// </summary>
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public long Gold {
@@ -459,7 +459,7 @@ namespace BigHead.protocol {
     public const int DiamondFieldNumber = 8;
     private int diamond_;
     /// <summary>
-    /// 钻石
+    ///钻石
     /// </summary>
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public int Diamond {
@@ -675,7 +675,7 @@ namespace BigHead.protocol {
   }
 
   /// <summary>
-  /// 随机昵称请求
+  ///随机昵称请求
   /// </summary>
   public sealed partial class ReqRandomSectNameMessage : pb::IMessage<ReqRandomSectNameMessage> {
     private static readonly pb::MessageParser<ReqRandomSectNameMessage> _parser = new pb::MessageParser<ReqRandomSectNameMessage>(() => new ReqRandomSectNameMessage());

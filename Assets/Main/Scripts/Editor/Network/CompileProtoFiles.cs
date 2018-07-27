@@ -10,7 +10,7 @@ using Debug = UnityEngine.Debug;
 
 public class CompileProtoFiles : Editor
 {
-    const string PROTO_FOLDER = @"..\Proto";
+    const string PROTO_FOLDER = @"..\Proto\proto";
     const string PROTO_CSHARP_FOLDER = @".\Main\Scripts\Plugins\Network\protocol";
     const string PROTOC_PATH = @"..\Proto\tools\bin\protoc.exe";
     const string NameSpace = @"BigHead.protocol";
@@ -30,6 +30,7 @@ public class CompileProtoFiles : Editor
                 CompileProtoFile(fileInfos[i].FullName);
             }
         }
+        StartCompilerProcess();
     }
 
     static string protoFolder = "";
@@ -41,7 +42,7 @@ public class CompileProtoFiles : Editor
         {
             protoFiles.Enqueue(filePath);
         }
-        StartCompilerProcess();
+        
     }
 
     static void StartCompilerProcess()
@@ -56,37 +57,38 @@ public class CompileProtoFiles : Editor
                 return;
             }
             filePath = protoFiles.Dequeue();
-        }
-        //option csharp_namespace = "BestSects.protocol";
-        FileStream fs = new FileStream(filePath, FileMode.Open, FileAccess.Read);
-        StreamReader sr = new StreamReader(fs, Encoding.GetEncoding("gbk"));
 
-        string content = sr.ReadToEnd();
-        if (!content.Contains("option csharp_namespace"))
-        {
-            int index = content.IndexOf("option java_outer_classname");
-            if (index < 0)
-                index = 0;
-            content = content.Insert(index, "option csharp_namespace = \"" + NameSpace + "\";\n");
-            sr.Close();
-            fs.Close();
-            fs.Dispose();
+            //option csharp_namespace = "BestSects.protocol";
+            FileStream fs = new FileStream(filePath, FileMode.Open, FileAccess.Read);
+            StreamReader sr = new StreamReader(fs, Encoding.GetEncoding("gbk"));
 
-            StreamWriter sw = new StreamWriter(filePath, false, Encoding.GetEncoding("gbk"));
-            sw.Write(content);
-            sw.Flush();
-            sw.Close();
+            string content = sr.ReadToEnd();
+            if (!content.Contains("option csharp_namespace"))
+            {
+                int index = content.IndexOf("option java_outer_classname");
+                if (index < 0)
+                    index = 0;
+                content = content.Insert(index, "option csharp_namespace = \"" + NameSpace + "\";\n");
+                sr.Close();
+                fs.Close();
+                fs.Dispose();
+
+                StreamWriter sw = new StreamWriter(filePath, false, Encoding.GetEncoding("gbk"));
+                sw.Write(content);
+                sw.Flush();
+                sw.Close();
+            }
+
+            Process process = new Process();
+            process.StartInfo.FileName = Path.Combine(Application.dataPath, PROTOC_PATH);
+            process.StartInfo.Arguments = " --csharp_out=" + exportFolder + " --proto_path=" + protoFolder + " " + filePath;
+            process.Disposed += DisposedHandler;
+            Debug.Log("->" + process.StartInfo.FileName + "  " + process.StartInfo.Arguments);
+            process.Start();
+            process.WaitForExit();
+            process.Close();
+            //process.Dispose();
         }
-        
-        Process process = new Process();
-        process.StartInfo.FileName = Path.Combine(Application.dataPath, PROTOC_PATH);
-        process.StartInfo.Arguments = " --csharp_out=" + exportFolder + " --proto_path=" + protoFolder + " " + filePath;
-        process.Disposed += DisposedHandler;
-        Debug.Log("->" + process.StartInfo.FileName + "  " + process.StartInfo.Arguments);
-        process.Start();
-        process.WaitForExit();
-        process.Close();
-        //process.Dispose();
     }
 
     static void DisposedHandler(object sender, System.EventArgs e)

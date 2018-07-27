@@ -39,7 +39,7 @@ namespace BigHead.protocol {
   }
   #region Messages
   /// <summary>
-  ///  同步请求
+  /// 同步请求
   /// </summary>
   public sealed partial class RoleInfo : pb::IMessage<RoleInfo> {
     private static readonly pb::MessageParser<RoleInfo> _parser = new pb::MessageParser<RoleInfo>(() => new RoleInfo());
@@ -139,7 +139,7 @@ namespace BigHead.protocol {
     public const int LevelFieldNumber = 6;
     private int level_;
     /// <summary>
-    /// 等级
+    ///等级
     /// </summary>
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public int Level {
@@ -153,7 +153,7 @@ namespace BigHead.protocol {
     public const int ClazzFieldNumber = 7;
     private int clazz_;
     /// <summary>
-    /// 修仙等阶
+    ///修仙等阶
     /// </summary>
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public int Clazz {
@@ -167,7 +167,7 @@ namespace BigHead.protocol {
     public const int TitleFieldNumber = 8;
     private string title_ = "";
     /// <summary>
-    /// 头衔
+    ///头衔
     /// </summary>
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public string Title {

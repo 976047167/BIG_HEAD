@@ -57,7 +57,7 @@ namespace BigHead.protocol {
   }
   #region Messages
   /// <summary>
-  ///  心跳请求
+  /// 心跳请求
   /// </summary>
   public sealed partial class ReqHeartbeatMessage : pb::IMessage<ReqHeartbeatMessage> {
     private static readonly pb::MessageParser<ReqHeartbeatMessage> _parser = new pb::MessageParser<ReqHeartbeatMessage>(() => new ReqHeartbeatMessage());
@@ -149,7 +149,7 @@ namespace BigHead.protocol {
   }
 
   /// <summary>
-  ///  登录请求
+  /// 登录请求
   /// </summary>
   public sealed partial class ReqLoginMessage : pb::IMessage<ReqLoginMessage> {
     private static readonly pb::MessageParser<ReqLoginMessage> _parser = new pb::MessageParser<ReqLoginMessage>(() => new ReqLoginMessage());
@@ -190,7 +190,7 @@ namespace BigHead.protocol {
     public const int TokenFieldNumber = 1;
     private string token_ = "";
     /// <summary>
-    /// 登录令牌
+    ///登录令牌
     /// </summary>
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public string Token {
@@ -204,7 +204,7 @@ namespace BigHead.protocol {
     public const int UsernameFieldNumber = 2;
     private string username_ = "";
     /// <summary>
-    /// 帐号
+    ///帐号
     /// </summary>
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public string Username {
@@ -218,7 +218,7 @@ namespace BigHead.protocol {
     public const int ChannelFieldNumber = 3;
     private int channel_;
     /// <summary>
-    /// 玩家渠道
+    ///玩家渠道
     /// </summary>
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public int Channel {
@@ -232,7 +232,7 @@ namespace BigHead.protocol {
     public const int DeviceIdFieldNumber = 4;
     private string deviceId_ = "";
     /// <summary>
-    /// 设备号
+    ///设备号
     /// </summary>
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public string DeviceId {
@@ -365,7 +365,7 @@ namespace BigHead.protocol {
   }
 
   /// <summary>
-  ///  登录响应
+  /// 登录响应
   /// </summary>
   public sealed partial class ResLoginMessage : pb::IMessage<ResLoginMessage> {
     private static readonly pb::MessageParser<ResLoginMessage> _parser = new pb::MessageParser<ResLoginMessage>(() => new ResLoginMessage());
@@ -404,7 +404,7 @@ namespace BigHead.protocol {
     public const int CodeFieldNumber = 1;
     private int code_;
     /// <summary>
-    /// 结果 0成功，1验证密匙中 2数据保存中，请稍后登录。 3未找到角色，请注册
+    ///结果 0成功，1验证密匙中 2数据保存中，请稍后登录。 3未找到角色，请注册
     /// </summary>
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public int Code {
@@ -418,7 +418,7 @@ namespace BigHead.protocol {
     public const int PlayerInfoFieldNumber = 2;
     private global::BigHead.protocol.PlayerInfo playerInfo_;
     /// <summary>
-    /// 玩家数据
+    ///玩家数据
     /// </summary>
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public global::BigHead.protocol.PlayerInfo PlayerInfo {
@@ -525,7 +525,7 @@ namespace BigHead.protocol {
   }
 
   /// <summary>
-  /// 玩家数据
+  ///玩家数据
   /// </summary>
   public sealed partial class PlayerInfo : pb::IMessage<PlayerInfo> {
     private static readonly pb::MessageParser<PlayerInfo> _parser = new pb::MessageParser<PlayerInfo>(() => new PlayerInfo());
@@ -567,7 +567,7 @@ namespace BigHead.protocol {
     public const int UidFieldNumber = 1;
     private long uid_;
     /// <summary>
-    /// 玩家编号
+    ///玩家编号
     /// </summary>
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public long Uid {
@@ -581,7 +581,7 @@ namespace BigHead.protocol {
     public const int NicknameFieldNumber = 2;
     private string nickname_ = "";
     /// <summary>
-    /// 昵称
+    ///昵称
     /// </summary>
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public string Nickname {
@@ -595,7 +595,7 @@ namespace BigHead.protocol {
     public const int SexFieldNumber = 3;
     private int sex_;
     /// <summary>
-    /// 性别
+    ///性别
     /// </summary>
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public int Sex {
@@ -609,7 +609,7 @@ namespace BigHead.protocol {
     public const int IconFieldNumber = 4;
     private string icon_ = "";
     /// <summary>
-    /// 头像
+    ///头像
     /// </summary>
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public string Icon {
@@ -623,7 +623,7 @@ namespace BigHead.protocol {
     public const int SectInfoFieldNumber = 5;
     private global::BigHead.protocol.SectInfo sectInfo_;
     /// <summary>
-    /// 门派
+    ///门派
     /// </summary>
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public global::BigHead.protocol.SectInfo SectInfo {
@@ -778,7 +778,7 @@ namespace BigHead.protocol {
   }
 
   /// <summary>
-  /// 玩家注册请求
+  ///玩家注册请求
   /// </summary>
   public sealed partial class ReqRegisterMessage : pb::IMessage<ReqRegisterMessage> {
     private static readonly pb::MessageParser<ReqRegisterMessage> _parser = new pb::MessageParser<ReqRegisterMessage>(() => new ReqRegisterMessage());
@@ -820,7 +820,7 @@ namespace BigHead.protocol {
     public const int NicknameFieldNumber = 1;
     private string nickname_ = "";
     /// <summary>
-    /// 昵称
+    ///昵称
     /// </summary>
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public string Nickname {
@@ -834,7 +834,7 @@ namespace BigHead.protocol {
     public const int IconFieldNumber = 2;
     private string icon_ = "";
     /// <summary>
-    /// 头像
+    ///头像
     /// </summary>
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public string Icon {
@@ -848,7 +848,7 @@ namespace BigHead.protocol {
     public const int SexFieldNumber = 3;
     private int sex_;
     /// <summary>
-    /// 性别
+    ///性别
     /// </summary>
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public int Sex {
@@ -862,7 +862,7 @@ namespace BigHead.protocol {
     public const int ChannelFieldNumber = 4;
     private int channel_;
     /// <summary>
-    /// 玩家渠道
+    ///玩家渠道
     /// </summary>
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public int Channel {
@@ -876,7 +876,7 @@ namespace BigHead.protocol {
     public const int DeviceIdFieldNumber = 5;
     private string deviceId_ = "";
     /// <summary>
-    /// 设备号
+    ///设备号
     /// </summary>
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public string DeviceId {
@@ -1025,7 +1025,7 @@ namespace BigHead.protocol {
   }
 
   /// <summary>
-  /// 玩家注册响应
+  ///玩家注册响应
   /// </summary>
   public sealed partial class ResRegisterMessage : pb::IMessage<ResRegisterMessage> {
     private static readonly pb::MessageParser<ResRegisterMessage> _parser = new pb::MessageParser<ResRegisterMessage>(() => new ResRegisterMessage());
@@ -1064,7 +1064,7 @@ namespace BigHead.protocol {
     public const int CodeFieldNumber = 1;
     private int code_;
     /// <summary>
-    /// 结果 0成功  
+    ///结果 0成功  
     /// </summary>
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public int Code {
@@ -1078,7 +1078,7 @@ namespace BigHead.protocol {
     public const int PlayerInfoFieldNumber = 2;
     private global::BigHead.protocol.PlayerInfo playerInfo_;
     /// <summary>
-    /// 玩家数据
+    ///玩家数据
     /// </summary>
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public global::BigHead.protocol.PlayerInfo PlayerInfo {
@@ -1185,7 +1185,7 @@ namespace BigHead.protocol {
   }
 
   /// <summary>
-  /// 属性变化通知响应
+  ///属性变化通知响应
   /// </summary>
   public sealed partial class ResPropertyChangeMessage : pb::IMessage<ResPropertyChangeMessage> {
     private static readonly pb::MessageParser<ResPropertyChangeMessage> _parser = new pb::MessageParser<ResPropertyChangeMessage>(() => new ResPropertyChangeMessage());
@@ -1333,7 +1333,7 @@ namespace BigHead.protocol {
   }
 
   /// <summary>
-  /// 随机昵称请求
+  ///随机昵称请求
   /// </summary>
   public sealed partial class ReqRandomNameMessage : pb::IMessage<ReqRandomNameMessage> {
     private static readonly pb::MessageParser<ReqRandomNameMessage> _parser = new pb::MessageParser<ReqRandomNameMessage>(() => new ReqRandomNameMessage());
