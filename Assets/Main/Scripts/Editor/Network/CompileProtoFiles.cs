@@ -14,15 +14,21 @@ public class CompileProtoFiles : Editor
     const string PROTO_CSHARP_FOLDER = @".\Main\Scripts\Plugins\Network\protocol";
     const string PROTOC_PATH = @"..\Proto\tools\bin\protoc.exe";
     const string NameSpace = @"BigHead.protocol";
+    const string MESSAGE_ID_PATH = @".\Main\Scripts\Plugins\Network\NetworkMessageId.cs";
 
-    [MenuItem("Tools/Protobuf/CompileAll")]
+    [MenuItem("Tools/Protobuf/Generate All Proto")]
     public static void CompileAllProto()
     {
         DirectoryInfo protoPath = new DirectoryInfo(Path.Combine(Application.dataPath, PROTO_FOLDER));
         DirectoryInfo exportPath = new DirectoryInfo(Path.Combine(Application.dataPath, PROTO_CSHARP_FOLDER));
         protoFolder = protoPath.FullName;
         exportFolder = exportPath.FullName;
-        FileInfo[] fileInfos = protoPath.GetFiles();
+        FileInfo[] csFileInfos = exportPath.GetFiles("*.cs", SearchOption.TopDirectoryOnly);
+        for (int i = 0; i < csFileInfos.Length; i++)
+        {
+            File.Delete(csFileInfos[i].FullName);
+        }
+        FileInfo[] fileInfos = protoPath.GetFiles("*.proto", SearchOption.TopDirectoryOnly);
         for (int i = 0; i < fileInfos.Length; i++)
         {
             if (fileInfos[i].Extension.ToLower() == ".proto")
@@ -31,6 +37,71 @@ public class CompileProtoFiles : Editor
             }
         }
         StartCompilerProcess();
+    }
+
+    const string Template = @"//generate by code
+using UnityEngine;
+
+public enum NetworkMessageId : ushort
+{
+    None = 0,
+    //添加内置事件,需要前往CompileProtoFiles.cs修改模板
+    NetworkConnect,
+    NetworkDisconnect,
+    NetworkReconnect,
+    #MESSAGE_ID
+    MAX = 65535,
+}
+";
+    [MenuItem("Tools/Protobuf/Generate MessageId")]
+    public static void CompileMessageId()
+    {
+        DirectoryInfo protoPath = new DirectoryInfo(Path.Combine(Application.dataPath, PROTO_FOLDER));
+        DirectoryInfo exportPath = new DirectoryInfo(Path.Combine(Application.dataPath, PROTO_CSHARP_FOLDER));
+        protoFolder = protoPath.FullName;
+        exportFolder = exportPath.FullName;
+        FileInfo[] fileInfos = protoPath.GetFiles("*.proto", SearchOption.TopDirectoryOnly);
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < fileInfos.Length; i++)
+        {
+            string name = fileInfos[i].Name.Replace(fileInfos[i].Extension, "");
+            //第二个字母是大写的C，那就是要客户端解析的
+            //LCLogin_1000
+            if ((name[1] == 'C' || name[1] == 'c') && name.Contains("_"))
+            {
+                string[] splite = name.Split('_');
+                if (splite.Length < 2)
+                {
+                    Debug.LogError("命名缺少[_] \n" + fileInfos[i].Name);
+                    continue;
+                }
+                string message = splite[0];
+                ushort messageId = 0;
+                if (!ushort.TryParse(splite[1], out messageId))
+                {
+                    Debug.LogError("编号超出ushort范围!\n" + fileInfos[i].Name);
+                    continue;
+                }
+                if (messageId < 1000)
+                {
+                    Debug.LogError("编号超出规定范围，1000以内为系统预留!\n" + fileInfos[i].Name);
+                    continue;
+                }
+                sb.Append("\n    ").Append(message).Append(" = ").Append(messageId).Append(",");
+            }
+        }
+        CreateScript(sb.ToString());
+        AssetDatabase.Refresh();
+    }
+    static void CreateScript(string actionName)
+    {
+        string path = Path.Combine(Application.dataPath, MESSAGE_ID_PATH);
+        FileStream fs = File.Create(path);
+        Debug.LogError(path);
+        StreamWriter sw = new StreamWriter(fs, System.Text.Encoding.UTF8);
+        sw.Write(Template.Replace("#MESSAGE_ID", actionName));
+        sw.Close();
+        fs.Close();
     }
 
     static string protoFolder = "";
@@ -42,7 +113,7 @@ public class CompileProtoFiles : Editor
         {
             protoFiles.Enqueue(filePath);
         }
-        
+
     }
 
     static void StartCompilerProcess()

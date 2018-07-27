@@ -67,6 +67,10 @@ namespace BigHead.Net
 
         public void Reset()
         {
+            if (socket != null)
+            {
+                socket.Close();
+            }
             socket = new USocket(listener, protocol);
             sender = new USocketSender(socket);
             netState = NetState.Inited;
