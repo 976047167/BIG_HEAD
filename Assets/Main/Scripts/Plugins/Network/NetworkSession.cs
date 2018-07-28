@@ -6,7 +6,7 @@ using KEngine;
 using System;
 using Google.Protobuf;
 using System.Net;
-//using BigHead.protocol;
+using BigHead.protocol;
 using CodedOutputStream = Google.Protobuf.CodedOutputStream;
 
 namespace BigHead.Net
@@ -14,7 +14,7 @@ namespace BigHead.Net
     /// <summary>
     /// 负责网络模块的顶层操作，如连接、断开、重连及在UI线程内分发回调
     /// </summary>
-    public class NetworkSession
+    public class NetworkSession : INetworkSession
     {
         protected string channelName;
         private USocket socket;
@@ -32,7 +32,7 @@ namespace BigHead.Net
         void Init()
         {
             protocol = new LVProtocol();
-            listener = new USocketListener(OnOpen, OnClose);
+            listener = new USocketListener(OnOpen, OnClose, OnMessage);
             socket = new USocket(listener, protocol);
             sender = new USocketSender(socket);
             netState = NetState.Inited;
@@ -49,7 +49,7 @@ namespace BigHead.Net
             netState = NetState.Connecting;
         }
 
-        public void Send(NetworkMessageId msgId, IMessage msg)
+        public void Send(MessageId_Send msgId, IMessage msg)
         {
             sender.Send(msgId, msg);
         }
@@ -57,14 +57,21 @@ namespace BigHead.Net
         void OnOpen()
         {
             netState = NetState.Connected;
-            Messenger.BroadcastAsync(NetworkMessageId.NetworkConnect);
+            Messenger.BroadcastAsync(MessageId.NetworkConnect);
         }
         void OnClose()
         {
             netState = NetState.Closed;
-            Messenger.BroadcastAsync(NetworkMessageId.NetworkDisconnect);
+            if (socket != null)
+            {
+                socket.Close();
+            }
+            Messenger.BroadcastAsync(MessageId.NetworkDisconnect);
         }
-
+        void OnMessage(ushort msgId, IMessage data)
+        {
+            DicHandler.Dic[msgId].Handle(this, data);
+        }
         public void Reset()
         {
             if (socket != null)
@@ -74,6 +81,16 @@ namespace BigHead.Net
             socket = new USocket(listener, protocol);
             sender = new USocketSender(socket);
             netState = NetState.Inited;
+        }
+        public void Close()
+        {
+            if (socket != null)
+            {
+                socket.Close();
+            }
+            socket = null;
+            sender = null;
+            netState = NetState.Closed;
         }
         public enum NetState
         {
@@ -94,7 +111,7 @@ namespace BigHead.Net
         {
             this.socket = socket;
         }
-        public void Send(NetworkMessageId msgId, IMessage msg)
+        public void Send(MessageId_Send msgId, IMessage msg)
         {
             //if (MessageMap.GetMsgType(msgId) != msg.GetType())
             //{
@@ -114,8 +131,9 @@ namespace BigHead.Net
     /// </summary>
     internal class USocketListener : SocketListener
     {
-        Action onOpen, onClose, onMessage = null;
-        public USocketListener(Action onOpen, Action onClose, Action onMessage = null)
+        Action onOpen, onClose = null;
+        Action<ushort, IMessage> onMessage = null;
+        public USocketListener(Action onOpen, Action onClose, Action<ushort, IMessage> onMessage)
         {
             this.onOpen = onOpen;
             this.onClose = onClose;
@@ -140,8 +158,7 @@ namespace BigHead.Net
 
         public override void OnMessage(USocket us, ByteBuf bb)
         {
-            if (onMessage != null)
-                onMessage();
+
             int len = bb.ReadShort();
 
             if (bb.ReadableBytes() != len)
@@ -149,13 +166,12 @@ namespace BigHead.Net
                 Log.Error("数据长度不对!");
                 return;
             }
-            //NetworkMessageId msgId = (NetworkMessageId)bb.ReadShort();
-            //byte[] data = bb.ReadBytes(len - 2);
-            //IMessage msgData = MessageMap.GetMessageData(msgId, data);
-            //if (msgData == null)
-            //    return;
-            ////Messenger.BroadcastAsync<IMessage>(msgId.ToString(), msgData);
-            //Messenger.BroadcastAsync(msgId.ToString(), (object)msgData);
+
+            ushort msgId = (ushort)bb.ReadShort();
+            byte[] data = bb.ReadBytes(len - 2);
+            IMessage message = DicParser.Dic[msgId].ParseFrom(data);
+            if (onMessage != null)
+                onMessage(msgId, message);
         }
 
         public override void OnOpen(USocket us)

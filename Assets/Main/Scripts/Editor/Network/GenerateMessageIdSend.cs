@@ -1,54 +1,37 @@
-﻿#if UNITY_EDITOR
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
-using UnityEditor;
 using System.IO;
-using System.Diagnostics;
 using System.Text;
-using Debug = UnityEngine.Debug;
+using UnityEditor;
+using UnityEngine;
 
-public class GeneratePacketHandler
+public class GenerateMessageIdSend
 {
     const string PROTO_FOLDER = @"..\Proto\proto";
-    const string MESSAGE_ID_PATH = @".\Main\Scripts\Network\PacketHandler\";
-
+    const string MESSAGE_ID_PATH = @".\Main\Scripts\Plugins\Network\MessageId_Send.cs";
     const string Template = @"//generate by code
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using BigHead.Net;
-using Google.Protobuf;
 
-public class #NAMEHandler : BasePacketHandler
+public enum MessageId_Send : ushort
 {
-    public override ushort OpCode
-    {
-        get
-        {
-            return (ushort)MessageId_Receive.#NAME;
-        }
-    }
-
-    public override void Handle(object sender, IMessage packet)
-    {
-        base.Handle(sender, packet);
-        //处理完数据和逻辑后,发送消息通知其他模块,绝对不可以直接操作UI等Unity主线程的东西!
-        throw new System.NotImplementedException(GetType().ToString());
-    }
+    None = 0,
+    #MESSAGE_ID
+    MAX = 65535,
 }
 ";
-    [MenuItem("Tools/Protobuf/Generate PacketHandler")]
+    [MenuItem("Tools/Protobuf/Generate MessageId Send")]
     public static void CompileMessageId()
     {
         DirectoryInfo protoPath = new DirectoryInfo(Path.Combine(Application.dataPath, PROTO_FOLDER));
+        string protoFolder = protoPath.FullName;
         FileInfo[] fileInfos = protoPath.GetFiles("*.proto", SearchOption.TopDirectoryOnly);
+        StringBuilder sb = new StringBuilder();
         for (int i = 0; i < fileInfos.Length; i++)
         {
             string name = fileInfos[i].Name.Replace(fileInfos[i].Extension, "");
             //第二个字母是大写的C，那就是要客户端解析的
             //LCLogin_1000
-            if ((name[1] == 'C' || name[1] == 'c') && name.Contains("_"))
+            if ((name[0] == 'C' || name[0] == 'c') && name.Contains("_"))
             {
                 string[] splite = name.Split('_');
                 if (splite.Length < 2)
@@ -68,24 +51,20 @@ public class #NAMEHandler : BasePacketHandler
                     Debug.LogError("编号超出规定范围，1000以内为系统预留!\n" + fileInfos[i].Name);
                     continue;
                 }
-                CreateScript(message);
+                sb.Append("\n    ").Append(message).Append(" = ").Append(messageId).Append(",");
             }
         }
+        CreateScript(sb.ToString());
         AssetDatabase.Refresh();
     }
     static void CreateScript(string actionName)
     {
-        string path = Path.Combine(Application.dataPath, MESSAGE_ID_PATH + actionName + "Handler.cs");
-        if (File.Exists(path))
-        {
-            return;
-        }
+        string path = Path.Combine(Application.dataPath, MESSAGE_ID_PATH);
         FileStream fs = File.Create(path);
         Debug.Log(path);
         StreamWriter sw = new StreamWriter(fs, System.Text.Encoding.UTF8);
-        sw.Write(Template.Replace("#NAME", actionName));
+        sw.Write(Template.Replace("#MESSAGE_ID", actionName));
         sw.Close();
         fs.Close();
     }
 }
-#endif
