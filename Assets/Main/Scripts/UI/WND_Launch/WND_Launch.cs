@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections;
 using UnityEngine;
+using BigHead.Net;
 
 public class WND_Launch : UIFormBase
 {
@@ -33,8 +34,9 @@ public class WND_Launch : UIFormBase
     }
     IEnumerator InitMgr()
     {
-        
-        
+        yield return null;
+        Game.NetworkManager.Init();
+        yield return null;
         I18N.SetLanguage(Game.Instance.language);
         yield return null;
     }

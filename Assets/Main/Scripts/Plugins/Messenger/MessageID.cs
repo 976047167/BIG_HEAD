@@ -1,7 +1,10 @@
 ﻿using BigHead.Net;
 public enum MessageId : uint
 {
-    MIN = NetworkMessageId.MAX + 1,
+    MIN = 0,
+    NetworkConnect=1,
+    NetworkDisconnect,
+
     /// <summary>
     /// UI编号从10000开始
     /// </summary>

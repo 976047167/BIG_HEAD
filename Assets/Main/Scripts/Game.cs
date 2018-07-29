@@ -7,6 +7,7 @@ using UnityEngine.SceneManagement;
 public class Game : MonoBehaviour
 {
     public bool BundleEditorMode = true;
+    public bool Online = false;
     public LanguageType language = LanguageType.None;
 
     public static Game Instance { get; private set; }
@@ -31,7 +32,7 @@ public class Game : MonoBehaviour
         yield return ModelPoolManager.Init();
         dataMgr = new DataMgr();
         battleMgr = new BattleMgr();
-
+        networkManager = new NetworkManager();
         StartGame();
     }
     private void Update()
@@ -57,8 +58,10 @@ public class Game : MonoBehaviour
     static DataMgr dataMgr;
     static BattleMgr battleMgr;
     static UIModule uiModule;
+    static NetworkManager networkManager;
     public static DataMgr DataManager { get { return dataMgr; } }
     public static BattleMgr BattleManager { get { return battleMgr; } }
     public static UIModule UI { get { return uiModule; } }
+    public static NetworkManager NetworkManager { get { return networkManager; } }
     #endregion
 }
