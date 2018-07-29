@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using AppSettings;
 
-public class UINormalCard : MonoBehaviour
+public class UINormalCard : MonoBehaviour, IModelItem
 {
     public int CardId {get;private set;}
     public BattleCardTableSetting CardData { get; private set; }
@@ -30,7 +30,10 @@ public class UINormalCard : MonoBehaviour
         labAttack = spAttack.transform.Find("labAttack").GetComponent<UILabel>();
     }
 
-
+    public void SetData(object cardId)
+    {
+        SetCard((int) cardId);
+    }
     public void SetCard(int cardId)
     {
 

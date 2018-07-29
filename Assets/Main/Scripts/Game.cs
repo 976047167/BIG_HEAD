@@ -28,6 +28,7 @@ public class Game : MonoBehaviour
         yield return ResourceManager.Init(Game.Instance.BundleEditorMode);
         yield return ResourceManager.Preload();
         yield return uiModule.Init();
+        yield return ModelPoolManager.Init();
         dataMgr = new DataMgr();
         battleMgr = new BattleMgr();
 
