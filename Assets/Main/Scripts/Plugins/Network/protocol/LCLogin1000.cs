@@ -22,13 +22,13 @@ namespace BigHead.protocol {
     static LCLogin1000Reflection() {
       byte[] descriptorData = global::System.Convert.FromBase64String(
           string.Concat(
-            "ChJMQ0xvZ2luXzEwMDAucHJvdG8iFwoHTENMb2dpbhIMCgRuYW1lGAEgASgJ",
-            "QjMKD2NvbS5jc2YuYmlnaGVhZEINTG9iYnlUb0NsaWVudKoCEEJpZ0hlYWQu",
-            "cHJvdG9jb2xiBnByb3RvMw=="));
+            "ChJMQ0xvZ2luXzEwMDAucHJvdG8iGQoHTENMb2dpbhIOCgZyZXN1bHQYASAB",
+            "KAVCMwoPY29tLmNzZi5iaWdoZWFkQg1Mb2JieVRvQ2xpZW50qgIQQmlnSGVh",
+            "ZC5wcm90b2NvbGIGcHJvdG8z"));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { },
           new pbr::GeneratedClrTypeInfo(null, new pbr::GeneratedClrTypeInfo[] {
-            new pbr::GeneratedClrTypeInfo(typeof(global::BigHead.protocol.LCLogin), global::BigHead.protocol.LCLogin.Parser, new[]{ "Name" }, null, null, null)
+            new pbr::GeneratedClrTypeInfo(typeof(global::BigHead.protocol.LCLogin), global::BigHead.protocol.LCLogin.Parser, new[]{ "Result" }, null, null, null)
           }));
     }
     #endregion
@@ -62,7 +62,7 @@ namespace BigHead.protocol {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public LCLogin(LCLogin other) : this() {
-      name_ = other.name_;
+      result_ = other.result_;
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -70,14 +70,14 @@ namespace BigHead.protocol {
       return new LCLogin(this);
     }
 
-    /// <summary>Field number for the "name" field.</summary>
-    public const int NameFieldNumber = 1;
-    private string name_ = "";
+    /// <summary>Field number for the "result" field.</summary>
+    public const int ResultFieldNumber = 1;
+    private int result_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public string Name {
-      get { return name_; }
+    public int Result {
+      get { return result_; }
       set {
-        name_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+        result_ = value;
       }
     }
 
@@ -94,14 +94,14 @@ namespace BigHead.protocol {
       if (ReferenceEquals(other, this)) {
         return true;
       }
-      if (Name != other.Name) return false;
+      if (Result != other.Result) return false;
       return true;
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override int GetHashCode() {
       int hash = 1;
-      if (Name.Length != 0) hash ^= Name.GetHashCode();
+      if (Result != 0) hash ^= Result.GetHashCode();
       return hash;
     }
 
@@ -112,17 +112,17 @@ namespace BigHead.protocol {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public void WriteTo(pb::CodedOutputStream output) {
-      if (Name.Length != 0) {
-        output.WriteRawTag(10);
-        output.WriteString(Name);
+      if (Result != 0) {
+        output.WriteRawTag(8);
+        output.WriteInt32(Result);
       }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public int CalculateSize() {
       int size = 0;
-      if (Name.Length != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeStringSize(Name);
+      if (Result != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(Result);
       }
       return size;
     }
@@ -132,8 +132,8 @@ namespace BigHead.protocol {
       if (other == null) {
         return;
       }
-      if (other.Name.Length != 0) {
-        Name = other.Name;
+      if (other.Result != 0) {
+        Result = other.Result;
       }
     }
 
@@ -145,8 +145,8 @@ namespace BigHead.protocol {
           default:
             input.SkipLastField();
             break;
-          case 10: {
-            Name = input.ReadString();
+          case 8: {
+            Result = input.ReadInt32();
             break;
           }
         }

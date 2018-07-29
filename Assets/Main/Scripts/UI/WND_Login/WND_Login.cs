@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using BigHead.protocol;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -28,6 +29,7 @@ public class WND_Login : UIFormBase
     protected override void OnOpen()
     {
         base.OnOpen();
+        Messenger.AddListener<string>(MessageId.NetworkConnect, OnCnnectServerSuccess);
     }
 
     protected override void OnShow()
@@ -44,6 +46,15 @@ public class WND_Login : UIFormBase
     void OnClick_GameStart()
     {
         //Messenger.Broadcast(MessageID.UI_GAME_START);
-        Messenger.Broadcast(MessageId.UI_GAME_CREATE_CHARACTER);
+        Game.NetworkManager.ConnectLobby();
+    }
+    void OnCnnectServerSuccess(string serverName)
+    {
+        if (serverName == NetworkManager.LobbySessionName)
+        {
+            CLLogin login = new CLLogin();
+            login.UserId = 1;
+            Game.NetworkManager.Send(MessageId_Send.CLLogin, login);
+        }
     }
 }

@@ -57,7 +57,7 @@ namespace BigHead.Net
         void OnOpen()
         {
             netState = NetState.Connected;
-            Messenger.BroadcastAsync(MessageId.NetworkConnect);
+            Messenger.BroadcastAsync(MessageId.NetworkConnect, channelName);
         }
         void OnClose()
         {
@@ -68,7 +68,7 @@ namespace BigHead.Net
             }
             Messenger.BroadcastAsync(MessageId.NetworkDisconnect);
         }
-        void OnMessage(ushort msgId, IMessage data)
+        public void OnMessage(ushort msgId, IMessage data)
         {
             DicHandler.Dic[msgId].Handle(this, data);
         }
@@ -92,14 +92,7 @@ namespace BigHead.Net
             sender = null;
             netState = NetState.Closed;
         }
-        public enum NetState
-        {
-            None = 0,
-            Inited,
-            Connecting,
-            Connected,
-            Closed,
-        }
+        
     }
     /// <summary>
     /// 负责发送消息

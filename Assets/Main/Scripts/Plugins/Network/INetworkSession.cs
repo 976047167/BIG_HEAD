@@ -9,5 +9,14 @@ namespace BigHead.Net
         void Connect(string ip, int port);
         void Send(MessageId_Send msgId, IMessage msg);
         void Close();
+        void OnMessage(ushort msgId, IMessage data);
     }
+}
+public enum NetState
+{
+    None = 0,
+    Inited,
+    Connecting,
+    Connected,
+    Closed,
 }

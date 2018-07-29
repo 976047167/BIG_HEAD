@@ -24,6 +24,8 @@ public class CompileProtoFiles : Editor
         GeneratePacketHandlerDic.CompileMessageId();
         GeneratePacketParserDic.CompileMessageId();
         GenerateMessageIdSend.CompileMessageId();
+        GenerateServerPacketHandler.CompileMessageId();
+        GenerateServerHandlerDic.CompileMessageId();
     }
 
     [MenuItem("Tools/Protobuf/Generate All Proto")]

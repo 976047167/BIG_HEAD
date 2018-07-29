@@ -5,6 +5,7 @@ using UnityEngine;
 using DG;
 using DG.Tweening;
 using AppSettings;
+using BigHead.protocol;
 
 public class WND_CreateCharacter : UIFormBase
 {
@@ -104,9 +105,12 @@ public class WND_CreateCharacter : UIFormBase
         }
         ClassTableSetting classData = ClassTableSettings.Get((int)Enum.Parse(typeof(ClassType), currentSelect));
         //目前没有皮肤了，暂时默认皮肤了
-        Game.DataManager.InitPlayer(classData.Id);
+        //Game.DataManager.InitPlayer(classData.Id);
 
-        Messenger.Broadcast(MessageId.UI_GAME_START);
+        //Messenger.Broadcast(MessageId.UI_GAME_START);
+        CLGetUserData data = new CLGetUserData();
+        data.UserId = classData.Id;
+        Game.NetworkManager.Send(MessageId_Send.CLGetUserData, data);
 
     }
 }

@@ -8,15 +8,12 @@ using System.Diagnostics;
 using System.Text;
 using Debug = UnityEngine.Debug;
 
-public class GeneratePacketHandler
+public class GenerateServerPacketHandler
 {
     const string PROTO_FOLDER = @"..\Proto\proto";
-    const string MESSAGE_ID_PATH = @".\Main\Scripts\Network\PacketHandler\";
+    const string MESSAGE_ID_PATH = @".\Main\Scripts\Network\ServerHandler\";
 
     const string Template = @"//generate by code
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 using BigHead.Net;
 using Google.Protobuf;
 using BigHead.protocol;
@@ -27,7 +24,7 @@ public class #NAMEHandler : BasePacketHandler
     {
         get
         {
-            return (ushort)MessageId_Receive.#NAME;
+            return (ushort)MessageId_Send.#NAME;
         }
     }
 
@@ -35,12 +32,12 @@ public class #NAMEHandler : BasePacketHandler
     {
         base.Handle(sender, packet);
         #NAME data = packet as #NAME;
-        //处理完数据和逻辑后,发送消息通知其他模块,绝对不可以直接操作UI等Unity主线程的东西!
+        //处理完数据和逻辑后,发送消息通知客户端
         throw new System.NotImplementedException(GetType().ToString());
     }
 }
 ";
-    [MenuItem("Tools/Protobuf/Generate PacketHandler")]
+    [MenuItem("Tools/Protobuf/Generate ServerPacketHandler")]
     public static void CompileMessageId()
     {
         DirectoryInfo protoPath = new DirectoryInfo(Path.Combine(Application.dataPath, PROTO_FOLDER));
@@ -50,7 +47,7 @@ public class #NAMEHandler : BasePacketHandler
             string name = fileInfos[i].Name.Replace(fileInfos[i].Extension, "");
             //第二个字母是大写的C，那就是要客户端解析的
             //LCLogin_1000
-            if ((name[1] == 'C' || name[1] == 'c') && name.Contains("_"))
+            if ((name[0] == 'C' || name[0] == 'c') && name.Contains("_"))
             {
                 string[] splite = name.Split('_');
                 if (splite.Length < 2)
