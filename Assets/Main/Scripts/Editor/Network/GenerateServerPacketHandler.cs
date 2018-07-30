@@ -18,7 +18,7 @@ using BigHead.Net;
 using Google.Protobuf;
 using BigHead.protocol;
 
-public class #NAMEHandler : BasePacketHandler
+public class #NAMEHandler : BaseServerPacketHandler
 {
     public override ushort OpCode
     {

@@ -46,8 +46,10 @@ public enum MessageId : uint
     /// 地图界面更新角色经验
     /// </summary>
     GAME_UPDATE_PLAYER_EXP,
-
-
+    /// <summary>
+    /// 进入战斗
+    /// </summary>
+    GAME_ENTER_BATTLE,
 
     /////<summary> 断线</summary>
     //MSG_LOST_CONNECT_TO_SERVER = 100000,

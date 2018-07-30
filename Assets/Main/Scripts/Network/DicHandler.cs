@@ -9,6 +9,7 @@ namespace BigHead.Net
         {
             Dic.Clear();
             
+            Dic.Add((ushort)MessageId_Receive.LCEnterBattle, new LCEnterBattleHandler());
             Dic.Add((ushort)MessageId_Receive.LCGetUserData, new LCGetUserDataHandler());
             Dic.Add((ushort)MessageId_Receive.LCLogin, new LCLoginHandler());
             Dic.Add((ushort)MessageId_Receive.LCLogout, new LCLogoutHandler());

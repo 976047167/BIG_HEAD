@@ -54,7 +54,7 @@ public class WND_Login : UIFormBase
         {
             CLLogin login = new CLLogin();
             login.UserId = 1;
-            Game.NetworkManager.Send(MessageId_Send.CLLogin, login);
+            Game.NetworkManager.SendToLobby(MessageId_Send.CLLogin, login);
         }
     }
 }

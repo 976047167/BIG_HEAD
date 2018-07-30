@@ -10,6 +10,7 @@ public class Procedure_BigPlain : ProcedureBase
         Game.UI.OpenForm<UIMapInfo>();
         Game.UI.OpenForm<UIMenu>();
         MapMgr.Create();
+        Messenger.AddListener<int>(MessageId.GAME_ENTER_BATTLE, EnterBattle);
     }
 
     public override void OnExit(ProcedureBase next)
@@ -30,5 +31,11 @@ public class Procedure_BigPlain : ProcedureBase
     {
         base.OnUpdate();
         MapMgr.Instance.Update();
+    }
+
+    void EnterBattle(int monsterId)
+    {
+        Game.BattleManager.StartBattle(monsterId);
+        Game.UI.CloseForm<WND_Dialog>();
     }
 }

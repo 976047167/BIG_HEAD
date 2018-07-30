@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using AppSettings;
+using BigHead.protocol;
 
 public class WND_Dialog : UIFormBase
 {
@@ -135,7 +136,7 @@ public class WND_Dialog : UIFormBase
         }
 
 
-        
+
         List<int> NextIds = DialogTableSettings.Get(preserntIndex).NextIds;
         switch ((DialogType)type)
         {
@@ -185,8 +186,11 @@ public class WND_Dialog : UIFormBase
                 break;
             case DialogType.Battle:
                 if (MonsterId != 0)
-                    Game.BattleManager.StartBattle(MonsterId);
-                Game.UI.CloseForm<WND_Dialog>();
+                {
+                    CLEnterBattle enterBattle = new CLEnterBattle();
+                    enterBattle.MonsterId = MonsterId;
+                    Game.NetworkManager.SendToLobby(MessageId_Send.CLEnterBattle, enterBattle);
+                }
                 break;
             case DialogType.NextPass:
                 if (MapMgr.Instance != null && MapMgr.Inited)

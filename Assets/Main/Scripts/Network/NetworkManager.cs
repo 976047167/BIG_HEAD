@@ -44,7 +44,7 @@ public class NetworkManager
         }
     }
 
-    public void Send(MessageId_Send messageId, IMessage message)
+    public void SendToLobby(MessageId_Send messageId, IMessage message)
     {
         if (session == null)
         {

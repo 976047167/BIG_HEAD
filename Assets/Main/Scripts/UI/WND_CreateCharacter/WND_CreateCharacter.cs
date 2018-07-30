@@ -110,7 +110,7 @@ public class WND_CreateCharacter : UIFormBase
         //Messenger.Broadcast(MessageId.UI_GAME_START);
         CLGetUserData data = new CLGetUserData();
         data.UserId = classData.Id;
-        Game.NetworkManager.Send(MessageId_Send.CLGetUserData, data);
+        Game.NetworkManager.SendToLobby(MessageId_Send.CLGetUserData, data);
 
     }
 }

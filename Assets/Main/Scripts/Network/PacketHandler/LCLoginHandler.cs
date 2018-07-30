@@ -37,7 +37,7 @@ public class LCLoginHandler : BasePacketHandler
         {
             CLGetUserData data = new CLGetUserData();
             data.UserId = 1;
-            Game.NetworkManager.Send(MessageId_Send.CLGetUserData, data);
+            Game.NetworkManager.SendToLobby(MessageId_Send.CLGetUserData, data);
         }
 
     }

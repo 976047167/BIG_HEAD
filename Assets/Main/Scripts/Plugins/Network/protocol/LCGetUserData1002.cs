@@ -23,8 +23,8 @@ namespace BigHead.protocol {
       byte[] descriptorData = global::System.Convert.FromBase64String(
           string.Concat(
             "ChhMQ0dldFVzZXJEYXRhXzEwMDIucHJvdG8iJAoNTENHZXRVc2VyRGF0YRIT",
-            "CgtjaGFyYWN0ZXJJZBgBIAEoBUIzCg9jb20uY3NmLmJpZ2hlYWRCDUxvYmJ5",
-            "VG9DbGllbnSqAhBCaWdIZWFkLnByb3RvY29sYgZwcm90bzM="));
+            "CgtjaGFyYWN0ZXJJZBgBIAEoBUIkCg9jb20uY3NmLmJpZ2hlYWSqAhBCaWdI",
+            "ZWFkLnByb3RvY29sYgZwcm90bzM="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { },
           new pbr::GeneratedClrTypeInfo(null, new pbr::GeneratedClrTypeInfo[] {
