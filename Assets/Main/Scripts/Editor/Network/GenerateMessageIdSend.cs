@@ -30,18 +30,18 @@ public enum MessageId_Send : ushort
         {
             string name = fileInfos[i].Name.Replace(fileInfos[i].Extension, "");
             //第二个字母是大写的C，那就是要客户端解析的
-            //LCLogin_1000
-            if ((name[0] == 'C' || name[0] == 'c') && name.Contains("_"))
+            //1000_LCLogin
+            string[] splite = name.Split('_');
+            if (splite.Length < 2)
             {
-                string[] splite = name.Split('_');
-                if (splite.Length < 2)
-                {
-                    Debug.LogError("命名缺少[_] \n" + fileInfos[i].Name);
-                    continue;
-                }
-                string message = splite[0];
+                Debug.LogError("命名缺少[_] \n" + fileInfos[i].Name);
+                continue;
+            }
+            if ((splite[1][0] == 'C' || splite[1][0] == 'c') && name.Contains("_"))
+            {
+                string message = splite[1];
                 ushort messageId = 0;
-                if (!ushort.TryParse(splite[1], out messageId))
+                if (!ushort.TryParse(splite[0], out messageId))
                 {
                     Debug.LogError("编号超出ushort范围!\n" + fileInfos[i].Name);
                     continue;

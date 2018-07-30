@@ -9,9 +9,9 @@ namespace BigHead.Net
         {
             Dic.Clear();
             
-            Dic.Add((ushort)MessageId_Send.CLEnterBattle, new CLEnterBattleHandler());
-            Dic.Add((ushort)MessageId_Send.CLGetUserData, new CLGetUserDataHandler());
             Dic.Add((ushort)MessageId_Send.CLLogin, new CLLoginHandler());
+            Dic.Add((ushort)MessageId_Send.CLGetUserData, new CLGetUserDataHandler());
+            Dic.Add((ushort)MessageId_Send.CLEnterBattle, new CLEnterBattleHandler());
         }
     }
 }

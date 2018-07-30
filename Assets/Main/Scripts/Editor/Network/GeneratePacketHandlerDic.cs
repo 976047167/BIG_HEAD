@@ -38,18 +38,18 @@ namespace BigHead.Net
         {
             string name = fileInfos[i].Name.Replace(fileInfos[i].Extension, "");
             //第二个字母是大写的C，那就是要客户端解析的
-            //LCLogin_1000
-            if ((name[1] == 'C' || name[1] == 'c') && name.Contains("_"))
+            //1000_LCLogin
+            string[] splite = name.Split('_');
+            if (splite.Length < 2)
             {
-                string[] splite = name.Split('_');
-                if (splite.Length < 2)
-                {
-                    Debug.LogError("命名缺少[_] \n" + fileInfos[i].Name);
-                    continue;
-                }
-                string message = splite[0];
+                Debug.LogError("命名缺少[_] \n" + fileInfos[i].Name);
+                continue;
+            }
+            if ((splite[1][1] == 'C' || splite[1][1] == 'c') && name.Contains("_"))
+            {
+                string message = splite[1];
                 ushort messageId = 0;
-                if (!ushort.TryParse(splite[1], out messageId))
+                if (!ushort.TryParse(splite[0], out messageId))
                 {
                     Debug.LogError("编号超出ushort范围!\n" + fileInfos[i].Name);
                     continue;
@@ -59,7 +59,6 @@ namespace BigHead.Net
                     Debug.LogError("编号超出规定范围，1000以内为系统预留!\n" + fileInfos[i].Name);
                     continue;
                 }
-                
                 sb.Append("\n            Dic.Add((ushort)MessageId_Receive.").Append(message).Append(", new ").Append(message).Append("Handler());");
             }
         }
