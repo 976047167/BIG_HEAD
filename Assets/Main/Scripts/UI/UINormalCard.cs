@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using AppSettings;
 
-public class UINormalCard : MonoBehaviour, IModelItem
+public class UINormalCard : MonoBehaviour
 {
     public int CardId {get;private set;}
     public BattleCardTableSetting CardData { get; private set; }
