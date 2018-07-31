@@ -15,7 +15,7 @@ namespace BigHead.Net
             Dic.Add((ushort)MessageId_Receive.LCLogin, LCLogin.Parser);
             Dic.Add((ushort)MessageId_Receive.LCLogout, LCLogout.Parser);
             Dic.Add((ushort)MessageId_Receive.LCGetUserData, LCGetUserData.Parser);
-            Dic.Add((ushort)MessageId_Receive.LCMap, LCMap.Parser);
+            Dic.Add((ushort)MessageId_Receive.LCEnterInstance, LCEnterInstance.Parser);
             Dic.Add((ushort)MessageId_Receive.LCEnterBattle, LCEnterBattle.Parser);
         }
     }

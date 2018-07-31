@@ -42,7 +42,7 @@ namespace BigHead.Net
             string[] splite = name.Split('_');
             if (splite.Length < 2)
             {
-                Debug.LogError("命名缺少[_] \n" + fileInfos[i].Name);
+                //Debug.LogError("命名缺少[_] \n" + fileInfos[i].Name);
                 continue;
             }
             if ((splite[1][0] == 'C' || splite[1][0] == 'c') && name.Contains("_"))

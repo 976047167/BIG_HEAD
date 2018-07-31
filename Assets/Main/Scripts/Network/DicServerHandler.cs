@@ -11,6 +11,7 @@ namespace BigHead.Net
             
             Dic.Add((ushort)MessageId_Send.CLLogin, new CLLoginHandler());
             Dic.Add((ushort)MessageId_Send.CLGetUserData, new CLGetUserDataHandler());
+            Dic.Add((ushort)MessageId_Send.CLEnterInstance, new CLEnterInstanceHandler());
             Dic.Add((ushort)MessageId_Send.CLEnterBattle, new CLEnterBattleHandler());
         }
     }

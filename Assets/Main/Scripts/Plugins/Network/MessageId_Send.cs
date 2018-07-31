@@ -7,6 +7,7 @@ public enum MessageId_Send : ushort
     
     CLLogin = 1000,
     CLGetUserData = 1002,
+    CLEnterInstance = 2000,
     CLEnterBattle = 3000,
     MAX = 65535,
 }
