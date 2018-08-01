@@ -21,29 +21,23 @@ public class CLGetUserDataHandler : BaseServerPacketHandler
         CLGetUserData data = packet as CLGetUserData;
         LCGetUserData userData = new LCGetUserData();
         userData.Uid = data.UserId;
-        userData.PlayerData = new PBPlayerData();
-        userData.PlayerData.Level = 1;
-        LevelTableSetting levelData = LevelTableSettings.Get(userData.PlayerData.Level);
-        if (levelData == null)
+        userData.AccountData = GetSavedData<PBAccountData>(ACCOUNT_DATA_KEY);
+        if (userData.AccountData == null)
         {
+            UnityEngine.Debug.LogError("没有创建账号!");
             return;
         }
-        userData.PlayerData.Food = userData.PlayerData.MaxFood = levelData.Food[MyPlayer.Data.Level];
-        MyPlayer.Data.Coin = AccountData.Gold;
-        MyPlayer.Data.Name = I18N.Get(characterData.Name);
-        MyPlayer.Data.HP = MyPlayer.Data.MaxHP = levelData.HP[(int)MyPlayer.Data.ClassData.Type];
-        MyPlayer.Data.MP = MyPlayer.Data.MaxMP = levelData.MP[(int)MyPlayer.Data.ClassData.Type];
-        //MyPlayer.Data.AP = MyPlayer.Data.MaxAP = 1;
-
-        MyPlayer.Data.HeadIcon = characterData.IconID;
-        PlayerDetailData = MyPlayer.DetailData;
-        PlayerDetailData.Deck = new Deck();
-        for (int i = 0; i < characterData.DefaultCardList.Count; i++)
+        userData.PlayerData = GetSavedData<PBPlayerData>(PLAYER_DATA_KEY);
+        if (userData.PlayerData == null)
         {
-            NormalCard normalCard = new NormalCard(characterData.DefaultCardList[i], uidIndex++);
-            MyPlayer.Data.CardList.Add(normalCard);
-            PlayerDetailData.Kaku.Add(normalCard);
-            PlayerDetailData.Deck.AddCard(normalCard);
+            UnityEngine.Debug.LogError("没有创建角色!");
+            return;
+        }
+        userData.PlayerDetailData = GetSavedData<PBPlayerDetailData>(PLAYER_DETAIL_DATA);
+        if (userData.PlayerDetailData == null)
+        {
+            UnityEngine.Debug.LogError("没有创建角色详细信息!");
+            return;
         }
         SendToClient(MessageId_Receive.LCGetUserData, userData);
     }

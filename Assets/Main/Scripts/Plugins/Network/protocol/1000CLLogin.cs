@@ -23,7 +23,7 @@ namespace BigHead.protocol {
       byte[] descriptorData = global::System.Convert.FromBase64String(
           string.Concat(
             "ChIxMDAwX0NMTG9naW4ucHJvdG8iGQoHQ0xMb2dpbhIOCgZ1c2VySWQYASAB",
-            "KAVCJAoPY29tLmNzZi5iaWdoZWFkqgIQQmlnSGVhZC5wcm90b2NvbGIGcHJv",
+            "KARCJAoPY29tLmNzZi5iaWdoZWFkqgIQQmlnSGVhZC5wcm90b2NvbGIGcHJv",
             "dG8z"));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { },
@@ -72,9 +72,9 @@ namespace BigHead.protocol {
 
     /// <summary>Field number for the "userId" field.</summary>
     public const int UserIdFieldNumber = 1;
-    private int userId_;
+    private ulong userId_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public int UserId {
+    public ulong UserId {
       get { return userId_; }
       set {
         userId_ = value;
@@ -101,7 +101,7 @@ namespace BigHead.protocol {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override int GetHashCode() {
       int hash = 1;
-      if (UserId != 0) hash ^= UserId.GetHashCode();
+      if (UserId != 0UL) hash ^= UserId.GetHashCode();
       return hash;
     }
 
@@ -112,17 +112,17 @@ namespace BigHead.protocol {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public void WriteTo(pb::CodedOutputStream output) {
-      if (UserId != 0) {
+      if (UserId != 0UL) {
         output.WriteRawTag(8);
-        output.WriteInt32(UserId);
+        output.WriteUInt64(UserId);
       }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public int CalculateSize() {
       int size = 0;
-      if (UserId != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeInt32Size(UserId);
+      if (UserId != 0UL) {
+        size += 1 + pb::CodedOutputStream.ComputeUInt64Size(UserId);
       }
       return size;
     }
@@ -132,7 +132,7 @@ namespace BigHead.protocol {
       if (other == null) {
         return;
       }
-      if (other.UserId != 0) {
+      if (other.UserId != 0UL) {
         UserId = other.UserId;
       }
     }
@@ -146,7 +146,7 @@ namespace BigHead.protocol {
             input.SkipLastField();
             break;
           case 8: {
-            UserId = input.ReadInt32();
+            UserId = input.ReadUInt64();
             break;
           }
         }

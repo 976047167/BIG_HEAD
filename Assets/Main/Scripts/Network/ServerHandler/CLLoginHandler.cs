@@ -20,27 +20,43 @@ public class CLLoginHandler : BaseServerPacketHandler
         CLLogin data = packet as CLLogin;
         //处理完数据和逻辑后,发送消息通知客户端
         LCLogin login = new LCLogin();
-        CLLogin read = GetSavedData<CLLogin>("login");
+        PBAccountData read = GetSavedData<PBAccountData>(ACCOUNT_DATA_KEY);
         if (read != null)
         {
-            if (read.UserId != data.UserId)
+            if (read.Uid != data.UserId)
             {
                 //新玩家
                 login.Result = 0;
+                CreateAccount(data.UserId);
             }
             else
             {
-                login.Result = 1;
+                if (GetSavedData<PBPlayerData>(PLAYER_DATA_KEY) == null || GetSavedData<PBPlayerDetailData>(PLAYER_DETAIL_DATA) == null)
+                {
+                    //新玩家，没有创建角色
+                    login.Result = 0;
+                }
+                else
+                    login.Result = 1;
             }
         }
         else
         {
-            SaveData("login", data);
+            CreateAccount(data.UserId);
             login.Result = 0;
         }
         //Debug.LogError(data.UserId.ToString());
 
 
         SendToClient(MessageId_Receive.LCLogin, login);
+    }
+    void CreateAccount(ulong uid)
+    {
+        PBAccountData AccountData = new PBAccountData();
+        AccountData.Uid = uid;
+        AccountData.Recharge = 0;
+        AccountData.Diamonds = 0;
+        AccountData.VipLevel = 0;
+        SaveData(ACCOUNT_DATA_KEY, AccountData);
     }
 }

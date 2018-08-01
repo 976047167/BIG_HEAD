@@ -23,13 +23,16 @@ namespace BigHead.protocol {
       byte[] descriptorData = global::System.Convert.FromBase64String(
           string.Concat(
             "ChgxMDAyX0xDR2V0VXNlckRhdGEucHJvdG8aElBCUGxheWVyRGF0YS5wcm90",
-            "byJACg1MQ0dldFVzZXJEYXRhEgsKA3VpZBgBIAEoAxIiCgtwbGF5ZXJfZGF0",
-            "YRgCIAEoCzINLlBCUGxheWVyRGF0YUIkCg9jb20uY3NmLmJpZ2hlYWSqAhBC",
+            "bxoTUEJBY2NvdW50RGF0YS5wcm90bxoYUEJQbGF5ZXJEZXRhaWxEYXRhLnBy",
+            "b3RvIpcBCg1MQ0dldFVzZXJEYXRhEgsKA3VpZBgBIAEoBBIkCgxhY2NvdW50",
+            "X2RhdGEYAiABKAsyDi5QQkFjY291bnREYXRhEiIKC3BsYXllcl9kYXRhGAMg",
+            "ASgLMg0uUEJQbGF5ZXJEYXRhEi8KEnBsYXllcl9kZXRhaWxfZGF0YRgEIAEo",
+            "CzITLlBCUGxheWVyRGV0YWlsRGF0YUIkCg9jb20uY3NmLmJpZ2hlYWSqAhBC",
             "aWdIZWFkLnByb3RvY29sYgZwcm90bzM="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
-          new pbr::FileDescriptor[] { global::BigHead.protocol.PBPlayerDataReflection.Descriptor, },
+          new pbr::FileDescriptor[] { global::BigHead.protocol.PBPlayerDataReflection.Descriptor, global::BigHead.protocol.PBAccountDataReflection.Descriptor, global::BigHead.protocol.PBPlayerDetailDataReflection.Descriptor, },
           new pbr::GeneratedClrTypeInfo(null, new pbr::GeneratedClrTypeInfo[] {
-            new pbr::GeneratedClrTypeInfo(typeof(global::BigHead.protocol.LCGetUserData), global::BigHead.protocol.LCGetUserData.Parser, new[]{ "Uid", "PlayerData" }, null, null, null)
+            new pbr::GeneratedClrTypeInfo(typeof(global::BigHead.protocol.LCGetUserData), global::BigHead.protocol.LCGetUserData.Parser, new[]{ "Uid", "AccountData", "PlayerData", "PlayerDetailData" }, null, null, null)
           }));
     }
     #endregion
@@ -64,7 +67,9 @@ namespace BigHead.protocol {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public LCGetUserData(LCGetUserData other) : this() {
       uid_ = other.uid_;
+      AccountData = other.accountData_ != null ? other.AccountData.Clone() : null;
       PlayerData = other.playerData_ != null ? other.PlayerData.Clone() : null;
+      PlayerDetailData = other.playerDetailData_ != null ? other.PlayerDetailData.Clone() : null;
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -74,23 +79,45 @@ namespace BigHead.protocol {
 
     /// <summary>Field number for the "uid" field.</summary>
     public const int UidFieldNumber = 1;
-    private long uid_;
+    private ulong uid_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public long Uid {
+    public ulong Uid {
       get { return uid_; }
       set {
         uid_ = value;
       }
     }
 
+    /// <summary>Field number for the "account_data" field.</summary>
+    public const int AccountDataFieldNumber = 2;
+    private global::BigHead.protocol.PBAccountData accountData_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public global::BigHead.protocol.PBAccountData AccountData {
+      get { return accountData_; }
+      set {
+        accountData_ = value;
+      }
+    }
+
     /// <summary>Field number for the "player_data" field.</summary>
-    public const int PlayerDataFieldNumber = 2;
+    public const int PlayerDataFieldNumber = 3;
     private global::BigHead.protocol.PBPlayerData playerData_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public global::BigHead.protocol.PBPlayerData PlayerData {
       get { return playerData_; }
       set {
         playerData_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "player_detail_data" field.</summary>
+    public const int PlayerDetailDataFieldNumber = 4;
+    private global::BigHead.protocol.PBPlayerDetailData playerDetailData_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public global::BigHead.protocol.PBPlayerDetailData PlayerDetailData {
+      get { return playerDetailData_; }
+      set {
+        playerDetailData_ = value;
       }
     }
 
@@ -108,15 +135,19 @@ namespace BigHead.protocol {
         return true;
       }
       if (Uid != other.Uid) return false;
+      if (!object.Equals(AccountData, other.AccountData)) return false;
       if (!object.Equals(PlayerData, other.PlayerData)) return false;
+      if (!object.Equals(PlayerDetailData, other.PlayerDetailData)) return false;
       return true;
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override int GetHashCode() {
       int hash = 1;
-      if (Uid != 0L) hash ^= Uid.GetHashCode();
+      if (Uid != 0UL) hash ^= Uid.GetHashCode();
+      if (accountData_ != null) hash ^= AccountData.GetHashCode();
       if (playerData_ != null) hash ^= PlayerData.GetHashCode();
+      if (playerDetailData_ != null) hash ^= PlayerDetailData.GetHashCode();
       return hash;
     }
 
@@ -127,24 +158,38 @@ namespace BigHead.protocol {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public void WriteTo(pb::CodedOutputStream output) {
-      if (Uid != 0L) {
+      if (Uid != 0UL) {
         output.WriteRawTag(8);
-        output.WriteInt64(Uid);
+        output.WriteUInt64(Uid);
+      }
+      if (accountData_ != null) {
+        output.WriteRawTag(18);
+        output.WriteMessage(AccountData);
       }
       if (playerData_ != null) {
-        output.WriteRawTag(18);
+        output.WriteRawTag(26);
         output.WriteMessage(PlayerData);
+      }
+      if (playerDetailData_ != null) {
+        output.WriteRawTag(34);
+        output.WriteMessage(PlayerDetailData);
       }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public int CalculateSize() {
       int size = 0;
-      if (Uid != 0L) {
-        size += 1 + pb::CodedOutputStream.ComputeInt64Size(Uid);
+      if (Uid != 0UL) {
+        size += 1 + pb::CodedOutputStream.ComputeUInt64Size(Uid);
+      }
+      if (accountData_ != null) {
+        size += 1 + pb::CodedOutputStream.ComputeMessageSize(AccountData);
       }
       if (playerData_ != null) {
         size += 1 + pb::CodedOutputStream.ComputeMessageSize(PlayerData);
+      }
+      if (playerDetailData_ != null) {
+        size += 1 + pb::CodedOutputStream.ComputeMessageSize(PlayerDetailData);
       }
       return size;
     }
@@ -154,14 +199,26 @@ namespace BigHead.protocol {
       if (other == null) {
         return;
       }
-      if (other.Uid != 0L) {
+      if (other.Uid != 0UL) {
         Uid = other.Uid;
+      }
+      if (other.accountData_ != null) {
+        if (accountData_ == null) {
+          accountData_ = new global::BigHead.protocol.PBAccountData();
+        }
+        AccountData.MergeFrom(other.AccountData);
       }
       if (other.playerData_ != null) {
         if (playerData_ == null) {
           playerData_ = new global::BigHead.protocol.PBPlayerData();
         }
         PlayerData.MergeFrom(other.PlayerData);
+      }
+      if (other.playerDetailData_ != null) {
+        if (playerDetailData_ == null) {
+          playerDetailData_ = new global::BigHead.protocol.PBPlayerDetailData();
+        }
+        PlayerDetailData.MergeFrom(other.PlayerDetailData);
       }
     }
 
@@ -174,14 +231,28 @@ namespace BigHead.protocol {
             input.SkipLastField();
             break;
           case 8: {
-            Uid = input.ReadInt64();
+            Uid = input.ReadUInt64();
             break;
           }
           case 18: {
+            if (accountData_ == null) {
+              accountData_ = new global::BigHead.protocol.PBAccountData();
+            }
+            input.ReadMessage(accountData_);
+            break;
+          }
+          case 26: {
             if (playerData_ == null) {
               playerData_ = new global::BigHead.protocol.PBPlayerData();
             }
             input.ReadMessage(playerData_);
+            break;
+          }
+          case 34: {
+            if (playerDetailData_ == null) {
+              playerDetailData_ = new global::BigHead.protocol.PBPlayerDetailData();
+            }
+            input.ReadMessage(playerDetailData_);
             break;
           }
         }

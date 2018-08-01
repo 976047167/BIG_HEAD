@@ -104,13 +104,13 @@ public class WND_CreateCharacter : UIFormBase
             return;
         }
         ClassTableSetting classData = ClassTableSettings.Get((int)Enum.Parse(typeof(ClassType), currentSelect));
-        //目前没有皮肤了，暂时默认皮肤了
-        //Game.DataManager.InitPlayer(classData.Id);
 
         //Messenger.Broadcast(MessageId.UI_GAME_START);
-        CLGetUserData data = new CLGetUserData();
-        data.UserId = classData.Id;
-        Game.NetworkManager.SendToLobby(MessageId_Send.CLGetUserData, data);
+        CLCreatePlayer data = new CLCreatePlayer();
+        data.UserId = Game.DataManager.AccountData.Uid;
+        //目前没有皮肤了，暂时默认皮肤了
+        data.CharacterId = classData.Id;
+        Game.NetworkManager.SendToLobby(MessageId_Send.CLCreatePlayer, data);
 
     }
 }

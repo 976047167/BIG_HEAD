@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 public class AccountData {
 
-    public int Uid;
+    public ulong Uid;
     public int Recharge;
     public int Diamonds;
     public int VipLevel;
