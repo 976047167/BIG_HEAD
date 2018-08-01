@@ -22,13 +22,14 @@ namespace BigHead.protocol {
     static LCGetUserDataReflection() {
       byte[] descriptorData = global::System.Convert.FromBase64String(
           string.Concat(
-            "ChgxMDAyX0xDR2V0VXNlckRhdGEucHJvdG8iJAoNTENHZXRVc2VyRGF0YRIT",
-            "CgtjaGFyYWN0ZXJJZBgBIAEoBUIkCg9jb20uY3NmLmJpZ2hlYWSqAhBCaWdI",
-            "ZWFkLnByb3RvY29sYgZwcm90bzM="));
+            "ChgxMDAyX0xDR2V0VXNlckRhdGEucHJvdG8aElBCUGxheWVyRGF0YS5wcm90",
+            "byJACg1MQ0dldFVzZXJEYXRhEgsKA3VpZBgBIAEoAxIiCgtwbGF5ZXJfZGF0",
+            "YRgCIAEoCzINLlBCUGxheWVyRGF0YUIkCg9jb20uY3NmLmJpZ2hlYWSqAhBC",
+            "aWdIZWFkLnByb3RvY29sYgZwcm90bzM="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
-          new pbr::FileDescriptor[] { },
+          new pbr::FileDescriptor[] { global::BigHead.protocol.PBPlayerDataReflection.Descriptor, },
           new pbr::GeneratedClrTypeInfo(null, new pbr::GeneratedClrTypeInfo[] {
-            new pbr::GeneratedClrTypeInfo(typeof(global::BigHead.protocol.LCGetUserData), global::BigHead.protocol.LCGetUserData.Parser, new[]{ "CharacterId" }, null, null, null)
+            new pbr::GeneratedClrTypeInfo(typeof(global::BigHead.protocol.LCGetUserData), global::BigHead.protocol.LCGetUserData.Parser, new[]{ "Uid", "PlayerData" }, null, null, null)
           }));
     }
     #endregion
@@ -36,7 +37,7 @@ namespace BigHead.protocol {
   }
   #region Messages
   /// <summary>
-  /// 获取玩家数据返回
+  /// 鑾峰彇鐜╁鏁版嵁杩斿洖
   /// </summary>
   public sealed partial class LCGetUserData : pb::IMessage<LCGetUserData> {
     private static readonly pb::MessageParser<LCGetUserData> _parser = new pb::MessageParser<LCGetUserData>(() => new LCGetUserData());
@@ -62,7 +63,8 @@ namespace BigHead.protocol {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public LCGetUserData(LCGetUserData other) : this() {
-      characterId_ = other.characterId_;
+      uid_ = other.uid_;
+      PlayerData = other.playerData_ != null ? other.PlayerData.Clone() : null;
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -70,14 +72,25 @@ namespace BigHead.protocol {
       return new LCGetUserData(this);
     }
 
-    /// <summary>Field number for the "characterId" field.</summary>
-    public const int CharacterIdFieldNumber = 1;
-    private int characterId_;
+    /// <summary>Field number for the "uid" field.</summary>
+    public const int UidFieldNumber = 1;
+    private long uid_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public int CharacterId {
-      get { return characterId_; }
+    public long Uid {
+      get { return uid_; }
       set {
-        characterId_ = value;
+        uid_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "player_data" field.</summary>
+    public const int PlayerDataFieldNumber = 2;
+    private global::BigHead.protocol.PBPlayerData playerData_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public global::BigHead.protocol.PBPlayerData PlayerData {
+      get { return playerData_; }
+      set {
+        playerData_ = value;
       }
     }
 
@@ -94,14 +107,16 @@ namespace BigHead.protocol {
       if (ReferenceEquals(other, this)) {
         return true;
       }
-      if (CharacterId != other.CharacterId) return false;
+      if (Uid != other.Uid) return false;
+      if (!object.Equals(PlayerData, other.PlayerData)) return false;
       return true;
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override int GetHashCode() {
       int hash = 1;
-      if (CharacterId != 0) hash ^= CharacterId.GetHashCode();
+      if (Uid != 0L) hash ^= Uid.GetHashCode();
+      if (playerData_ != null) hash ^= PlayerData.GetHashCode();
       return hash;
     }
 
@@ -112,17 +127,24 @@ namespace BigHead.protocol {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public void WriteTo(pb::CodedOutputStream output) {
-      if (CharacterId != 0) {
+      if (Uid != 0L) {
         output.WriteRawTag(8);
-        output.WriteInt32(CharacterId);
+        output.WriteInt64(Uid);
+      }
+      if (playerData_ != null) {
+        output.WriteRawTag(18);
+        output.WriteMessage(PlayerData);
       }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public int CalculateSize() {
       int size = 0;
-      if (CharacterId != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeInt32Size(CharacterId);
+      if (Uid != 0L) {
+        size += 1 + pb::CodedOutputStream.ComputeInt64Size(Uid);
+      }
+      if (playerData_ != null) {
+        size += 1 + pb::CodedOutputStream.ComputeMessageSize(PlayerData);
       }
       return size;
     }
@@ -132,8 +154,14 @@ namespace BigHead.protocol {
       if (other == null) {
         return;
       }
-      if (other.CharacterId != 0) {
-        CharacterId = other.CharacterId;
+      if (other.Uid != 0L) {
+        Uid = other.Uid;
+      }
+      if (other.playerData_ != null) {
+        if (playerData_ == null) {
+          playerData_ = new global::BigHead.protocol.PBPlayerData();
+        }
+        PlayerData.MergeFrom(other.PlayerData);
       }
     }
 
@@ -146,7 +174,14 @@ namespace BigHead.protocol {
             input.SkipLastField();
             break;
           case 8: {
-            CharacterId = input.ReadInt32();
+            Uid = input.ReadInt64();
+            break;
+          }
+          case 18: {
+            if (playerData_ == null) {
+              playerData_ = new global::BigHead.protocol.PBPlayerData();
+            }
+            input.ReadMessage(playerData_);
             break;
           }
         }

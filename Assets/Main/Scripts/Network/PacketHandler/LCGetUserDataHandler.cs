@@ -23,7 +23,7 @@ public class LCGetUserDataHandler : BasePacketHandler
         //处理完数据和逻辑后,发送消息通知其他模块,绝对不可以直接操作UI等Unity主线程的东西!
 
         //目前没有皮肤了，暂时默认皮肤了
-        Game.DataManager.InitPlayer(data.CharacterId);
+        Game.DataManager.InitPlayer(data.PlayerData.CharacterId);
 
         Messenger.Broadcast(MessageId.UI_GAME_START);
     }
