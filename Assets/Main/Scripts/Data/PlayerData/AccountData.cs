@@ -8,7 +8,6 @@ public class AccountData {
     public int Recharge;
     public int Diamonds;
     public int VipLevel;
-    public int Gold;
 
 
     public AccountData( ){

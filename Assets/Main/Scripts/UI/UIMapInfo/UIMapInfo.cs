@@ -71,7 +71,7 @@ public class UIMapInfo : UIFormBase
         sliderMp.value = (float)playerInfo.Data.MP / (float)playerInfo.Data.MaxMP;
         labMp.text = string.Format("{0}/{1}", playerInfo.Data.MP, playerInfo.Data.MaxMP);
         labFood.text = (MapMgr.Instance.MyMapPlayer.Data.Food.ToString());
-        labGold.text = (MapMgr.Instance.MyMapPlayer.Data.Coin.ToString());
+        labGold.text = (MapMgr.Instance.MyMapPlayer.Data.Gold.ToString());
         spExp.fillAmount = (float)playerInfo.Data.Exp / (float)playerInfo.Data.MaxExp;
         lblLevel.text = playerInfo.Data.Level.ToString();
     }

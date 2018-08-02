@@ -68,7 +68,7 @@ public class MapMgr
     }
     public void ExitMap()
     {
-        Game.DataManager.MyPlayer.Data.Coin = m_MyMapPlayer.Data.Coin;
+        Game.DataManager.MyPlayer.Data.Gold = m_MyMapPlayer.Data.Gold;
         Game.DataManager.MyPlayer.Data.Food = m_MyMapPlayer.Data.Food;
         SceneMgr.ChangeScene(3);
         Clear();

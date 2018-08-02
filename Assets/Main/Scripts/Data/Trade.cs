@@ -47,10 +47,10 @@ public class Trade
                     Game.DataManager.MyPlayer.Data.MP -= tmpEvent.CostNum;
                 break;
             case TradeType.Coin:
-                if (MapMgr.Instance.MyMapPlayer.Data.Coin < tmpEvent.CostNum)
+                if (MapMgr.Instance.MyMapPlayer.Data.Gold < tmpEvent.CostNum)
                     return 1;
                 else
-                    MapMgr.Instance.MyMapPlayer.Data.Coin -= tmpEvent.CostNum;
+                    MapMgr.Instance.MyMapPlayer.Data.Gold -= tmpEvent.CostNum;
                 break;
             case TradeType.Equip:
                 for (int j = 0; j < tmpEvent.CostNum; j++)
@@ -95,7 +95,7 @@ public class Trade
                     Game.DataManager.MyPlayer.Data.MP = Game.DataManager.MyPlayer.Data.MaxMP;
                 break;
             case TradeType.Coin:
-                MapMgr.Instance.MyMapPlayer.Data.Coin += tmpEvent.Num;
+                MapMgr.Instance.MyMapPlayer.Data.Gold += tmpEvent.Num;
                 break;
             case TradeType.Equip:
                 for (int j = 0; j < tmpEvent.CostNum; j++)

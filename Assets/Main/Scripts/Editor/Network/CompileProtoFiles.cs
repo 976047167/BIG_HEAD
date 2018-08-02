@@ -45,7 +45,23 @@ public class CompileProtoFiles : Editor
         {
             if (fileInfos[i].Extension.ToLower() == ".proto")
             {
-                CompileProtoFile(fileInfos[i].FullName);
+                FileInfo file = fileInfos[i];
+                if (file.Name.StartsWith("PB"))
+                {
+                    CompileProtoFile(fileInfos[i].FullName);
+                }
+                else
+                {
+                    string[] splites = file.Name.Split('_');
+                    if (splites.Length >= 2)
+                    {
+                        if (splites[1][0] == 'C' || splites[1][1] == 'C' || splites[1][0] == 'c' || splites[1][1] == 'c')
+                        {
+                            CompileProtoFile(fileInfos[i].FullName);
+                        }
+                    }
+                }
+
             }
         }
         StartCompilerProcess();

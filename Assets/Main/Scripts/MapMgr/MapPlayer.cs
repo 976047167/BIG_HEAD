@@ -60,7 +60,7 @@ public class MapPlayer
         if (rewardTable != null)
         {
             AddExp(rewardTable.exp);
-            Data.Coin += rewardTable.gold;
+            Data.Gold += rewardTable.gold;
             Data.Diamond += rewardTable.diamond;
             for (int i = 0; i < rewardTable.ItemList.Count; i++)
             {

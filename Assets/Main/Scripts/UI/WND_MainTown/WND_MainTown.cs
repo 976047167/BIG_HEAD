@@ -49,7 +49,7 @@ public class WND_MainTown : UIFormBase
         labLevel.text = Game.DataManager.MyPlayer.Data.Level.ToString();
         labVipLevel.text = Game.DataManager.AccountData.VipLevel.ToString();
         labYuanBao.text = Game.DataManager.AccountData.Diamonds.ToString();
-        labCoin.text = Game.DataManager.AccountData.Gold.ToString();
+        labCoin.text = Game.DataManager.MyPlayer.Data.Gold.ToString();
         if (iconId != Game.DataManager.PlayerData.HeadIcon)
         {
             iconId = Game.DataManager.PlayerData.HeadIcon;

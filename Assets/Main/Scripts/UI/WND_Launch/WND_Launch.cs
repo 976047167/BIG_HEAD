@@ -39,6 +39,8 @@ public class WND_Launch : UIFormBase
         yield return null;
         I18N.SetLanguage(Game.Instance.language);
         yield return null;
+        Game.DataManager.OnInit();
+        yield return null;
     }
     protected override void OnShow()
     {

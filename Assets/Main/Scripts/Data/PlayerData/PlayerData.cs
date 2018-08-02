@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using BigHead.protocol;
 
 public class PlayerData
 {
@@ -17,7 +18,7 @@ public class PlayerData
     public int MaxMP;
     public int Food;
     public int MaxFood;
-    public int Coin;
+    public int Gold;
     public int Diamond;
     public int HeadIcon;
     public int MapSkillID;
@@ -53,4 +54,12 @@ public class PlayerData
     /// </summary>
     public List<ItemData> ItemList { get { return m_ItemList; } }
 
+    public void Update(PBPlayerData playerData)
+    {
+
+    }
+    public void Update(PBPlayerDetailData playerDetailData)
+    {
+
+    }
 }

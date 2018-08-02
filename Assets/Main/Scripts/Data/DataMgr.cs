@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using AppSettings;
+using BigHead.protocol;
 
 public class DataMgr
 {
@@ -32,7 +33,7 @@ public class DataMgr
 
     static uint uidIndex = 1;
     /// <summary>
-    /// 游戏启动时初始化
+    /// 游戏启动时初始化数据表格
     /// </summary>
     public void OnInit()
     {
@@ -42,18 +43,19 @@ public class DataMgr
         DialogSpeed = 0.5f;
     }
 
-    public void InitAccount()
+    public void InitAccount(PBAccountData accountData)
     {
         AccountData = new AccountData();
-        AccountData.Gold = 100;
-        AccountData.Diamonds = 100;
-        AccountData.Uid = 0x1;
+        AccountData.Diamonds = accountData.Diamonds;
+        AccountData.Uid = accountData.Uid;
+        AccountData.VipLevel = accountData.VipLevel;
+        AccountData.Recharge = accountData.Recharge;
 
     }
 
-    public void InitPlayer(int characterId)
+    public void InitPlayer(PBPlayerData playerData)
     {
-        ClassCharacterTableSetting characterData = ClassCharacterTableSettings.Get(characterId);
+        ClassCharacterTableSetting characterData = ClassCharacterTableSettings.Get(playerData.CharacterId);
         if (characterData == null)
         {
             return;
@@ -61,17 +63,18 @@ public class DataMgr
 
         MyPlayer = new MyPlayer();
         PlayerData = MyPlayer.Data;
-        MyPlayer.Data.Level = 1;
+        MyPlayer.Data.Level = playerData.Level;
 
-        MyPlayer.Data.ClassData = new ClassData(characterId);
+        MyPlayer.Data.ClassData = new ClassData(playerData.CharacterId);
         LevelTableSetting levelData = LevelTableSettings.Get(MyPlayer.Data.Level);
         if (levelData == null)
         {
             return;
         }
-        MyPlayer.Data.Food = MyPlayer.Data.MaxFood = levelData.Food[MyPlayer.Data.Level];
-        MyPlayer.Data.Coin = AccountData.Gold;
-        MyPlayer.Data.Name = I18N.Get(characterData.Name);
+        MyPlayer.Data.Food  = playerData.Food;
+        MyPlayer.Data.MaxFood = levelData.Food[(int)MyPlayer.Data.ClassData.Type];
+        //MyPlayer.Data.Coin = AccountData.Gold;
+        MyPlayer.Data.Name = playerData.Name;
         MyPlayer.Data.HP = MyPlayer.Data.MaxHP = levelData.HP[(int)MyPlayer.Data.ClassData.Type];
         MyPlayer.Data.MP = MyPlayer.Data.MaxMP = levelData.MP[(int)MyPlayer.Data.ClassData.Type];
         //MyPlayer.Data.AP = MyPlayer.Data.MaxAP = 1;

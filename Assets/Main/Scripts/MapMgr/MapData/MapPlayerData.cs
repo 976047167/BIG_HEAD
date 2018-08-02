@@ -35,7 +35,7 @@ public class MapPlayerData : PlayerData
         UsingCharacter = playerData.UsingCharacter;
         Food = playerData.Food;
         MaxFood = playerData.MaxFood;
-        Coin = playerData.Coin;
+        Gold = playerData.Gold;
         m_EquipList = new List<NormalCard>(playerData.EquipList);
         m_BuffList = new List<NormalCard>(playerData.BuffList);
         m_CardList = new List<NormalCard>(playerData.CardList);

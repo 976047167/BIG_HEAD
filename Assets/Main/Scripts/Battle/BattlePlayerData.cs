@@ -58,7 +58,7 @@ public class BattlePlayerData : MapPlayerData
         UsingCharacter = mapPlayerData.UsingCharacter;
         Food = mapPlayerData.Food;
         MaxFood = mapPlayerData.MaxFood;
-        Coin = mapPlayerData.Coin;
+        Gold = mapPlayerData.Gold;
         SkillId = mapPlayerData.BattleSkillID;
         ClassData = mapPlayerData.ClassData;
         //玩家的行动值初始

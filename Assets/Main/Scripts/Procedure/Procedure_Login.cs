@@ -19,8 +19,8 @@ public class Procedure_Login : ProcedureBase
         Messenger.RemoveListener(MessageId.UI_GAME_START, GameStart);
         Messenger.RemoveListener(MessageId.UI_GAME_CREATE_CHARACTER, CreateCharacter);
         Game.UI.CloseForm<WND_Login>();
-        Game.DataManager.OnInit();
-        Game.DataManager.InitAccount();
+        
+        
     }
 
     public override bool OnInit(object userdata = null)
