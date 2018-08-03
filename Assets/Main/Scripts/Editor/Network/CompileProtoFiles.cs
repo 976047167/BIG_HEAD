@@ -10,7 +10,7 @@ using Debug = UnityEngine.Debug;
 
 public class CompileProtoFiles : Editor
 {
-    const string PROTO_FOLDER = @"..\Proto\proto";
+    public const string PROTO_FOLDER = @"..\Proto\proto\Client";
     const string PROTO_CSHARP_FOLDER = @".\Main\Scripts\Plugins\Network\protocol";
     const string PROTOC_PATH = @"..\Proto\tools\bin\protoc.exe";
     const string NameSpace = @"BigHead.protocol";

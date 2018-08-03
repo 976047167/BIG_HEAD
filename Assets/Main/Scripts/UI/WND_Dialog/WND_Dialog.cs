@@ -187,9 +187,9 @@ public class WND_Dialog : UIFormBase
             case DialogType.Battle:
                 if (MonsterId != 0)
                 {
-                    CLEnterBattle enterBattle = new CLEnterBattle();
+                    CGEnterBattle enterBattle = new CGEnterBattle();
                     enterBattle.MonsterId = MonsterId;
-                    Game.NetworkManager.SendToLobby(MessageId_Send.CLEnterBattle, enterBattle);
+                    Game.NetworkManager.SendToLobby(MessageId_Send.CGEnterBattle, enterBattle);
                 }
                 break;
             case DialogType.NextPass:

@@ -106,11 +106,11 @@ public class WND_CreateCharacter : UIFormBase
         ClassTableSetting classData = ClassTableSettings.Get((int)Enum.Parse(typeof(ClassType), currentSelect));
 
         //Messenger.Broadcast(MessageId.UI_GAME_START);
-        CLCreatePlayer data = new CLCreatePlayer();
+        CGCreatePlayer data = new CGCreatePlayer();
         data.UserId = Game.DataManager.AccountData.Uid;
         //目前没有皮肤了，暂时默认皮肤了
         data.CharacterId = classData.Id;
-        Game.NetworkManager.SendToLobby(MessageId_Send.CLCreatePlayer, data);
+        Game.NetworkManager.SendToLobby(MessageId_Send.CGCreatePlayer, data);
 
     }
 }

@@ -15,7 +15,7 @@ public class WND_ChoseDeck : UIFormBase {
     private delegate void CallBack();
     private CallBack callbackdelegate;
     private int callBackInt;
-    private uint chosingDeck = 0;
+    private int chosingDeck = 0;
     private int chosingClassCharacter;
     // Use this for initialization
      void Awake()
@@ -128,7 +128,7 @@ public class WND_ChoseDeck : UIFormBase {
         }
         else
         {
-            Game.DataManager.PlayerData.UsingDeck = chosingDeck;
+            Game.DataManager.PlayerDetailData.UsingDeck = chosingDeck;
         }
         
         if (chosingClassCharacter == 0)

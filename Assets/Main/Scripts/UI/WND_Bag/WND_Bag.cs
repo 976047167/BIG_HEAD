@@ -16,7 +16,7 @@ public class WND_Bag : UIFormBase
     protected override void OnInit(object userdata)
     {
         base.OnInit(userdata);
-        List<NormalCard> cardList = Game.DataManager.MyPlayer.Data.CardList;
+        List<NormalCard> cardList = Game.DataManager.MyPlayer.DetailData.CardList;
         LoadCard(cardList);
     }
     //key为卡片id，value为卡片张数；

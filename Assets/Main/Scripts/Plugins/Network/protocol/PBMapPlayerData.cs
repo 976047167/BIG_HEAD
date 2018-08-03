@@ -24,8 +24,9 @@ namespace BigHead.protocol {
           string.Concat(
             "ChVQQk1hcFBsYXllckRhdGEucHJvdG8aElBCUGxheWVyRGF0YS5wcm90byI1",
             "Cg9QQk1hcFBsYXllckRhdGESIgoLcGxheWVyX2RhdGEYASABKAsyDS5QQlBs",
-            "YXllckRhdGFCJAoPY29tLmNzZi5iaWdoZWFkqgIQQmlnSGVhZC5wcm90b2Nv",
-            "bGIGcHJvdG8z"));
+            "YXllckRhdGFCSwodY29tLndoYWxlaXNsYW5kLmdhbWUucHJvdG9jb2xCF1BC",
+            "TWFwUGxheWVyRGF0YVByb3RvY29sqgIQQmlnSGVhZC5wcm90b2NvbGIGcHJv",
+            "dG8z"));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { global::BigHead.protocol.PBPlayerDataReflection.Descriptor, },
           new pbr::GeneratedClrTypeInfo(null, new pbr::GeneratedClrTypeInfo[] {

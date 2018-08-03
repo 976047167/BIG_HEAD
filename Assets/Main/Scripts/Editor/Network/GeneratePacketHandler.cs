@@ -10,7 +10,6 @@ using Debug = UnityEngine.Debug;
 
 public class GeneratePacketHandler
 {
-    const string PROTO_FOLDER = @"..\Proto\proto";
     const string MESSAGE_ID_PATH = @".\Main\Scripts\Network\PacketHandler\";
 
     const string Template = @"//generate by code
@@ -43,7 +42,7 @@ public class #NAMEHandler : BasePacketHandler
     [MenuItem("Tools/Protobuf/Generate PacketHandler")]
     public static void CompileMessageId()
     {
-        DirectoryInfo protoPath = new DirectoryInfo(Path.Combine(Application.dataPath, PROTO_FOLDER));
+        DirectoryInfo protoPath = new DirectoryInfo(Path.Combine(Application.dataPath, CompileProtoFiles.PROTO_FOLDER));
         FileInfo[] fileInfos = protoPath.GetFiles("*.proto", SearchOption.TopDirectoryOnly);
         for (int i = 0; i < fileInfos.Length; i++)
         {

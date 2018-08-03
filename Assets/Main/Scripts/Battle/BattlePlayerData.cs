@@ -43,7 +43,7 @@ public class BattlePlayerData : MapPlayerData
 
     public BattlePlayer Player { get; private set; }
 
-    public BattlePlayerData(MapPlayerData mapPlayerData, BattlePlayer owner) : base(null)
+    public BattlePlayerData(MapPlayerData mapPlayerData, BattlePlayer owner) : base(null, null)
     {
         Name = mapPlayerData.Name;
         Level = mapPlayerData.Level;
@@ -96,7 +96,7 @@ public class BattlePlayerData : MapPlayerData
             CurrentCardList.Add(new BattleCardData(CardList[i].CardId, owner));
         }
     }
-    public BattlePlayerData(int monsterId, BattlePlayer owner) : base(null)
+    public BattlePlayerData(int monsterId, BattlePlayer owner) : base(null, null)
     {
         BattleMonsterTableSetting monster = BattleMonsterTableSettings.Get(monsterId);
         if (monster == null)
@@ -121,5 +121,5 @@ public class BattlePlayerData : MapPlayerData
         }
     }
 
-    
+
 }

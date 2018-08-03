@@ -22,18 +22,19 @@ namespace BigHead.protocol {
     static PBPlayerDataReflection() {
       byte[] descriptorData = global::System.Convert.FromBase64String(
           string.Concat(
-            "ChJQQlBsYXllckRhdGEucHJvdG8i9wEKDFBCUGxheWVyRGF0YRIRCglwbGF5",
+            "ChJQQlBsYXllckRhdGEucHJvdG8iiQIKDFBCUGxheWVyRGF0YRIRCglwbGF5",
             "ZXJfaWQYASABKAQSDAoEbmFtZRgCIAEoCRIUCgxjaGFyYWN0ZXJfaWQYAyAB",
             "KAUSDQoFbGV2ZWwYBCABKAUSCwoDZXhwGAUgASgFEgoKAmhwGAYgASgFEg4K",
             "Bm1heF9ocBgHIAEoBRIKCgJtcBgIIAEoBRIOCgZtYXhfbXAYCSABKAUSDAoE",
-            "Zm9vZBgKIAEoBRIMCgRjb2luGAsgASgFEhEKCWhlYWRfaWNvbhgMIAEoBRIU",
-            "CgxtYXBfc2tpbGxfaWQYDSABKAUSFwoPYmF0dGxlX3NraWxsX2lkGA4gASgF",
-            "QiQKD2NvbS5jc2YuYmlnaGVhZKoCEEJpZ0hlYWQucHJvdG9jb2xiBnByb3Rv",
-            "Mw=="));
+            "Zm9vZBgKIAEoBRIQCghtYXhfZm9vZBgLIAEoBRIMCgRnb2xkGAwgASgFEhEK",
+            "CWhlYWRfaWNvbhgNIAEoBRIUCgxtYXBfc2tpbGxfaWQYDiABKAUSFwoPYmF0",
+            "dGxlX3NraWxsX2lkGA8gASgFQkgKHWNvbS53aGFsZWlzbGFuZC5nYW1lLnBy",
+            "b3RvY29sQhRQQlBsYXllckRhdGFQcm90b2NvbKoCEEJpZ0hlYWQucHJvdG9j",
+            "b2xiBnByb3RvMw=="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { },
           new pbr::GeneratedClrTypeInfo(null, new pbr::GeneratedClrTypeInfo[] {
-            new pbr::GeneratedClrTypeInfo(typeof(global::BigHead.protocol.PBPlayerData), global::BigHead.protocol.PBPlayerData.Parser, new[]{ "PlayerId", "Name", "CharacterId", "Level", "Exp", "Hp", "MaxHp", "Mp", "MaxMp", "Food", "Coin", "HeadIcon", "MapSkillId", "BattleSkillId" }, null, null, null)
+            new pbr::GeneratedClrTypeInfo(typeof(global::BigHead.protocol.PBPlayerData), global::BigHead.protocol.PBPlayerData.Parser, new[]{ "PlayerId", "Name", "CharacterId", "Level", "Exp", "Hp", "MaxHp", "Mp", "MaxMp", "Food", "MaxFood", "Gold", "HeadIcon", "MapSkillId", "BattleSkillId" }, null, null, null)
           }));
     }
     #endregion
@@ -77,7 +78,8 @@ namespace BigHead.protocol {
       mp_ = other.mp_;
       maxMp_ = other.maxMp_;
       food_ = other.food_;
-      coin_ = other.coin_;
+      maxFood_ = other.maxFood_;
+      gold_ = other.gold_;
       headIcon_ = other.headIcon_;
       mapSkillId_ = other.mapSkillId_;
       battleSkillId_ = other.battleSkillId_;
@@ -198,19 +200,30 @@ namespace BigHead.protocol {
       }
     }
 
-    /// <summary>Field number for the "coin" field.</summary>
-    public const int CoinFieldNumber = 11;
-    private int coin_;
+    /// <summary>Field number for the "max_food" field.</summary>
+    public const int MaxFoodFieldNumber = 11;
+    private int maxFood_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public int Coin {
-      get { return coin_; }
+    public int MaxFood {
+      get { return maxFood_; }
       set {
-        coin_ = value;
+        maxFood_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "gold" field.</summary>
+    public const int GoldFieldNumber = 12;
+    private int gold_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int Gold {
+      get { return gold_; }
+      set {
+        gold_ = value;
       }
     }
 
     /// <summary>Field number for the "head_icon" field.</summary>
-    public const int HeadIconFieldNumber = 12;
+    public const int HeadIconFieldNumber = 13;
     private int headIcon_;
     /// <summary>
     ///diamond is in account_data
@@ -224,7 +237,7 @@ namespace BigHead.protocol {
     }
 
     /// <summary>Field number for the "map_skill_id" field.</summary>
-    public const int MapSkillIdFieldNumber = 13;
+    public const int MapSkillIdFieldNumber = 14;
     private int mapSkillId_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public int MapSkillId {
@@ -235,7 +248,7 @@ namespace BigHead.protocol {
     }
 
     /// <summary>Field number for the "battle_skill_id" field.</summary>
-    public const int BattleSkillIdFieldNumber = 14;
+    public const int BattleSkillIdFieldNumber = 15;
     private int battleSkillId_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public int BattleSkillId {
@@ -268,7 +281,8 @@ namespace BigHead.protocol {
       if (Mp != other.Mp) return false;
       if (MaxMp != other.MaxMp) return false;
       if (Food != other.Food) return false;
-      if (Coin != other.Coin) return false;
+      if (MaxFood != other.MaxFood) return false;
+      if (Gold != other.Gold) return false;
       if (HeadIcon != other.HeadIcon) return false;
       if (MapSkillId != other.MapSkillId) return false;
       if (BattleSkillId != other.BattleSkillId) return false;
@@ -288,7 +302,8 @@ namespace BigHead.protocol {
       if (Mp != 0) hash ^= Mp.GetHashCode();
       if (MaxMp != 0) hash ^= MaxMp.GetHashCode();
       if (Food != 0) hash ^= Food.GetHashCode();
-      if (Coin != 0) hash ^= Coin.GetHashCode();
+      if (MaxFood != 0) hash ^= MaxFood.GetHashCode();
+      if (Gold != 0) hash ^= Gold.GetHashCode();
       if (HeadIcon != 0) hash ^= HeadIcon.GetHashCode();
       if (MapSkillId != 0) hash ^= MapSkillId.GetHashCode();
       if (BattleSkillId != 0) hash ^= BattleSkillId.GetHashCode();
@@ -342,20 +357,24 @@ namespace BigHead.protocol {
         output.WriteRawTag(80);
         output.WriteInt32(Food);
       }
-      if (Coin != 0) {
+      if (MaxFood != 0) {
         output.WriteRawTag(88);
-        output.WriteInt32(Coin);
+        output.WriteInt32(MaxFood);
+      }
+      if (Gold != 0) {
+        output.WriteRawTag(96);
+        output.WriteInt32(Gold);
       }
       if (HeadIcon != 0) {
-        output.WriteRawTag(96);
+        output.WriteRawTag(104);
         output.WriteInt32(HeadIcon);
       }
       if (MapSkillId != 0) {
-        output.WriteRawTag(104);
+        output.WriteRawTag(112);
         output.WriteInt32(MapSkillId);
       }
       if (BattleSkillId != 0) {
-        output.WriteRawTag(112);
+        output.WriteRawTag(120);
         output.WriteInt32(BattleSkillId);
       }
     }
@@ -393,8 +412,11 @@ namespace BigHead.protocol {
       if (Food != 0) {
         size += 1 + pb::CodedOutputStream.ComputeInt32Size(Food);
       }
-      if (Coin != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeInt32Size(Coin);
+      if (MaxFood != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(MaxFood);
+      }
+      if (Gold != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(Gold);
       }
       if (HeadIcon != 0) {
         size += 1 + pb::CodedOutputStream.ComputeInt32Size(HeadIcon);
@@ -443,8 +465,11 @@ namespace BigHead.protocol {
       if (other.Food != 0) {
         Food = other.Food;
       }
-      if (other.Coin != 0) {
-        Coin = other.Coin;
+      if (other.MaxFood != 0) {
+        MaxFood = other.MaxFood;
+      }
+      if (other.Gold != 0) {
+        Gold = other.Gold;
       }
       if (other.HeadIcon != 0) {
         HeadIcon = other.HeadIcon;
@@ -506,18 +531,22 @@ namespace BigHead.protocol {
             break;
           }
           case 88: {
-            Coin = input.ReadInt32();
+            MaxFood = input.ReadInt32();
             break;
           }
           case 96: {
-            HeadIcon = input.ReadInt32();
+            Gold = input.ReadInt32();
             break;
           }
           case 104: {
-            MapSkillId = input.ReadInt32();
+            HeadIcon = input.ReadInt32();
             break;
           }
           case 112: {
+            MapSkillId = input.ReadInt32();
+            break;
+          }
+          case 120: {
             BattleSkillId = input.ReadInt32();
             break;
           }

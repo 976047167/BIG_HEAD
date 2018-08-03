@@ -18,7 +18,12 @@ public class MapPlayer
     public MapPlayer(Player player)
     {
         m_Player = player;
-        m_Data = new MapPlayerData(m_Player.Data);
+        if (m_Player is MyPlayer)
+        {
+            m_Data = new MapPlayerData(m_Player.Data, (m_Player as MyPlayer).DetailData);
+        }
+        else
+            m_Data = new MapPlayerData(m_Player.Data, null);
     }
 
     public void CreateModel(MapCardPos pos)

@@ -5,10 +5,11 @@ public enum MessageId_Send : ushort
 {
     None = 0,
     
-    CLLogin = 1000,
-    CLGetUserData = 1002,
-    CLCreatePlayer = 1003,
-    CLEnterInstance = 2000,
-    CLEnterBattle = 3000,
+    CGLogin = 1000,
+    CGLogout = 1001,
+    CGGetUserData = 1002,
+    CGCreatePlayer = 1003,
+    CGEnterInstance = 2000,
+    CGEnterBattle = 3000,
     MAX = 65535,
 }

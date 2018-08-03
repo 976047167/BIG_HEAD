@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using BigHead.protocol;
+using AppSettings;
 
 public class PlayerData
 {
@@ -23,43 +24,35 @@ public class PlayerData
     public int HeadIcon;
     public int MapSkillID;
     public int BattleSkillID;
-    public uint UsingDeck;
+    
     public int UsingCharacter;
     public ClassData ClassData;
 
-    protected List<NormalCard> m_EquipList = new List<NormalCard>();
-    /// <summary>
-    /// 
-    /// </summary>
-    protected List<NormalCard> m_BuffList = new List<NormalCard>();
-    /// <summary>
-    /// 当前设置的卡牌库，除了初始化，不许改
-    /// </summary>
-    protected List<NormalCard> m_CardList = new List<NormalCard>();
-    /// <summary>
-    /// 消耗品
-    /// </summary>
-    protected List<ItemData> m_ItemList = new List<ItemData>();
-    public List<NormalCard> EquipList { get { return m_EquipList; } }
-    /// <summary>
-    /// 身上自带的永久性buff
-    /// </summary>
-    public List<NormalCard> BuffList { get { return m_BuffList; } }
-    /// <summary>
-    /// 当前设置的卡牌库，除了初始化，不许改
-    /// </summary>
-    public List<NormalCard> CardList { get { return m_CardList; } }
-    /// <summary>
-    /// 消耗品
-    /// </summary>
-    public List<ItemData> ItemList { get { return m_ItemList; } }
+
+    
 
     public void Update(PBPlayerData playerData)
     {
+        Level = playerData.Level;
 
+        ClassData = new ClassData(playerData.CharacterId);
+        LevelTableSetting levelData = LevelTableSettings.Get(Level);
+        if (levelData == null)
+        {
+            return;
+        }
+        Name = playerData.Name;
+        HP = playerData.Hp;
+        MaxHP = playerData.MaxHp;
+        MP = playerData.Mp;
+        MaxMP = playerData.MaxMp;
+        Food = playerData.Food;
+        MaxFood = playerData.MaxFood;
+        Gold = playerData.Gold;
+        HeadIcon = playerData.HeadIcon;
+        MapSkillID = playerData.MapSkillId;
+        BattleSkillID = playerData.BattleSkillId;
     }
-    public void Update(PBPlayerDetailData playerDetailData)
-    {
+    
 
-    }
 }

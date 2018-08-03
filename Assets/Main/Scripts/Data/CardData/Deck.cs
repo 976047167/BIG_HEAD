@@ -4,11 +4,16 @@ using UnityEngine;
 
 public class Deck
 {
+    private int index = 0;
+    private int max_count = 0;
+    string name = "";
+    private List<NormalCard> Cards;
 
-    private List<NormalCard> Cards ;
-
-    public Deck()
+    public Deck(int index, int max_count, string name)
     {
+        this.index = index;
+        this.max_count = max_count;
+        this.name = name;
         Cards = new List<NormalCard>();
     }
 
@@ -23,7 +28,7 @@ public class Deck
         }
         return result;
     }
-    
+
     public void AddCard(NormalCard card)
     {
         Cards.Add(card);

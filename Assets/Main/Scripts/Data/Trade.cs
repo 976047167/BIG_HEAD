@@ -56,11 +56,11 @@ public class Trade
                 for (int j = 0; j < tmpEvent.CostNum; j++)
                 {
                     bool done = false;
-                    foreach (NormalCard i in Game.DataManager.MyPlayer.Data.EquipList)
+                    foreach (NormalCard i in Game.DataManager.MyPlayer.DetailData.EquipList)
                     {
                         if (i.CardId == tmpEvent.CostItemId)
                         {
-                            Game.DataManager.MyPlayer.Data.EquipList.Remove(i);
+                            Game.DataManager.MyPlayer.DetailData.EquipList.Remove(i);
                             done = true;
                             break;
                         }

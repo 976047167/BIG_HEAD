@@ -10,7 +10,6 @@ using Debug = UnityEngine.Debug;
 
 public class GeneratePacketParserDic
 {
-    const string PROTO_FOLDER = @"..\Proto\proto";
     const string DIC_PATH = @".\Main\Scripts\Network\DicParser.cs";
 
     const string Template = @"//generate by code
@@ -34,7 +33,7 @@ namespace BigHead.Net
     [MenuItem("Tools/Protobuf/Generate PacketParser Dic")]
     public static void CompileMessageId()
     {
-        DirectoryInfo protoPath = new DirectoryInfo(Path.Combine(Application.dataPath, PROTO_FOLDER));
+        DirectoryInfo protoPath = new DirectoryInfo(Path.Combine(Application.dataPath, CompileProtoFiles.PROTO_FOLDER));
         FileInfo[] fileInfos = protoPath.GetFiles("*.proto", SearchOption.TopDirectoryOnly);
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < fileInfos.Length; i++)

@@ -53,7 +53,7 @@ public class DataMgr
 
     }
 
-    public void InitPlayer(PBPlayerData playerData)
+    public void InitPlayer(PBPlayerData playerData,PBPlayerDetailData playerDetailData)
     {
         ClassCharacterTableSetting characterData = ClassCharacterTableSettings.Get(playerData.CharacterId);
         if (characterData == null)
@@ -63,32 +63,10 @@ public class DataMgr
 
         MyPlayer = new MyPlayer();
         PlayerData = MyPlayer.Data;
-        MyPlayer.Data.Level = playerData.Level;
-
-        MyPlayer.Data.ClassData = new ClassData(playerData.CharacterId);
-        LevelTableSetting levelData = LevelTableSettings.Get(MyPlayer.Data.Level);
-        if (levelData == null)
-        {
-            return;
-        }
-        MyPlayer.Data.Food  = playerData.Food;
-        MyPlayer.Data.MaxFood = levelData.Food[(int)MyPlayer.Data.ClassData.Type];
-        //MyPlayer.Data.Coin = AccountData.Gold;
-        MyPlayer.Data.Name = playerData.Name;
-        MyPlayer.Data.HP = MyPlayer.Data.MaxHP = levelData.HP[(int)MyPlayer.Data.ClassData.Type];
-        MyPlayer.Data.MP = MyPlayer.Data.MaxMP = levelData.MP[(int)MyPlayer.Data.ClassData.Type];
-        //MyPlayer.Data.AP = MyPlayer.Data.MaxAP = 1;
-
-        MyPlayer.Data.HeadIcon = characterData.IconID;
+        MyPlayer.Data.Update(playerData);
+        MyPlayer.DetailData.Update(playerDetailData);
         PlayerDetailData = MyPlayer.DetailData;
-        PlayerDetailData.Deck = new Deck();
-        for (int i = 0; i < characterData.DefaultCardList.Count; i++)
-        {
-            NormalCard normalCard = new NormalCard(characterData.DefaultCardList[i], uidIndex++);
-            MyPlayer.Data.CardList.Add(normalCard);
-            PlayerDetailData.Kaku.Add(normalCard);
-            PlayerDetailData.Deck.AddCard(normalCard);
-        }
+        
 
     }
 

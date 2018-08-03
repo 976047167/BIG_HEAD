@@ -7,7 +7,6 @@ using UnityEngine;
 
 public class GenerateMessageId
 {
-    const string PROTO_FOLDER = @"..\Proto\proto";
     const string MESSAGE_ID_PATH = @".\Main\Scripts\Plugins\Network\MessageId_Receive.cs";
     const string Template = @"//generate by code
 using UnityEngine;
@@ -22,7 +21,7 @@ public enum MessageId_Receive : ushort
     [MenuItem("Tools/Protobuf/Generate MessageId Receive")]
     public static void CompileMessageId()
     {
-        DirectoryInfo protoPath = new DirectoryInfo(Path.Combine(Application.dataPath, PROTO_FOLDER));
+        DirectoryInfo protoPath = new DirectoryInfo(Path.Combine(Application.dataPath, CompileProtoFiles.PROTO_FOLDER));
         string protoFolder = protoPath.FullName;
         FileInfo[] fileInfos = protoPath.GetFiles("*.proto", SearchOption.TopDirectoryOnly);
         StringBuilder sb = new StringBuilder();

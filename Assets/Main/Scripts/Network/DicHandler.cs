@@ -9,11 +9,10 @@ namespace BigHead.Net
         {
             Dic.Clear();
             
-            Dic.Add((ushort)MessageId_Receive.LCLogin, new LCLoginHandler());
-            Dic.Add((ushort)MessageId_Receive.LCLogout, new LCLogoutHandler());
-            Dic.Add((ushort)MessageId_Receive.LCGetUserData, new LCGetUserDataHandler());
-            Dic.Add((ushort)MessageId_Receive.LCEnterInstance, new LCEnterInstanceHandler());
-            Dic.Add((ushort)MessageId_Receive.LCEnterBattle, new LCEnterBattleHandler());
+            Dic.Add((ushort)MessageId_Receive.GCLogin, new GCLoginHandler());
+            Dic.Add((ushort)MessageId_Receive.GCGetUserData, new GCGetUserDataHandler());
+            Dic.Add((ushort)MessageId_Receive.GCEnterInstance, new GCEnterInstanceHandler());
+            Dic.Add((ushort)MessageId_Receive.GCEnterBattle, new GCEnterBattleHandler());
         }
     }
 }

@@ -25,8 +25,9 @@ namespace BigHead.protocol {
             "ChhQQlBsYXllckRldGFpbERhdGEucHJvdG8aDFBCRGVjay5wcm90byKDAQoS",
             "UEJQbGF5ZXJEZXRhaWxEYXRhEg4KBmVxdWlwcxgBIAMoBRINCgVidWZmcxgC",
             "IAMoBRINCgVjYXJkcxgDIAMoBRINCgVpdGVtcxgEIAMoBRIYChB1c2luZ19k",
-            "ZWNrX2luZGV4GAUgASgFEhYKBWRlY2tzGAYgAygLMgcuUEJEZWNrQiQKD2Nv",
-            "bS5jc2YuYmlnaGVhZKoCEEJpZ0hlYWQucHJvdG9jb2xiBnByb3RvMw=="));
+            "ZWNrX2luZGV4GAUgASgFEhYKBWRlY2tzGAYgAygLMgcuUEJEZWNrQk4KHWNv",
+            "bS53aGFsZWlzbGFuZC5nYW1lLnByb3RvY29sQhpQQlBsYXllckRldGFpbERh",
+            "dGFQcm90b2NvbKoCEEJpZ0hlYWQucHJvdG9jb2xiBnByb3RvMw=="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { global::BigHead.protocol.PBDeckReflection.Descriptor, },
           new pbr::GeneratedClrTypeInfo(null, new pbr::GeneratedClrTypeInfo[] {

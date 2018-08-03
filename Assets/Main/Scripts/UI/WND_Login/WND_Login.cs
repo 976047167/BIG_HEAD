@@ -52,9 +52,9 @@ public class WND_Login : UIFormBase
     {
         if (serverName == NetworkManager.LobbySessionName)
         {
-            CLLogin login = new CLLogin();
-            login.UserId = 1;
-            Game.NetworkManager.SendToLobby(MessageId_Send.CLLogin, login);
+            CGLogin login = new CGLogin();
+            login.Username = "PlayerOne";
+            Game.NetworkManager.SendToLobby(MessageId_Send.CGLogin, login);
         }
     }
 }

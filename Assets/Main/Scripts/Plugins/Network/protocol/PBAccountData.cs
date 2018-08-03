@@ -22,14 +22,15 @@ namespace BigHead.protocol {
     static PBAccountDataReflection() {
       byte[] descriptorData = global::System.Convert.FromBase64String(
           string.Concat(
-            "ChNQQkFjY291bnREYXRhLnByb3RvIlIKDVBCQWNjb3VudERhdGESCwoDVWlk",
+            "ChNQQkFjY291bnREYXRhLnByb3RvImQKDVBCQWNjb3VudERhdGESCwoDVWlk",
             "GAEgASgEEhAKCFJlY2hhcmdlGAIgASgFEhAKCERpYW1vbmRzGAMgASgFEhAK",
-            "CFZpcExldmVsGAQgASgFQiQKD2NvbS5jc2YuYmlnaGVhZKoCEEJpZ0hlYWQu",
-            "cHJvdG9jb2xiBnByb3RvMw=="));
+            "CFZpcExldmVsGAQgASgFEhAKCHVzZXJuYW1lGAUgASgJQkkKHWNvbS53aGFs",
+            "ZWlzbGFuZC5nYW1lLnByb3RvY29sQhVQQkFjY291bnREYXRhUHJvdG9jb2yq",
+            "AhBCaWdIZWFkLnByb3RvY29sYgZwcm90bzM="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { },
           new pbr::GeneratedClrTypeInfo(null, new pbr::GeneratedClrTypeInfo[] {
-            new pbr::GeneratedClrTypeInfo(typeof(global::BigHead.protocol.PBAccountData), global::BigHead.protocol.PBAccountData.Parser, new[]{ "Uid", "Recharge", "Diamonds", "VipLevel" }, null, null, null)
+            new pbr::GeneratedClrTypeInfo(typeof(global::BigHead.protocol.PBAccountData), global::BigHead.protocol.PBAccountData.Parser, new[]{ "Uid", "Recharge", "Diamonds", "VipLevel", "Username" }, null, null, null)
           }));
     }
     #endregion
@@ -67,6 +68,7 @@ namespace BigHead.protocol {
       recharge_ = other.recharge_;
       diamonds_ = other.diamonds_;
       vipLevel_ = other.vipLevel_;
+      username_ = other.username_;
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -118,6 +120,17 @@ namespace BigHead.protocol {
       }
     }
 
+    /// <summary>Field number for the "username" field.</summary>
+    public const int UsernameFieldNumber = 5;
+    private string username_ = "";
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public string Username {
+      get { return username_; }
+      set {
+        username_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+      }
+    }
+
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override bool Equals(object other) {
       return Equals(other as PBAccountData);
@@ -135,6 +148,7 @@ namespace BigHead.protocol {
       if (Recharge != other.Recharge) return false;
       if (Diamonds != other.Diamonds) return false;
       if (VipLevel != other.VipLevel) return false;
+      if (Username != other.Username) return false;
       return true;
     }
 
@@ -145,6 +159,7 @@ namespace BigHead.protocol {
       if (Recharge != 0) hash ^= Recharge.GetHashCode();
       if (Diamonds != 0) hash ^= Diamonds.GetHashCode();
       if (VipLevel != 0) hash ^= VipLevel.GetHashCode();
+      if (Username.Length != 0) hash ^= Username.GetHashCode();
       return hash;
     }
 
@@ -171,6 +186,10 @@ namespace BigHead.protocol {
         output.WriteRawTag(32);
         output.WriteInt32(VipLevel);
       }
+      if (Username.Length != 0) {
+        output.WriteRawTag(42);
+        output.WriteString(Username);
+      }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -187,6 +206,9 @@ namespace BigHead.protocol {
       }
       if (VipLevel != 0) {
         size += 1 + pb::CodedOutputStream.ComputeInt32Size(VipLevel);
+      }
+      if (Username.Length != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeStringSize(Username);
       }
       return size;
     }
@@ -207,6 +229,9 @@ namespace BigHead.protocol {
       }
       if (other.VipLevel != 0) {
         VipLevel = other.VipLevel;
+      }
+      if (other.Username.Length != 0) {
+        Username = other.Username;
       }
     }
 
@@ -232,6 +257,10 @@ namespace BigHead.protocol {
           }
           case 32: {
             VipLevel = input.ReadInt32();
+            break;
+          }
+          case 42: {
+            Username = input.ReadString();
             break;
           }
         }
