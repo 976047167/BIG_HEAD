@@ -41,8 +41,8 @@ namespace BigHead.Net
             string[] files = Directory.GetFiles(Application.persistentDataPath);
             for (int i = 0; i < files.Length; i++)
             {
-                string file = files[i];
-                string[] splites = file.Split(SPLITE);
+                FileInfo file = new FileInfo(files[i]);
+                string[] splites = file.Name.Split(SPLITE);
                 if (splites[0] == key)
                 {
                     if (splites.Length < 2 || splites[1] == null)
@@ -51,7 +51,7 @@ namespace BigHead.Net
                     }
                     string type = splites[1].Replace(SUFFIX, "");
                     IMessage data = GetType().Assembly.CreateInstance(type) as IMessage;
-                    FileStream fs = File.Open(file, FileMode.Open);
+                    FileStream fs = file.Open(FileMode.Open);
                     Debug.Log(file);
                     //StreamWriter sw = new StreamWriter(fs, System.Text.Encoding.UTF8);
                     data.MergeFrom(fs);
