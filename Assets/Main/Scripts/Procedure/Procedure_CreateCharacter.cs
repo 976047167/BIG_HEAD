@@ -19,9 +19,9 @@ public class Procedure_CreateCharacter : ProcedureBase
         Messenger.RemoveListener(MessageId.UI_GAME_START, GameStart);
     }
 
-    public override bool OnInit(object userdata = null)
+    public override IEnumerator OnInit(object userdata = null)
     {
-        return base.OnInit(userdata);
+        yield return base.OnInit(userdata);
     }
 
     public override void OnUpdate()

@@ -10,6 +10,7 @@ public enum MessageId_Send : ushort
     CGGetUserData = 1002,
     CGCreatePlayer = 1003,
     CGEnterInstance = 2000,
+    CGGetMapLayerData = 2001,
     CGEnterBattle = 3000,
     MAX = 65535,
 }

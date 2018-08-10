@@ -21,15 +21,15 @@ public class Procedure_ChangeScene : ProcedureBase
         Game.UI.CloseForm<WND_Loading>();
     }
 
-    public override bool OnInit(object userdata = null)
+    public override IEnumerator OnInit(object userdata = null)
     {
         sceneID = (int)userdata;
         SceneTableSetting setting = SceneTableSettings.Get(sceneID);
         if (setting == null)
         {
-            return false;
+            yield break;
         }
-        return base.OnInit(userdata);
+        yield return base.OnInit(userdata);
     }
 
     public override void OnUpdate()

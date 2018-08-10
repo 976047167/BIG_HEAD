@@ -33,8 +33,13 @@ public class ProcedureManager
         {
             return;
         }
-        if (!next.OnInit(userdata))
-            return;
+
+        helper.StartCoroutine(ChangingProcedure(next, userdata));
+    }
+
+    static IEnumerator ChangingProcedure(ProcedureBase next, object userdata)
+    {
+        yield return next.OnInit(userdata);
         if (current != null)
             current.OnExit(next);
         next.OnEnter(current);

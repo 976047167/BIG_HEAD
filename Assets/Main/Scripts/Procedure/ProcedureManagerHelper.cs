@@ -13,7 +13,8 @@ public class ProcedureManagerHelper : MonoBehaviour
     private void Update()
     {
 #if UNITY_EDITOR
-        current = ProcedureManager.Current.ToString();
+        if (ProcedureManager.Current != null)
+            current = ProcedureManager.Current.ToString();
 #endif
         if (ProcedureManager.Current != null)
             ProcedureManager.Current.OnUpdate();

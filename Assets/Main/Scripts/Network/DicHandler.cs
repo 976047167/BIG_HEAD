@@ -12,6 +12,7 @@ namespace BigHead.Net
             Dic.Add((ushort)MessageId_Receive.GCLogin, new GCLoginHandler());
             Dic.Add((ushort)MessageId_Receive.GCGetUserData, new GCGetUserDataHandler());
             Dic.Add((ushort)MessageId_Receive.GCEnterInstance, new GCEnterInstanceHandler());
+            Dic.Add((ushort)MessageId_Receive.GCGetMapLayerData, new GCGetMapLayerDataHandler());
             Dic.Add((ushort)MessageId_Receive.GCEnterBattle, new GCEnterBattleHandler());
         }
     }

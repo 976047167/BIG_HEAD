@@ -17,9 +17,9 @@ public class Procedure_Launch : ProcedureBase
         Game.UI.CloseForm<WND_Launch>();
     }
 
-    public override bool OnInit(object userdata = null)
+    public override IEnumerator OnInit(object userdata = null)
     {
-        return base.OnInit(userdata);
+        yield return base.OnInit(userdata);
     }
 
     public override void OnUpdate()
