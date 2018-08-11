@@ -5,7 +5,7 @@ public abstract class ProcedureBase
 {
     public float Progress { get; protected set; }
     /// <summary>
-    /// 可以初始化失败
+    /// 可以初始化失败(Progress小于0),不可以在此处打开窗口
     /// </summary>
     /// <param name="userdata"></param>
     /// <returns></returns>

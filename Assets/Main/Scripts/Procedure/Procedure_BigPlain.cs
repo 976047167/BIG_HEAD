@@ -40,7 +40,7 @@ public class Procedure_BigPlain : ProcedureBase
                         state = InitState.InitMapMgr;
                         break;
                     case InitState.InitMapMgr:
-                        MapMgr.Create();
+                        //MapMgr.Create();
                         Progress = 0.1f;
                         state = InitState.GetMapLayerData;
                         break;
@@ -72,8 +72,11 @@ public class Procedure_BigPlain : ProcedureBase
 
     void GetLayerData(PBMapLayerData mapLayerData)
     {
-        state = InitState.CreateModel;
-        Messenger.RemoveListener<PBMapLayerData>(MessageId_Receive.GCGetMapLayerData, GetLayerData);
+        if (state== InitState.GetMapLayerData)
+        {
+            state = InitState.CreateModel;
+        }
+        //Messenger.RemoveListener<PBMapLayerData>(MessageId_Receive.GCGetMapLayerData, GetLayerData);
 
     }
     /// <summary>

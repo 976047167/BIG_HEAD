@@ -25,10 +25,7 @@ public enum MessageId : uint
     /// 游戏开始
     /// </summary>
     UI_GAME_START,
-    /// <summary>
-    /// 
-    /// </summary>
-    SCENE_LOAD_COMPLETE,
+
     /// <summary>
     /// 地图界面更新角色信息
     /// </summary>
@@ -50,6 +47,14 @@ public enum MessageId : uint
     /// 进入战斗
     /// </summary>
     GAME_ENTER_BATTLE,
+    /// <summary>
+    /// 初始化下个流程失败
+    /// </summary>
+    GAME_INIT_PROCEDURE_FAILED,
+    /// <summary>
+    /// 初始化下个流程成功
+    /// </summary>
+    GAME_INIT_PROCEDURE_SUCCESS,
 
     /////<summary> 断线</summary>
     //MSG_LOST_CONNECT_TO_SERVER = 100000,

@@ -12,7 +12,7 @@ int	string	string	string	int	int
 10	奖励发放	WND_Reward	WND_Reward	0	1
 11	主城	WND_MainTown	Lobby/WND_MainTown	0	0
 12	选择卡组	WND_ChoseDeck	WND_ChoseDeck	0	1
-13	加载界面	WND_Loading	Internal/WND_Loading	0	2
+13	加载界面	WND_Loading	Internal/WND_Loading	3	2
 14	设置界面	WND_Settings	WND_Settings	0	1
 15	战斗设置界面	WND_BattleSetting	Instance/WND_BattleSetting	0	1
 16	副本设置界面	WND_InstanceSetting	WND_InstanceSetting	0	2

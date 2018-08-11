@@ -11,14 +11,13 @@ public class Procedure_ChangeScene : ProcedureBase
     public override void OnEnter(ProcedureBase last)
     {
         base.OnEnter(last);
-        Game.UI.CloaseAllForm();
         Game.UI.OpenForm<WND_Loading>(sceneID);
     }
 
     public override void OnExit(ProcedureBase next)
     {
         base.OnExit(next);
-        Game.UI.CloseForm<WND_Loading>();
+        
     }
 
     public override IEnumerator OnInit(object userdata = null)

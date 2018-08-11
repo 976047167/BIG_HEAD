@@ -7,6 +7,7 @@ public class ProcedureManager
 {
     static ProcedureBase current = null;
     static ProcedureManagerHelper helper = null;
+    static bool isChanging = false;
     public static ProcedureBase Current { get { return current; } }
 
     public static void ChangeProcedure<T>(object userdata = null) where T : ProcedureBase, new()
@@ -35,15 +36,33 @@ public class ProcedureManager
         }
 
         helper.StartCoroutine(ChangingProcedure(next, userdata));
+        //return next;
     }
 
     static IEnumerator ChangingProcedure(ProcedureBase next, object userdata)
     {
-        yield return next.OnInit(userdata);
+        if (isChanging)
+        {
+            yield break;
+        }
+        isChanging = true;
+        helper.StartCoroutine(next.OnInit(userdata));
+        while (next.Progress < 1.0f && next.Progress >= 0f)
+        {
+            yield return null;
+        }
+        if (next.Progress < 0f)
+        {
+            isChanging = false;
+            Messenger.Broadcast(MessageId.GAME_INIT_PROCEDURE_FAILED, next);
+            yield break;
+        }
+        Messenger.Broadcast(MessageId.GAME_INIT_PROCEDURE_SUCCESS, next);
         if (current != null)
             current.OnExit(next);
         next.OnEnter(current);
         current = next;
+        isChanging = false;
     }
 
 }

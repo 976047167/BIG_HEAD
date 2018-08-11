@@ -18,6 +18,6 @@ public class CGGetMapLayerDataHandler : BaseServerPacketHandler
         base.Handle(sender, packet);
         CGGetMapLayerData data = packet as CGGetMapLayerData;
         //处理完数据和逻辑后,发送消息通知客户端
-        throw new System.NotImplementedException(GetType().ToString());
+        
     }
 }

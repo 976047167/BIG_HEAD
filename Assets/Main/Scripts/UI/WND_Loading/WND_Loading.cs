@@ -12,7 +12,9 @@ public class WND_Loading : UIFormBase
     protected int nextSceneID = 0;
     protected float progress = 0f;
     protected SceneTableSetting sceneTable = null;
-    protected bool isLoadSceneSuccess = false;
+    [SerializeField]
+    protected LoadState loadState = LoadState.None;
+    protected LoadState lastLoadState = LoadState.None;
     static OnAssetDestory lastSceneDestory = null;
     protected override void OnInit(object userdata)
     {
@@ -25,19 +27,57 @@ public class WND_Loading : UIFormBase
     protected override void OnOpen()
     {
         base.OnOpen();
-        Game.UI.CloaseAllForm(Table.Id);
-        LoadScene(nextSceneID);
+        loadState = LoadState.CheckValid;
+        Messenger.AddListener<ProcedureBase>(MessageId.GAME_INIT_PROCEDURE_SUCCESS, InitProcedureSuccess);
+        Messenger.AddListener<ProcedureBase>(MessageId.GAME_INIT_PROCEDURE_FAILED, InitProcedureFailed);
     }
 
     protected override void OnUpdate()
     {
         base.OnUpdate();
-        if (progress >= 100 && isLoadSceneSuccess)
+        if (lastLoadState != loadState)
         {
-            ClearMemery();
-            if (sceneTable.Procedure != "NULL")
+            lastLoadState = loadState;
+            switch (loadState)
             {
-                ProcedureManager.ChangeProcedure(sceneTable.Procedure);
+                case LoadState.None:
+                    loadState = LoadState.CheckValid;
+                    break;
+                case LoadState.CheckValid:
+                    SceneTableSetting setting = SceneTableSettings.Get(nextSceneID);
+                    if (setting == null)
+                    {
+                        Debug.LogError("要加载的场景不存在表中");
+                        loadState = LoadState.Failed;
+                        return;
+                    }
+                    sceneTable = setting;
+                    loadState = LoadState.CloseForms;
+                    break;
+                case LoadState.CloseForms:
+                    Game.UI.CloaseAllForm(Table.Id);
+                    loadState = LoadState.LoadScene;
+                    break;
+                case LoadState.LoadScene:
+                    LoadScene(nextSceneID);
+
+                    break;
+                case LoadState.ClearMemery:
+                    ClearMemery();
+                    loadState = LoadState.InitNextProcedure;
+                    break;
+                case LoadState.InitNextProcedure:
+                    if (sceneTable.Procedure != "NULL")
+                    {
+                        ProcedureManager.ChangeProcedure(sceneTable.Procedure);
+                    }
+                    break;
+                case LoadState.Success:
+                    break;
+                case LoadState.Failed:
+                    break;
+                default:
+                    break;
             }
 
         }
@@ -45,24 +85,21 @@ public class WND_Loading : UIFormBase
         {
             progress += 3;
         }
-        if (progress >= 100f && isLoadSceneSuccess == false)
+        if (progress >= 100f * ((float)loadState / (float)LoadState.Success))
         {
-            progress = 99f;
+            progress = 100f * ((float)loadState / (float)LoadState.Success);
         }
         sliderProgress.value = progress / 100f;
+        if (progress >= 100f)
+        {
+            Game.UI.CloseForm<WND_Loading>();
+        }
     }
 
 
     protected void LoadScene(int sceneId)
     {
-        SceneTableSetting setting = SceneTableSettings.Get(sceneId);
-        if (setting == null)
-        {
-            Debug.LogError("要加载的场景不存在表中");
-            return;
-        }
-        sceneTable = setting;
-        ResourceManager.LoadScene(setting.Path, LoadSceneSuccess, LoadSceneFailed, false);
+        ResourceManager.LoadScene(sceneTable.Path, LoadSceneSuccess, LoadSceneFailed, false);
     }
 
     protected void LoadSceneSuccess(string path, object[] args, OnAssetDestory onAssetDestory)
@@ -71,7 +108,7 @@ public class WND_Loading : UIFormBase
         {
             lastSceneDestory();
         }
-        isLoadSceneSuccess = true;
+        loadState = LoadState.ClearMemery;
         lastSceneDestory = onAssetDestory;
 
     }
@@ -85,4 +122,30 @@ public class WND_Loading : UIFormBase
         ResourceManager.ReleaseBundle();
     }
 
+    protected void InitProcedureSuccess(ProcedureBase next)
+    {
+        loadState = LoadState.Success;
+    }
+    protected void InitProcedureFailed(ProcedureBase next)
+    {
+        Debug.LogError("初始化下个流程失败!");
+    }
+
+    protected override void OnClose()
+    {
+        Messenger.RemoveListener<ProcedureBase>(MessageId.GAME_INIT_PROCEDURE_SUCCESS, InitProcedureSuccess);
+        Messenger.RemoveListener<ProcedureBase>(MessageId.GAME_INIT_PROCEDURE_FAILED, InitProcedureFailed);
+    }
+
+    public enum LoadState
+    {
+        None = 0,
+        CheckValid,
+        CloseForms,
+        LoadScene,
+        ClearMemery,
+        InitNextProcedure,
+        Success,
+        Failed,
+    }
 }

@@ -2801,6 +2801,11 @@ namespace AppSettings
         public int Id { get; private set;}
         
         /// <summary>
+        /// 使用的场景
+        /// </summary>
+        public int SceneId { get; private set;}
+        
+        /// <summary>
         /// 层数
         /// </summary>
         public List<int> Layers { get; private set;}
@@ -2839,12 +2844,13 @@ namespace AppSettings
         internal void Reload(TableFileRow row)
         { 
             Id = row.Get_int(row.Values[0], ""); 
-            Layers = row.Get_List_int(row.Values[1], ""); 
-            LayerMax = row.Get_int(row.Values[2], ""); 
-            BossLayer = row.Get_int(row.Values[3], ""); 
-            CardMax = row.Get_int(row.Values[4], ""); 
-            FoodMax = row.Get_int(row.Values[5], ""); 
-            ItemMax = row.Get_int(row.Values[6], ""); 
+            SceneId = row.Get_int(row.Values[1], ""); 
+            Layers = row.Get_List_int(row.Values[2], ""); 
+            LayerMax = row.Get_int(row.Values[3], ""); 
+            BossLayer = row.Get_int(row.Values[4], ""); 
+            CardMax = row.Get_int(row.Values[5], ""); 
+            FoodMax = row.Get_int(row.Values[6], ""); 
+            ItemMax = row.Get_int(row.Values[7], ""); 
         }
 
         /// <summary>
@@ -5480,7 +5486,7 @@ namespace AppSettings
         public string Path { get; private set;}
         
         /// <summary>
-        /// UI窗口分组(0默认1提示2对话框3死亡)
+        /// UI窗口分组(0默认1提示2对话框3最顶层)
         /// </summary>
         public int Group { get; private set;}
         
