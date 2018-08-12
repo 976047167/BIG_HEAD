@@ -2,11 +2,13 @@
 using System.Collections.Generic;
 using UnityEngine;
 using AppSettings;
+using BigHead.protocol;
 /// <summary>
 /// 地图玩家数据类
 /// </summary>
 public class MapPlayerData
 {
+    public ulong Id = 0;
     public string Name;
     public int Level;
     public int Exp = 0;
@@ -29,7 +31,6 @@ public class MapPlayerData
     public int UsingCharacter;
     public ClassData ClassData;
 
-    public int UsingDeck;
     protected List<NormalCard> m_EquipList = new List<NormalCard>();
     /// <summary>
     /// 
@@ -43,7 +44,7 @@ public class MapPlayerData
     /// 消耗品
     /// </summary>
     protected List<ItemData> m_ItemList = new List<ItemData>();
-    protected Dictionary<int, Deck> decks = new Dictionary<int, Deck>();
+    protected Deck m_Deck = null;
     public List<NormalCard> EquipList { get { return m_EquipList; } }
     /// <summary>
     /// 身上自带的永久性buff
@@ -58,6 +59,8 @@ public class MapPlayerData
     /// </summary>
     public List<ItemData> ItemList { get { return m_ItemList; } }
 
+    public Deck Deck { get { return m_Deck; } }
+
     protected PlayerData playerData;
 
     public MapPlayerData(PlayerData playerData, PlayerDetailData playerDetailData)
@@ -67,6 +70,7 @@ public class MapPlayerData
             return;
         }
         this.playerData = playerData;
+        Id = playerData.ID;
         Name = playerData.Name;
         Level = playerData.Level;
         Exp = playerData.Exp;
@@ -89,31 +93,62 @@ public class MapPlayerData
         Gold = playerData.Gold;
         if (playerDetailData != null)
         {
-            UsingDeck = playerDetailData.UsingDeck;
             m_EquipList = new List<NormalCard>(playerDetailData.EquipList);
             m_BuffList = new List<NormalCard>(playerDetailData.BuffList);
             m_CardList = new List<NormalCard>(playerDetailData.CardList);
             ClassData = playerData.ClassData;
-
-            m_MapEquipList = new List<NormalCard>(m_EquipList);
-            m_MapBuffList = new List<NormalCard>(m_BuffList);
-            m_MapCardList = new List<NormalCard>(m_CardList);
         }
     }
-    protected List<NormalCard> m_MapEquipList = new List<NormalCard>();
-    /// <summary>
-    /// 
-    /// </summary>
-    protected List<NormalCard> m_MapBuffList = new List<NormalCard>();
-    /// <summary>
-    /// 当前设置的卡牌库，除了初始化，不许改
-    /// </summary>
-    private List<NormalCard> m_MapCardList = new List<NormalCard>();
+    public void Update(PBMapPlayerData mapPlayerData)
+    {
+        if (Id != mapPlayerData.PlayerData.PlayerId)
+        {
+            Debug.LogError("不是一个玩家的数据!");
+            return;
+        }
+        PlayerData playerData = new PlayerData();
+        playerData.Update(mapPlayerData.PlayerData);
+        
+        if (playerData == null)
+        {
+            return;
+        }
+        Name = playerData.Name;
+        Level = playerData.Level;
+        Exp = playerData.Exp;
+        LevelTableSetting levelTable = LevelTableSettings.Get(Level);
+        if (levelTable != null)
+        {
+            MaxExp = levelTable.Exp[(int)playerData.ClassData.Type];
+        }
+        HP = playerData.HP;
+        MaxHP = playerData.MaxHP;
+        MP = playerData.MP;
+        MaxMP = playerData.MaxMP;
+        HeadIcon = playerData.HeadIcon;
+        MapSkillID = playerData.MapSkillID;
+        BattleSkillID = playerData.BattleSkillID;
 
-    public List<NormalCard> MapEquipList { get { return m_MapEquipList; } }
-
-    public List<NormalCard> MapBuffList { get { return m_MapBuffList; } }
-
-    public List<NormalCard> MapCardList { get { return m_MapCardList; } }
-
+        UsingCharacter = playerData.UsingCharacter;
+        Food = playerData.Food;
+        MaxFood = playerData.MaxFood;
+        Gold = playerData.Gold;
+        for (int i = 0; i < mapPlayerData.Equips.Count; i++)
+        {
+            m_EquipList.Add(new NormalCard(mapPlayerData.Equips[i], false));
+        }
+        for (int i = 0; i < mapPlayerData.Buffs.Count; i++)
+        {
+            m_BuffList.Add(new NormalCard(mapPlayerData.Buffs[i], false));
+        }
+        m_Deck = new Deck(mapPlayerData.Deck);
+        m_CardList = m_Deck.Cards;
+        for (int i = 0; i < mapPlayerData.Items.Count; i++)
+        {
+            m_ItemList.Add(new ItemData(mapPlayerData.Items[i]));
+        }
+        ClassData = playerData.ClassData;
+    }
 }
+
+

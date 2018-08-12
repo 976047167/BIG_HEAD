@@ -16,16 +16,16 @@ public class MapData
             return _instance;
         }
     }
-    
+
 
     public static Dictionary<int, MapLayerData> DicLayerDatas = new Dictionary<int, MapLayerData>();
 
-    public MapLayerData CurrentMapLayerData = new MapLayerData(0);
+    public MapLayerData CurrentMapLayerData = new MapLayerData(0, 5, 5);
 
 
     public void NextLayer()
     {
-        CurrentMapLayerData = new MapLayerData(CurrentMapLayerData.LayerId + 1);
+        CurrentMapLayerData = new MapLayerData(CurrentMapLayerData.LayerId + 1, 5, 5);
         //切换层表现
     }
 

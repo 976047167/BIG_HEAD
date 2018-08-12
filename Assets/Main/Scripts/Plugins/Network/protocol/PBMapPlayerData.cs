@@ -22,15 +22,18 @@ namespace BigHead.protocol {
     static PBMapPlayerDataReflection() {
       byte[] descriptorData = global::System.Convert.FromBase64String(
           string.Concat(
-            "ChVQQk1hcFBsYXllckRhdGEucHJvdG8aElBCUGxheWVyRGF0YS5wcm90byI1",
-            "Cg9QQk1hcFBsYXllckRhdGESIgoLcGxheWVyX2RhdGEYASABKAsyDS5QQlBs",
-            "YXllckRhdGFCSwodY29tLndoYWxlaXNsYW5kLmdhbWUucHJvdG9jb2xCF1BC",
-            "TWFwUGxheWVyRGF0YVByb3RvY29sqgIQQmlnSGVhZC5wcm90b2NvbGIGcHJv",
-            "dG8z"));
+            "ChVQQk1hcFBsYXllckRhdGEucHJvdG8aElBCUGxheWVyRGF0YS5wcm90bxoM",
+            "UEJEZWNrLnByb3RvItQBCg9QQk1hcFBsYXllckRhdGESIgoLcGxheWVyX2Rh",
+            "dGEYASABKAsyDS5QQlBsYXllckRhdGESFAoMcGxheWVyX3Bvc194GAIgASgF",
+            "EhQKDHBsYXllcl9wb3NfeRgDIAEoBRIXCg9wbGF5ZXJfbW9kZWxfaWQYBCAB",
+            "KAUSEwoLaW5zdGFuY2VfaWQYBSABKAUSFQoEZGVjaxgGIAEoCzIHLlBCRGVj",
+            "axIOCgZlcXVpcHMYByADKAUSDQoFYnVmZnMYCCADKAUSDQoFaXRlbXMYCSAD",
+            "KAVCSwodY29tLndoYWxlaXNsYW5kLmdhbWUucHJvdG9jb2xCF1BCTWFwUGxh",
+            "eWVyRGF0YVByb3RvY29sqgIQQmlnSGVhZC5wcm90b2NvbGIGcHJvdG8z"));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
-          new pbr::FileDescriptor[] { global::BigHead.protocol.PBPlayerDataReflection.Descriptor, },
+          new pbr::FileDescriptor[] { global::BigHead.protocol.PBPlayerDataReflection.Descriptor, global::BigHead.protocol.PBDeckReflection.Descriptor, },
           new pbr::GeneratedClrTypeInfo(null, new pbr::GeneratedClrTypeInfo[] {
-            new pbr::GeneratedClrTypeInfo(typeof(global::BigHead.protocol.PBMapPlayerData), global::BigHead.protocol.PBMapPlayerData.Parser, new[]{ "PlayerData" }, null, null, null)
+            new pbr::GeneratedClrTypeInfo(typeof(global::BigHead.protocol.PBMapPlayerData), global::BigHead.protocol.PBMapPlayerData.Parser, new[]{ "PlayerData", "PlayerPosX", "PlayerPosY", "PlayerModelId", "InstanceId", "Deck", "Equips", "Buffs", "Items" }, null, null, null)
           }));
     }
     #endregion
@@ -65,6 +68,14 @@ namespace BigHead.protocol {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public PBMapPlayerData(PBMapPlayerData other) : this() {
       PlayerData = other.playerData_ != null ? other.PlayerData.Clone() : null;
+      playerPosX_ = other.playerPosX_;
+      playerPosY_ = other.playerPosY_;
+      playerModelId_ = other.playerModelId_;
+      instanceId_ = other.instanceId_;
+      Deck = other.deck_ != null ? other.Deck.Clone() : null;
+      equips_ = other.equips_.Clone();
+      buffs_ = other.buffs_.Clone();
+      items_ = other.items_.Clone();
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -83,6 +94,91 @@ namespace BigHead.protocol {
       }
     }
 
+    /// <summary>Field number for the "player_pos_x" field.</summary>
+    public const int PlayerPosXFieldNumber = 2;
+    private int playerPosX_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int PlayerPosX {
+      get { return playerPosX_; }
+      set {
+        playerPosX_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "player_pos_y" field.</summary>
+    public const int PlayerPosYFieldNumber = 3;
+    private int playerPosY_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int PlayerPosY {
+      get { return playerPosY_; }
+      set {
+        playerPosY_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "player_model_id" field.</summary>
+    public const int PlayerModelIdFieldNumber = 4;
+    private int playerModelId_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int PlayerModelId {
+      get { return playerModelId_; }
+      set {
+        playerModelId_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "instance_id" field.</summary>
+    public const int InstanceIdFieldNumber = 5;
+    private int instanceId_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int InstanceId {
+      get { return instanceId_; }
+      set {
+        instanceId_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "deck" field.</summary>
+    public const int DeckFieldNumber = 6;
+    private global::BigHead.protocol.PBDeck deck_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public global::BigHead.protocol.PBDeck Deck {
+      get { return deck_; }
+      set {
+        deck_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "equips" field.</summary>
+    public const int EquipsFieldNumber = 7;
+    private static readonly pb::FieldCodec<int> _repeated_equips_codec
+        = pb::FieldCodec.ForInt32(58);
+    private readonly pbc::RepeatedField<int> equips_ = new pbc::RepeatedField<int>();
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public pbc::RepeatedField<int> Equips {
+      get { return equips_; }
+    }
+
+    /// <summary>Field number for the "buffs" field.</summary>
+    public const int BuffsFieldNumber = 8;
+    private static readonly pb::FieldCodec<int> _repeated_buffs_codec
+        = pb::FieldCodec.ForInt32(66);
+    private readonly pbc::RepeatedField<int> buffs_ = new pbc::RepeatedField<int>();
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public pbc::RepeatedField<int> Buffs {
+      get { return buffs_; }
+    }
+
+    /// <summary>Field number for the "items" field.</summary>
+    public const int ItemsFieldNumber = 9;
+    private static readonly pb::FieldCodec<int> _repeated_items_codec
+        = pb::FieldCodec.ForInt32(74);
+    private readonly pbc::RepeatedField<int> items_ = new pbc::RepeatedField<int>();
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public pbc::RepeatedField<int> Items {
+      get { return items_; }
+    }
+
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override bool Equals(object other) {
       return Equals(other as PBMapPlayerData);
@@ -97,6 +193,14 @@ namespace BigHead.protocol {
         return true;
       }
       if (!object.Equals(PlayerData, other.PlayerData)) return false;
+      if (PlayerPosX != other.PlayerPosX) return false;
+      if (PlayerPosY != other.PlayerPosY) return false;
+      if (PlayerModelId != other.PlayerModelId) return false;
+      if (InstanceId != other.InstanceId) return false;
+      if (!object.Equals(Deck, other.Deck)) return false;
+      if(!equips_.Equals(other.equips_)) return false;
+      if(!buffs_.Equals(other.buffs_)) return false;
+      if(!items_.Equals(other.items_)) return false;
       return true;
     }
 
@@ -104,6 +208,14 @@ namespace BigHead.protocol {
     public override int GetHashCode() {
       int hash = 1;
       if (playerData_ != null) hash ^= PlayerData.GetHashCode();
+      if (PlayerPosX != 0) hash ^= PlayerPosX.GetHashCode();
+      if (PlayerPosY != 0) hash ^= PlayerPosY.GetHashCode();
+      if (PlayerModelId != 0) hash ^= PlayerModelId.GetHashCode();
+      if (InstanceId != 0) hash ^= InstanceId.GetHashCode();
+      if (deck_ != null) hash ^= Deck.GetHashCode();
+      hash ^= equips_.GetHashCode();
+      hash ^= buffs_.GetHashCode();
+      hash ^= items_.GetHashCode();
       return hash;
     }
 
@@ -118,6 +230,29 @@ namespace BigHead.protocol {
         output.WriteRawTag(10);
         output.WriteMessage(PlayerData);
       }
+      if (PlayerPosX != 0) {
+        output.WriteRawTag(16);
+        output.WriteInt32(PlayerPosX);
+      }
+      if (PlayerPosY != 0) {
+        output.WriteRawTag(24);
+        output.WriteInt32(PlayerPosY);
+      }
+      if (PlayerModelId != 0) {
+        output.WriteRawTag(32);
+        output.WriteInt32(PlayerModelId);
+      }
+      if (InstanceId != 0) {
+        output.WriteRawTag(40);
+        output.WriteInt32(InstanceId);
+      }
+      if (deck_ != null) {
+        output.WriteRawTag(50);
+        output.WriteMessage(Deck);
+      }
+      equips_.WriteTo(output, _repeated_equips_codec);
+      buffs_.WriteTo(output, _repeated_buffs_codec);
+      items_.WriteTo(output, _repeated_items_codec);
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -126,6 +261,24 @@ namespace BigHead.protocol {
       if (playerData_ != null) {
         size += 1 + pb::CodedOutputStream.ComputeMessageSize(PlayerData);
       }
+      if (PlayerPosX != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(PlayerPosX);
+      }
+      if (PlayerPosY != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(PlayerPosY);
+      }
+      if (PlayerModelId != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(PlayerModelId);
+      }
+      if (InstanceId != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(InstanceId);
+      }
+      if (deck_ != null) {
+        size += 1 + pb::CodedOutputStream.ComputeMessageSize(Deck);
+      }
+      size += equips_.CalculateSize(_repeated_equips_codec);
+      size += buffs_.CalculateSize(_repeated_buffs_codec);
+      size += items_.CalculateSize(_repeated_items_codec);
       return size;
     }
 
@@ -140,6 +293,27 @@ namespace BigHead.protocol {
         }
         PlayerData.MergeFrom(other.PlayerData);
       }
+      if (other.PlayerPosX != 0) {
+        PlayerPosX = other.PlayerPosX;
+      }
+      if (other.PlayerPosY != 0) {
+        PlayerPosY = other.PlayerPosY;
+      }
+      if (other.PlayerModelId != 0) {
+        PlayerModelId = other.PlayerModelId;
+      }
+      if (other.InstanceId != 0) {
+        InstanceId = other.InstanceId;
+      }
+      if (other.deck_ != null) {
+        if (deck_ == null) {
+          deck_ = new global::BigHead.protocol.PBDeck();
+        }
+        Deck.MergeFrom(other.Deck);
+      }
+      equips_.Add(other.equips_);
+      buffs_.Add(other.buffs_);
+      items_.Add(other.items_);
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -155,6 +329,44 @@ namespace BigHead.protocol {
               playerData_ = new global::BigHead.protocol.PBPlayerData();
             }
             input.ReadMessage(playerData_);
+            break;
+          }
+          case 16: {
+            PlayerPosX = input.ReadInt32();
+            break;
+          }
+          case 24: {
+            PlayerPosY = input.ReadInt32();
+            break;
+          }
+          case 32: {
+            PlayerModelId = input.ReadInt32();
+            break;
+          }
+          case 40: {
+            InstanceId = input.ReadInt32();
+            break;
+          }
+          case 50: {
+            if (deck_ == null) {
+              deck_ = new global::BigHead.protocol.PBDeck();
+            }
+            input.ReadMessage(deck_);
+            break;
+          }
+          case 58:
+          case 56: {
+            equips_.AddEntriesFrom(input, _repeated_equips_codec);
+            break;
+          }
+          case 66:
+          case 64: {
+            buffs_.AddEntriesFrom(input, _repeated_buffs_codec);
+            break;
+          }
+          case 74:
+          case 72: {
+            items_.AddEntriesFrom(input, _repeated_items_codec);
             break;
           }
         }

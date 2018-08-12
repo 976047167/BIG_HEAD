@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using BigHead.protocol;
 
 public class WND_MainTown : UIFormBase
 {
@@ -55,7 +56,7 @@ public class WND_MainTown : UIFormBase
             iconId = Game.DataManager.PlayerData.HeadIcon;
             headIcon.Load(iconId);
         }
-        
+
     }
     private void KakuClick(GameObject obj)
     {
@@ -63,16 +64,26 @@ public class WND_MainTown : UIFormBase
     }
     private void DungeonClick(GameObject obj)
     {
-      //  UIModule.Instance.OpenForm<WND_ChoseDeck>(2);
+        //  UIModule.Instance.OpenForm<WND_ChoseDeck>(2);
     }
 
     protected void Onclick_btnPlot(GameObject go)
     {
-        
+        CGEnterInstance request = new CGEnterInstance();
+        request.InstanceId = 1;
+        request.UsingDeck = 1;
+        Game.NetworkManager.SendToLobby(MessageId_Send.CGEnterInstance, request);
     }
     private void OnClick_HeadFrame(GameObject obj)
     {
         Game.UI.OpenForm<WND_Settings>();
 
+    }
+
+
+    protected override void OnClose()
+    {
+        base.OnClose();
+        Messenger.RemoveListener(MessageId.MAP_UPDATE_PLAYER_INFO, UpdatePlayerInfoPanel);
     }
 }

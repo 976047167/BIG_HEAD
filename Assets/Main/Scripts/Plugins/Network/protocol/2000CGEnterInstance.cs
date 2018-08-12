@@ -22,14 +22,14 @@ namespace BigHead.protocol {
     static CGEnterInstanceReflection() {
       byte[] descriptorData = global::System.Convert.FromBase64String(
           string.Concat(
-            "ChoyMDAwX0NHRW50ZXJJbnN0YW5jZS5wcm90byIlCg9DR0VudGVySW5zdGFu",
-            "Y2USEgoKaW5zdGFuY2VJZBgBIAEoBUJLCh1jb20ud2hhbGVpc2xhbmQuZ2Ft",
-            "ZS5wcm90b2NvbEIXQ0dFbnRlckluc3RhbmNlUHJvdG9jb2yqAhBCaWdIZWFk",
-            "LnByb3RvY29sYgZwcm90bzM="));
+            "ChoyMDAwX0NHRW50ZXJJbnN0YW5jZS5wcm90byI5Cg9DR0VudGVySW5zdGFu",
+            "Y2USEgoKaW5zdGFuY2VJZBgBIAEoBRISCgp1c2luZ19kZWNrGAIgASgFQksK",
+            "HWNvbS53aGFsZWlzbGFuZC5nYW1lLnByb3RvY29sQhdDR0VudGVySW5zdGFu",
+            "Y2VQcm90b2NvbKoCEEJpZ0hlYWQucHJvdG9jb2xiBnByb3RvMw=="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { },
           new pbr::GeneratedClrTypeInfo(null, new pbr::GeneratedClrTypeInfo[] {
-            new pbr::GeneratedClrTypeInfo(typeof(global::BigHead.protocol.CGEnterInstance), global::BigHead.protocol.CGEnterInstance.Parser, new[]{ "InstanceId" }, null, null, null)
+            new pbr::GeneratedClrTypeInfo(typeof(global::BigHead.protocol.CGEnterInstance), global::BigHead.protocol.CGEnterInstance.Parser, new[]{ "InstanceId", "UsingDeck" }, null, null, null)
           }));
     }
     #endregion
@@ -64,6 +64,7 @@ namespace BigHead.protocol {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public CGEnterInstance(CGEnterInstance other) : this() {
       instanceId_ = other.instanceId_;
+      usingDeck_ = other.usingDeck_;
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -82,6 +83,17 @@ namespace BigHead.protocol {
       }
     }
 
+    /// <summary>Field number for the "using_deck" field.</summary>
+    public const int UsingDeckFieldNumber = 2;
+    private int usingDeck_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int UsingDeck {
+      get { return usingDeck_; }
+      set {
+        usingDeck_ = value;
+      }
+    }
+
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override bool Equals(object other) {
       return Equals(other as CGEnterInstance);
@@ -96,6 +108,7 @@ namespace BigHead.protocol {
         return true;
       }
       if (InstanceId != other.InstanceId) return false;
+      if (UsingDeck != other.UsingDeck) return false;
       return true;
     }
 
@@ -103,6 +116,7 @@ namespace BigHead.protocol {
     public override int GetHashCode() {
       int hash = 1;
       if (InstanceId != 0) hash ^= InstanceId.GetHashCode();
+      if (UsingDeck != 0) hash ^= UsingDeck.GetHashCode();
       return hash;
     }
 
@@ -117,6 +131,10 @@ namespace BigHead.protocol {
         output.WriteRawTag(8);
         output.WriteInt32(InstanceId);
       }
+      if (UsingDeck != 0) {
+        output.WriteRawTag(16);
+        output.WriteInt32(UsingDeck);
+      }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -124,6 +142,9 @@ namespace BigHead.protocol {
       int size = 0;
       if (InstanceId != 0) {
         size += 1 + pb::CodedOutputStream.ComputeInt32Size(InstanceId);
+      }
+      if (UsingDeck != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(UsingDeck);
       }
       return size;
     }
@@ -135,6 +156,9 @@ namespace BigHead.protocol {
       }
       if (other.InstanceId != 0) {
         InstanceId = other.InstanceId;
+      }
+      if (other.UsingDeck != 0) {
+        UsingDeck = other.UsingDeck;
       }
     }
 
@@ -148,6 +172,10 @@ namespace BigHead.protocol {
             break;
           case 8: {
             InstanceId = input.ReadInt32();
+            break;
+          }
+          case 16: {
+            UsingDeck = input.ReadInt32();
             break;
           }
         }

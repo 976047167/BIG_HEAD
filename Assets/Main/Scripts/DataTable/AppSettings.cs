@@ -2548,6 +2548,16 @@ namespace AppSettings
         public int Id { get; private set;}
         
         /// <summary>
+        /// 最少卡
+        /// </summary>
+        public int MinCount { get; private set;}
+        
+        /// <summary>
+        /// 最多卡
+        /// </summary>
+        public int MaxCount { get; private set;}
+        
+        /// <summary>
         /// 怪物
         /// </summary>
         public List<int> Monsters { get; private set;}
@@ -2601,15 +2611,17 @@ namespace AppSettings
         internal void Reload(TableFileRow row)
         { 
             Id = row.Get_int(row.Values[0], ""); 
-            Monsters = row.Get_List_int(row.Values[1], ""); 
-            MonsterProbability = row.Get_List_int(row.Values[2], ""); 
-            Shop = row.Get_List_int(row.Values[3], ""); 
-            ShopProbability = row.Get_List_int(row.Values[4], ""); 
-            Box = row.Get_List_int(row.Values[5], ""); 
-            BoxProbability = row.Get_List_int(row.Values[6], ""); 
-            NPC = row.Get_List_int(row.Values[7], ""); 
-            NPCProbability = row.Get_List_int(row.Values[8], ""); 
-            Boss = row.Get_int(row.Values[9], ""); 
+            MinCount = row.Get_int(row.Values[1], ""); 
+            MaxCount = row.Get_int(row.Values[2], ""); 
+            Monsters = row.Get_List_int(row.Values[3], ""); 
+            MonsterProbability = row.Get_List_int(row.Values[4], ""); 
+            Shop = row.Get_List_int(row.Values[5], ""); 
+            ShopProbability = row.Get_List_int(row.Values[6], ""); 
+            Box = row.Get_List_int(row.Values[7], ""); 
+            BoxProbability = row.Get_List_int(row.Values[8], ""); 
+            NPC = row.Get_List_int(row.Values[9], ""); 
+            NPCProbability = row.Get_List_int(row.Values[10], ""); 
+            Boss = row.Get_int(row.Values[11], ""); 
         }
 
         /// <summary>
@@ -2806,6 +2818,16 @@ namespace AppSettings
         public int SceneId { get; private set;}
         
         /// <summary>
+        /// 宽
+        /// </summary>
+        public int Width { get; private set;}
+        
+        /// <summary>
+        /// 高
+        /// </summary>
+        public int Height { get; private set;}
+        
+        /// <summary>
         /// 层数
         /// </summary>
         public List<int> Layers { get; private set;}
@@ -2845,12 +2867,14 @@ namespace AppSettings
         { 
             Id = row.Get_int(row.Values[0], ""); 
             SceneId = row.Get_int(row.Values[1], ""); 
-            Layers = row.Get_List_int(row.Values[2], ""); 
-            LayerMax = row.Get_int(row.Values[3], ""); 
-            BossLayer = row.Get_int(row.Values[4], ""); 
-            CardMax = row.Get_int(row.Values[5], ""); 
-            FoodMax = row.Get_int(row.Values[6], ""); 
-            ItemMax = row.Get_int(row.Values[7], ""); 
+            Width = row.Get_int(row.Values[2], ""); 
+            Height = row.Get_int(row.Values[3], ""); 
+            Layers = row.Get_List_int(row.Values[4], ""); 
+            LayerMax = row.Get_int(row.Values[5], ""); 
+            BossLayer = row.Get_int(row.Values[6], ""); 
+            CardMax = row.Get_int(row.Values[7], ""); 
+            FoodMax = row.Get_int(row.Values[8], ""); 
+            ItemMax = row.Get_int(row.Values[9], ""); 
         }
 
         /// <summary>

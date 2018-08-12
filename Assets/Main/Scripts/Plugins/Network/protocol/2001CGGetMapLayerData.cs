@@ -22,14 +22,15 @@ namespace BigHead.protocol {
     static CGGetMapLayerDataReflection() {
       byte[] descriptorData = global::System.Convert.FromBase64String(
           string.Concat(
-            "ChwyMDAxX0NHR2V0TWFwTGF5ZXJEYXRhLnByb3RvIigKEUNHR2V0TWFwTGF5",
-            "ZXJEYXRhEhMKC2xheWVyX2luZGV4GAEgASgFQk0KHWNvbS53aGFsZWlzbGFu",
-            "ZC5nYW1lLnByb3RvY29sQhlDR0dldE1hcExheWVyRGF0YVByb3RvY29sqgIQ",
-            "QmlnSGVhZC5wcm90b2NvbGIGcHJvdG8z"));
+            "ChwyMDAxX0NHR2V0TWFwTGF5ZXJEYXRhLnByb3RvImEKEUNHR2V0TWFwTGF5",
+            "ZXJEYXRhEhMKC2xheWVyX2luZGV4GAEgASgFEhMKC2luc3RhbmNlX2lkGAIg",
+            "ASgFEhAKCHBsYXllcl94GAMgASgFEhAKCHBsYXllcl95GAQgASgFQk0KHWNv",
+            "bS53aGFsZWlzbGFuZC5nYW1lLnByb3RvY29sQhlDR0dldE1hcExheWVyRGF0",
+            "YVByb3RvY29sqgIQQmlnSGVhZC5wcm90b2NvbGIGcHJvdG8z"));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { },
           new pbr::GeneratedClrTypeInfo(null, new pbr::GeneratedClrTypeInfo[] {
-            new pbr::GeneratedClrTypeInfo(typeof(global::BigHead.protocol.CGGetMapLayerData), global::BigHead.protocol.CGGetMapLayerData.Parser, new[]{ "LayerIndex" }, null, null, null)
+            new pbr::GeneratedClrTypeInfo(typeof(global::BigHead.protocol.CGGetMapLayerData), global::BigHead.protocol.CGGetMapLayerData.Parser, new[]{ "LayerIndex", "InstanceId", "PlayerX", "PlayerY" }, null, null, null)
           }));
     }
     #endregion
@@ -64,6 +65,9 @@ namespace BigHead.protocol {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public CGGetMapLayerData(CGGetMapLayerData other) : this() {
       layerIndex_ = other.layerIndex_;
+      instanceId_ = other.instanceId_;
+      playerX_ = other.playerX_;
+      playerY_ = other.playerY_;
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -82,6 +86,39 @@ namespace BigHead.protocol {
       }
     }
 
+    /// <summary>Field number for the "instance_id" field.</summary>
+    public const int InstanceIdFieldNumber = 2;
+    private int instanceId_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int InstanceId {
+      get { return instanceId_; }
+      set {
+        instanceId_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "player_x" field.</summary>
+    public const int PlayerXFieldNumber = 3;
+    private int playerX_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int PlayerX {
+      get { return playerX_; }
+      set {
+        playerX_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "player_y" field.</summary>
+    public const int PlayerYFieldNumber = 4;
+    private int playerY_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int PlayerY {
+      get { return playerY_; }
+      set {
+        playerY_ = value;
+      }
+    }
+
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override bool Equals(object other) {
       return Equals(other as CGGetMapLayerData);
@@ -96,6 +133,9 @@ namespace BigHead.protocol {
         return true;
       }
       if (LayerIndex != other.LayerIndex) return false;
+      if (InstanceId != other.InstanceId) return false;
+      if (PlayerX != other.PlayerX) return false;
+      if (PlayerY != other.PlayerY) return false;
       return true;
     }
 
@@ -103,6 +143,9 @@ namespace BigHead.protocol {
     public override int GetHashCode() {
       int hash = 1;
       if (LayerIndex != 0) hash ^= LayerIndex.GetHashCode();
+      if (InstanceId != 0) hash ^= InstanceId.GetHashCode();
+      if (PlayerX != 0) hash ^= PlayerX.GetHashCode();
+      if (PlayerY != 0) hash ^= PlayerY.GetHashCode();
       return hash;
     }
 
@@ -117,6 +160,18 @@ namespace BigHead.protocol {
         output.WriteRawTag(8);
         output.WriteInt32(LayerIndex);
       }
+      if (InstanceId != 0) {
+        output.WriteRawTag(16);
+        output.WriteInt32(InstanceId);
+      }
+      if (PlayerX != 0) {
+        output.WriteRawTag(24);
+        output.WriteInt32(PlayerX);
+      }
+      if (PlayerY != 0) {
+        output.WriteRawTag(32);
+        output.WriteInt32(PlayerY);
+      }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -124,6 +179,15 @@ namespace BigHead.protocol {
       int size = 0;
       if (LayerIndex != 0) {
         size += 1 + pb::CodedOutputStream.ComputeInt32Size(LayerIndex);
+      }
+      if (InstanceId != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(InstanceId);
+      }
+      if (PlayerX != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(PlayerX);
+      }
+      if (PlayerY != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(PlayerY);
       }
       return size;
     }
@@ -135,6 +199,15 @@ namespace BigHead.protocol {
       }
       if (other.LayerIndex != 0) {
         LayerIndex = other.LayerIndex;
+      }
+      if (other.InstanceId != 0) {
+        InstanceId = other.InstanceId;
+      }
+      if (other.PlayerX != 0) {
+        PlayerX = other.PlayerX;
+      }
+      if (other.PlayerY != 0) {
+        PlayerY = other.PlayerY;
       }
     }
 
@@ -148,6 +221,18 @@ namespace BigHead.protocol {
             break;
           case 8: {
             LayerIndex = input.ReadInt32();
+            break;
+          }
+          case 16: {
+            InstanceId = input.ReadInt32();
+            break;
+          }
+          case 24: {
+            PlayerX = input.ReadInt32();
+            break;
+          }
+          case 32: {
+            PlayerY = input.ReadInt32();
             break;
           }
         }

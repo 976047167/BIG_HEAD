@@ -55,6 +55,10 @@ public enum MessageId : uint
     /// 初始化下个流程成功
     /// </summary>
     GAME_INIT_PROCEDURE_SUCCESS,
+    /// <summary>
+    /// 初始化地图本地玩家成功
+    /// </summary>
+    GAME_INIT_MY_MAP_PLAYER_SUCCESS,
 
     /////<summary> 断线</summary>
     //MSG_LOST_CONNECT_TO_SERVER = 100000,

@@ -78,6 +78,9 @@ namespace BigHead.protocol {
     /// <summary>Field number for the "result" field.</summary>
     public const int ResultFieldNumber = 1;
     private int result_;
+    /// <summary>
+    ///0Success,1failed
+    /// </summary>
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public int Result {
       get { return result_; }

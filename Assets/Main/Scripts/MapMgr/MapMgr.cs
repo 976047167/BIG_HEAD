@@ -7,6 +7,7 @@ public class MapMgr
 {
     public Camera mainCamera;
 
+    int instanceId = 0;
     MapLayerData currentMapLayerData;
     MapLayerData lastMapLayerData;
     public GameObject MapCardRoot { private set; get; }
@@ -31,9 +32,11 @@ public class MapMgr
             return m_Instance;
         }
     }
-    public static void Create()
+    public static void Create(int instanceId)
     {
         m_Instance = new MapMgr();
+        m_Instance.instanceId = instanceId;
+        m_Instance.m_MyMapPlayer = new MapPlayer(Game.DataManager.MyPlayer);
 
     }
     public void Init()
@@ -41,7 +44,7 @@ public class MapMgr
         //可以显示场景了
         mainCamera = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();
         MapCardRoot = new GameObject("MapMgr");
-        m_MyMapPlayer = new MapPlayer(Game.DataManager.MyPlayer);
+
         MakePlayer();
         MakeMap(1);
         m_Inited = true;
@@ -126,7 +129,7 @@ public class MapMgr
                 }
             }
         }
-        MapLayerData layerData = new MapLayerData(layerId);
+        MapLayerData layerData = new MapLayerData(layerId, 5, 5);
         currentMapLayerData = layerData;
         MapCardBase[,] maplist = layerData.MapCardDatas;
         List<MapCardBase> mapCards = new List<MapCardBase>();

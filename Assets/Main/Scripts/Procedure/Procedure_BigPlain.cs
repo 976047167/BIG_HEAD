@@ -47,7 +47,9 @@ public class Procedure_BigPlain : ProcedureBase
                     case InitState.GetMapLayerData:
                         Messenger.AddListener<PBMapLayerData>(MessageId_Receive.GCGetMapLayerData, GetLayerData);
                         CGGetMapLayerData getMapLayerData = new CGGetMapLayerData();
-                        getMapLayerData.LayerIndex = 0;
+                        //层数从第一层开始
+                        getMapLayerData.LayerIndex = 1;
+                        getMapLayerData.InstanceId = MapMgr.Instance.MyMapPlayer.InstanceId;
                         Game.NetworkManager.SendToLobby(MessageId_Send.CGGetMapLayerData, getMapLayerData);
                         break;
                     case InitState.CreateModel:
@@ -72,7 +74,7 @@ public class Procedure_BigPlain : ProcedureBase
 
     void GetLayerData(PBMapLayerData mapLayerData)
     {
-        if (state== InitState.GetMapLayerData)
+        if (state == InitState.GetMapLayerData)
         {
             state = InitState.CreateModel;
         }

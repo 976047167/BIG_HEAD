@@ -6,6 +6,7 @@ using AppSettings;
 
 public class PlayerData
 {
+    public ulong ID = 0;
     public string Name;
     public int Level;
     public int Exp = 0;
@@ -33,6 +34,7 @@ public class PlayerData
 
     public void Update(PBPlayerData playerData)
     {
+        ID = playerData.PlayerId;
         Level = playerData.Level;
 
         ClassData = new ClassData(playerData.CharacterId);

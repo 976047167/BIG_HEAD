@@ -8,15 +8,18 @@ using UnityEngine;
 /// </summary>
 public class MapLayerData
 {
-    
+
     public int LayerId { get; private set; }
 
-    public MapCardBase[,] MapCardDatas = new MapCardBase[ConstValue.MAP_WIDTH, ConstValue.MAP_HEIGHT];
+    public MapCardBase[,] MapCardDatas = null;
+    public int Width { get; private set; }
+    public int Height { get; private set; }
 
-    public MapLayerData(int layerId)
+    public MapLayerData(int layerId, int width, int height)
     {
         LayerId = layerId;
         MapData.DicLayerDatas[layerId] = this;
+        MapCardDatas = new MapCardBase[width, height];
     }
 
     public MapCardBase this[int x, int y]

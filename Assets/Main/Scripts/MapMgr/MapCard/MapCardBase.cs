@@ -32,6 +32,7 @@ public class MapCardBase
     public bool Activating { get; protected set; }
     protected bool isFirstEnter = true;
     public bool Used { get; protected set; }
+    public virtual MapCardType CardType { get { return MapCardType.None; } }
 
     public CardState State
     {

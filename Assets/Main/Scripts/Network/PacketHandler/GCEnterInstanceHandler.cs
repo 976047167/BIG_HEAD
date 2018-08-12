@@ -32,8 +32,8 @@ public class GCEnterInstanceHandler : BasePacketHandler
             }
 
             SceneMgr.ChangeScene(instanceTable.SceneId);
-            MapMgr.Create();
-            //MapMgr.Instance.
+            MapMgr.Create(data.InstanceId);
+            MapMgr.Instance.MyMapPlayer.Update(data.MapPlayerData);
         }
         else
         {

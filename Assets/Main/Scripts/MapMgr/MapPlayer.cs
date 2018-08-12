@@ -3,14 +3,16 @@ using System.Collections.Generic;
 using UnityEngine;
 using AppSettings;
 using System;
+using BigHead.protocol;
 
 public class MapPlayer
 {
     protected GameObject m_gameObject;
     protected MapPlayerData m_Data;
+    protected int m_InstanceId;
     public MapPlayerData Data { get { return m_Data; } }
     public GameObject PlayerGO { get { return m_gameObject; } }
-
+    public int InstanceId { get { return m_InstanceId; } }
     private Player m_Player;
     public Player Player { get { return m_Player; } }
     public MapCardPos CurPos { protected set; get; }
@@ -25,10 +27,18 @@ public class MapPlayer
         else
             m_Data = new MapPlayerData(m_Player.Data, null);
     }
-
+    public void Update(PBMapPlayerData mapPlayerData)
+    {
+        CurPos = new MapCardPos(mapPlayerData.PlayerPosX, mapPlayerData.PlayerPosY);
+        m_InstanceId = mapPlayerData.InstanceId;
+        m_Data.Update(mapPlayerData);
+    }
     public void CreateModel(MapCardPos pos)
     {
-        CurPos = pos;
+        if (CurPos == null)
+        {
+            CurPos = pos;
+        }
         ResourceManager.LoadGameObject(ModelTableSettings.Get(ClassCharacterTableSettings.Get(m_Data.ClassData.CharacterID).ModelID).Path, LoadPlayerSuccess,
             (str, obj) => { Debug.LogError("Load player Failed!"); }
             );

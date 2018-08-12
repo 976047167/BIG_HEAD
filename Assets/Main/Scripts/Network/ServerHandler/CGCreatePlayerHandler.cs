@@ -73,6 +73,13 @@ public class CGCreatePlayerHandler : BaseServerPacketHandler
             //}
             userData.PlayerDetailData = new PBPlayerDetailData();
             userData.PlayerDetailData.Cards.AddRange(characterData.DefaultCardList);
+            PBDeck deck = new PBDeck();
+            deck.Cards.AddRange(characterData.DefaultCardList);
+            userData.PlayerDetailData.UsingDeckIndex = deck.Index = 1;
+            deck.MaxCount = 10;
+            deck.Name = "默认卡组";
+            userData.PlayerDetailData.Decks.Add(deck);
+
             SaveData(PLAYER_DETAIL_DATA, userData.PlayerDetailData);
         }
         SendToClient(MessageId_Receive.GCGetUserData, userData);

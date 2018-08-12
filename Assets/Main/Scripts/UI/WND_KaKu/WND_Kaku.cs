@@ -78,7 +78,7 @@ public class WND_Kaku : UIFormBase
         {
             //Deck Deck = Game.DataManager.PlayerDetailData.Deck;
             //ExtraDeckCards = Game.DataManager.PlayerDetailData.ExtraDeckCards;
-            List<NormalCard> kakuCards = MapMgr.Instance.MyMapPlayer.Data.MapCardList;
+            //List<NormalCard> kakuCards = MapMgr.Instance.MyMapPlayer.Data.MapCardList;
             for (int i = 0; i < Deck.Count; i++)
             {
                 tempDeck.Add(Deck[i]);
@@ -447,10 +447,10 @@ public class WND_Kaku : UIFormBase
     {
         if (isInBattle)
         {
-            MapMgr.Instance.MyMapPlayer.Data.MapCardList.Clear();
+            MapMgr.Instance.MyMapPlayer.Data.CardList.Clear();
             for (int i = 0; i < tempDeck.Count; i++)
             {
-                MapMgr.Instance.MyMapPlayer.Data.MapCardList.Add(tempDeck[i]);
+                MapMgr.Instance.MyMapPlayer.Data.CardList.Add(tempDeck[i]);
             }
         }
         else

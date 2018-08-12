@@ -92,3 +92,12 @@ public enum MessageBoxReturnType
     Yes = 1,
     No = 2,
 }
+public enum MapCardType : int
+{
+    None = 0,
+    Door,
+    Monster,
+    Shop,
+    Box,
+    NPC,
+}

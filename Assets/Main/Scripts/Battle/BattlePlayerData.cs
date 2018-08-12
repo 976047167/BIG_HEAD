@@ -54,7 +54,6 @@ public class BattlePlayerData : MapPlayerData
         HeadIcon = mapPlayerData.HeadIcon;
         MapSkillID = mapPlayerData.MapSkillID;
         BattleSkillID = mapPlayerData.BattleSkillID;
-        UsingDeck = mapPlayerData.UsingDeck;
         UsingCharacter = mapPlayerData.UsingCharacter;
         Food = mapPlayerData.Food;
         MaxFood = mapPlayerData.MaxFood;

@@ -103,6 +103,9 @@ namespace BigHead.protocol {
     private static readonly pb::FieldCodec<int> _repeated_cards_codec
         = pb::FieldCodec.ForInt32(26);
     private readonly pbc::RepeatedField<int> cards_ = new pbc::RepeatedField<int>();
+    /// <summary>
+    ///所有的卡牌
+    /// </summary>
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public pbc::RepeatedField<int> Cards {
       get { return cards_; }
