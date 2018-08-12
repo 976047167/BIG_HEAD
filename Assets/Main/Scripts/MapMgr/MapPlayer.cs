@@ -17,9 +17,12 @@ public class MapPlayer
     public Player Player { get { return m_Player; } }
     public MapCardPos CurPos { protected set; get; }
 
+    public bool LoadedModel { get; protected set; }
+
     public MapPlayer(Player player)
     {
         m_Player = player;
+        LoadedModel = false;
         if (m_Player is MyPlayer)
         {
             m_Data = new MapPlayerData(m_Player.Data, (m_Player as MyPlayer).DetailData);
@@ -33,7 +36,7 @@ public class MapPlayer
         m_InstanceId = mapPlayerData.InstanceId;
         m_Data.Update(mapPlayerData);
     }
-    public void CreateModel(MapCardPos pos)
+    public void CreateModel(MapCardPos pos = null)
     {
         if (CurPos == null)
         {
@@ -48,6 +51,7 @@ public class MapPlayer
         m_gameObject = go;
         m_gameObject.transform.localScale = new Vector3(0.6f, 0.6f, 0.6f);
         m_gameObject.transform.position = MapMgr.Instance.GetTransfromByPos(CurPos);
+        LoadedModel = true;
     }
 
     public void MoveTo(MapCardPos pos)

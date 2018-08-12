@@ -21,6 +21,14 @@ public class GCGetMapLayerDataHandler : BasePacketHandler
         base.Handle(sender, packet);
         GCGetMapLayerData data = packet as GCGetMapLayerData;
         //处理完数据和逻辑后,发送消息通知其他模块,绝对不可以直接操作UI等Unity主线程的东西!
-        throw new System.NotImplementedException(GetType().ToString());
+        if (data.Result == 0)
+        {
+            if (MapMgr.Inited)
+            {
+                MapMgr.Instance.MakeMapByLayerData(data.LayerData);
+            }
+            Messenger.Broadcast(MessageId.GAME_GET_MAP_LAYER_DATA);
+        }
+
     }
 }

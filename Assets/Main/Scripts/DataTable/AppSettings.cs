@@ -2813,6 +2813,11 @@ namespace AppSettings
         public int Id { get; private set;}
         
         /// <summary>
+        /// 副本名字
+        /// </summary>
+        public string Name { get; private set;}
+        
+        /// <summary>
         /// 使用的场景
         /// </summary>
         public int SceneId { get; private set;}
@@ -2866,15 +2871,16 @@ namespace AppSettings
         internal void Reload(TableFileRow row)
         { 
             Id = row.Get_int(row.Values[0], ""); 
-            SceneId = row.Get_int(row.Values[1], ""); 
-            Width = row.Get_int(row.Values[2], ""); 
-            Height = row.Get_int(row.Values[3], ""); 
-            Layers = row.Get_List_int(row.Values[4], ""); 
-            LayerMax = row.Get_int(row.Values[5], ""); 
-            BossLayer = row.Get_int(row.Values[6], ""); 
-            CardMax = row.Get_int(row.Values[7], ""); 
-            FoodMax = row.Get_int(row.Values[8], ""); 
-            ItemMax = row.Get_int(row.Values[9], ""); 
+            Name = row.Get_string(row.Values[1], ""); 
+            SceneId = row.Get_int(row.Values[2], ""); 
+            Width = row.Get_int(row.Values[3], ""); 
+            Height = row.Get_int(row.Values[4], ""); 
+            Layers = row.Get_List_int(row.Values[5], ""); 
+            LayerMax = row.Get_int(row.Values[6], ""); 
+            BossLayer = row.Get_int(row.Values[7], ""); 
+            CardMax = row.Get_int(row.Values[8], ""); 
+            FoodMax = row.Get_int(row.Values[9], ""); 
+            ItemMax = row.Get_int(row.Values[10], ""); 
         }
 
         /// <summary>

@@ -33,6 +33,7 @@ public class Procedure_BigPlain : ProcedureBase
         {
             if (last != state)
             {
+                last = state;
                 switch (state)
                 {
                     case InitState.Start:
@@ -41,25 +42,32 @@ public class Procedure_BigPlain : ProcedureBase
                         break;
                     case InitState.InitMapMgr:
                         //MapMgr.Create();
-                        Progress = 0.1f;
+                        MapMgr.Instance.Init();
+                        Progress = 0.3f;
                         state = InitState.GetMapLayerData;
                         break;
                     case InitState.GetMapLayerData:
-                        Messenger.AddListener<PBMapLayerData>(MessageId_Receive.GCGetMapLayerData, GetLayerData);
+                        Messenger.AddListener(MessageId.GAME_GET_MAP_LAYER_DATA, GetLayerData);
                         CGGetMapLayerData getMapLayerData = new CGGetMapLayerData();
                         //层数从第一层开始
                         getMapLayerData.LayerIndex = 1;
                         getMapLayerData.InstanceId = MapMgr.Instance.MyMapPlayer.InstanceId;
+                        getMapLayerData.PlayerX = MapMgr.Instance.MyMapPlayer.CurPos.X;
+                        getMapLayerData.PlayerY = MapMgr.Instance.MyMapPlayer.CurPos.Y;
                         Game.NetworkManager.SendToLobby(MessageId_Send.CGGetMapLayerData, getMapLayerData);
+                        Progress = 0.5f;
                         break;
                     case InitState.CreateModel:
+                        yield return MapMgr.Instance.MakePlayer();
+                        state = InitState.Finish;
+                        Progress = 0.8f;
                         break;
                     case InitState.Finish:
-                        break;
+                        Progress = 1f;
+                        yield break;
                     default:
                         break;
                 }
-                last = state;
             }
 
             yield return null;
@@ -72,14 +80,17 @@ public class Procedure_BigPlain : ProcedureBase
         MapMgr.Instance.Update();
     }
 
-    void GetLayerData(PBMapLayerData mapLayerData)
+    void GetLayerData()
     {
         if (state == InitState.GetMapLayerData)
         {
             state = InitState.CreateModel;
         }
-        //Messenger.RemoveListener<PBMapLayerData>(MessageId_Receive.GCGetMapLayerData, GetLayerData);
-
+        Messenger.RemoveListener(MessageId_Receive.GCGetMapLayerData, GetLayerData);
+        //if (MapMgr.Inited)
+        //{
+        //    MapMgr.Instance.MakeMapByLayerData(mapLayerData);
+        //}
     }
     /// <summary>
     /// 进入战斗

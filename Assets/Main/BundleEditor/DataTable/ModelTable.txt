@@ -1,10 +1,10 @@
 Id	Path
 int	string
 1	Character/Player/Player
-2	MapCard/MapCard.prefab
-3	MapCard/MapCardBoss.prefab
-4	MapCard/MapCardBox.prefab
-5	MapCard/MapCardDoor.prefab
-6	MapCard/MapCardMonster.prefab
-7	MapCard/MapCardNpc.prefab
-8	MapCard/MapCardShop.prefab
+2	MapCard/MapCard
+3	MapCard/MapCardBoss
+4	MapCard/MapCardBox
+5	MapCard/MapCardDoor
+6	MapCard/MapCardMonster
+7	MapCard/MapCardNpc
+8	MapCard/MapCardShop

@@ -7,6 +7,7 @@ using System.Reflection;
 using Type = System.Type;
 using DG.Tweening;
 using DG.Tweening.Plugins.Options;
+using AppSettings;
 /// <summary>
 /// 地图上的那些背景地形卡牌，山河之类的
 /// </summary>
@@ -20,7 +21,7 @@ public class MapCardBase
     public Transform transform { protected set; get; }
     public Transform parent { get; protected set; }
     private MapCardPos pos = new MapCardPos(0, 0);
-    public MapCardPos Position { get { return pos; } }
+    public MapCardPos Position { get { return pos; } set { pos = value; } }
     private CardState state;
     /// <summary>
     /// gameObject的状态
@@ -32,8 +33,8 @@ public class MapCardBase
     public bool Activating { get; protected set; }
     protected bool isFirstEnter = true;
     public bool Used { get; protected set; }
-    public virtual MapCardType CardType { get { return MapCardType.None; } }
-
+    public virtual MapCardType CardType { get; protected set; }
+    public int DataId { get; protected set; }
     public CardState State
     {
         get
@@ -116,7 +117,63 @@ public class MapCardBase
         ResourceManager.LoadGameObject("MapCard/" + cardType, LoadAssetSuccessess, LoadAssetFailed, mapCard);
         return mapCard;
     }
+    public static MapCardBase CreateMapCard(MapCardType mapCardType,int dataId,MapCardPos pos)
+    {
+        MapCardBase mapCard = null;
+        ModelTableSetting model = null;
+        switch (mapCardType)
+        {
+            case MapCardType.None:
+                break;
+            case MapCardType.Door:
+                mapCard = new MapCardDoor();
+                mapCard.Position = pos;
+                mapCard.State = MapCardBase.CardState.Behind;
+                mapCard.CardType = mapCardType;
+                ResourceManager.LoadGameObject("MapCard/" + typeof(MapCardDoor).ToString(), LoadAssetSuccessess, LoadAssetFailed, mapCard);
+                break;
+            case MapCardType.Monster:
+                BattleMonsterTableSetting battleMonster = BattleMonsterTableSettings.Get(dataId);
+                model = ModelTableSettings.Get(battleMonster.ModelId);
+                mapCard = new MapCardMonster();
+                mapCard.Position = pos;
+                mapCard.State = MapCardBase.CardState.Behind;
+                mapCard.CardType = mapCardType;
+                ResourceManager.LoadGameObject(model.Path, LoadAssetSuccessess, LoadAssetFailed, mapCard);
+                break;
+            case MapCardType.Shop:
+                ShopTableSetting shopTable = ShopTableSettings.Get(dataId);
+                model = ModelTableSettings.Get(shopTable.ModelId);
+                mapCard = new MapCardShop();
+                mapCard.Position = pos;
+                mapCard.State = MapCardBase.CardState.Behind;
+                mapCard.CardType = mapCardType;
+                ResourceManager.LoadGameObject(model.Path, LoadAssetSuccessess, LoadAssetFailed, mapCard);
+                break;
+            case MapCardType.Box:
+                BoxTableSetting boxTable = BoxTableSettings.Get(dataId);
+                model = ModelTableSettings.Get(boxTable.ModelId);
+                mapCard = new MapCardBox();
+                mapCard.Position = pos;
+                mapCard.State = MapCardBase.CardState.Behind;
+                mapCard.CardType = mapCardType;
+                ResourceManager.LoadGameObject(model.Path, LoadAssetSuccessess, LoadAssetFailed, mapCard);
+                break;
+            case MapCardType.NPC:
+                NpcTableSetting npcTable = NpcTableSettings.Get(dataId);
+                model = ModelTableSettings.Get(npcTable.ModelId);
+                mapCard = new MapCardNpc();
+                mapCard.Position = pos;
+                mapCard.State = MapCardBase.CardState.Behind;
+                mapCard.CardType = mapCardType;
+                ResourceManager.LoadGameObject(model.Path, LoadAssetSuccessess, LoadAssetFailed, mapCard);
+                break;
+            default:
+                break;
+        }
 
+        return mapCard;
+    }
     static void LoadAssetSuccessess(string path, object[] args, GameObject go)
     {
         MapCardBase mapCard = args[0] as MapCardBase;
@@ -431,6 +488,42 @@ public class MapCardPos
     {
         X = x;
         Y = y;
+    }
+
+    public override bool Equals(object obj)
+    {
+        if (obj is MapCardPos)
+        {
+            MapCardPos other = obj as MapCardPos;
+            if (other.X == X && other.Y == Y)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+    public static bool operator ==(MapCardBase a, MapCardPos b)
+    {
+        if (a.X == b.X && a.Y == b.Y)
+        {
+            return true;
+        }
+        return false;
+    }
+    public static bool operator !=(MapCardBase a, MapCardPos b)
+    {
+        if (a.X != b.X || a.Y != b.Y)
+        {
+            return true;
+        }
+        return false;
+    }
+    public override int GetHashCode()
+    {
+        var hashCode = 1861411795;
+        hashCode = hashCode * -1521134295 + X.GetHashCode();
+        hashCode = hashCode * -1521134295 + Y.GetHashCode();
+        return hashCode;
     }
 }
 

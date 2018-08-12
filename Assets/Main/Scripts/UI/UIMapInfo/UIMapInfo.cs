@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using AppSettings;
+using System;
 
 public class UIMapInfo : UIFormBase
 {
@@ -17,6 +18,8 @@ public class UIMapInfo : UIFormBase
     private MapPlayer playerInfo;
     private UISprite spExp;
     private UILabel lblLevel;
+    private UILabel lblMapName;
+    private UILabel lblMapLayerName;
 
     private int iconId = 0;
 
@@ -35,16 +38,19 @@ public class UIMapInfo : UIFormBase
         labFood = transform.Find("food/num").GetComponent<UILabel>();
         spExp = transform.Find("headFrame/spExp").GetComponent<UISprite>();
         lblLevel = transform.Find("headFrame/spExp/lblLevel").GetComponent<UILabel>();
-
+        lblMapName = transform.Find("mapName").GetComponent<UILabel>();
+        lblMapLayerName = transform.Find("mapLayerName").GetComponent<UILabel>();
         Messenger.AddListener(MessageId.MAP_UPDATE_PLAYER_INFO, UpdatePlayerInfoPanel);
-
+        Messenger.AddListener(MessageId.GAME_GET_MAP_LAYER_DATA, UpdateMapInfo);
     }
+
 
 
     protected override void OnOpen()
     {
         base.OnOpen();
         UpdatePlayerInfoPanel();
+        UpdateMapInfo();
     }
     protected override void OnClose()
     {
@@ -74,5 +80,15 @@ public class UIMapInfo : UIFormBase
         labGold.text = (MapMgr.Instance.MyMapPlayer.Data.Gold.ToString());
         spExp.fillAmount = (float)playerInfo.Data.Exp / (float)playerInfo.Data.MaxExp;
         lblLevel.text = playerInfo.Data.Level.ToString();
+    }
+    private void UpdateMapInfo()
+    {
+        if (MapMgr.Inited == false)
+        {
+            return;
+        }
+        InstanceTableSetting instanceTable = InstanceTableSettings.Get(MapMgr.Instance.InstanceId);
+        lblMapName.text = instanceTable.Name;
+        lblMapLayerName.text = MapMgr.Instance.CurrentMapLayerData.Name;
     }
 }

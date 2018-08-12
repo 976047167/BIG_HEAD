@@ -18,8 +18,9 @@ public class MapMgr
     protected MapPlayer m_MyMapPlayer;
 
     public MapPlayer MyMapPlayer { get { return m_MyMapPlayer; } }
+    public int InstanceId { get { return instanceId; } }
+    public MapLayerData CurrentMapLayerData { get { return currentMapLayerData; } }
     public static bool Inited { get { return m_Instance != null && m_Inited; } }
-
     private MapMgr()
     {
 
@@ -44,17 +45,17 @@ public class MapMgr
         //可以显示场景了
         mainCamera = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();
         MapCardRoot = new GameObject("MapMgr");
-
-        MakePlayer();
-        MakeMap(1);
-        m_Inited = true;
         Messenger.Broadcast(MessageId.MAP_UPDATE_PLAYER_INFO);
+        //MakeMap(1);
+
+        m_Inited = true;
+
     }
     public void Update()
     {
         if (m_Inited == false)
         {
-            Init();
+            //Init();
             return;
         }
         if (Input.GetKeyDown(KeyCode.A))
@@ -83,14 +84,72 @@ public class MapMgr
         m_Inited = false;
     }
 
-    void MakePlayer()
+    public IEnumerator MakePlayer()
     {
-        //MapCardBase mapcard = mapCards[Random.Range(0, mapCards.Count)];
-        //MapCardPos currentPos = new MapCardPos(mapcard.X, mapcard.Y);
+        //MapCardPos currentPos = new MapCardPos(Random.Range(0, ConstValue.MAP_WIDTH), Random.Range(0, ConstValue.MAP_HEIGHT));
         //m_MyMapPlayer.CreateModel(currentPos);
-        //mapcard.State = MapCardBase.CardState.Front;
-        MapCardPos currentPos = new MapCardPos(Random.Range(0, ConstValue.MAP_WIDTH), Random.Range(0, ConstValue.MAP_HEIGHT));
-        m_MyMapPlayer.CreateModel(currentPos);
+        m_MyMapPlayer.CreateModel();
+        while (m_MyMapPlayer.LoadedModel == false)
+        {
+            yield return null;
+        }
+
+    }
+    public void MakeMapByLayerData(PBMapLayerData layerData)
+    {
+        MapCardBase playerDoorCard = null;
+        if (currentMapLayerData != null)
+        {
+            if (lastMapLayerData != null)
+            {
+                for (int i = 0; i < lastMapLayerData.Width; i++)
+                {
+                    for (int j = 0; j < lastMapLayerData.Height; j++)
+                    {
+                        if (lastMapLayerData[i, j] != null && lastMapLayerData[i, j] != currentMapLayerData[i, j])
+                        {
+                            lastMapLayerData[i, j].Destory();
+                        }
+                    }
+                }
+            }
+            lastMapLayerData = currentMapLayerData;
+            for (int i = 0; i < lastMapLayerData.Width; i++)
+            {
+                for (int j = 0; j < lastMapLayerData.Height; j++)
+                {
+                    //共用传送门
+                    if (i == m_MyMapPlayer.CurPos.X && j == m_MyMapPlayer.CurPos.Y)
+                    {
+                        playerDoorCard = lastMapLayerData[i, j];
+                    }
+                    else if (lastMapLayerData[i, j] != null)
+                    {
+                        lastMapLayerData[i, j].ExitMap();
+                    }
+                }
+            }
+        }
+        MapLayerData mapLayerData = new MapLayerData(layerData.Index, layerData.Name, layerData.Width, layerData.Height);
+        for (int i = 0; i < layerData.Width; i++)
+        {
+            for (int j = 0; j < layerData.Height; j++)
+            {
+                if (playerDoorCard != null && i == m_MyMapPlayer.CurPos.X && j == m_MyMapPlayer.CurPos.Y)
+                {
+                    mapLayerData[i, j] = playerDoorCard;
+                    continue;
+                }
+                int index = i * layerData.Width + j;
+                mapLayerData[i, j] = MapCardBase.CreateMapCard((MapCardType)layerData.PointTypes[index],
+                    layerData.PointIds[index],
+                    new MapCardPos(i, j));
+            }
+        }
+        currentMapLayerData = mapLayerData;
+    }
+    void MakeMap(MapLayerData mapLayerData)
+    {
 
     }
     void MakeMap(int layerId)
@@ -129,9 +188,8 @@ public class MapMgr
                 }
             }
         }
-        MapLayerData layerData = new MapLayerData(layerId, 5, 5);
+        MapLayerData layerData = new MapLayerData(layerId, "", 5, 5);
         currentMapLayerData = layerData;
-        MapCardBase[,] maplist = layerData.MapCardDatas;
         List<MapCardBase> mapCards = new List<MapCardBase>();
         int cardCount = Random.Range(10, 15);
         //先确定出生点
@@ -141,7 +199,7 @@ public class MapMgr
                 playerDoorCard = MapCardBase.CreateMapCard<MapCardDoor>(m_MyMapPlayer.CurPos, MapCardBase.CardState.Front);
             }
             mapCards.Add(playerDoorCard);
-            maplist[playerDoorCard.X, playerDoorCard.Y] = playerDoorCard;
+            layerData[playerDoorCard.X, playerDoorCard.Y] = playerDoorCard;
             playerDoorCard.SetUsed(true);
             playerDoorCard.SetActive(true);
             playerDoorCard.SetParent(MapCardRoot.transform);
@@ -160,7 +218,7 @@ public class MapMgr
             int count = Random.Range(0, poss.Count - 1);
             pos = poss[count];
             mapCards.Add(MapCardBase.GetRandomMapCard(pos, MapCardBase.CardState.Behind));
-            maplist[mapCards[i].X, mapCards[i].Y] = mapCards[i];
+            layerData[mapCards[i].X, mapCards[i].Y] = mapCards[i];
             mapCards[i].SetActive(true);
             mapCards[i].SetParent(MapCardRoot.transform);
         }
@@ -179,7 +237,7 @@ public class MapMgr
             pos = poss[count];
             MapCardBase door = MapCardBase.CreateMapCard<MapCardDoor>(pos, MapCardBase.CardState.Behind);
             mapCards.Add(door);
-            maplist[door.X, door.Y] = door;
+            layerData[door.X, door.Y] = door;
             door.SetActive(true);
             door.SetParent(MapCardRoot.transform);
         }
@@ -215,7 +273,7 @@ public class MapMgr
 
     public MapCardBase GetMapCard(int x, int y)
     {
-        return currentMapLayerData.MapCardDatas[x, y];
+        return currentMapLayerData[x, y];
     }
 
     public Vector3 GetTransfromByPos(MapCardPos pos)
