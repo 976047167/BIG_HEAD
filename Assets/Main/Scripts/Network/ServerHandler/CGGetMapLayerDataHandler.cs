@@ -24,10 +24,16 @@ public class CGGetMapLayerDataHandler : BaseServerPacketHandler
         GCGetMapLayerData response = new GCGetMapLayerData();
         InstanceTableSetting instanceTable = InstanceTableSettings.Get(data.InstanceId);
         //层数从第一层开始
-        InstanceLayerTableSetting layerTableSetting = InstanceLayerTableSettings.Get(instanceTable.Layers[data.LayerIndex - 1]);
+        if (instanceTable.LayerMax < data.LayerIndex)
+        {
+            response.Result = 1;
+            SendToClient(MessageId_Receive.GCGetMapLayerData, response);
+            return;
+        }
+        InstanceLayerTableSetting layerTableSetting = InstanceLayerTableSettings.Get(instanceTable.Layers[Random.Range(0, instanceTable.Layers.Count)]);
 
 
-        MapLayerData layerData = new MapLayerData(data.LayerIndex, "", instanceTable.Width, instanceTable.Height);
+        MapLayerData layerData = new MapLayerData(data.LayerIndex, instanceTable.Width, instanceTable.Height);
         int[,] mapType = new int[instanceTable.Width, instanceTable.Height];
         int[,] mapID = new int[instanceTable.Width, instanceTable.Height];
         List<MapCardPos> mapCards = new List<MapCardPos>();
@@ -103,9 +109,9 @@ public class CGGetMapLayerDataHandler : BaseServerPacketHandler
         }
         response.Result = 0;
         response.LayerData = new PBMapLayerData();
+        response.LayerData.Index = data.LayerIndex;
         response.LayerData.Height = instanceTable.Width;
         response.LayerData.Width = instanceTable.Height;
-        response.LayerData.Name = string.Format("{0} 第{1}层", instanceTable.Name, data.LayerIndex);
         for (int i = 0; i < instanceTable.Width; i++)
         {
             for (int j = 0; j < instanceTable.Height; j++)

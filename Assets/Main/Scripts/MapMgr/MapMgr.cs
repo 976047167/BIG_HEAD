@@ -130,7 +130,7 @@ public class MapMgr
                 }
             }
         }
-        MapLayerData mapLayerData = new MapLayerData(layerData.Index, layerData.Name, layerData.Width, layerData.Height);
+        MapLayerData mapLayerData = new MapLayerData(layerData.Index, layerData.Width, layerData.Height);
         for (int i = 0; i < layerData.Width; i++)
         {
             for (int j = 0; j < layerData.Height; j++)
@@ -188,7 +188,7 @@ public class MapMgr
                 }
             }
         }
-        MapLayerData layerData = new MapLayerData(layerId, "", 5, 5);
+        MapLayerData layerData = new MapLayerData(layerId, 5, 5);
         currentMapLayerData = layerData;
         List<MapCardBase> mapCards = new List<MapCardBase>();
         int cardCount = Random.Range(10, 15);
@@ -255,7 +255,14 @@ public class MapMgr
 
     public void NextMapLayer()
     {
-        MakeMap(currentMapLayerData.LayerId + 1);
+        //MakeMap(currentMapLayerData.LayerId + 1);
+        CGGetMapLayerData getMapLayerData = new CGGetMapLayerData();
+        //层数从第一层开始
+        getMapLayerData.LayerIndex = currentMapLayerData.LayerId + 1;
+        getMapLayerData.InstanceId = MapMgr.Instance.MyMapPlayer.InstanceId;
+        getMapLayerData.PlayerX = MapMgr.Instance.MyMapPlayer.CurPos.X;
+        getMapLayerData.PlayerY = MapMgr.Instance.MyMapPlayer.CurPos.Y;
+        Game.NetworkManager.SendToLobby(MessageId_Send.CGGetMapLayerData, getMapLayerData);
     }
 
     public void OnClickMapCard(MapCardBase mapCard)

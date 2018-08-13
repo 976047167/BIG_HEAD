@@ -153,3 +153,5 @@ int	string	string	string
 1004003	职业	職業	Private
 1004004	结算奖励	結算獎勵	Reward
 1004005	返回	返回	Exit
+1005000	WND_MapInfo	WND_MapInfo	WND_MapInfo
+1005001	第{0}层	Layer {0}	第{0}层

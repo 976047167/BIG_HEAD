@@ -22,15 +22,15 @@ namespace BigHead.protocol {
     static PBMapLayerDataReflection() {
       byte[] descriptorData = global::System.Convert.FromBase64String(
           string.Concat(
-            "ChRQQk1hcExheWVyRGF0YS5wcm90byJ0Cg5QQk1hcExheWVyRGF0YRINCgVp",
-            "bmRleBgBIAEoBRINCgV3aWR0aBgCIAEoBRIOCgZoZWlnaHQYAyABKAUSDAoE",
-            "bmFtZRgEIAEoCRITCgtwb2ludF90eXBlcxgFIAMoBRIRCglwb2ludF9pZHMY",
-            "BiADKAVCSgodY29tLndoYWxlaXNsYW5kLmdhbWUucHJvdG9jb2xCFlBCTWFw",
-            "TGF5ZXJEYXRhUHJvdG9jb2yqAhBCaWdIZWFkLnByb3RvY29sYgZwcm90bzM="));
+            "ChRQQk1hcExheWVyRGF0YS5wcm90byJmCg5QQk1hcExheWVyRGF0YRINCgVp",
+            "bmRleBgBIAEoBRINCgV3aWR0aBgCIAEoBRIOCgZoZWlnaHQYAyABKAUSEwoL",
+            "cG9pbnRfdHlwZXMYBCADKAUSEQoJcG9pbnRfaWRzGAUgAygFQkoKHWNvbS53",
+            "aGFsZWlzbGFuZC5nYW1lLnByb3RvY29sQhZQQk1hcExheWVyRGF0YVByb3Rv",
+            "Y29sqgIQQmlnSGVhZC5wcm90b2NvbGIGcHJvdG8z"));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { },
           new pbr::GeneratedClrTypeInfo(null, new pbr::GeneratedClrTypeInfo[] {
-            new pbr::GeneratedClrTypeInfo(typeof(global::BigHead.protocol.PBMapLayerData), global::BigHead.protocol.PBMapLayerData.Parser, new[]{ "Index", "Width", "Height", "Name", "PointTypes", "PointIds" }, null, null, null)
+            new pbr::GeneratedClrTypeInfo(typeof(global::BigHead.protocol.PBMapLayerData), global::BigHead.protocol.PBMapLayerData.Parser, new[]{ "Index", "Width", "Height", "PointTypes", "PointIds" }, null, null, null)
           }));
     }
     #endregion
@@ -67,7 +67,6 @@ namespace BigHead.protocol {
       index_ = other.index_;
       width_ = other.width_;
       height_ = other.height_;
-      name_ = other.name_;
       pointTypes_ = other.pointTypes_.Clone();
       pointIds_ = other.pointIds_.Clone();
     }
@@ -110,21 +109,10 @@ namespace BigHead.protocol {
       }
     }
 
-    /// <summary>Field number for the "name" field.</summary>
-    public const int NameFieldNumber = 4;
-    private string name_ = "";
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public string Name {
-      get { return name_; }
-      set {
-        name_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
-      }
-    }
-
     /// <summary>Field number for the "point_types" field.</summary>
-    public const int PointTypesFieldNumber = 5;
+    public const int PointTypesFieldNumber = 4;
     private static readonly pb::FieldCodec<int> _repeated_pointTypes_codec
-        = pb::FieldCodec.ForInt32(42);
+        = pb::FieldCodec.ForInt32(34);
     private readonly pbc::RepeatedField<int> pointTypes_ = new pbc::RepeatedField<int>();
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public pbc::RepeatedField<int> PointTypes {
@@ -132,9 +120,9 @@ namespace BigHead.protocol {
     }
 
     /// <summary>Field number for the "point_ids" field.</summary>
-    public const int PointIdsFieldNumber = 6;
+    public const int PointIdsFieldNumber = 5;
     private static readonly pb::FieldCodec<int> _repeated_pointIds_codec
-        = pb::FieldCodec.ForInt32(50);
+        = pb::FieldCodec.ForInt32(42);
     private readonly pbc::RepeatedField<int> pointIds_ = new pbc::RepeatedField<int>();
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public pbc::RepeatedField<int> PointIds {
@@ -157,7 +145,6 @@ namespace BigHead.protocol {
       if (Index != other.Index) return false;
       if (Width != other.Width) return false;
       if (Height != other.Height) return false;
-      if (Name != other.Name) return false;
       if(!pointTypes_.Equals(other.pointTypes_)) return false;
       if(!pointIds_.Equals(other.pointIds_)) return false;
       return true;
@@ -169,7 +156,6 @@ namespace BigHead.protocol {
       if (Index != 0) hash ^= Index.GetHashCode();
       if (Width != 0) hash ^= Width.GetHashCode();
       if (Height != 0) hash ^= Height.GetHashCode();
-      if (Name.Length != 0) hash ^= Name.GetHashCode();
       hash ^= pointTypes_.GetHashCode();
       hash ^= pointIds_.GetHashCode();
       return hash;
@@ -194,10 +180,6 @@ namespace BigHead.protocol {
         output.WriteRawTag(24);
         output.WriteInt32(Height);
       }
-      if (Name.Length != 0) {
-        output.WriteRawTag(34);
-        output.WriteString(Name);
-      }
       pointTypes_.WriteTo(output, _repeated_pointTypes_codec);
       pointIds_.WriteTo(output, _repeated_pointIds_codec);
     }
@@ -213,9 +195,6 @@ namespace BigHead.protocol {
       }
       if (Height != 0) {
         size += 1 + pb::CodedOutputStream.ComputeInt32Size(Height);
-      }
-      if (Name.Length != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeStringSize(Name);
       }
       size += pointTypes_.CalculateSize(_repeated_pointTypes_codec);
       size += pointIds_.CalculateSize(_repeated_pointIds_codec);
@@ -235,9 +214,6 @@ namespace BigHead.protocol {
       }
       if (other.Height != 0) {
         Height = other.Height;
-      }
-      if (other.Name.Length != 0) {
-        Name = other.Name;
       }
       pointTypes_.Add(other.pointTypes_);
       pointIds_.Add(other.pointIds_);
@@ -263,17 +239,13 @@ namespace BigHead.protocol {
             Height = input.ReadInt32();
             break;
           }
-          case 34: {
-            Name = input.ReadString();
+          case 34:
+          case 32: {
+            pointTypes_.AddEntriesFrom(input, _repeated_pointTypes_codec);
             break;
           }
           case 42:
           case 40: {
-            pointTypes_.AddEntriesFrom(input, _repeated_pointTypes_codec);
-            break;
-          }
-          case 50:
-          case 48: {
             pointIds_.AddEntriesFrom(input, _repeated_pointIds_codec);
             break;
           }

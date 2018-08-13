@@ -38,21 +38,34 @@ public class I18N
         language = languageType;
     }
 
-    public static string Get(int stringId)
+    public static string Get(int stringId, params object[] args)
     {
+        string result = null;
         switch (language)
         {
             case LanguageType.None:
                 SetLanguage(LanguageType.None);
-                return Get(stringId);
+                result = Get(stringId, args);
+                break;
             case LanguageType.ChineseSimplified:
-                return LocalizationTableSettings.Get(stringId).ChineseSimplified;
+                result = LocalizationTableSettings.Get(stringId).ChineseSimplified;
+                break;
             case LanguageType.ChineseTraditional:
-                return LocalizationTableSettings.Get(stringId).ChineseTraditional;
+                result = LocalizationTableSettings.Get(stringId).ChineseTraditional;
+                break;
             case LanguageType.English:
-                return LocalizationTableSettings.Get(stringId).English;
+                result = LocalizationTableSettings.Get(stringId).English;
+                break;
             default:
                 return LocalizationTableSettings.Get(stringId).ChineseSimplified;
+        }
+        if (args == null)
+        {
+            return result;
+        }
+        else
+        {
+            return string.Format(result, args);
         }
     }
 }

@@ -89,6 +89,6 @@ public class UIMapInfo : UIFormBase
         }
         InstanceTableSetting instanceTable = InstanceTableSettings.Get(MapMgr.Instance.InstanceId);
         lblMapName.text = instanceTable.Name;
-        lblMapLayerName.text = MapMgr.Instance.CurrentMapLayerData.Name;
+        lblMapLayerName.text = I18N.Get(1005001, MapMgr.Instance.CurrentMapLayerData.LayerId);
     }
 }
