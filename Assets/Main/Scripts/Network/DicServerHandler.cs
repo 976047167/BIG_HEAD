@@ -20,6 +20,7 @@ namespace BigHead.Net
             Dic.Add((ushort)MessageId_Send.CGMapPlayerMove, new CGMapPlayerMoveHandler());
             Dic.Add((ushort)MessageId_Send.CGMapBuyItem, new CGMapBuyItemHandler());
             Dic.Add((ushort)MessageId_Send.CGMapChangeDeck, new CGMapChangeDeckHandler());
+            Dic.Add((ushort)MessageId_Send.CGMapUseItem, new CGMapUseItemHandler());
             Dic.Add((ushort)MessageId_Send.CGEnterBattle, new CGEnterBattleHandler());
             Dic.Add((ushort)MessageId_Send.CGExitBattle, new CGExitBattleHandler());
         }

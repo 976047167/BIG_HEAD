@@ -15,6 +15,8 @@ public enum MessageId_Receive : ushort
     GCMapPlayerMove = 2005,
     GCMapBuyItem = 2006,
     GCMapChangeDeck = 2007,
+    GCMapUseItem = 2008,
+    GCUpdateMapPlayerData = 2009,
     GCEnterBattle = 3000,
     GCExitBattle = 3001,
     MAX = 65535,
