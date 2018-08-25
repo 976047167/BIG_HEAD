@@ -11,6 +11,12 @@ public enum MessageId_Send : ushort
     CGCreatePlayer = 1003,
     CGEnterInstance = 2000,
     CGGetMapLayerData = 2001,
+    CGExitInstance = 2003,
+    CGMapCardInteraction = 2004,
+    CGMapPlayerMove = 2005,
+    CGMapBuyItem = 2006,
+    CGMapChangeDeck = 2007,
     CGEnterBattle = 3000,
+    CGExitBattle = 3001,
     MAX = 65535,
 }

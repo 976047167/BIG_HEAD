@@ -22,7 +22,7 @@ public class MapCardBase
     public Transform parent { get; protected set; }
     private MapCardPos pos = new MapCardPos(0, 0);
     public MapCardPos Position { get { return pos; } set { pos = value; } }
-    private CardState state;
+    protected CardState state;
     /// <summary>
     /// gameObject的状态
     /// </summary>
@@ -35,6 +35,9 @@ public class MapCardBase
     public bool Used { get; protected set; }
     public virtual MapCardType CardType { get; protected set; }
     public int DataId { get; protected set; }
+    /// <summary>
+    /// 修改这个会引起ChangeState
+    /// </summary>
     public CardState State
     {
         get
@@ -117,7 +120,7 @@ public class MapCardBase
         ResourceManager.LoadGameObject("MapCard/" + cardType, LoadAssetSuccessess, LoadAssetFailed, mapCard);
         return mapCard;
     }
-    public static MapCardBase CreateMapCard(MapCardType mapCardType,int dataId,MapCardPos pos)
+    public static MapCardBase CreateMapCard(MapCardType mapCardType, int dataId, MapCardPos pos)
     {
         MapCardBase mapCard = null;
         ModelTableSetting model = null;
@@ -222,10 +225,11 @@ public class MapCardBase
         transform = gameObject.transform;
         gameObject.SetActive(Active);
         transform.SetParent(parent);
-        RefreshPos();
-        RefreshState();
+
         UIEventListener.Get(transform.Find("Card").gameObject).onClick = OnClick;
         OnInit();
+        RefreshPos();
+        RefreshState();
         EnterMap();
         return true;
     }
@@ -492,6 +496,10 @@ public class MapCardPos
 
     public override bool Equals(object obj)
     {
+        if (obj == null)
+        {
+            return false;
+        }
         if (obj is MapCardPos)
         {
             MapCardPos other = obj as MapCardPos;
@@ -502,21 +510,20 @@ public class MapCardPos
         }
         return false;
     }
-    public static bool operator ==(MapCardBase a, MapCardPos b)
+    public static bool operator ==(MapCardPos a, MapCardPos b)
     {
-        if (a.X == b.X && a.Y == b.Y)
+        if (object.ReferenceEquals(a, null))
         {
-            return true;
+            return object.ReferenceEquals(b, null);
         }
-        return false;
+
+        return a.Equals(b);
     }
-    public static bool operator !=(MapCardBase a, MapCardPos b)
+   
+    public static bool operator !=(MapCardPos a, MapCardPos b)
     {
-        if (a.X != b.X || a.Y != b.Y)
-        {
-            return true;
-        }
-        return false;
+
+        return !(a == b);
     }
     public override int GetHashCode()
     {

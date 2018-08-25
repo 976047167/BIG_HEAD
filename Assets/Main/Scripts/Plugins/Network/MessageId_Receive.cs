@@ -9,6 +9,13 @@ public enum MessageId_Receive : ushort
     GCGetUserData = 1002,
     GCEnterInstance = 2000,
     GCGetMapLayerData = 2001,
+    GCGetReward = 2002,
+    GCExitInstance = 2003,
+    GCMapCardInteraction = 2004,
+    GCMapPlayerMove = 2005,
+    GCMapBuyItem = 2006,
+    GCMapChangeDeck = 2007,
     GCEnterBattle = 3000,
+    GCExitBattle = 3001,
     MAX = 65535,
 }
