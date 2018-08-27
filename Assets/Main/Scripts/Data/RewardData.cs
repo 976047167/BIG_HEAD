@@ -10,7 +10,9 @@ public class RewardData
     protected int[] items = null;
     protected int gold;
     protected int diamond;
-    protected int exp;
+    protected int oldLevel;
+    protected int oldExp;
+    protected int addedExp;
     /// <summary>
     /// 奖励数据
     /// </summary>
@@ -19,11 +21,13 @@ public class RewardData
     /// <param name="exp">经验</param>
     /// <param name="food">食物</param>
     /// <param name="rewards">奖励物品</param>
-    public RewardData(int gold, int diamond, int exp, int food, params int[] items)
+    public RewardData(int gold, int diamond,int oldLevel,int oldexp, int addedExp, int food, params int[] items)
     {
         this.gold = gold;
         this.diamond = diamond;
-        this.exp = exp;
+        this.addedExp = addedExp;
+        this.oldLevel = oldLevel;
+        this.oldExp = oldexp;
         this.food = food;
         this.items = items;
     }
@@ -44,15 +48,23 @@ public class RewardData
         }
     }
 
-    public int Exp
+    public int AddedExp
     {
         get
         {
-            return exp;
+            return addedExp;
         }
 
     }
+    public int OldExp
+    {
+        get
+        {
+            return oldExp;
+        }
 
+    }
+    public int OldLevel { get { return oldLevel; } }
     public int Food
     {
         get
@@ -68,4 +80,5 @@ public class RewardData
             return items;
         }
     }
+
 }

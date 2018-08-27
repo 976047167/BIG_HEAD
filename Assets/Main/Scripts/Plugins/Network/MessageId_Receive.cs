@@ -9,7 +9,7 @@ public enum MessageId_Receive : ushort
     GCGetUserData = 1002,
     GCEnterInstance = 2000,
     GCGetMapLayerData = 2001,
-    GCGetReward = 2002,
+    GCMapGetReward = 2002,
     GCExitInstance = 2003,
     GCMapCardInteraction = 2004,
     GCMapPlayerMove = 2005,

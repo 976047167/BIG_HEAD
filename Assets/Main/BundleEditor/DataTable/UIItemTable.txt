@@ -1,0 +1,3 @@
+Id	Name	Path
+int	string	string
+1	UINormalCard	UI/Item/UINormalCard

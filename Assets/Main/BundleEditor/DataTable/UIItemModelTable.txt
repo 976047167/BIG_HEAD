@@ -1,3 +1,0 @@
-Id	Desc	Name	Path
-int	string	string	string
-1	卡片模板	UINormalCard	UI/Item/UINormalCard

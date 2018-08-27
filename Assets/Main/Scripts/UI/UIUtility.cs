@@ -1,6 +1,8 @@
-﻿using System.Collections;
+﻿using AppSettings;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 public class UIUtility
 {
@@ -9,14 +11,14 @@ public class UIUtility
     /// </summary>
     /// <param name="go"></param>需要添加脚本的go
     /// <param name="cardId"></param>
-    public static void SetCardTips(GameObject go, int cardId,int cardNum =1)
+    public static void SetCardTips(GameObject go, int cardId, int cardNum = 1)
     {
         ShowCard ShowCard = go.GetComponent<ShowCard>();
         if (ShowCard == null)
         {
             go.AddComponent<ShowCard>().SetShow(0, cardId, cardNum);
         }
-       else
+        else
         {
             ShowCard.SetShow(0, cardId, cardNum);
         }
@@ -62,5 +64,44 @@ public class UIUtility
     public static void ShowMessageBox(MessageBoxType messageBoxType, string content, WND_MessageBox.MessageBoxCallback messageBoxCallback)
     {
         UIModule.Instance.OpenForm<WND_MessageBox>(new object[] { messageBoxType, content, messageBoxCallback });
+    }
+
+    public static void GetNormalCard(Transform parent, int cardId, int count)
+    {
+        GetNormalCard(parent, cardId, count, Vector3.zero, Vector3.one, Vector3.zero, null);
+    }
+    public static void GetNormalCard(Transform parent, int cardId, int count, Action<UINormalCard> callback)
+    {
+        GetNormalCard(parent, cardId, count, Vector3.zero, Vector3.one, Vector3.zero, callback);
+    }
+    public static void GetNormalCard(Transform parent, int cardId, int count, Vector3 eulerAngles, Vector3 scale, Vector3 pos, Action<UINormalCard> callback)
+    {
+        ItemTableSetting cardData = ItemTableSettings.Get(cardId);
+        if (cardData == null)
+        {
+            Debug.LogError("非法ID:" + cardId);
+            return;
+        }
+        UIItemTableSetting uiItem = UIItemTableSettings.Get(1);
+        ResourceManager.LoadGameObject(uiItem.Path,
+            (p, u, go) =>
+            {
+                go.transform.parent = parent;
+                go.transform.localEulerAngles = eulerAngles;
+                go.transform.localScale = scale;
+                go.transform.position = pos;
+                go.SetActive(true);
+                UINormalCard normalCard = go.GetComponent<UINormalCard>();
+                normalCard.SetCard(cardId, count);
+                if (callback != null)
+                {
+                    callback(normalCard);
+                }
+
+            },
+            (p, u) =>
+            {
+                Debug.LogError("加载失败!");
+            });
     }
 }

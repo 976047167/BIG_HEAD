@@ -5,12 +5,13 @@ using AppSettings;
 
 public class UINormalCard : MonoBehaviour
 {
-    public int CardId {get;private set;}
+    public int CardId { get; private set; }
     public BattleCardTableSetting CardData { get; private set; }
     private int cardNum;
     private UITexture leftIcon;
     private UITexture rightIcon;
     private UILabel labCardNum;
+    private UISprite spFrameNum;
     private UILabel labSpending;
     private UILabel labAttack;
     private UISprite spAttack;
@@ -19,8 +20,9 @@ public class UINormalCard : MonoBehaviour
     private UISprite spEquip;
     private void Awake()
     {
-        leftIcon = transform.Find("spLeft/spFrameIcon/Icon").GetComponent<UITexture>();
-        rightIcon = transform.Find("spRight/spFrameIcon/Icon").GetComponent<UITexture>();
+        leftIcon = transform.Find("spLeft/Icon").GetComponent<UITexture>();
+        rightIcon = transform.Find("spRight/Icon").GetComponent<UITexture>();
+        spFrameNum = transform.Find("spFrameNum").GetComponent<UISprite>();
         labCardNum = transform.Find("spFrameNum/labNum").GetComponent<UILabel>();
         labSpending = transform.Find("spFrameSpending/labSpending").GetComponent<UILabel>();
         spAttack = transform.Find("spAttack").GetComponent<UISprite>();
@@ -30,20 +32,16 @@ public class UINormalCard : MonoBehaviour
         labAttack = spAttack.transform.Find("labAttack").GetComponent<UILabel>();
     }
 
-    public void SetData(object cardId)
-    {
-        SetCard((int) cardId);
-    }
-    public void SetCard(int cardId)
+    public void SetCard(int cardId, int count = 1)
     {
 
         CardId = cardId;
-        CardNum =1 ;
+        CardNum = count;
         CardData = BattleCardTableSettings.Get(CardId);
         leftIcon.Load(CardData.IconLeftID);
         rightIcon.Load(CardData.IconRightID);
-       
-        labSpending.text =CardData.Spending.ToString();
+
+        labSpending.text = CardData.Spending.ToString();
         ShowCardType(CardData.Type);
 
         if (CardData.Type == 0 && CardData.ActionTypes[0] == 1)
@@ -51,7 +49,7 @@ public class UINormalCard : MonoBehaviour
             labAttack.text = CardData.ActionParams[0].ToString();
         }
 
-        UIUtility.SetCardTips(gameObject,CardId, CardNum);
+        UIUtility.SetCardTips(gameObject, CardId, CardNum);
 
 
     }
@@ -67,19 +65,23 @@ public class UINormalCard : MonoBehaviour
 
     public int CardNum
     {
-        set{
-            if (value < 0 ){
-                Debug.LogError("Wrong Card Num!");            
+        set
+        {
+            if (value < 0)
+            {
+                Debug.LogError("Wrong Card Num!");
                 return;
             }
 
 
             cardNum = value;
+            spFrameNum.gameObject.SetActive(cardNum <= 1);
             labCardNum.text = "" + cardNum;
             UIUtility.SetCardTips(gameObject, CardId, cardNum);
         }
-        get{
-          return   cardNum ;
+        get
+        {
+            return cardNum;
         }
     }
 
