@@ -11,15 +11,20 @@ public class UIPromptHover : UIFormBase {
     {
         base.OnInit(userdata);
         //PromptBox = Resources.Load("Prefabs/PromptBox/PromptBox") as GameObject;
-        ResourceManager.LoadGameObject("UIForm/UIPromptBox",(str,obj,go)=>{ PromptBox = go;
+
+    }
+    protected override void OnOpen()
+    {
+        base.OnOpen();
+        ResourceManager.LoadGameObject("UIForm/UIPromptBox", (str, obj, go) => {
+            PromptBox = go;
             PromptBox.transform.SetParent(transform);
             PromptBox.transform.localPosition = new Vector3(0, 100, 0);
             PromptBox.transform.localScale = new Vector3(1, 1, 1);
             //PromptBox.GetComponent<UIPromptBox>().SetData(PromptId);
 
-        },(str,obj)=> { });
+        }, (str, obj) => { });
     }
-
 
     static public void AddPrompt(GameObject obj, int promptid)
     {
