@@ -63,6 +63,10 @@ public enum MessageId : uint
     /// 获取到一层的数据
     /// </summary>
     GAME_GET_MAP_LAYER_DATA,
+    /// <summary>
+    /// 在地图中获得奖励
+    /// </summary>
+    GAME_GET_MAP_REWARD,
 
     /////<summary> 断线</summary>
     //MSG_LOST_CONNECT_TO_SERVER = 100000,

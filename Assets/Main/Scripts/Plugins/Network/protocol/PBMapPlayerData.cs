@@ -23,17 +23,18 @@ namespace BigHead.protocol {
       byte[] descriptorData = global::System.Convert.FromBase64String(
           string.Concat(
             "ChVQQk1hcFBsYXllckRhdGEucHJvdG8aElBCUGxheWVyRGF0YS5wcm90bxoM",
-            "UEJEZWNrLnByb3RvItQBCg9QQk1hcFBsYXllckRhdGESIgoLcGxheWVyX2Rh",
+            "UEJEZWNrLnByb3RvIuMBCg9QQk1hcFBsYXllckRhdGESIgoLcGxheWVyX2Rh",
             "dGEYASABKAsyDS5QQlBsYXllckRhdGESFAoMcGxheWVyX3Bvc194GAIgASgF",
             "EhQKDHBsYXllcl9wb3NfeRgDIAEoBRIXCg9wbGF5ZXJfbW9kZWxfaWQYBCAB",
             "KAUSEwoLaW5zdGFuY2VfaWQYBSABKAUSFQoEZGVjaxgGIAEoCzIHLlBCRGVj",
-            "axIOCgZlcXVpcHMYByADKAUSDQoFYnVmZnMYCCADKAUSDQoFaXRlbXMYCSAD",
-            "KAVCSwodY29tLndoYWxlaXNsYW5kLmdhbWUucHJvdG9jb2xCF1BCTWFwUGxh",
-            "eWVyRGF0YVByb3RvY29sqgIQQmlnSGVhZC5wcm90b2NvbGIGcHJvdG8z"));
+            "axINCgVjYXJkcxgHIAMoBRIOCgZlcXVpcHMYCCADKAUSDQoFYnVmZnMYCSAD",
+            "KAUSDQoFaXRlbXMYCiADKAVCSwodY29tLndoYWxlaXNsYW5kLmdhbWUucHJv",
+            "dG9jb2xCF1BCTWFwUGxheWVyRGF0YVByb3RvY29sqgIQQmlnSGVhZC5wcm90",
+            "b2NvbGIGcHJvdG8z"));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { global::BigHead.protocol.PBPlayerDataReflection.Descriptor, global::BigHead.protocol.PBDeckReflection.Descriptor, },
           new pbr::GeneratedClrTypeInfo(null, new pbr::GeneratedClrTypeInfo[] {
-            new pbr::GeneratedClrTypeInfo(typeof(global::BigHead.protocol.PBMapPlayerData), global::BigHead.protocol.PBMapPlayerData.Parser, new[]{ "PlayerData", "PlayerPosX", "PlayerPosY", "PlayerModelId", "InstanceId", "Deck", "Equips", "Buffs", "Items" }, null, null, null)
+            new pbr::GeneratedClrTypeInfo(typeof(global::BigHead.protocol.PBMapPlayerData), global::BigHead.protocol.PBMapPlayerData.Parser, new[]{ "PlayerData", "PlayerPosX", "PlayerPosY", "PlayerModelId", "InstanceId", "Deck", "Cards", "Equips", "Buffs", "Items" }, null, null, null)
           }));
     }
     #endregion
@@ -73,6 +74,7 @@ namespace BigHead.protocol {
       playerModelId_ = other.playerModelId_;
       instanceId_ = other.instanceId_;
       Deck = other.deck_ != null ? other.Deck.Clone() : null;
+      cards_ = other.cards_.Clone();
       equips_ = other.equips_.Clone();
       buffs_ = other.buffs_.Clone();
       items_ = other.items_.Clone();
@@ -149,10 +151,23 @@ namespace BigHead.protocol {
       }
     }
 
-    /// <summary>Field number for the "equips" field.</summary>
-    public const int EquipsFieldNumber = 7;
-    private static readonly pb::FieldCodec<int> _repeated_equips_codec
+    /// <summary>Field number for the "cards" field.</summary>
+    public const int CardsFieldNumber = 7;
+    private static readonly pb::FieldCodec<int> _repeated_cards_codec
         = pb::FieldCodec.ForInt32(58);
+    private readonly pbc::RepeatedField<int> cards_ = new pbc::RepeatedField<int>();
+    /// <summary>
+    ///所有的卡牌
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public pbc::RepeatedField<int> Cards {
+      get { return cards_; }
+    }
+
+    /// <summary>Field number for the "equips" field.</summary>
+    public const int EquipsFieldNumber = 8;
+    private static readonly pb::FieldCodec<int> _repeated_equips_codec
+        = pb::FieldCodec.ForInt32(66);
     private readonly pbc::RepeatedField<int> equips_ = new pbc::RepeatedField<int>();
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public pbc::RepeatedField<int> Equips {
@@ -160,9 +175,9 @@ namespace BigHead.protocol {
     }
 
     /// <summary>Field number for the "buffs" field.</summary>
-    public const int BuffsFieldNumber = 8;
+    public const int BuffsFieldNumber = 9;
     private static readonly pb::FieldCodec<int> _repeated_buffs_codec
-        = pb::FieldCodec.ForInt32(66);
+        = pb::FieldCodec.ForInt32(74);
     private readonly pbc::RepeatedField<int> buffs_ = new pbc::RepeatedField<int>();
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public pbc::RepeatedField<int> Buffs {
@@ -170,9 +185,9 @@ namespace BigHead.protocol {
     }
 
     /// <summary>Field number for the "items" field.</summary>
-    public const int ItemsFieldNumber = 9;
+    public const int ItemsFieldNumber = 10;
     private static readonly pb::FieldCodec<int> _repeated_items_codec
-        = pb::FieldCodec.ForInt32(74);
+        = pb::FieldCodec.ForInt32(82);
     private readonly pbc::RepeatedField<int> items_ = new pbc::RepeatedField<int>();
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public pbc::RepeatedField<int> Items {
@@ -198,6 +213,7 @@ namespace BigHead.protocol {
       if (PlayerModelId != other.PlayerModelId) return false;
       if (InstanceId != other.InstanceId) return false;
       if (!object.Equals(Deck, other.Deck)) return false;
+      if(!cards_.Equals(other.cards_)) return false;
       if(!equips_.Equals(other.equips_)) return false;
       if(!buffs_.Equals(other.buffs_)) return false;
       if(!items_.Equals(other.items_)) return false;
@@ -213,6 +229,7 @@ namespace BigHead.protocol {
       if (PlayerModelId != 0) hash ^= PlayerModelId.GetHashCode();
       if (InstanceId != 0) hash ^= InstanceId.GetHashCode();
       if (deck_ != null) hash ^= Deck.GetHashCode();
+      hash ^= cards_.GetHashCode();
       hash ^= equips_.GetHashCode();
       hash ^= buffs_.GetHashCode();
       hash ^= items_.GetHashCode();
@@ -250,6 +267,7 @@ namespace BigHead.protocol {
         output.WriteRawTag(50);
         output.WriteMessage(Deck);
       }
+      cards_.WriteTo(output, _repeated_cards_codec);
       equips_.WriteTo(output, _repeated_equips_codec);
       buffs_.WriteTo(output, _repeated_buffs_codec);
       items_.WriteTo(output, _repeated_items_codec);
@@ -276,6 +294,7 @@ namespace BigHead.protocol {
       if (deck_ != null) {
         size += 1 + pb::CodedOutputStream.ComputeMessageSize(Deck);
       }
+      size += cards_.CalculateSize(_repeated_cards_codec);
       size += equips_.CalculateSize(_repeated_equips_codec);
       size += buffs_.CalculateSize(_repeated_buffs_codec);
       size += items_.CalculateSize(_repeated_items_codec);
@@ -311,6 +330,7 @@ namespace BigHead.protocol {
         }
         Deck.MergeFrom(other.Deck);
       }
+      cards_.Add(other.cards_);
       equips_.Add(other.equips_);
       buffs_.Add(other.buffs_);
       items_.Add(other.items_);
@@ -356,16 +376,21 @@ namespace BigHead.protocol {
           }
           case 58:
           case 56: {
-            equips_.AddEntriesFrom(input, _repeated_equips_codec);
+            cards_.AddEntriesFrom(input, _repeated_cards_codec);
             break;
           }
           case 66:
           case 64: {
-            buffs_.AddEntriesFrom(input, _repeated_buffs_codec);
+            equips_.AddEntriesFrom(input, _repeated_equips_codec);
             break;
           }
           case 74:
           case 72: {
+            buffs_.AddEntriesFrom(input, _repeated_buffs_codec);
+            break;
+          }
+          case 82:
+          case 80: {
             items_.AddEntriesFrom(input, _repeated_items_codec);
             break;
           }

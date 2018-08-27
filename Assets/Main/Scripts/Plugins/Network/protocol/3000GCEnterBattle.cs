@@ -22,14 +22,16 @@ namespace BigHead.protocol {
     static GCEnterBattleReflection() {
       byte[] descriptorData = global::System.Convert.FromBase64String(
           string.Concat(
-            "ChgzMDAwX0dDRW50ZXJCYXR0bGUucHJvdG8iIgoNR0NFbnRlckJhdHRsZRIR",
-            "Cgltb25zdGVySWQYASABKAVCSQodY29tLndoYWxlaXNsYW5kLmdhbWUucHJv",
-            "dG9jb2xCFUdDRW50ZXJCYXR0bGVQcm90b2NvbKoCEEJpZ0hlYWQucHJvdG9j",
-            "b2xiBnByb3RvMw=="));
+            "ChgzMDAwX0dDRW50ZXJCYXR0bGUucHJvdG8aGFBCQmF0dGxlUGxheWVyRGF0",
+            "YS5wcm90byJwCg1HQ0VudGVyQmF0dGxlEhEKCW1vbnN0ZXJJZBgBIAEoBRIm",
+            "CglteV9wbGF5ZXIYAiABKAsyEy5QQkJhdHRsZVBsYXllckRhdGESJAoHbW9u",
+            "c3RlchgDIAEoCzITLlBCQmF0dGxlUGxheWVyRGF0YUJJCh1jb20ud2hhbGVp",
+            "c2xhbmQuZ2FtZS5wcm90b2NvbEIVR0NFbnRlckJhdHRsZVByb3RvY29sqgIQ",
+            "QmlnSGVhZC5wcm90b2NvbGIGcHJvdG8z"));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
-          new pbr::FileDescriptor[] { },
+          new pbr::FileDescriptor[] { global::BigHead.protocol.PBBattlePlayerDataReflection.Descriptor, },
           new pbr::GeneratedClrTypeInfo(null, new pbr::GeneratedClrTypeInfo[] {
-            new pbr::GeneratedClrTypeInfo(typeof(global::BigHead.protocol.GCEnterBattle), global::BigHead.protocol.GCEnterBattle.Parser, new[]{ "MonsterId" }, null, null, null)
+            new pbr::GeneratedClrTypeInfo(typeof(global::BigHead.protocol.GCEnterBattle), global::BigHead.protocol.GCEnterBattle.Parser, new[]{ "MonsterId", "MyPlayer", "Monster" }, null, null, null)
           }));
     }
     #endregion
@@ -37,7 +39,7 @@ namespace BigHead.protocol {
   }
   #region Messages
   /// <summary>
-  /// 进入战斗响应
+  /// 杩涘叆鎴樻枟鍝嶅簲
   /// </summary>
   public sealed partial class GCEnterBattle : pb::IMessage<GCEnterBattle> {
     private static readonly pb::MessageParser<GCEnterBattle> _parser = new pb::MessageParser<GCEnterBattle>(() => new GCEnterBattle());
@@ -64,6 +66,8 @@ namespace BigHead.protocol {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public GCEnterBattle(GCEnterBattle other) : this() {
       monsterId_ = other.monsterId_;
+      MyPlayer = other.myPlayer_ != null ? other.MyPlayer.Clone() : null;
+      Monster = other.monster_ != null ? other.Monster.Clone() : null;
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -82,6 +86,28 @@ namespace BigHead.protocol {
       }
     }
 
+    /// <summary>Field number for the "my_player" field.</summary>
+    public const int MyPlayerFieldNumber = 2;
+    private global::BigHead.protocol.PBBattlePlayerData myPlayer_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public global::BigHead.protocol.PBBattlePlayerData MyPlayer {
+      get { return myPlayer_; }
+      set {
+        myPlayer_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "monster" field.</summary>
+    public const int MonsterFieldNumber = 3;
+    private global::BigHead.protocol.PBBattlePlayerData monster_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public global::BigHead.protocol.PBBattlePlayerData Monster {
+      get { return monster_; }
+      set {
+        monster_ = value;
+      }
+    }
+
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override bool Equals(object other) {
       return Equals(other as GCEnterBattle);
@@ -96,6 +122,8 @@ namespace BigHead.protocol {
         return true;
       }
       if (MonsterId != other.MonsterId) return false;
+      if (!object.Equals(MyPlayer, other.MyPlayer)) return false;
+      if (!object.Equals(Monster, other.Monster)) return false;
       return true;
     }
 
@@ -103,6 +131,8 @@ namespace BigHead.protocol {
     public override int GetHashCode() {
       int hash = 1;
       if (MonsterId != 0) hash ^= MonsterId.GetHashCode();
+      if (myPlayer_ != null) hash ^= MyPlayer.GetHashCode();
+      if (monster_ != null) hash ^= Monster.GetHashCode();
       return hash;
     }
 
@@ -117,6 +147,14 @@ namespace BigHead.protocol {
         output.WriteRawTag(8);
         output.WriteInt32(MonsterId);
       }
+      if (myPlayer_ != null) {
+        output.WriteRawTag(18);
+        output.WriteMessage(MyPlayer);
+      }
+      if (monster_ != null) {
+        output.WriteRawTag(26);
+        output.WriteMessage(Monster);
+      }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -124,6 +162,12 @@ namespace BigHead.protocol {
       int size = 0;
       if (MonsterId != 0) {
         size += 1 + pb::CodedOutputStream.ComputeInt32Size(MonsterId);
+      }
+      if (myPlayer_ != null) {
+        size += 1 + pb::CodedOutputStream.ComputeMessageSize(MyPlayer);
+      }
+      if (monster_ != null) {
+        size += 1 + pb::CodedOutputStream.ComputeMessageSize(Monster);
       }
       return size;
     }
@@ -135,6 +179,18 @@ namespace BigHead.protocol {
       }
       if (other.MonsterId != 0) {
         MonsterId = other.MonsterId;
+      }
+      if (other.myPlayer_ != null) {
+        if (myPlayer_ == null) {
+          myPlayer_ = new global::BigHead.protocol.PBBattlePlayerData();
+        }
+        MyPlayer.MergeFrom(other.MyPlayer);
+      }
+      if (other.monster_ != null) {
+        if (monster_ == null) {
+          monster_ = new global::BigHead.protocol.PBBattlePlayerData();
+        }
+        Monster.MergeFrom(other.Monster);
       }
     }
 
@@ -148,6 +204,20 @@ namespace BigHead.protocol {
             break;
           case 8: {
             MonsterId = input.ReadInt32();
+            break;
+          }
+          case 18: {
+            if (myPlayer_ == null) {
+              myPlayer_ = new global::BigHead.protocol.PBBattlePlayerData();
+            }
+            input.ReadMessage(myPlayer_);
+            break;
+          }
+          case 26: {
+            if (monster_ == null) {
+              monster_ = new global::BigHead.protocol.PBBattlePlayerData();
+            }
+            input.ReadMessage(monster_);
             break;
           }
         }

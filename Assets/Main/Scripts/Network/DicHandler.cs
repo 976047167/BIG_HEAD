@@ -13,7 +13,16 @@ namespace BigHead.Net
             Dic.Add((ushort)MessageId_Receive.GCGetUserData, new GCGetUserDataHandler());
             Dic.Add((ushort)MessageId_Receive.GCEnterInstance, new GCEnterInstanceHandler());
             Dic.Add((ushort)MessageId_Receive.GCGetMapLayerData, new GCGetMapLayerDataHandler());
+            Dic.Add((ushort)MessageId_Receive.GCMapGetReward, new GCMapGetRewardHandler());
+            Dic.Add((ushort)MessageId_Receive.GCExitInstance, new GCExitInstanceHandler());
+            Dic.Add((ushort)MessageId_Receive.GCMapCardInteraction, new GCMapCardInteractionHandler());
+            Dic.Add((ushort)MessageId_Receive.GCMapPlayerMove, new GCMapPlayerMoveHandler());
+            Dic.Add((ushort)MessageId_Receive.GCMapBuyItem, new GCMapBuyItemHandler());
+            Dic.Add((ushort)MessageId_Receive.GCMapChangeDeck, new GCMapChangeDeckHandler());
+            Dic.Add((ushort)MessageId_Receive.GCMapUseItem, new GCMapUseItemHandler());
+            Dic.Add((ushort)MessageId_Receive.GCUpdateMapPlayerData, new GCUpdateMapPlayerDataHandler());
             Dic.Add((ushort)MessageId_Receive.GCEnterBattle, new GCEnterBattleHandler());
+            Dic.Add((ushort)MessageId_Receive.GCExitBattle, new GCExitBattleHandler());
         }
     }
 }

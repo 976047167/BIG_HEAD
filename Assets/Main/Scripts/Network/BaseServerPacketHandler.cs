@@ -24,7 +24,16 @@ namespace BigHead.Net
         protected void SaveData(string key, IMessage data)
         {
             //Debug.LogError(key + SPLITE + data.GetType().ToString() + ".data");
+            
             string file = Path.Combine(Application.persistentDataPath, key + SPLITE + data.GetType().ToString() + SUFFIX);
+            if (data == null)
+            {
+                if (File.Exists(file))
+                {
+                    File.Delete(file);
+                }
+                return;
+            }
             FileStream fs = File.Create(file);
             Debug.Log(file);
             //StreamWriter sw = new StreamWriter(fs, System.Text.Encoding.UTF8);

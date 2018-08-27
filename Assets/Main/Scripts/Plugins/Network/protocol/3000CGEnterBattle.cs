@@ -37,7 +37,7 @@ namespace BigHead.protocol {
   }
   #region Messages
   /// <summary>
-  /// 进入战斗请求
+  /// 杩涘叆鎴樻枟璇锋眰
   /// </summary>
   public sealed partial class CGEnterBattle : pb::IMessage<CGEnterBattle> {
     private static readonly pb::MessageParser<CGEnterBattle> _parser = new pb::MessageParser<CGEnterBattle>(() => new CGEnterBattle());

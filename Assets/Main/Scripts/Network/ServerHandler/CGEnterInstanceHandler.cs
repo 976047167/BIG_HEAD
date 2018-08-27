@@ -48,6 +48,7 @@ public class CGEnterInstanceHandler : BaseServerPacketHandler
         response.MapPlayerData.Items.AddRange(playerDetailData.Items);
         response.MapPlayerData.Equips.AddRange(playerDetailData.Equips);
         response.MapPlayerData.Buffs.AddRange(playerDetailData.Buffs);
+        SaveData(MAP_PLAYER_DATA_KEY, response.MapPlayerData);
         SendToClient(MessageId_Receive.GCEnterInstance, response);
     }
 }
