@@ -16,7 +16,7 @@ public class ShowCard : MonoBehaviour {
     }
     private void Show(GameObject obj)
     {
-        int[] args = new int[2];
+        int[] args = new int[3];
         args[0] = Type;
         args[1] = Id;
         args[2] = Num;

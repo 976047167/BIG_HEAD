@@ -8,6 +8,7 @@ public class UINormalCard : MonoBehaviour
     public int CardId { get; private set; }
     public BattleCardTableSetting CardData { get; private set; }
     private int cardNum;
+    private UILabel lblName;
     private UITexture leftIcon;
     private UITexture rightIcon;
     private UILabel labCardNum;
@@ -20,6 +21,7 @@ public class UINormalCard : MonoBehaviour
     private UISprite spEquip;
     private void Awake()
     {
+        lblName = transform.Find("labName").GetComponent<UILabel>();
         leftIcon = transform.Find("spLeft/Icon").GetComponent<UITexture>();
         rightIcon = transform.Find("spRight/Icon").GetComponent<UITexture>();
         spFrameNum = transform.Find("spFrameNum").GetComponent<UISprite>();
@@ -32,7 +34,7 @@ public class UINormalCard : MonoBehaviour
         labAttack = spAttack.transform.Find("labAttack").GetComponent<UILabel>();
     }
 
-    public void SetCard(int cardId, int count = 1)
+    public void SetCard(int cardId, int count = 1, bool showTips = false)
     {
 
         CardId = cardId;
@@ -40,7 +42,7 @@ public class UINormalCard : MonoBehaviour
         CardData = BattleCardTableSettings.Get(CardId);
         leftIcon.Load(CardData.IconLeftID);
         rightIcon.Load(CardData.IconRightID);
-
+        lblName.text = I18N.Get(CardData.Name);
         labSpending.text = CardData.Spending.ToString();
         ShowCardType(CardData.Type);
 
@@ -48,9 +50,10 @@ public class UINormalCard : MonoBehaviour
         {
             labAttack.text = CardData.ActionParams[0].ToString();
         }
-
-        UIUtility.SetCardTips(gameObject, CardId, CardNum);
-
+        if (showTips)
+        {
+            UIUtility.SetCardTips(gameObject, CardId, CardNum);
+        }
 
     }
     private void ShowCardType(int cardType)

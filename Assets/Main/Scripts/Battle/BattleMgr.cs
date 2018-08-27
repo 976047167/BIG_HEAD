@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Reflection;
 using System;
+using BigHead.protocol;
 
 public class BattleMgr
 {
@@ -48,12 +49,28 @@ public class BattleMgr
         OppPlayer.Data.HP = 1;
         Game.UI.OpenForm<UIBattleForm>();
     }
-    public void SaveData()
+    /// <summary>
+    ///0Win 1Failure 2Me Escape 3Monster Escape
+    /// </summary>
+    public void SaveData(int reason)
     {
         //退出战斗
         if (MapMgr.Inited)
         {
-            MyPlayer.Save(State == BattleState.BattleEnd_Win ? MonsterId : 0);
+            CGExitBattle exitBattle = new CGExitBattle();
+            exitBattle.MonsterId = MonsterId;
+            exitBattle.Reason = reason;
+            exitBattle.PlayerData = new PBPlayerData();
+            exitBattle.PlayerData.Hp = MyPlayer.Data.HP;
+            exitBattle.PlayerData.MaxHp = MyPlayer.Data.MaxHP;
+            exitBattle.PlayerData.Mp = MyPlayer.Data.MP;
+            exitBattle.PlayerData.MaxMp = MyPlayer.Data.MaxMP;
+            for (int i = 0; i < MyPlayer.Data.ItemList.Count; i++)
+            {
+                exitBattle.Items.Add(MyPlayer.Data.ItemList[i].ItemId);
+            }
+
+            Game.NetworkManager.SendToLobby(MessageId_Send.CGExitBattle, exitBattle);
         }
     }
     public void Clear()
@@ -170,20 +187,20 @@ public class BattleMgr
             case BattleState.BattleEnd_MyEscape:
                 uiActions.Enqueue(new UIAction.UIMeEscapeBattle());
                 MyPlayer.Data.HP = 1;
-                SaveData();
+                SaveData(2);
                 break;
             case BattleState.BattleEnd_OppEscape:
                 uiActions.Enqueue(new UIAction.UIOppEscapeBattle());
-                SaveData();
+                SaveData(3);
                 break;
             case BattleState.BattleEnd_Win:
 
-                SaveData();
+                SaveData(0);
                 break;
             case BattleState.BattleEnd_Lose:
                 //battleForm.LoseBattle();
                 uiActions.Enqueue(new UIAction.UILoseBattle());
-                SaveData();
+                SaveData(1);
 
                 break;
             default:

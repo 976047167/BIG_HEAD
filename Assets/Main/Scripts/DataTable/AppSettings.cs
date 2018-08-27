@@ -1408,6 +1408,11 @@ namespace AppSettings
         /// </summary>
         public int RewardId { get; private set;}
         
+        /// <summary>
+        /// 失败奖励
+        /// </summary>
+        public int LoseReward { get; private set;}
+        
 
         internal BattleMonsterTableSetting(TableFileRow row)
         {
@@ -1436,6 +1441,7 @@ namespace AppSettings
             EquipIds = row.Get_List_int(row.Values[17], ""); 
             DialogId = row.Get_int(row.Values[18], ""); 
             RewardId = row.Get_int(row.Values[19], ""); 
+            LoseReward = row.Get_int(row.Values[20], ""); 
         }
 
         /// <summary>

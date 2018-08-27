@@ -60,7 +60,11 @@ public class MapMgr
         }
         if (Input.GetKeyDown(KeyCode.A))
         {
-            NextMapLayer();
+            //NextMapLayer();
+            CGExitBattle getReward = new CGExitBattle();
+            getReward.MonsterId = 1;
+            getReward.Reason = 0;
+            Game.NetworkManager.SendToLobby(MessageId_Send.CGExitBattle, getReward);
         }
         if (UICamera.isOverUI == false && Input.GetKeyDown(KeyCode.Mouse0))
         {

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using AppSettings;
+using DG.Tweening;
 
 public class WND_Reward : UIFormBase
 {
@@ -28,46 +29,48 @@ public class WND_Reward : UIFormBase
     protected override void OnInit(object userdata)
     {
         base.OnInit(userdata);
-        labRewardText = transform.Find("bg/frame/labReward").GetComponent<UILabel>();
-        btnCommond = transform.Find("bg/frame/btnCommond").gameObject;
-        frame = transform.Find("bg/frame").gameObject;
-        gridItems = transform.Find("bg/frame/scrollView/Grid").GetComponent<UIGrid>();
+        labRewardText = transform.Find("frame/labReward").GetComponent<UILabel>();
+        btnCommond = transform.Find("frame/btnCommond").gameObject;
+        frame = transform.Find("frame").gameObject;
+        gridItems = transform.Find("frame/scrollView/Grid").GetComponent<UIGrid>();
 
-        goExp = transform.Find("bg/frame/exp").gameObject;
-        lblLevel = transform.Find("bg/frame/exp/level").GetComponent<UILabel>();
-        lblExp = transform.Find("bg/frame/exp/exp").GetComponent<UILabel>();
-        sliderExp=transform.Find("bg/frame/exp").GetComponent<UISlider>();
-        goGold = transform.Find("bg/frame/grid/gold").gameObject;
-        goDiamond = transform.Find("bg/frame/grid/diamond").gameObject;
-        goFood = transform.Find("bg/frame/grid/food").gameObject;
-        lblGold = transform.Find("bg/frame/grid/gold/Label").GetComponent<UILabel>();
-        lblDiamond = transform.Find("bg/frame/grid/diamond/Label").GetComponent<UILabel>();
-        lblFood = transform.Find("bg/frame/grid/food/Label").GetComponent<UILabel>();
-        gridGold = transform.Find("bg/frame/grid").GetComponent<UIGrid>();
+        goExp = transform.Find("frame/exp").gameObject;
+        lblLevel = transform.Find("frame/exp/level").GetComponent<UILabel>();
+        lblExp = transform.Find("frame/exp/exp").GetComponent<UILabel>();
+        sliderExp = transform.Find("frame/exp").GetComponent<UISlider>();
+        goGold = transform.Find("frame/grid/gold").gameObject;
+        goDiamond = transform.Find("frame/grid/diamond").gameObject;
+        goFood = transform.Find("frame/grid/food").gameObject;
+        lblGold = transform.Find("frame/grid/gold/Label").GetComponent<UILabel>();
+        lblDiamond = transform.Find("frame/grid/diamond/Label").GetComponent<UILabel>();
+        lblFood = transform.Find("frame/grid/food/Label").GetComponent<UILabel>();
+        gridGold = transform.Find("frame/grid").GetComponent<UIGrid>();
 
         UIEventListener.Get(btnCommond).onClick = exitClick;
 
         rewardData = (RewardData)userdata;
-
+        PlayShowAnime();
     }
 
     protected override void OnOpen()
     {
         base.OnOpen();
+        //PlayShowAnime();
         if (rewardData == null)
         {
             Debug.LogError("没有奖励!");
             return;
         }
         LoadRewardList();
-        PlayShowAnime();
+
 
     }
 
     private void PlayShowAnime()
     {
-        frame.transform.localScale = new Vector3(0.3f, 0.3f, 0.3f);
-        TweenScale.Begin(frame, 0.1f, Vector3.one);
+        //frame.transform.localScale = new Vector3(0.3f, 0.3f, 0.3f);
+        //TweenScale.Begin(frame, 0.1f, Vector3.one);
+        DOTween.To(() => Vector3.zero, (v3) => frame.transform.localScale = v3, Vector3.one, 0.1f);
     }
 
 
@@ -76,7 +79,7 @@ public class WND_Reward : UIFormBase
         if (rewardData.AddedExp > 0)
         {
             goExp.SetActive(true);
-            
+
             int maxExp = 0;
             int level = rewardData.OldLevel;
             int exp = rewardData.OldExp + rewardData.AddedExp;
@@ -100,7 +103,7 @@ public class WND_Reward : UIFormBase
             }
             lblLevel.text = level.ToString();
             lblExp.text = exp + " / " + maxExp;
-            sliderExp.value = (float)exp / (float)maxExp;
+            sliderExp.value = Mathf.Max(0.001f, (float)exp / (float)maxExp);
         }
         else
         {

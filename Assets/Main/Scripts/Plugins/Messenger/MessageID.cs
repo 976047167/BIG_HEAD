@@ -34,9 +34,13 @@ public enum MessageId : uint
     /// 地图界面更新角色经验
     /// </summary>
     MAP_UPDATE_PLAYER_EXP,
+    /// <summary>
+    /// 在地图中获得奖励
+    /// </summary>
+    MAP_GET_REWARD,
 
     /// <summary>
-    /// 地图界面更新角色信息
+    /// 更新角色信息
     /// </summary>
     GAME_UPDATE_PLAYER_INFO,
     /// <summary>
@@ -63,10 +67,7 @@ public enum MessageId : uint
     /// 获取到一层的数据
     /// </summary>
     GAME_GET_MAP_LAYER_DATA,
-    /// <summary>
-    /// 在地图中获得奖励
-    /// </summary>
-    GAME_GET_MAP_REWARD,
+    
 
     /////<summary> 断线</summary>
     //MSG_LOST_CONNECT_TO_SERVER = 100000,

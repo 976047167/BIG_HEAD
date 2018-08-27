@@ -21,9 +21,18 @@ public class GCMapGetRewardHandler : BasePacketHandler
         base.Handle(sender, packet);
         GCMapGetReward data = packet as GCMapGetReward;
         //处理完数据和逻辑后,发送消息通知其他模块,绝对不可以直接操作UI等Unity主线程的东西!
+        List<int> items = new List<int>();
+        items.AddRange(data.Cards);
+        items.AddRange(data.Equips);
+        RewardData rewardData = new RewardData(data.Gold, data.Diamonds, data.OldLevel, data.OldExp, data.AddedExp, data.Food, items.ToArray());
+
         if (MapMgr.Inited)
         {
-
+            if (Game.BattleManager.State == BattleMgr.BattleState.None)
+            {
+                Game.UI.OpenForm<WND_Reward>(rewardData);
+            }
         }
+        Messenger.Broadcast(MessageId.MAP_GET_REWARD, rewardData);
     }
 }

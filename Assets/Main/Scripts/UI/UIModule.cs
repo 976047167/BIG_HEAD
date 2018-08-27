@@ -81,13 +81,18 @@ public partial class UIModule
             Debug.LogError("The UI[" + formId.ToString() + "] is not configed!");
             return;
         }
+        //暂时关闭窗口复用
         UIFormBase form = GetForm(formId);
-        if (form == null)
+        if (form!=null)
+        {
+            CloseForm(form);
+        }
+        //if (form == null)
         {
             ResourceManager.LoadGameObject("UI/" + config.Path, LoadFormSuccess, LoadFormFailed, config, userdata);
             return;
         }
-        ProcessForm(form, config, userdata, true);
+        //ProcessForm(form, config, userdata, true);
 
     }
     void LoadFormSuccess(string path, object[] userData, GameObject uiForm)

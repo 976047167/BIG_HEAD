@@ -21,6 +21,11 @@ public class GCUpdateMapPlayerDataHandler : BasePacketHandler
         base.Handle(sender, packet);
         GCUpdateMapPlayerData data = packet as GCUpdateMapPlayerData;
         //处理完数据和逻辑后,发送消息通知其他模块,绝对不可以直接操作UI等Unity主线程的东西!
-        throw new System.NotImplementedException(GetType().ToString());
+        if (MapMgr.Inited)
+        {
+            MapMgr.Instance.MyMapPlayer.Update(data.MapPlayerData);
+        }
+
+        Messenger.Broadcast(MessageId.MAP_UPDATE_PLAYER_INFO);
     }
 }
