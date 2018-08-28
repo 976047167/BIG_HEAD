@@ -8,6 +8,7 @@ public class SceneMgr
 {
     public static void ChangeScene(int sceneId)
     {
-        ProcedureManager.ChangeProcedure<Procedure_ChangeScene>(sceneId);
+        Messenger.Broadcast<int>(MessageId.GAME_CHANGE_SCENE, sceneId);
+        //ProcedureManager.ChangeProcedure<Procedure_ChangeScene>(sceneId);
     }
 }

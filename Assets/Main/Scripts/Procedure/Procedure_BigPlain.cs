@@ -47,7 +47,7 @@ public class Procedure_BigPlain : ProcedureBase
                         state = InitState.GetMapLayerData;
                         break;
                     case InitState.GetMapLayerData:
-                        Messenger.AddListener(MessageId.GAME_GET_MAP_LAYER_DATA, GetLayerData);
+                        Messenger.AddListener(MessageId.MAP_GET_MAP_LAYER_DATA, GetLayerData);
                         CGGetMapLayerData getMapLayerData = new CGGetMapLayerData();
                         //层数从第一层开始
                         getMapLayerData.LayerIndex = 1;
@@ -86,7 +86,7 @@ public class Procedure_BigPlain : ProcedureBase
         {
             state = InitState.CreateModel;
         }
-        Messenger.RemoveListener(MessageId_Receive.GCGetMapLayerData, GetLayerData);
+        Messenger.RemoveListener(MessageId.MAP_GET_MAP_LAYER_DATA, GetLayerData);
         //if (MapMgr.Inited)
         //{
         //    MapMgr.Instance.MakeMapByLayerData(mapLayerData);

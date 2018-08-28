@@ -50,7 +50,24 @@ public class Game : MonoBehaviour
 
 
         //SceneManager.LoadScene("Init");
+        RegisterGlobalMessage();
+    }
+    public void ReStartGame()
+    {
+        StartCoroutine(Init());
+    }
 
+    void RegisterGlobalMessage()
+    {
+        Messenger.AddListener<int>(MessageId.GAME_CHANGE_SCENE, ChangeScene);
+    }
+    void RemoveGlobalMessage()
+    {
+        Messenger.RemoveListener<int>(MessageId.GAME_CHANGE_SCENE, ChangeScene);
+    }
+    void ChangeScene(int sceneId)
+    {
+        ProcedureManager.ChangeProcedure<Procedure_ChangeScene>(sceneId);
     }
 
     #region Game Module Managers

@@ -23,15 +23,13 @@ namespace BigHead.protocol {
       byte[] descriptorData = global::System.Convert.FromBase64String(
           string.Concat(
             "ChczMDAxX0dDRXhpdEJhdHRsZS5wcm90bxoSUEJQbGF5ZXJEYXRhLnByb3Rv",
-            "ImUKDEdDRXhpdEJhdHRsZRISCgptb25zdGVyX2lkGAEgASgFEg4KBnJlYXNv",
-            "bhgCIAEoBRIiCgtwbGF5ZXJfZGF0YRgDIAEoCzINLlBCUGxheWVyRGF0YRIN",
-            "CgVpdGVtcxgEIAMoBUJICh1jb20ud2hhbGVpc2xhbmQuZ2FtZS5wcm90b2Nv",
-            "bEIUQ0dFeGl0QmF0dGxlUHJvdG9jb2yqAhBCaWdIZWFkLnByb3RvY29sYgZw",
-            "cm90bzM="));
+            "IjIKDEdDRXhpdEJhdHRsZRISCgptb25zdGVyX2lkGAEgASgFEg4KBnJlYXNv",
+            "bhgCIAEoBUJICh1jb20ud2hhbGVpc2xhbmQuZ2FtZS5wcm90b2NvbEIUQ0dF",
+            "eGl0QmF0dGxlUHJvdG9jb2yqAhBCaWdIZWFkLnByb3RvY29sYgZwcm90bzM="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { global::BigHead.protocol.PBPlayerDataReflection.Descriptor, },
           new pbr::GeneratedClrTypeInfo(null, new pbr::GeneratedClrTypeInfo[] {
-            new pbr::GeneratedClrTypeInfo(typeof(global::BigHead.protocol.GCExitBattle), global::BigHead.protocol.GCExitBattle.Parser, new[]{ "MonsterId", "Reason", "PlayerData", "Items" }, null, null, null)
+            new pbr::GeneratedClrTypeInfo(typeof(global::BigHead.protocol.GCExitBattle), global::BigHead.protocol.GCExitBattle.Parser, new[]{ "MonsterId", "Reason" }, null, null, null)
           }));
     }
     #endregion
@@ -67,8 +65,6 @@ namespace BigHead.protocol {
     public GCExitBattle(GCExitBattle other) : this() {
       monsterId_ = other.monsterId_;
       reason_ = other.reason_;
-      PlayerData = other.playerData_ != null ? other.PlayerData.Clone() : null;
-      items_ = other.items_.Clone();
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -101,33 +97,6 @@ namespace BigHead.protocol {
       }
     }
 
-    /// <summary>Field number for the "player_data" field.</summary>
-    public const int PlayerDataFieldNumber = 3;
-    private global::BigHead.protocol.PBPlayerData playerData_;
-    /// <summary>
-    ///基础属性
-    /// </summary>
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public global::BigHead.protocol.PBPlayerData PlayerData {
-      get { return playerData_; }
-      set {
-        playerData_ = value;
-      }
-    }
-
-    /// <summary>Field number for the "items" field.</summary>
-    public const int ItemsFieldNumber = 4;
-    private static readonly pb::FieldCodec<int> _repeated_items_codec
-        = pb::FieldCodec.ForInt32(34);
-    private readonly pbc::RepeatedField<int> items_ = new pbc::RepeatedField<int>();
-    /// <summary>
-    ///剩余的消耗品
-    /// </summary>
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public pbc::RepeatedField<int> Items {
-      get { return items_; }
-    }
-
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override bool Equals(object other) {
       return Equals(other as GCExitBattle);
@@ -143,8 +112,6 @@ namespace BigHead.protocol {
       }
       if (MonsterId != other.MonsterId) return false;
       if (Reason != other.Reason) return false;
-      if (!object.Equals(PlayerData, other.PlayerData)) return false;
-      if(!items_.Equals(other.items_)) return false;
       return true;
     }
 
@@ -153,8 +120,6 @@ namespace BigHead.protocol {
       int hash = 1;
       if (MonsterId != 0) hash ^= MonsterId.GetHashCode();
       if (Reason != 0) hash ^= Reason.GetHashCode();
-      if (playerData_ != null) hash ^= PlayerData.GetHashCode();
-      hash ^= items_.GetHashCode();
       return hash;
     }
 
@@ -173,11 +138,6 @@ namespace BigHead.protocol {
         output.WriteRawTag(16);
         output.WriteInt32(Reason);
       }
-      if (playerData_ != null) {
-        output.WriteRawTag(26);
-        output.WriteMessage(PlayerData);
-      }
-      items_.WriteTo(output, _repeated_items_codec);
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -189,10 +149,6 @@ namespace BigHead.protocol {
       if (Reason != 0) {
         size += 1 + pb::CodedOutputStream.ComputeInt32Size(Reason);
       }
-      if (playerData_ != null) {
-        size += 1 + pb::CodedOutputStream.ComputeMessageSize(PlayerData);
-      }
-      size += items_.CalculateSize(_repeated_items_codec);
       return size;
     }
 
@@ -207,13 +163,6 @@ namespace BigHead.protocol {
       if (other.Reason != 0) {
         Reason = other.Reason;
       }
-      if (other.playerData_ != null) {
-        if (playerData_ == null) {
-          playerData_ = new global::BigHead.protocol.PBPlayerData();
-        }
-        PlayerData.MergeFrom(other.PlayerData);
-      }
-      items_.Add(other.items_);
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -230,18 +179,6 @@ namespace BigHead.protocol {
           }
           case 16: {
             Reason = input.ReadInt32();
-            break;
-          }
-          case 26: {
-            if (playerData_ == null) {
-              playerData_ = new global::BigHead.protocol.PBPlayerData();
-            }
-            input.ReadMessage(playerData_);
-            break;
-          }
-          case 34:
-          case 32: {
-            items_.AddEntriesFrom(input, _repeated_items_codec);
             break;
           }
         }

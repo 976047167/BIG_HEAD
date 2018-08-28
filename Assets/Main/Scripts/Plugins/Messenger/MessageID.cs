@@ -27,17 +27,13 @@ public enum MessageId : uint
     UI_GAME_START,
 
     /// <summary>
-    /// 地图界面更新角色信息
+    /// 退出战斗
     /// </summary>
-    MAP_UPDATE_PLAYER_INFO,
+    BATTLE_EXIT_BATTLE,
     /// <summary>
-    /// 地图界面更新角色经验
+    /// 切换场景
     /// </summary>
-    MAP_UPDATE_PLAYER_EXP,
-    /// <summary>
-    /// 在地图中获得奖励
-    /// </summary>
-    MAP_GET_REWARD,
+    GAME_CHANGE_SCENE,
 
     /// <summary>
     /// 更新角色信息
@@ -59,14 +55,37 @@ public enum MessageId : uint
     /// 初始化下个流程成功
     /// </summary>
     GAME_INIT_PROCEDURE_SUCCESS,
+
+    /// <summary>
+    /// 地图界面更新角色信息
+    /// </summary>
+    MAP_UPDATE_PLAYER_INFO,
+    /// <summary>
+    /// 地图界面更新角色经验
+    /// </summary>
+    MAP_UPDATE_PLAYER_EXP,
+    /// <summary>
+    /// 在地图中获得奖励
+    /// </summary>
+    MAP_GET_REWARD,
     /// <summary>
     /// 初始化地图本地玩家成功
     /// </summary>
-    GAME_INIT_MY_MAP_PLAYER_SUCCESS,
+    MAP_INIT_MY_PLAYER_SUCCESS,
     /// <summary>
     /// 获取到一层的数据
     /// </summary>
-    GAME_GET_MAP_LAYER_DATA,
+    MAP_GET_MAP_LAYER_DATA,
+    /// <summary>
+    /// 玩家死亡
+    /// </summary>
+    MAP_PLAYER_DEAD,
+    /// <summary>
+    /// 回到主城
+    /// </summary>
+    MAP_BACK_TO_MAINTOWN,
+    
+    
     
 
     /////<summary> 断线</summary>

@@ -42,24 +42,44 @@ public class Lua2csMessenger
         set { m_Instance = value; }
 
     }
+    /// <summary> default is Async </summary>
     public void Broadcast(uint eventType)
     {
         Messenger.Broadcast(eventType);
     }
-
+    /// <summary> default is Async </summary>
     public void Broadcast(uint eventType, Object para1)
     {
         Messenger.Broadcast<Object>(eventType, para1);
     }
-
+    /// <summary> default is Async </summary>
     public void Broadcast(uint eventType, Object para1, Object para2)
     {
         Messenger.Broadcast<Object, Object>(eventType, para1, para2);
     }
-
+    /// <summary> default is Async </summary>
     public void Broadcast(uint eventType, Object para1, Object para2, Object para3)
     {
         Messenger.Broadcast<Object, Object, Object>(eventType, para1, para2, para3);
+    }
+    public void BroadcastSync(uint eventType)
+    {
+        Messenger.BroadcastSync(eventType);
+    }
+
+    public void BroadcastSync(uint eventType, Object para1)
+    {
+        Messenger.BroadcastSync<Object>(eventType, para1);
+    }
+
+    public void BroadcastSync(uint eventType, Object para1, Object para2)
+    {
+        Messenger.BroadcastSync<Object, Object>(eventType, para1, para2);
+    }
+
+    public void BroadcastSync(uint eventType, Object para1, Object para2, Object para3)
+    {
+        Messenger.BroadcastSync<Object, Object, Object>(eventType, para1, para2, para3);
     }
 
     public void BroadcastAsync(uint eventType)

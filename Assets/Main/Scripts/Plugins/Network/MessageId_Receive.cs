@@ -6,7 +6,8 @@ public enum MessageId_Receive : ushort
     None = 0,
     
     GCLogin = 1000,
-    GCGetUserData = 1002,
+    GCSignIn = 1002,
+    GCUpdatePlayerData = 1004,
     GCEnterInstance = 2000,
     GCGetMapLayerData = 2001,
     GCMapGetReward = 2002,

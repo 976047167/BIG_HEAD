@@ -26,13 +26,7 @@ public class GCMapGetRewardHandler : BasePacketHandler
         items.AddRange(data.Equips);
         RewardData rewardData = new RewardData(data.Gold, data.Diamonds, data.OldLevel, data.OldExp, data.AddedExp, data.Food, items.ToArray());
 
-        if (MapMgr.Inited)
-        {
-            if (Game.BattleManager.State == BattleMgr.BattleState.None)
-            {
-                Game.UI.OpenForm<WND_Reward>(rewardData);
-            }
-        }
+
         Messenger.Broadcast(MessageId.MAP_GET_REWARD, rewardData);
     }
 }

@@ -11,7 +11,7 @@ namespace BigHead.Net
             
             Dic.Add((ushort)MessageId_Send.CGLogin, new CGLoginHandler());
             Dic.Add((ushort)MessageId_Send.CGLogout, new CGLogoutHandler());
-            Dic.Add((ushort)MessageId_Send.CGGetUserData, new CGGetUserDataHandler());
+            Dic.Add((ushort)MessageId_Send.CGSignIn, new CGSignInHandler());
             Dic.Add((ushort)MessageId_Send.CGCreatePlayer, new CGCreatePlayerHandler());
             Dic.Add((ushort)MessageId_Send.CGEnterInstance, new CGEnterInstanceHandler());
             Dic.Add((ushort)MessageId_Send.CGGetMapLayerData, new CGGetMapLayerDataHandler());

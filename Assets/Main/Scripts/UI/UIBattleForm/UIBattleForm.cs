@@ -17,10 +17,6 @@ public class UIBattleForm : UIFormBase
     [SerializeField]
     private PlayerInfoView oppPlayerViews;
     [SerializeField]
-    private GameObject resultInfo;
-    [SerializeField]
-    private UILabel lblResultInfo;
-    [SerializeField]
     private UILabel lblRoundCount;
     [SerializeField]
     private GameObject btnBattleSetting;
@@ -70,8 +66,6 @@ public class UIBattleForm : UIFormBase
         oppPlayerViews.InitData(Game.BattleManager.OppPlayer.Data);
         //myPlayerViews.GetUIController();
         //oppPlayerViews.GetUIController();
-        resultInfo = transform.Find("ResultInfo").gameObject;
-        lblResultInfo = transform.Find("ResultInfo/result").GetComponent<UILabel>();
         MovingPanel = transform.Find("MovingPanel").GetComponent<UIPanel>();
         lblRoundCount = transform.Find("FlowPanel/split/lblRoundCount").GetComponent<UILabel>();
         btnBattleSetting = transform.Find("FlowPanel/btnSetting").gameObject;
@@ -79,7 +73,6 @@ public class UIBattleForm : UIFormBase
         monsterId = Game.BattleManager.MonsterId;
         Game.BattleManager.ReadyStart(this);
         UIEventListener.Get(transform.Find("FlowPanel/btnRoundEnd").gameObject).onClick = OnClick_RoundEnd;
-        UIEventListener.Get(transform.Find("ResultInfo/mask").gameObject).onClick = Onclick_CloseUI;
         UIEventListener.Get(btnBattleSetting).onClick = Onclick_Setting;
 
         StartCoroutine(CoroutineUseCard());
@@ -99,41 +92,41 @@ public class UIBattleForm : UIFormBase
     }
     public void WinBattle()
     {
-        resultInfo.SetActive(true);
-        resultInfo.transform.Find("bg").gameObject.SetActive(false);
-        lblResultInfo.gameObject.SetActive(false);
+        //resultInfo.SetActive(true);
+        //resultInfo.transform.Find("bg").gameObject.SetActive(false);
+        //lblResultInfo.gameObject.SetActive(false);
         //lblResultInfo.text = "WIN!";
         //lblResultInfo.color = new Color32(255, 0, 0, 255);
 
-
+        Game.UI.OpenForm<WND_BattleResult>(0);
     }
     public void LoseBattle()
     {
-        resultInfo.SetActive(true);
-        resultInfo.transform.Find("bg").gameObject.SetActive(true);
-        lblResultInfo.gameObject.SetActive(true);
-        lblResultInfo.text = "LOSE!";
-        lblResultInfo.color = new Color32(150, 150, 150, 255);
-
+        //resultInfo.SetActive(true);
+        //resultInfo.transform.Find("bg").gameObject.SetActive(true);
+        //lblResultInfo.gameObject.SetActive(true);
+        //lblResultInfo.text = "LOSE!";
+        //lblResultInfo.color = new Color32(150, 150, 150, 255);
+        Game.UI.OpenForm<WND_BattleResult>(1);
 
     }
     public void MeEscapeBattle()
     {
-        resultInfo.SetActive(true);
-        resultInfo.transform.Find("bg").gameObject.SetActive(true);
-        lblResultInfo.gameObject.SetActive(true);
-        lblResultInfo.text = I18N.Get(1003007); //"我跑!";
-        lblResultInfo.color = new Color32(150, 150, 150, 255);
-
+        //resultInfo.SetActive(true);
+        //resultInfo.transform.Find("bg").gameObject.SetActive(true);
+        //lblResultInfo.gameObject.SetActive(true);
+        //lblResultInfo.text = I18N.Get(1003007); //"我跑!";
+        //lblResultInfo.color = new Color32(150, 150, 150, 255);
+        Game.UI.OpenForm<WND_BattleResult>(2);
     }
     public void OppEscapeBattle()
     {
-        resultInfo.SetActive(true);
-        resultInfo.transform.Find("bg").gameObject.SetActive(true);
-        lblResultInfo.gameObject.SetActive(true);
-        lblResultInfo.text = I18N.Get(1003008);// "快追!";
-        lblResultInfo.color = new Color32(150, 150, 150, 255);
-
+        //resultInfo.SetActive(true);
+        //resultInfo.transform.Find("bg").gameObject.SetActive(true);
+        //lblResultInfo.gameObject.SetActive(true);
+        //lblResultInfo.text = I18N.Get(1003008);// "快追!";
+        //lblResultInfo.color = new Color32(150, 150, 150, 255);
+        Game.UI.OpenForm<WND_BattleResult>(3);
     }
     public void UpdateRoundCount(int roundCount)
     {
@@ -150,21 +143,6 @@ public class UIBattleForm : UIFormBase
             CanUseCard = false;
             Game.BattleManager.RoundEnd();
         }
-    }
-    void Onclick_CloseUI(GameObject go)
-    {
-
-        if (Game.BattleManager.State == BattleMgr.BattleState.BattleEnd_Lose)
-        {
-            UIUtility.ShowMessageBox(MessageBoxType.Yes, 1003006, (result) =>
-              {
-                  Game.UI.CloseForm(this);
-                  //回主城
-                  SceneMgr.ChangeScene(3);
-              });
-        }
-        else
-            Game.UI.CloseForm(this);
     }
     void Onclick_Setting(GameObject go)
     {

@@ -36,9 +36,9 @@ public class GCLoginHandler : BasePacketHandler
         }
         if (login.Result == 1)
         {
-            CGGetUserData data = new CGGetUserData();
+            CGSignIn data = new CGSignIn();
             data.UserId = 1;
-            Game.NetworkManager.SendToLobby(MessageId_Send.CGGetUserData, data);
+            Game.NetworkManager.SendToLobby(MessageId_Send.CGSignIn, data);
         }
 
     }

@@ -35,6 +35,10 @@ public class MapPlayer
         CurPos = new MapCardPos(mapPlayerData.PlayerPosX, mapPlayerData.PlayerPosY);
         m_InstanceId = mapPlayerData.InstanceId;
         m_Data.Update(mapPlayerData);
+        if (m_Data.HP <= 0)
+        {
+            Messenger.BroadcastAsync<ulong>(MessageId.MAP_PLAYER_DEAD, m_Data.Id);
+        }
     }
     public void CreateModel(MapCardPos pos = null)
     {

@@ -7,7 +7,7 @@ public enum MessageId_Send : ushort
     
     CGLogin = 1000,
     CGLogout = 1001,
-    CGGetUserData = 1002,
+    CGSignIn = 1002,
     CGCreatePlayer = 1003,
     CGEnterInstance = 2000,
     CGGetMapLayerData = 2001,

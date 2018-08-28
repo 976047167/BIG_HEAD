@@ -37,7 +37,7 @@ namespace BigHead.protocol {
   }
   #region Messages
   /// <summary>
-  /// 创建角色请求
+  /// 鍒涘缓瑙掕壊璇锋眰
   /// </summary>
   public sealed partial class CGCreatePlayer : pb::IMessage<CGCreatePlayer> {
     private static readonly pb::MessageParser<CGCreatePlayer> _parser = new pb::MessageParser<CGCreatePlayer>(() => new CGCreatePlayer());

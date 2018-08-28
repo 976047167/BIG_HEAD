@@ -8,17 +8,14 @@ public partial class UIAction
     {
         public static UIActionType ActionType { get { return UIActionType.WinBattle; } }
 
-        public List<int> RewardIds { private set; get; }
-        public UIWinBattle(List<int> rewardIds) : base()
+        public UIWinBattle() : base()
         {
-            RewardIds = rewardIds;
         }
 
         public override IEnumerator Excute()
         {
             yield return null;
             BattleForm.WinBattle();
-            UIModule.Instance.OpenForm<WND_Reward>(RewardIds);
         }
     }
 }

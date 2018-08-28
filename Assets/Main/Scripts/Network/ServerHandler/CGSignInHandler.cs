@@ -2,24 +2,23 @@
 using BigHead.Net;
 using Google.Protobuf;
 using BigHead.protocol;
-using AppSettings;
 
-public class CGGetUserDataHandler : BaseServerPacketHandler
+public class CGSignInHandler : BaseServerPacketHandler
 {
     public override ushort OpCode
     {
         get
         {
-            return (ushort)MessageId_Send.CGGetUserData;
+            return (ushort)MessageId_Send.CGSignIn;
         }
     }
 
     public override void Handle(object sender, IMessage packet)
     {
         base.Handle(sender, packet);
+        CGSignIn data = packet as CGSignIn;
         //处理完数据和逻辑后,发送消息通知客户端
-        CGGetUserData data = packet as CGGetUserData;
-        GCGetUserData userData = new GCGetUserData();
+        GCSignIn userData = new GCSignIn();
         userData.Uid = data.UserId;
         userData.AccountData = GetSavedData<PBAccountData>(ACCOUNT_DATA_KEY);
         if (userData.AccountData == null)
@@ -39,6 +38,6 @@ public class CGGetUserDataHandler : BaseServerPacketHandler
             UnityEngine.Debug.LogError("没有创建角色详细信息!");
             return;
         }
-        SendToClient(MessageId_Receive.GCGetUserData, userData);
+        SendToClient(MessageId_Receive.GCSignIn, userData);
     }
 }

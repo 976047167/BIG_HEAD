@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using BigHead.protocol;
+using Random = UnityEngine.Random;
 
 public class MapMgr
 {
@@ -23,7 +24,7 @@ public class MapMgr
     public static bool Inited { get { return m_Instance != null && m_Inited; } }
     private MapMgr()
     {
-
+        RegisterMessage();
     }
 
     public static MapMgr Instance
@@ -40,6 +41,23 @@ public class MapMgr
         m_Instance.m_MyMapPlayer = new MapPlayer(Game.DataManager.MyPlayer);
 
     }
+    void RegisterMessage()
+    {
+        Messenger.AddListener<PBMapLayerData>(MessageId_Receive.GCGetMapLayerData, MakeMapByLayerData);
+        Messenger.AddListener<RewardData>(MessageId.MAP_GET_REWARD, GetMapReward);
+        Messenger.AddListener(MessageId.MAP_BACK_TO_MAINTOWN, BackToMaintown);
+        Messenger.AddListener<ulong>(MessageId.MAP_PLAYER_DEAD, OnPlayerDead);
+    }
+    void RemoveMessage()
+    {
+        Messenger.RemoveListener<PBMapLayerData>(MessageId_Receive.GCGetMapLayerData, MakeMapByLayerData);
+        Messenger.RemoveListener<RewardData>(MessageId.MAP_GET_REWARD, GetMapReward);
+        Messenger.RemoveListener(MessageId.MAP_BACK_TO_MAINTOWN, BackToMaintown);
+        Messenger.RemoveListener<ulong>(MessageId.MAP_PLAYER_DEAD, OnPlayerDead);
+    }
+
+
+
     public void Init()
     {
         //可以显示场景了
@@ -86,6 +104,9 @@ public class MapMgr
     public void Clear()
     {
         m_Inited = false;
+
+        RemoveMessage();
+        m_Instance = null;
     }
 
     public IEnumerator MakePlayer()
@@ -151,6 +172,7 @@ public class MapMgr
             }
         }
         currentMapLayerData = mapLayerData;
+        Messenger.BroadcastSync(MessageId.MAP_GET_MAP_LAYER_DATA);
     }
     void MakeMap(MapLayerData mapLayerData)
     {
@@ -268,7 +290,33 @@ public class MapMgr
         getMapLayerData.PlayerY = MapMgr.Instance.MyMapPlayer.CurPos.Y;
         Game.NetworkManager.SendToLobby(MessageId_Send.CGGetMapLayerData, getMapLayerData);
     }
-
+    void GetMapReward(RewardData rewardData)
+    {
+        if (Game.BattleManager.State == BattleMgr.BattleState.None)
+        {
+            Game.UI.OpenForm<WND_Reward>(rewardData);
+        }
+    }
+    void BackToMaintown()
+    {
+        UIUtility.ShowMessageBox(MessageBoxType.Yes, 1003006, (result) =>
+        {
+            Game.UI.CloseForm<UIBattleForm>();
+            //回主城
+            SceneMgr.ChangeScene(3);
+        });
+    }
+    private void OnPlayerDead(ulong playerId)
+    {
+        if (playerId == MyMapPlayer.Data.Id)
+        {
+            CGExitInstance exitInstance = new CGExitInstance();
+            exitInstance.AccountId = Game.DataManager.AccountData.Uid;
+            exitInstance.PlayerId = Game.DataManager.MyPlayer.Data.ID;
+            exitInstance.Reason = 1;
+            Game.NetworkManager.SendToLobby(MessageId_Send.CGExitInstance, exitInstance);
+        }
+    }
     public void OnClickMapCard(MapCardBase mapCard)
     {
         if (m_Inited == false)

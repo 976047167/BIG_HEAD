@@ -41,7 +41,7 @@ public class UIMapInfo : UIFormBase
         lblMapName = transform.Find("mapName").GetComponent<UILabel>();
         lblMapLayerName = transform.Find("mapLayerName").GetComponent<UILabel>();
         Messenger.AddListener(MessageId.MAP_UPDATE_PLAYER_INFO, UpdatePlayerInfoPanel);
-        Messenger.AddListener(MessageId.GAME_GET_MAP_LAYER_DATA, UpdateMapInfo);
+        Messenger.AddListener(MessageId.MAP_GET_MAP_LAYER_DATA, UpdateMapInfo);
     }
 
 
@@ -56,6 +56,7 @@ public class UIMapInfo : UIFormBase
     {
         base.OnClose();
         Messenger.RemoveListener(MessageId.MAP_UPDATE_PLAYER_INFO, UpdatePlayerInfoPanel);
+        Messenger.RemoveListener(MessageId.MAP_GET_MAP_LAYER_DATA, UpdateMapInfo);
     }
     // Update is called once per frame
     void UpdatePlayerInfoPanel()

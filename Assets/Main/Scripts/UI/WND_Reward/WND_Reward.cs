@@ -173,4 +173,14 @@ public class WND_Reward : UIFormBase
         Game.UI.CloseForm<WND_Reward>();
     }
 
+    protected override void OnClose()
+    {
+        base.OnClose();
+        if (Game.BattleManager.State!= BattleMgr.BattleState.None)
+        {
+            
+            Game.UI.CloseForm<UIBattleForm>();
+        }
+        
+    }
 }

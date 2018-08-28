@@ -149,6 +149,8 @@ int	string	string	string
 1003006	即将返回主城	即將返回主城	Return to Lobby
 1003007	我跑	我跑	Run
 1003008	快追	快追	Chase
+1003009	胜利!	胜利!	WIN!
+1003010	失败!	失败!	LOSE!
 1004000	WND_Kaku	WND_Kaku	WND_Kaku
 1004001	 全部	全部	All
 1004002	通用	通用	Universal 

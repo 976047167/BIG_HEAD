@@ -148,30 +148,7 @@ public class BattlePlayer
     {
         Game.BattleManager.EscapeBattle(this);
     }
-    public void Save(int monsterId = 0)
-    {
-        if (Player == null)
-        {
-            Debug.LogError("怪物不需要保存数据!");
-            return;
-        }
-        Player.Data.HP = Data.HP;
-        Player.Data.MaxHP = Data.MaxHP;
-        Player.Data.MP = Data.MP;
-        Player.Data.MaxMP = Data.MaxMP;
-        if (monsterId != 0)
-        {
-            //发奖励
-            BattleMonsterTableSetting monster = BattleMonsterTableSettings.Get(monsterId);
-            List<int> rewardList = new List<int>();
-            int rewardId = monster.RewardId;
-
-            Game.BattleManager.AddUIAction(new UIAction.UIWinBattle(rewardList));
-            Player.AddReward(rewardId);
-        }
-        else
-            Messenger.Broadcast(MessageId.MAP_UPDATE_PLAYER_INFO);
-    }
+    
     public void StartAI()
     {
         if (playerAI == null)

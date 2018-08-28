@@ -9,7 +9,6 @@ public partial class UIAction
         public static UIActionType ActionType { get { return UIActionType.LoseBattle; } }
         public UILoseBattle() : base()
         {
-            
         }
 
         public override IEnumerator Excute()

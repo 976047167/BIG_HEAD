@@ -16,8 +16,8 @@ public class UIPromptBox : UIFormBase {
 
     public void  SetData(int id)
     {
-       PromptTableSetting prompt =   PromptTableSettings.Get(id);
-       icon.Load(prompt.ImagePath) ;
-        describe.text = prompt.Describe;
+       //PromptTableSetting prompt =   PromptTableSettings.Get(id);
+       //icon.Load(prompt.ImagePath) ;
+       // describe.text = prompt.Describe;
     }
 }

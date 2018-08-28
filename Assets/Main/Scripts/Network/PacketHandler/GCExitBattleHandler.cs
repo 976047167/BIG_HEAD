@@ -21,6 +21,6 @@ public class GCExitBattleHandler : BasePacketHandler
         base.Handle(sender, packet);
         GCExitBattle data = packet as GCExitBattle;
         //处理完数据和逻辑后,发送消息通知其他模块,绝对不可以直接操作UI等Unity主线程的东西!
-        //throw new System.NotImplementedException(GetType().ToString());
+        Messenger.Broadcast<GCExitBattle>(MessageId_Receive.GCExitBattle, data);
     }
 }

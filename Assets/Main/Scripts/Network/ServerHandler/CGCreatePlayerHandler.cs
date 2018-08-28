@@ -19,7 +19,7 @@ public class CGCreatePlayerHandler : BaseServerPacketHandler
         base.Handle(sender, packet);
         CGCreatePlayer data = packet as CGCreatePlayer;
         //处理完数据和逻辑后,发送消息通知客户端
-        GCGetUserData userData = new GCGetUserData();
+        GCSignIn userData = new GCSignIn();
         userData.Uid = data.UserId;
         ClassCharacterTableSetting characterData = ClassCharacterTableSettings.Get(data.CharacterId);
         if (characterData == null)
@@ -82,6 +82,6 @@ public class CGCreatePlayerHandler : BaseServerPacketHandler
 
             SaveData(PLAYER_DETAIL_DATA, userData.PlayerDetailData);
         }
-        SendToClient(MessageId_Receive.GCGetUserData, userData);
+        SendToClient(MessageId_Receive.GCSignIn, userData);
     }
 }

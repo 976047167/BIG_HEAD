@@ -14,6 +14,7 @@ public class BattleMgr
     Dictionary<string, int> dicBattleCounter = null;
 
     UIBattleForm battleForm;
+    public RewardData RewardData { get; protected set; }
     Queue<UIAction> uiActions = new Queue<UIAction>();
     public BattleState State { get; private set; }
     public bool CanUseCard { get; private set; }
@@ -42,9 +43,10 @@ public class BattleMgr
         dicRoundCounter = new Dictionary<string, int>();
         dicBattleCounter = new Dictionary<string, int>();
         RoundCount = 0;
+        RewardData = null;
         OppPlayer.StartAI();
         uiActions.Clear();
-
+        RegisterMessage();
         MyPlayer.Data.MP = MyPlayer.Data.MaxMP = 100;
         OppPlayer.Data.HP = 1;
         Game.UI.OpenForm<UIBattleForm>();
@@ -76,6 +78,7 @@ public class BattleMgr
     public void Clear()
     {
         //Game.UI.CloseForm<UIBattleForm>();
+        RemoveMessage();
         OppPlayer.StopAI();
         MonsterId = 0;
         uiActions.Clear();
@@ -84,10 +87,51 @@ public class BattleMgr
         OppPlayer = null;
         dicRoundCounter = null;
         dicBattleCounter = null;
+        RewardData = null;
         State = BattleState.None;
         lastState = BattleState.None;
     }
 
+    void RegisterMessage()
+    {
+        Messenger.AddListener<RewardData>(MessageId.MAP_GET_REWARD, GetMapReward);
+        Messenger.AddListener<GCExitBattle>(MessageId_Receive.GCExitBattle, GetExitResponse);
+    }
+
+    void RemoveMessage()
+    {
+        Messenger.RemoveListener<RewardData>(MessageId.MAP_GET_REWARD, GetMapReward);
+        Messenger.RemoveListener<GCExitBattle>(MessageId_Receive.GCExitBattle, GetExitResponse);
+    }
+
+    private void GetExitResponse(GCExitBattle data)
+    {
+        if (data.MonsterId == MonsterId)
+        {
+            switch (data.Reason)
+            {
+                case 0:
+                    uiActions.Enqueue(new UIAction.UIWinBattle());
+                    break;
+                case 1:
+                    uiActions.Enqueue(new UIAction.UILoseBattle());
+                    break;
+                case 2:
+                    uiActions.Enqueue(new UIAction.UIMeEscapeBattle());
+                    break;
+                case 3:
+                    uiActions.Enqueue(new UIAction.UIOppEscapeBattle());
+                    break;
+                default:
+                    break;
+            }
+        }
+    }
+
+    private void GetMapReward(RewardData reward)
+    {
+        this.RewardData = reward;
+    }
 
     /// <summary>
     /// UI加载完毕，准备开始游戏

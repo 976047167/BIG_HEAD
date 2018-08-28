@@ -5,12 +5,16 @@ using UnityEngine;
 using Google.Protobuf;
 using System.IO;
 using System.Text;
+using AppSettings;
+using BigHead.protocol;
+
 namespace BigHead.Net
 {
     public abstract class BaseServerPacketHandler : BasePacketHandler
     {
         const char SPLITE = '#';
         const string SUFFIX = ".data";
+        public static string Save_Data_Path = "c:\\";
 
         protected const string ACCOUNT_DATA_KEY = "accountData";
         protected const string PLAYER_DATA_KEY = "playerData";
@@ -25,7 +29,7 @@ namespace BigHead.Net
         {
             //Debug.LogError(key + SPLITE + data.GetType().ToString() + ".data");
             
-            string file = Path.Combine(Application.persistentDataPath, key + SPLITE + data.GetType().ToString() + SUFFIX);
+            string file = Path.Combine(Save_Data_Path, key + SPLITE + data.GetType().ToString() + SUFFIX);
             if (data == null)
             {
                 if (File.Exists(file))
@@ -47,7 +51,7 @@ namespace BigHead.Net
         }
         protected IMessage GetSavedData(string key)
         {
-            string[] files = Directory.GetFiles(Application.persistentDataPath);
+            string[] files = Directory.GetFiles(Save_Data_Path);
             for (int i = 0; i < files.Length; i++)
             {
                 FileInfo file = new FileInfo(files[i]);
@@ -72,5 +76,80 @@ namespace BigHead.Net
 
             return null;
         }
+        #region Common Function
+        protected void AddExp(PBPlayerData playerData, int exp)
+        {
+            LevelTableSetting levelTable = LevelTableSettings.Get(playerData.Level);
+            if (levelTable == null)
+            {
+                return;
+            }
+            exp = exp + playerData.Exp;
+            int maxExp = levelTable.Exp[ClassCharacterTableSettings.Get(playerData.CharacterId).ClassType];
+            while (exp >= maxExp)
+            {
+                //level Up!
+                playerData.Level++;
+                exp = exp - maxExp;
+                levelTable = LevelTableSettings.Get(playerData.Level);
+                if (levelTable == null)
+                {
+                    break;
+                }
+                playerData.Hp = levelTable.HP[(int)MapMgr.Instance.MyMapPlayer.Data.ClassData.Type];
+                playerData.MaxHp = levelTable.HP[(int)MapMgr.Instance.MyMapPlayer.Data.ClassData.Type];
+                playerData.Mp = levelTable.MP[(int)MapMgr.Instance.MyMapPlayer.Data.ClassData.Type];
+                playerData.MaxMp = levelTable.MP[(int)MapMgr.Instance.MyMapPlayer.Data.ClassData.Type];
+                maxExp = levelTable.Exp[(int)MapMgr.Instance.MyMapPlayer.Data.ClassData.Type];
+            }
+            playerData.Exp = exp;
+        }
+        protected GCMapGetReward GetRewardById(int rewardId)
+        {
+            GCMapGetReward reward = new GCMapGetReward();
+            PBAccountData accountData = GetSavedData<PBAccountData>(ACCOUNT_DATA_KEY);
+            PBMapPlayerData mapPlayerData = GetSavedData<PBMapPlayerData>(MAP_PLAYER_DATA_KEY);
+            reward.AccountId = accountData.Uid;
+            reward.PlayerId = mapPlayerData.PlayerData.PlayerId;
+            reward.OldExp = mapPlayerData.PlayerData.Exp;
+            reward.OldLevel = mapPlayerData.PlayerData.Level;
+            RewardTableSetting rewardTable = RewardTableSettings.Get(rewardId);
+            reward.AddedExp = rewardTable.exp;
+            reward.Diamonds = rewardTable.diamond;
+            reward.Gold = rewardTable.gold;
+            reward.Food = rewardTable.food;
+            for (int i = 0; i < rewardTable.ItemList.Count; i++)
+            {
+                if (UnityEngine.Random.Range(0, 10000) < rewardTable.RewardProbability[i])
+                {
+                    ItemTableSetting itemTable = ItemTableSettings.Get(rewardTable.ItemList[i]);
+                    if (itemTable == null)
+                    {
+                        continue;
+                    }
+                    switch ((ItemType)itemTable.Type)
+                    {
+                        case ItemType.Card:
+                            reward.Cards.Add(rewardTable.ItemList[i]);
+                            break;
+                        case ItemType.Equip:
+                            reward.Equips.Add(rewardTable.ItemList[i]);
+                            break;
+                        case ItemType.Skill:
+                            //要改
+                            reward.Buffs.Add(rewardTable.ItemList[i]);
+                            break;
+                        case ItemType.Consumable:
+                            reward.Items.Add(rewardTable.ItemList[i]);
+                            break;
+                        default:
+                            break;
+                    }
+                }
+            }
+            return reward;
+        }
+        #endregion
     }
+
 }

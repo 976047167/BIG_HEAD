@@ -23,18 +23,18 @@ namespace BigHead.protocol {
       byte[] descriptorData = global::System.Convert.FromBase64String(
           string.Concat(
             "ChVQQk1hcFBsYXllckRhdGEucHJvdG8aElBCUGxheWVyRGF0YS5wcm90bxoM",
-            "UEJEZWNrLnByb3RvIuMBCg9QQk1hcFBsYXllckRhdGESIgoLcGxheWVyX2Rh",
+            "UEJEZWNrLnByb3RvIvYBCg9QQk1hcFBsYXllckRhdGESIgoLcGxheWVyX2Rh",
             "dGEYASABKAsyDS5QQlBsYXllckRhdGESFAoMcGxheWVyX3Bvc194GAIgASgF",
             "EhQKDHBsYXllcl9wb3NfeRgDIAEoBRIXCg9wbGF5ZXJfbW9kZWxfaWQYBCAB",
             "KAUSEwoLaW5zdGFuY2VfaWQYBSABKAUSFQoEZGVjaxgGIAEoCzIHLlBCRGVj",
             "axINCgVjYXJkcxgHIAMoBRIOCgZlcXVpcHMYCCADKAUSDQoFYnVmZnMYCSAD",
-            "KAUSDQoFaXRlbXMYCiADKAVCSwodY29tLndoYWxlaXNsYW5kLmdhbWUucHJv",
-            "dG9jb2xCF1BCTWFwUGxheWVyRGF0YVByb3RvY29sqgIQQmlnSGVhZC5wcm90",
-            "b2NvbGIGcHJvdG8z"));
+            "KAUSDQoFaXRlbXMYCiADKAUSEQoJYWRkZWRfZXhwGAsgASgFQksKHWNvbS53",
+            "aGFsZWlzbGFuZC5nYW1lLnByb3RvY29sQhdQQk1hcFBsYXllckRhdGFQcm90",
+            "b2NvbKoCEEJpZ0hlYWQucHJvdG9jb2xiBnByb3RvMw=="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { global::BigHead.protocol.PBPlayerDataReflection.Descriptor, global::BigHead.protocol.PBDeckReflection.Descriptor, },
           new pbr::GeneratedClrTypeInfo(null, new pbr::GeneratedClrTypeInfo[] {
-            new pbr::GeneratedClrTypeInfo(typeof(global::BigHead.protocol.PBMapPlayerData), global::BigHead.protocol.PBMapPlayerData.Parser, new[]{ "PlayerData", "PlayerPosX", "PlayerPosY", "PlayerModelId", "InstanceId", "Deck", "Cards", "Equips", "Buffs", "Items" }, null, null, null)
+            new pbr::GeneratedClrTypeInfo(typeof(global::BigHead.protocol.PBMapPlayerData), global::BigHead.protocol.PBMapPlayerData.Parser, new[]{ "PlayerData", "PlayerPosX", "PlayerPosY", "PlayerModelId", "InstanceId", "Deck", "Cards", "Equips", "Buffs", "Items", "AddedExp" }, null, null, null)
           }));
     }
     #endregion
@@ -78,6 +78,7 @@ namespace BigHead.protocol {
       equips_ = other.equips_.Clone();
       buffs_ = other.buffs_.Clone();
       items_ = other.items_.Clone();
+      addedExp_ = other.addedExp_;
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -194,6 +195,20 @@ namespace BigHead.protocol {
       get { return items_; }
     }
 
+    /// <summary>Field number for the "added_exp" field.</summary>
+    public const int AddedExpFieldNumber = 11;
+    private int addedExp_;
+    /// <summary>
+    ///本局所获得的经验
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int AddedExp {
+      get { return addedExp_; }
+      set {
+        addedExp_ = value;
+      }
+    }
+
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override bool Equals(object other) {
       return Equals(other as PBMapPlayerData);
@@ -217,6 +232,7 @@ namespace BigHead.protocol {
       if(!equips_.Equals(other.equips_)) return false;
       if(!buffs_.Equals(other.buffs_)) return false;
       if(!items_.Equals(other.items_)) return false;
+      if (AddedExp != other.AddedExp) return false;
       return true;
     }
 
@@ -233,6 +249,7 @@ namespace BigHead.protocol {
       hash ^= equips_.GetHashCode();
       hash ^= buffs_.GetHashCode();
       hash ^= items_.GetHashCode();
+      if (AddedExp != 0) hash ^= AddedExp.GetHashCode();
       return hash;
     }
 
@@ -271,6 +288,10 @@ namespace BigHead.protocol {
       equips_.WriteTo(output, _repeated_equips_codec);
       buffs_.WriteTo(output, _repeated_buffs_codec);
       items_.WriteTo(output, _repeated_items_codec);
+      if (AddedExp != 0) {
+        output.WriteRawTag(88);
+        output.WriteInt32(AddedExp);
+      }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -298,6 +319,9 @@ namespace BigHead.protocol {
       size += equips_.CalculateSize(_repeated_equips_codec);
       size += buffs_.CalculateSize(_repeated_buffs_codec);
       size += items_.CalculateSize(_repeated_items_codec);
+      if (AddedExp != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(AddedExp);
+      }
       return size;
     }
 
@@ -334,6 +358,9 @@ namespace BigHead.protocol {
       equips_.Add(other.equips_);
       buffs_.Add(other.buffs_);
       items_.Add(other.items_);
+      if (other.AddedExp != 0) {
+        AddedExp = other.AddedExp;
+      }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -392,6 +419,10 @@ namespace BigHead.protocol {
           case 82:
           case 80: {
             items_.AddEntriesFrom(input, _repeated_items_codec);
+            break;
+          }
+          case 88: {
+            AddedExp = input.ReadInt32();
             break;
           }
         }

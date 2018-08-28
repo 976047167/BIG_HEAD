@@ -438,43 +438,60 @@ static public partial class Messenger
     #region Broadcast definition
 
     //No parameters
+    /// <summary> default is Async </summary>
     static public void Broadcast(uint eventType)
     {
-        DoBroadcast(eventType, false);
+        DoBroadcast(eventType, true);
     }
     static public void BroadcastAsync(uint eventType)
     {
         DoBroadcast(eventType, true);
     }
-
+    static public void BroadcastSync(uint eventType)
+    {
+        DoBroadcast(eventType, false);
+    }
     //Single parameter
+    /// <summary> default is Async </summary>
     static public void Broadcast<T>(uint eventType, T arg1)
     {
-        DoBroadcast<T>(eventType, arg1, false);
+        DoBroadcast<T>(eventType, arg1, true);
     }
     static public void BroadcastAsync<T>(uint eventType, T arg1)
     {
         DoBroadcast<T>(eventType, arg1, true);
     }
-
+    static public void BroadcastSync<T>(uint eventType, T arg1)
+    {
+        DoBroadcast<T>(eventType, arg1, false);
+    }
     //Two parameters
+    /// <summary> default is Async </summary>
     static public void Broadcast<T, U>(uint eventType, T arg1, U arg2)
     {
-        DoBroadcast<T, U>(eventType, arg1, arg2, false);
+        DoBroadcast<T, U>(eventType, arg1, arg2, true);
     }
     static public void BroadcastAsync<T, U>(uint eventType, T arg1, U arg2)
     {
         DoBroadcast<T, U>(eventType, arg1, arg2, true);
     }
-
+    static public void BroadcastSync<T, U>(uint eventType, T arg1, U arg2)
+    {
+        DoBroadcast<T, U>(eventType, arg1, arg2, false);
+    }
     //Three parameters
+    /// <summary> default is Async </summary>
     static public void Broadcast<T, U, V>(uint eventType, T arg1, U arg2, V arg3)
     {
-        DoBroadcast<T, U, V>(eventType, arg1, arg2, arg3, false);
+        DoBroadcast<T, U, V>(eventType, arg1, arg2, arg3, true);
     }
     static public void BroadcastAsync<T, U, V>(uint eventType, T arg1, U arg2, V arg3)
     {
         DoBroadcast<T, U, V>(eventType, arg1, arg2, arg3, true);
+    }
+    static public void BroadcastSync<T, U, V>(uint eventType, T arg1, U arg2, V arg3)
+    {
+        DoBroadcast<T, U, V>(eventType, arg1, arg2, arg3, false);
     }
     #endregion
 

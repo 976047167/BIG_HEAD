@@ -52,8 +52,22 @@ public class DataMgr
         AccountData.Recharge = accountData.Recharge;
 
     }
+    public void UpdateAccount(PBAccountData accountData)
+    {
+        if (accountData == null)
+        {
+            return;
+        }
+        if (AccountData.Uid != accountData.Uid)
+        {
+            return;
+        }
+        AccountData.Diamonds = accountData.Diamonds;
+        AccountData.VipLevel = accountData.VipLevel;
+        AccountData.Recharge = accountData.Recharge;
 
-    public void InitPlayer(PBPlayerData playerData,PBPlayerDetailData playerDetailData)
+    }
+    public void InitPlayer(PBPlayerData playerData, PBPlayerDetailData playerDetailData)
     {
         ClassCharacterTableSetting characterData = ClassCharacterTableSettings.Get(playerData.CharacterId);
         if (characterData == null)
@@ -66,7 +80,25 @@ public class DataMgr
         MyPlayer.Data.Update(playerData);
         MyPlayer.DetailData.Update(playerDetailData);
         PlayerDetailData = MyPlayer.DetailData;
-        
+
+
+    }
+    public void UpdatePlayer(PBPlayerData playerData, PBPlayerDetailData playerDetailData)
+    {
+        ClassCharacterTableSetting characterData = ClassCharacterTableSettings.Get(playerData.CharacterId);
+        if (characterData == null)
+        {
+            return;
+        }
+        if (playerData != null)
+        {
+            MyPlayer.Data.Update(playerData);
+        }
+        if (playerDetailData != null)
+        {
+            MyPlayer.DetailData.Update(playerDetailData);
+        }
+
 
     }
 

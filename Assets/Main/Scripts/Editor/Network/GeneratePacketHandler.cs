@@ -35,6 +35,7 @@ public class #NAMEHandler : BasePacketHandler
         base.Handle(sender, packet);
         #NAME data = packet as #NAME;
         //处理完数据和逻辑后,发送消息通知其他模块,绝对不可以直接操作UI等Unity主线程的东西!
+        //此处发送消息不允许使用Messenger.BroadcastSync同步通知
         throw new System.NotImplementedException(GetType().ToString());
     }
 }

@@ -18,3 +18,4 @@ int	string	string	string	int	int
 16	副本设置界面	WND_InstanceSetting	WND_InstanceSetting	0	2
 17	创角界面	WND_CreateCharacter	WND_CreateCharacter	0	2
 18	消息框	WND_MessageBox	Internal/WND_MessageBox	2	1
+19	战斗结果	WND_BattleResult	Instance/WND_BattleResult	1	1
