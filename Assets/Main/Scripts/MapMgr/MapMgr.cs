@@ -45,14 +45,14 @@ public class MapMgr
     {
         Messenger.AddListener<PBMapLayerData>(MessageId_Receive.GCGetMapLayerData, MakeMapByLayerData);
         Messenger.AddListener<RewardData>(MessageId.MAP_GET_REWARD, GetMapReward);
-        Messenger.AddListener(MessageId.MAP_BACK_TO_MAINTOWN, BackToMaintown);
+        Messenger.AddListener(MessageId.MAP_BACK_TO_MAINTOWN, ResponseBackToMaintown);
         Messenger.AddListener<ulong>(MessageId.MAP_PLAYER_DEAD, OnPlayerDead);
     }
     void RemoveMessage()
     {
         Messenger.RemoveListener<PBMapLayerData>(MessageId_Receive.GCGetMapLayerData, MakeMapByLayerData);
         Messenger.RemoveListener<RewardData>(MessageId.MAP_GET_REWARD, GetMapReward);
-        Messenger.RemoveListener(MessageId.MAP_BACK_TO_MAINTOWN, BackToMaintown);
+        Messenger.RemoveListener(MessageId.MAP_BACK_TO_MAINTOWN, ResponseBackToMaintown);
         Messenger.RemoveListener<ulong>(MessageId.MAP_PLAYER_DEAD, OnPlayerDead);
     }
 
@@ -297,7 +297,15 @@ public class MapMgr
             Game.UI.OpenForm<WND_Reward>(rewardData);
         }
     }
-    void BackToMaintown()
+    public void BackToMaintown()
+    {
+        CGExitInstance exitInstance = new CGExitInstance();
+        exitInstance.AccountId = Game.DataManager.AccountData.Uid;
+        exitInstance.PlayerId = Game.DataManager.MyPlayer.Data.ID;
+        exitInstance.Reason = 2;
+        Game.NetworkManager.SendToLobby(MessageId_Send.CGExitInstance, exitInstance);
+    }
+    void ResponseBackToMaintown()
     {
         UIUtility.ShowMessageBox(MessageBoxType.Yes, 1003006, (result) =>
         {

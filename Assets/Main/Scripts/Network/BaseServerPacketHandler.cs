@@ -28,16 +28,23 @@ namespace BigHead.Net
         protected void SaveData(string key, IMessage data)
         {
             //Debug.LogError(key + SPLITE + data.GetType().ToString() + ".data");
-            
-            string file = Path.Combine(Save_Data_Path, key + SPLITE + data.GetType().ToString() + SUFFIX);
             if (data == null)
             {
-                if (File.Exists(file))
+                string[] files = Directory.GetFiles(Save_Data_Path);
+                for (int i = 0; i < files.Length; i++)
                 {
-                    File.Delete(file);
+                    FileInfo f = new FileInfo(files[i]);
+                    string[] splites = f.Name.Split(SPLITE);
+                    if (splites[0] == key)
+                    {
+                        f.Delete();
+                    }
                 }
+                
                 return;
             }
+            string file = Path.Combine(Save_Data_Path, key + SPLITE + data.GetType().ToString() + SUFFIX);
+
             FileStream fs = File.Create(file);
             Debug.Log(file);
             //StreamWriter sw = new StreamWriter(fs, System.Text.Encoding.UTF8);
@@ -131,16 +138,20 @@ namespace BigHead.Net
                     {
                         case ItemType.Card:
                             reward.Cards.Add(rewardTable.ItemList[i]);
+                            reward.CardTemps.Add(rewardTable.Permanent[i]);
                             break;
                         case ItemType.Equip:
                             reward.Equips.Add(rewardTable.ItemList[i]);
+                            reward.EquipTemps.Add(rewardTable.Permanent[i]);
                             break;
                         case ItemType.Skill:
                             //要改
                             reward.Buffs.Add(rewardTable.ItemList[i]);
+                            reward.BuffTemps.Add(rewardTable.Permanent[i]);
                             break;
                         case ItemType.Consumable:
                             reward.Items.Add(rewardTable.ItemList[i]);
+                            reward.ItemTemps.Add(rewardTable.Permanent[i]);
                             break;
                         default:
                             break;

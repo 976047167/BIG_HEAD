@@ -103,12 +103,12 @@ public class MapPlayerData
     {
         if (Id != mapPlayerData.PlayerData.PlayerId)
         {
-            Debug.LogError("不是一个玩家的数据!");
+            Debug.LogError(Id + "不是一个玩家的数据!" + mapPlayerData.PlayerData.PlayerId);
             return;
         }
         PlayerData playerData = new PlayerData();
         playerData.Update(mapPlayerData.PlayerData);
-        
+
         if (playerData == null)
         {
             return;

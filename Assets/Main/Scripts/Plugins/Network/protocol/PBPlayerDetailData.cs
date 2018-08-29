@@ -83,6 +83,9 @@ namespace BigHead.protocol {
     private static readonly pb::FieldCodec<int> _repeated_equips_codec
         = pb::FieldCodec.ForInt32(10);
     private readonly pbc::RepeatedField<int> equips_ = new pbc::RepeatedField<int>();
+    /// <summary>
+    ///所有的装备
+    /// </summary>
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public pbc::RepeatedField<int> Equips {
       get { return equips_; }
@@ -93,6 +96,9 @@ namespace BigHead.protocol {
     private static readonly pb::FieldCodec<int> _repeated_buffs_codec
         = pb::FieldCodec.ForInt32(18);
     private readonly pbc::RepeatedField<int> buffs_ = new pbc::RepeatedField<int>();
+    /// <summary>
+    ///目前没有用
+    /// </summary>
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public pbc::RepeatedField<int> Buffs {
       get { return buffs_; }
@@ -116,6 +122,9 @@ namespace BigHead.protocol {
     private static readonly pb::FieldCodec<int> _repeated_items_codec
         = pb::FieldCodec.ForInt32(34);
     private readonly pbc::RepeatedField<int> items_ = new pbc::RepeatedField<int>();
+    /// <summary>
+    ///消耗品
+    /// </summary>
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public pbc::RepeatedField<int> Items {
       get { return items_; }

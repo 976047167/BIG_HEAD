@@ -23,18 +23,19 @@ namespace BigHead.protocol {
       byte[] descriptorData = global::System.Convert.FromBase64String(
           string.Concat(
             "ChVQQk1hcFBsYXllckRhdGEucHJvdG8aElBCUGxheWVyRGF0YS5wcm90bxoM",
-            "UEJEZWNrLnByb3RvIvYBCg9QQk1hcFBsYXllckRhdGESIgoLcGxheWVyX2Rh",
+            "UEJEZWNrLnByb3RvIqICCg9QQk1hcFBsYXllckRhdGESIgoLcGxheWVyX2Rh",
             "dGEYASABKAsyDS5QQlBsYXllckRhdGESFAoMcGxheWVyX3Bvc194GAIgASgF",
             "EhQKDHBsYXllcl9wb3NfeRgDIAEoBRIXCg9wbGF5ZXJfbW9kZWxfaWQYBCAB",
             "KAUSEwoLaW5zdGFuY2VfaWQYBSABKAUSFQoEZGVjaxgGIAEoCzIHLlBCRGVj",
             "axINCgVjYXJkcxgHIAMoBRIOCgZlcXVpcHMYCCADKAUSDQoFYnVmZnMYCSAD",
-            "KAUSDQoFaXRlbXMYCiADKAUSEQoJYWRkZWRfZXhwGAsgASgFQksKHWNvbS53",
-            "aGFsZWlzbGFuZC5nYW1lLnByb3RvY29sQhdQQk1hcFBsYXllckRhdGFQcm90",
-            "b2NvbKoCEEJpZ0hlYWQucHJvdG9jb2xiBnByb3RvMw=="));
+            "KAUSDQoFaXRlbXMYCiADKAUSEQoJYWRkZWRfZXhwGAsgASgFEhQKDHJld2Fy",
+            "ZF9jYXJkcxgMIAMoBRIUCgxyZXdhcmRfaXRlbXMYDSADKAVCSwodY29tLndo",
+            "YWxlaXNsYW5kLmdhbWUucHJvdG9jb2xCF1BCTWFwUGxheWVyRGF0YVByb3Rv",
+            "Y29sqgIQQmlnSGVhZC5wcm90b2NvbGIGcHJvdG8z"));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { global::BigHead.protocol.PBPlayerDataReflection.Descriptor, global::BigHead.protocol.PBDeckReflection.Descriptor, },
           new pbr::GeneratedClrTypeInfo(null, new pbr::GeneratedClrTypeInfo[] {
-            new pbr::GeneratedClrTypeInfo(typeof(global::BigHead.protocol.PBMapPlayerData), global::BigHead.protocol.PBMapPlayerData.Parser, new[]{ "PlayerData", "PlayerPosX", "PlayerPosY", "PlayerModelId", "InstanceId", "Deck", "Cards", "Equips", "Buffs", "Items", "AddedExp" }, null, null, null)
+            new pbr::GeneratedClrTypeInfo(typeof(global::BigHead.protocol.PBMapPlayerData), global::BigHead.protocol.PBMapPlayerData.Parser, new[]{ "PlayerData", "PlayerPosX", "PlayerPosY", "PlayerModelId", "InstanceId", "Deck", "Cards", "Equips", "Buffs", "Items", "AddedExp", "RewardCards", "RewardItems" }, null, null, null)
           }));
     }
     #endregion
@@ -79,6 +80,8 @@ namespace BigHead.protocol {
       buffs_ = other.buffs_.Clone();
       items_ = other.items_.Clone();
       addedExp_ = other.addedExp_;
+      rewardCards_ = other.rewardCards_.Clone();
+      rewardItems_ = other.rewardItems_.Clone();
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -209,6 +212,32 @@ namespace BigHead.protocol {
       }
     }
 
+    /// <summary>Field number for the "reward_cards" field.</summary>
+    public const int RewardCardsFieldNumber = 12;
+    private static readonly pb::FieldCodec<int> _repeated_rewardCards_codec
+        = pb::FieldCodec.ForInt32(98);
+    private readonly pbc::RepeatedField<int> rewardCards_ = new pbc::RepeatedField<int>();
+    /// <summary>
+    ///获得的奖励卡牌(可以带走的)
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public pbc::RepeatedField<int> RewardCards {
+      get { return rewardCards_; }
+    }
+
+    /// <summary>Field number for the "reward_items" field.</summary>
+    public const int RewardItemsFieldNumber = 13;
+    private static readonly pb::FieldCodec<int> _repeated_rewardItems_codec
+        = pb::FieldCodec.ForInt32(106);
+    private readonly pbc::RepeatedField<int> rewardItems_ = new pbc::RepeatedField<int>();
+    /// <summary>
+    ///获得的消耗品(可以带走的)
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public pbc::RepeatedField<int> RewardItems {
+      get { return rewardItems_; }
+    }
+
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override bool Equals(object other) {
       return Equals(other as PBMapPlayerData);
@@ -233,6 +262,8 @@ namespace BigHead.protocol {
       if(!buffs_.Equals(other.buffs_)) return false;
       if(!items_.Equals(other.items_)) return false;
       if (AddedExp != other.AddedExp) return false;
+      if(!rewardCards_.Equals(other.rewardCards_)) return false;
+      if(!rewardItems_.Equals(other.rewardItems_)) return false;
       return true;
     }
 
@@ -250,6 +281,8 @@ namespace BigHead.protocol {
       hash ^= buffs_.GetHashCode();
       hash ^= items_.GetHashCode();
       if (AddedExp != 0) hash ^= AddedExp.GetHashCode();
+      hash ^= rewardCards_.GetHashCode();
+      hash ^= rewardItems_.GetHashCode();
       return hash;
     }
 
@@ -292,6 +325,8 @@ namespace BigHead.protocol {
         output.WriteRawTag(88);
         output.WriteInt32(AddedExp);
       }
+      rewardCards_.WriteTo(output, _repeated_rewardCards_codec);
+      rewardItems_.WriteTo(output, _repeated_rewardItems_codec);
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -322,6 +357,8 @@ namespace BigHead.protocol {
       if (AddedExp != 0) {
         size += 1 + pb::CodedOutputStream.ComputeInt32Size(AddedExp);
       }
+      size += rewardCards_.CalculateSize(_repeated_rewardCards_codec);
+      size += rewardItems_.CalculateSize(_repeated_rewardItems_codec);
       return size;
     }
 
@@ -361,6 +398,8 @@ namespace BigHead.protocol {
       if (other.AddedExp != 0) {
         AddedExp = other.AddedExp;
       }
+      rewardCards_.Add(other.rewardCards_);
+      rewardItems_.Add(other.rewardItems_);
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -423,6 +462,16 @@ namespace BigHead.protocol {
           }
           case 88: {
             AddedExp = input.ReadInt32();
+            break;
+          }
+          case 98:
+          case 96: {
+            rewardCards_.AddEntriesFrom(input, _repeated_rewardCards_codec);
+            break;
+          }
+          case 106:
+          case 104: {
+            rewardItems_.AddEntriesFrom(input, _repeated_rewardItems_codec);
             break;
           }
         }

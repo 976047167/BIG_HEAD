@@ -79,4 +79,16 @@ public class Deck
     {
         m_Cards.Clear();
     }
+    public PBDeck ToPBDeck()
+    {
+        PBDeck pbDeck = new PBDeck();
+        pbDeck.Index = this.index;
+        pbDeck.MaxCount = this.max_count;
+        pbDeck.Name = this.name;
+        for (int i = 0; i < Cards.Count; i++)
+        {
+            pbDeck.Cards.Add(Cards[i].CardId);
+        }
+        return pbDeck;
+    }
 }

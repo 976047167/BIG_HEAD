@@ -82,9 +82,10 @@ public class WND_InstanceSetting : UIFormBase
         {
             if (result == MessageBoxReturnType.Yes)
             {
-                Game.DataManager.MyPlayer.Data.HP = Game.DataManager.MyPlayer.Data.MaxHP;
-                Game.DataManager.MyPlayer.Data.MP = Game.DataManager.MyPlayer.Data.MaxMP;
-                SceneMgr.ChangeScene(3);
+                if (MapMgr.Inited)
+                {
+                    MapMgr.Instance.BackToMaintown();
+                }
             }
         });
 

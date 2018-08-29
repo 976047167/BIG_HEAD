@@ -21,6 +21,9 @@ public class GCExitInstanceHandler : BasePacketHandler
         base.Handle(sender, packet);
         GCExitInstance data = packet as GCExitInstance;
         //处理完数据和逻辑后,发送消息通知其他模块,绝对不可以直接操作UI等Unity主线程的东西!
-        throw new System.NotImplementedException(GetType().ToString());
+        //TODO: 退出副本的总结算
+        //RewardData rewardData = new RewardData(data.Gold,data.Diamonds)
+        
+        Messenger.Broadcast(MessageId.MAP_BACK_TO_MAINTOWN);
     }
 }

@@ -22,18 +22,20 @@ namespace BigHead.protocol {
     static GCMapGetRewardReflection() {
       byte[] descriptorData = global::System.Convert.FromBase64String(
           string.Concat(
-            "ChkyMDAyX0dDTWFwR2V0UmV3YXJkLnByb3RvIvEBCg5HQ01hcEdldFJld2Fy",
+            "ChkyMDAyX0dDTWFwR2V0UmV3YXJkLnByb3RvIsICCg5HQ01hcEdldFJld2Fy",
             "ZBISCgphY2NvdW50X2lkGAEgASgEEhEKCXBsYXllcl9pZBgCIAEoBBIQCghk",
             "aWFtb25kcxgDIAEoBRIRCglvbGRfbGV2ZWwYBCABKAUSDwoHb2xkX2V4cBgF",
             "IAEoBRIRCglhZGRlZF9leHAYBiABKAUSCgoCaHAYByABKAUSCgoCbXAYCCAB",
             "KAUSDAoEZm9vZBgJIAEoBRIMCgRnb2xkGAogASgFEg0KBWNhcmRzGAsgAygF",
-            "Eg0KBWl0ZW1zGAwgAygFEg0KBWJ1ZmZzGA0gAygFEg4KBmVxdWlwcxgOIAMo",
-            "BUJKCh1jb20ud2hhbGVpc2xhbmQuZ2FtZS5wcm90b2NvbEIWR0NNYXBHZXRS",
-            "ZXdhcmRQcm90b2NvbKoCEEJpZ0hlYWQucHJvdG9jb2xiBnByb3RvMw=="));
+            "EhIKCmNhcmRfdGVtcHMYDCADKAUSDQoFaXRlbXMYDSADKAUSEgoKaXRlbV90",
+            "ZW1wcxgOIAMoBRINCgVidWZmcxgPIAMoBRISCgpidWZmX3RlbXBzGBAgAygF",
+            "Eg4KBmVxdWlwcxgRIAMoBRITCgtlcXVpcF90ZW1wcxgSIAMoBUJKCh1jb20u",
+            "d2hhbGVpc2xhbmQuZ2FtZS5wcm90b2NvbEIWR0NNYXBHZXRSZXdhcmRQcm90",
+            "b2NvbKoCEEJpZ0hlYWQucHJvdG9jb2xiBnByb3RvMw=="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { },
           new pbr::GeneratedClrTypeInfo(null, new pbr::GeneratedClrTypeInfo[] {
-            new pbr::GeneratedClrTypeInfo(typeof(global::BigHead.protocol.GCMapGetReward), global::BigHead.protocol.GCMapGetReward.Parser, new[]{ "AccountId", "PlayerId", "Diamonds", "OldLevel", "OldExp", "AddedExp", "Hp", "Mp", "Food", "Gold", "Cards", "Items", "Buffs", "Equips" }, null, null, null)
+            new pbr::GeneratedClrTypeInfo(typeof(global::BigHead.protocol.GCMapGetReward), global::BigHead.protocol.GCMapGetReward.Parser, new[]{ "AccountId", "PlayerId", "Diamonds", "OldLevel", "OldExp", "AddedExp", "Hp", "Mp", "Food", "Gold", "Cards", "CardTemps", "Items", "ItemTemps", "Buffs", "BuffTemps", "Equips", "EquipTemps" }, null, null, null)
           }));
     }
     #endregion
@@ -78,9 +80,13 @@ namespace BigHead.protocol {
       food_ = other.food_;
       gold_ = other.gold_;
       cards_ = other.cards_.Clone();
+      cardTemps_ = other.cardTemps_.Clone();
       items_ = other.items_.Clone();
+      itemTemps_ = other.itemTemps_.Clone();
       buffs_ = other.buffs_.Clone();
+      buffTemps_ = other.buffTemps_.Clone();
       equips_ = other.equips_.Clone();
+      equipTemps_ = other.equipTemps_.Clone();
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -214,34 +220,86 @@ namespace BigHead.protocol {
       get { return cards_; }
     }
 
-    /// <summary>Field number for the "items" field.</summary>
-    public const int ItemsFieldNumber = 12;
-    private static readonly pb::FieldCodec<int> _repeated_items_codec
+    /// <summary>Field number for the "card_temps" field.</summary>
+    public const int CardTempsFieldNumber = 12;
+    private static readonly pb::FieldCodec<int> _repeated_cardTemps_codec
         = pb::FieldCodec.ForInt32(98);
+    private readonly pbc::RepeatedField<int> cardTemps_ = new pbc::RepeatedField<int>();
+    /// <summary>
+    ///是否是临时卡
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public pbc::RepeatedField<int> CardTemps {
+      get { return cardTemps_; }
+    }
+
+    /// <summary>Field number for the "items" field.</summary>
+    public const int ItemsFieldNumber = 13;
+    private static readonly pb::FieldCodec<int> _repeated_items_codec
+        = pb::FieldCodec.ForInt32(106);
     private readonly pbc::RepeatedField<int> items_ = new pbc::RepeatedField<int>();
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public pbc::RepeatedField<int> Items {
       get { return items_; }
     }
 
+    /// <summary>Field number for the "item_temps" field.</summary>
+    public const int ItemTempsFieldNumber = 14;
+    private static readonly pb::FieldCodec<int> _repeated_itemTemps_codec
+        = pb::FieldCodec.ForInt32(114);
+    private readonly pbc::RepeatedField<int> itemTemps_ = new pbc::RepeatedField<int>();
+    /// <summary>
+    ///是否是临时卡
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public pbc::RepeatedField<int> ItemTemps {
+      get { return itemTemps_; }
+    }
+
     /// <summary>Field number for the "buffs" field.</summary>
-    public const int BuffsFieldNumber = 13;
+    public const int BuffsFieldNumber = 15;
     private static readonly pb::FieldCodec<int> _repeated_buffs_codec
-        = pb::FieldCodec.ForInt32(106);
+        = pb::FieldCodec.ForInt32(122);
     private readonly pbc::RepeatedField<int> buffs_ = new pbc::RepeatedField<int>();
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public pbc::RepeatedField<int> Buffs {
       get { return buffs_; }
     }
 
+    /// <summary>Field number for the "buff_temps" field.</summary>
+    public const int BuffTempsFieldNumber = 16;
+    private static readonly pb::FieldCodec<int> _repeated_buffTemps_codec
+        = pb::FieldCodec.ForInt32(130);
+    private readonly pbc::RepeatedField<int> buffTemps_ = new pbc::RepeatedField<int>();
+    /// <summary>
+    ///是否是临时卡
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public pbc::RepeatedField<int> BuffTemps {
+      get { return buffTemps_; }
+    }
+
     /// <summary>Field number for the "equips" field.</summary>
-    public const int EquipsFieldNumber = 14;
+    public const int EquipsFieldNumber = 17;
     private static readonly pb::FieldCodec<int> _repeated_equips_codec
-        = pb::FieldCodec.ForInt32(114);
+        = pb::FieldCodec.ForInt32(138);
     private readonly pbc::RepeatedField<int> equips_ = new pbc::RepeatedField<int>();
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public pbc::RepeatedField<int> Equips {
       get { return equips_; }
+    }
+
+    /// <summary>Field number for the "equip_temps" field.</summary>
+    public const int EquipTempsFieldNumber = 18;
+    private static readonly pb::FieldCodec<int> _repeated_equipTemps_codec
+        = pb::FieldCodec.ForInt32(146);
+    private readonly pbc::RepeatedField<int> equipTemps_ = new pbc::RepeatedField<int>();
+    /// <summary>
+    ///是否是临时卡
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public pbc::RepeatedField<int> EquipTemps {
+      get { return equipTemps_; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -268,9 +326,13 @@ namespace BigHead.protocol {
       if (Food != other.Food) return false;
       if (Gold != other.Gold) return false;
       if(!cards_.Equals(other.cards_)) return false;
+      if(!cardTemps_.Equals(other.cardTemps_)) return false;
       if(!items_.Equals(other.items_)) return false;
+      if(!itemTemps_.Equals(other.itemTemps_)) return false;
       if(!buffs_.Equals(other.buffs_)) return false;
+      if(!buffTemps_.Equals(other.buffTemps_)) return false;
       if(!equips_.Equals(other.equips_)) return false;
+      if(!equipTemps_.Equals(other.equipTemps_)) return false;
       return true;
     }
 
@@ -288,9 +350,13 @@ namespace BigHead.protocol {
       if (Food != 0) hash ^= Food.GetHashCode();
       if (Gold != 0) hash ^= Gold.GetHashCode();
       hash ^= cards_.GetHashCode();
+      hash ^= cardTemps_.GetHashCode();
       hash ^= items_.GetHashCode();
+      hash ^= itemTemps_.GetHashCode();
       hash ^= buffs_.GetHashCode();
+      hash ^= buffTemps_.GetHashCode();
       hash ^= equips_.GetHashCode();
+      hash ^= equipTemps_.GetHashCode();
       return hash;
     }
 
@@ -342,9 +408,13 @@ namespace BigHead.protocol {
         output.WriteInt32(Gold);
       }
       cards_.WriteTo(output, _repeated_cards_codec);
+      cardTemps_.WriteTo(output, _repeated_cardTemps_codec);
       items_.WriteTo(output, _repeated_items_codec);
+      itemTemps_.WriteTo(output, _repeated_itemTemps_codec);
       buffs_.WriteTo(output, _repeated_buffs_codec);
+      buffTemps_.WriteTo(output, _repeated_buffTemps_codec);
       equips_.WriteTo(output, _repeated_equips_codec);
+      equipTemps_.WriteTo(output, _repeated_equipTemps_codec);
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -381,9 +451,13 @@ namespace BigHead.protocol {
         size += 1 + pb::CodedOutputStream.ComputeInt32Size(Gold);
       }
       size += cards_.CalculateSize(_repeated_cards_codec);
+      size += cardTemps_.CalculateSize(_repeated_cardTemps_codec);
       size += items_.CalculateSize(_repeated_items_codec);
+      size += itemTemps_.CalculateSize(_repeated_itemTemps_codec);
       size += buffs_.CalculateSize(_repeated_buffs_codec);
+      size += buffTemps_.CalculateSize(_repeated_buffTemps_codec);
       size += equips_.CalculateSize(_repeated_equips_codec);
+      size += equipTemps_.CalculateSize(_repeated_equipTemps_codec);
       return size;
     }
 
@@ -423,9 +497,13 @@ namespace BigHead.protocol {
         Gold = other.Gold;
       }
       cards_.Add(other.cards_);
+      cardTemps_.Add(other.cardTemps_);
       items_.Add(other.items_);
+      itemTemps_.Add(other.itemTemps_);
       buffs_.Add(other.buffs_);
+      buffTemps_.Add(other.buffTemps_);
       equips_.Add(other.equips_);
+      equipTemps_.Add(other.equipTemps_);
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -483,17 +561,37 @@ namespace BigHead.protocol {
           }
           case 98:
           case 96: {
-            items_.AddEntriesFrom(input, _repeated_items_codec);
+            cardTemps_.AddEntriesFrom(input, _repeated_cardTemps_codec);
             break;
           }
           case 106:
           case 104: {
-            buffs_.AddEntriesFrom(input, _repeated_buffs_codec);
+            items_.AddEntriesFrom(input, _repeated_items_codec);
             break;
           }
           case 114:
           case 112: {
+            itemTemps_.AddEntriesFrom(input, _repeated_itemTemps_codec);
+            break;
+          }
+          case 122:
+          case 120: {
+            buffs_.AddEntriesFrom(input, _repeated_buffs_codec);
+            break;
+          }
+          case 130:
+          case 128: {
+            buffTemps_.AddEntriesFrom(input, _repeated_buffTemps_codec);
+            break;
+          }
+          case 138:
+          case 136: {
             equips_.AddEntriesFrom(input, _repeated_equips_codec);
+            break;
+          }
+          case 146:
+          case 144: {
+            equipTemps_.AddEntriesFrom(input, _repeated_equipTemps_codec);
             break;
           }
         }

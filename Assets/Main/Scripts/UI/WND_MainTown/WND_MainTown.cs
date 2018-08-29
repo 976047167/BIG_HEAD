@@ -36,7 +36,7 @@ public class WND_MainTown : UIFormBase
         UIEventListener.Get(btnDungeon).onClick = DungeonClick;
         UIEventListener.Get(btnPlot).onClick = Onclick_btnPlot;
         UIEventListener.Get(headFrame).onClick = OnClick_HeadFrame;
-        Messenger.AddListener(MessageId.MAP_UPDATE_PLAYER_INFO, UpdatePlayerInfoPanel);
+        Messenger.AddListener(MessageId.GAME_UPDATE_PLAYER_INFO, UpdatePlayerInfoPanel);
     }
     protected override void OnOpen()
     {
@@ -71,7 +71,12 @@ public class WND_MainTown : UIFormBase
     {
         CGEnterInstance request = new CGEnterInstance();
         request.InstanceId = 1;
-        request.UsingDeck = 1;
+        //取默认的一个
+        foreach (var item in Game.DataManager.MyPlayer.DetailData.Decks)
+        {
+            request.Deck =item.Value.ToPBDeck();
+            break;
+        }
         Game.NetworkManager.SendToLobby(MessageId_Send.CGEnterInstance, request);
     }
     private void OnClick_HeadFrame(GameObject obj)

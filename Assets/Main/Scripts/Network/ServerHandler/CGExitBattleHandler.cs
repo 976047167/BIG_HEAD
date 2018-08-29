@@ -66,6 +66,20 @@ public class CGExitBattleHandler : BaseServerPacketHandler
                 mapPlayerData.Items.Add(reward.Items);
             if (reward.Buffs.Count > 0)
                 mapPlayerData.Buffs.Add(reward.Items);
+            for (int i = 0; i < reward.Cards.Count; i++)
+            {
+                if (reward.CardTemps[i]==1)
+                {
+                    mapPlayerData.RewardCards.Add(reward.Cards[i]);
+                }
+            }
+            for (int i = 0; i < reward.Items.Count; i++)
+            {
+                if (reward.ItemTemps[i] == 1)
+                {
+                    mapPlayerData.RewardItems.Add(reward.Items[i]);
+                }
+            }
             SaveData(ACCOUNT_DATA_KEY, accountData);
             SaveData(MAP_PLAYER_DATA_KEY, mapPlayerData);
 
@@ -80,6 +94,7 @@ public class CGExitBattleHandler : BaseServerPacketHandler
         GCUpdateMapPlayerData updateMapPlayerData = new GCUpdateMapPlayerData();
         updateMapPlayerData.MapPlayerData = mapPlayerData;
         updateMapPlayerData.PlayerId = mapPlayerData.PlayerData.PlayerId;
+
         SendToClient(MessageId_Receive.GCUpdateMapPlayerData, updateMapPlayerData);
     }
     

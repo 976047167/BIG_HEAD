@@ -54,6 +54,7 @@ public class PlayerData
         HeadIcon = playerData.HeadIcon;
         MapSkillID = playerData.MapSkillId;
         BattleSkillID = playerData.BattleSkillId;
+        Exp = playerData.Exp;
     }
     
 

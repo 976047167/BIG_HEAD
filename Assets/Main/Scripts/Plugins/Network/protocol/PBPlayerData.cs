@@ -22,19 +22,19 @@ namespace BigHead.protocol {
     static PBPlayerDataReflection() {
       byte[] descriptorData = global::System.Convert.FromBase64String(
           string.Concat(
-            "ChJQQlBsYXllckRhdGEucHJvdG8iiQIKDFBCUGxheWVyRGF0YRIRCglwbGF5",
+            "ChJQQlBsYXllckRhdGEucHJvdG8imQIKDFBCUGxheWVyRGF0YRIRCglwbGF5",
             "ZXJfaWQYASABKAQSDAoEbmFtZRgCIAEoCRIUCgxjaGFyYWN0ZXJfaWQYAyAB",
             "KAUSDQoFbGV2ZWwYBCABKAUSCwoDZXhwGAUgASgFEgoKAmhwGAYgASgFEg4K",
             "Bm1heF9ocBgHIAEoBRIKCgJtcBgIIAEoBRIOCgZtYXhfbXAYCSABKAUSDAoE",
             "Zm9vZBgKIAEoBRIQCghtYXhfZm9vZBgLIAEoBRIMCgRnb2xkGAwgASgFEhEK",
             "CWhlYWRfaWNvbhgNIAEoBRIUCgxtYXBfc2tpbGxfaWQYDiABKAUSFwoPYmF0",
-            "dGxlX3NraWxsX2lkGA8gASgFQkgKHWNvbS53aGFsZWlzbGFuZC5nYW1lLnBy",
-            "b3RvY29sQhRQQlBsYXllckRhdGFQcm90b2NvbKoCEEJpZ0hlYWQucHJvdG9j",
-            "b2xiBnByb3RvMw=="));
+            "dGxlX3NraWxsX2lkGA8gASgFEg4KBmVxdWlwcxgQIAMoBUJICh1jb20ud2hh",
+            "bGVpc2xhbmQuZ2FtZS5wcm90b2NvbEIUUEJQbGF5ZXJEYXRhUHJvdG9jb2yq",
+            "AhBCaWdIZWFkLnByb3RvY29sYgZwcm90bzM="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { },
           new pbr::GeneratedClrTypeInfo(null, new pbr::GeneratedClrTypeInfo[] {
-            new pbr::GeneratedClrTypeInfo(typeof(global::BigHead.protocol.PBPlayerData), global::BigHead.protocol.PBPlayerData.Parser, new[]{ "PlayerId", "Name", "CharacterId", "Level", "Exp", "Hp", "MaxHp", "Mp", "MaxMp", "Food", "MaxFood", "Gold", "HeadIcon", "MapSkillId", "BattleSkillId" }, null, null, null)
+            new pbr::GeneratedClrTypeInfo(typeof(global::BigHead.protocol.PBPlayerData), global::BigHead.protocol.PBPlayerData.Parser, new[]{ "PlayerId", "Name", "CharacterId", "Level", "Exp", "Hp", "MaxHp", "Mp", "MaxMp", "Food", "MaxFood", "Gold", "HeadIcon", "MapSkillId", "BattleSkillId", "Equips" }, null, null, null)
           }));
     }
     #endregion
@@ -83,6 +83,7 @@ namespace BigHead.protocol {
       headIcon_ = other.headIcon_;
       mapSkillId_ = other.mapSkillId_;
       battleSkillId_ = other.battleSkillId_;
+      equips_ = other.equips_.Clone();
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -258,6 +259,19 @@ namespace BigHead.protocol {
       }
     }
 
+    /// <summary>Field number for the "equips" field.</summary>
+    public const int EquipsFieldNumber = 16;
+    private static readonly pb::FieldCodec<int> _repeated_equips_codec
+        = pb::FieldCodec.ForInt32(130);
+    private readonly pbc::RepeatedField<int> equips_ = new pbc::RepeatedField<int>();
+    /// <summary>
+    ///装备在身上的装备
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public pbc::RepeatedField<int> Equips {
+      get { return equips_; }
+    }
+
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override bool Equals(object other) {
       return Equals(other as PBPlayerData);
@@ -286,6 +300,7 @@ namespace BigHead.protocol {
       if (HeadIcon != other.HeadIcon) return false;
       if (MapSkillId != other.MapSkillId) return false;
       if (BattleSkillId != other.BattleSkillId) return false;
+      if(!equips_.Equals(other.equips_)) return false;
       return true;
     }
 
@@ -307,6 +322,7 @@ namespace BigHead.protocol {
       if (HeadIcon != 0) hash ^= HeadIcon.GetHashCode();
       if (MapSkillId != 0) hash ^= MapSkillId.GetHashCode();
       if (BattleSkillId != 0) hash ^= BattleSkillId.GetHashCode();
+      hash ^= equips_.GetHashCode();
       return hash;
     }
 
@@ -377,6 +393,7 @@ namespace BigHead.protocol {
         output.WriteRawTag(120);
         output.WriteInt32(BattleSkillId);
       }
+      equips_.WriteTo(output, _repeated_equips_codec);
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -427,6 +444,7 @@ namespace BigHead.protocol {
       if (BattleSkillId != 0) {
         size += 1 + pb::CodedOutputStream.ComputeInt32Size(BattleSkillId);
       }
+      size += equips_.CalculateSize(_repeated_equips_codec);
       return size;
     }
 
@@ -480,6 +498,7 @@ namespace BigHead.protocol {
       if (other.BattleSkillId != 0) {
         BattleSkillId = other.BattleSkillId;
       }
+      equips_.Add(other.equips_);
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -548,6 +567,11 @@ namespace BigHead.protocol {
           }
           case 120: {
             BattleSkillId = input.ReadInt32();
+            break;
+          }
+          case 130:
+          case 128: {
+            equips_.AddEntriesFrom(input, _repeated_equips_codec);
             break;
           }
         }
