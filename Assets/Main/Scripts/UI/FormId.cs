@@ -44,5 +44,7 @@ public enum FormId : int
     WND_MessageBox = 18,
     ///<summary>战斗结果</summary>
     WND_BattleResult = 19,
+    ///<summary>网络消息等待</summary>
+    WND_Waiting = 20,
 
 }
