@@ -21,7 +21,7 @@ public class CGExitInstanceHandler : BaseServerPacketHandler
         PBAccountData accountData = GetSavedData<PBAccountData>(ACCOUNT_DATA_KEY);
         PBMapPlayerData mapPlayerData = GetSavedData<PBMapPlayerData>(MAP_PLAYER_DATA_KEY);
         PBPlayerData playerData = GetSavedData<PBPlayerData>(PLAYER_DATA_KEY);
-        PBPlayerDetailData playerDetailData = GetSavedData<PBPlayerDetailData>(PLAYER_DETAIL_DATA);
+        PBPlayerDetailData playerDetailData = GetSavedData<PBPlayerDetailData>(PLAYER_DETAIL_DATA_KEY);
 
         if (data.AccountId != accountData.Uid)
         {
@@ -42,7 +42,7 @@ public class CGExitInstanceHandler : BaseServerPacketHandler
 
         SaveData(MAP_PLAYER_DATA_KEY, null);
         SaveData(PLAYER_DATA_KEY, playerData);
-        SaveData(PLAYER_DETAIL_DATA, playerDetailData);
+        SaveData(PLAYER_DETAIL_DATA_KEY, playerDetailData);
 
         GCExitInstance exitInstance = new GCExitInstance();
         exitInstance.AccountId = accountData.Uid;

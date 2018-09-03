@@ -32,7 +32,7 @@ public class CGSignInHandler : BaseServerPacketHandler
             UnityEngine.Debug.LogError("没有创建角色!");
             return;
         }
-        userData.PlayerDetailData = GetSavedData<PBPlayerDetailData>(PLAYER_DETAIL_DATA);
+        userData.PlayerDetailData = GetSavedData<PBPlayerDetailData>(PLAYER_DETAIL_DATA_KEY);
         if (userData.PlayerDetailData == null)
         {
             UnityEngine.Debug.LogError("没有创建角色详细信息!");

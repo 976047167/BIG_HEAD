@@ -59,7 +59,7 @@ public class CGCreatePlayerHandler : BaseServerPacketHandler
             SaveData(PLAYER_DATA_KEY, userData.PlayerData);
 
         }
-        userData.PlayerDetailData = GetSavedData<PBPlayerDetailData>(PLAYER_DETAIL_DATA);
+        userData.PlayerDetailData = GetSavedData<PBPlayerDetailData>(PLAYER_DETAIL_DATA_KEY);
         if (userData.PlayerDetailData == null)
         {
             //PlayerDetailData = MyPlayer.DetailData;
@@ -80,7 +80,7 @@ public class CGCreatePlayerHandler : BaseServerPacketHandler
             deck.Name = "默认卡组";
             userData.PlayerDetailData.Decks.Add(deck);
 
-            SaveData(PLAYER_DETAIL_DATA, userData.PlayerDetailData);
+            SaveData(PLAYER_DETAIL_DATA_KEY, userData.PlayerDetailData);
         }
         SendToClient(MessageId_Receive.GCSignIn, userData);
     }

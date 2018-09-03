@@ -65,7 +65,7 @@ public class CGEnterInstanceHandler : BaseServerPacketHandler
 
         //response.MapPlayerData.PlayerData
         response.MapPlayerData.PlayerModelId = ClassCharacterTableSettings.Get(response.MapPlayerData.PlayerData.CharacterId).ModelID;
-        PBPlayerDetailData playerDetailData = GetSavedData<PBPlayerDetailData>(PLAYER_DETAIL_DATA);
+        PBPlayerDetailData playerDetailData = GetSavedData<PBPlayerDetailData>(PLAYER_DETAIL_DATA_KEY);
         bool exist = false;
         for (int i = 0; i < playerDetailData.Decks.Count; i++)
         {
@@ -92,7 +92,7 @@ public class CGEnterInstanceHandler : BaseServerPacketHandler
         }
 
         SaveData(PLAYER_DATA_KEY, playerData);
-        SaveData(PLAYER_DETAIL_DATA, playerDetailData);
+        SaveData(PLAYER_DETAIL_DATA_KEY, playerDetailData);
         SaveData(MAP_PLAYER_DATA_KEY, response.MapPlayerData);
         SendToClient(MessageId_Receive.GCEnterInstance, response);
     }

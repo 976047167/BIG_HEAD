@@ -32,7 +32,7 @@ public class CGLoginHandler : BaseServerPacketHandler
             else
             {
                 login.AccountData = GetSavedData<PBAccountData>(ACCOUNT_DATA_KEY);
-                if (GetSavedData<PBPlayerData>(PLAYER_DATA_KEY) == null || GetSavedData<PBPlayerDetailData>(PLAYER_DETAIL_DATA) == null)
+                if (GetSavedData<PBPlayerData>(PLAYER_DATA_KEY) == null || GetSavedData<PBPlayerDetailData>(PLAYER_DETAIL_DATA_KEY) == null)
                 {
                     //新玩家，没有创建角色
                     login.Result = 0;

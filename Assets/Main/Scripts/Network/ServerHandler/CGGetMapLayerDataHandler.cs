@@ -120,6 +120,7 @@ public class CGGetMapLayerDataHandler : BaseServerPacketHandler
                 response.LayerData.PointIds.Add(mapID[i, j]);
             }
         }
+        SaveData(MAP_LAYER_DATA_KEY, response.LayerData);
         SendToClient(MessageId_Receive.GCGetMapLayerData, response);
     }
 }

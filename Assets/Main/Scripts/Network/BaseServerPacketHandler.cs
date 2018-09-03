@@ -19,7 +19,8 @@ namespace BigHead.Net
         protected const string ACCOUNT_DATA_KEY = "accountData";
         protected const string PLAYER_DATA_KEY = "playerData";
         protected const string MAP_PLAYER_DATA_KEY = "mapPlayerData";
-        protected const string PLAYER_DETAIL_DATA = "detailPlayerData";
+        protected const string PLAYER_DETAIL_DATA_KEY = "detailPlayerData";
+        protected const string MAP_LAYER_DATA_KEY = "mapLayerData";
 
         protected void SendToClient(MessageId_Receive messageId, IMessage message)
         {
