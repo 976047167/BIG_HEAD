@@ -118,8 +118,10 @@ public class CGGetMapLayerDataHandler : BaseServerPacketHandler
             {
                 response.LayerData.PointTypes.Add(mapType[i, j]);
                 response.LayerData.PointIds.Add(mapID[i, j]);
+                response.LayerData.PointState.Add(0);
             }
         }
+        response.LayerData.PointState[data.PlayerX + data.PlayerY * instanceTable.Width] = 1;
         SaveData(MAP_LAYER_DATA_KEY, response.LayerData);
         SendToClient(MessageId_Receive.GCGetMapLayerData, response);
     }

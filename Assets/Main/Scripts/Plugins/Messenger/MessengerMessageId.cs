@@ -105,10 +105,16 @@ static public partial class Messenger
     {
         DoBroadcast((uint)eventType, true);
     }
+    /// <summary>
+    /// 异步
+    /// </summary>
     static public void BroadcastAsync(MessageId eventType)
     {
         DoBroadcast((uint)eventType, true);
     }
+    /// <summary>
+    /// 同步
+    /// </summary>
     static public void BroadcastSync(MessageId eventType)
     {
         DoBroadcast((uint)eventType, false);
@@ -121,10 +127,16 @@ static public partial class Messenger
     {
         DoBroadcast<T>((uint)eventType, arg1, true);
     }
+    /// <summary>
+    /// 异步
+    /// </summary>
     static public void BroadcastAsync<T>(MessageId eventType, T arg1)
     {
         DoBroadcast<T>((uint)eventType, arg1, true);
     }
+    /// <summary>
+    /// 同步
+    /// </summary>
     static public void BroadcastSync<T>(MessageId eventType, T arg1)
     {
         DoBroadcast<T>((uint)eventType, arg1, false);
@@ -137,10 +149,16 @@ static public partial class Messenger
     {
         DoBroadcast<T, U>((uint)eventType, arg1, arg2, true);
     }
+    /// <summary>
+    /// 异步
+    /// </summary>
     static public void BroadcastAsync<T, U>(MessageId eventType, T arg1, U arg2)
     {
         DoBroadcast<T, U>((uint)eventType, arg1, arg2, true);
     }
+    /// <summary>
+    /// 同步
+    /// </summary>
     static public void BroadcastSync<T, U>(MessageId eventType, T arg1, U arg2)
     {
         DoBroadcast<T, U>((uint)eventType, arg1, arg2, false);
@@ -153,10 +171,16 @@ static public partial class Messenger
     {
         DoBroadcast<T, U, V>((uint)eventType, arg1, arg2, arg3, true);
     }
+    /// <summary>
+    /// 异步
+    /// </summary>
     static public void BroadcastAsync<T, U, V>(MessageId eventType, T arg1, U arg2, V arg3)
     {
         DoBroadcast<T, U, V>((uint)eventType, arg1, arg2, arg3, true);
     }
+    /// <summary>
+    /// 同步
+    /// </summary>
     static public void BroadcastSync<T, U, V>(MessageId eventType, T arg1, U arg2, V arg3)
     {
         DoBroadcast<T, U, V>((uint)eventType, arg1, arg2, arg3, false);

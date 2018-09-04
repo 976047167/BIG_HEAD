@@ -47,6 +47,7 @@ public class MapMgr
         Messenger.AddListener<RewardData>(MessageId.MAP_GET_REWARD, GetMapReward);
         Messenger.AddListener(MessageId.MAP_BACK_TO_MAINTOWN, ResponseBackToMaintown);
         Messenger.AddListener<ulong>(MessageId.MAP_PLAYER_DEAD, OnPlayerDead);
+        Messenger.AddListener<GCMapPlayerMove>(MessageId.MAP_PLAYER_MOVE, PlayerMove);
     }
     void RemoveMessage()
     {
@@ -54,6 +55,7 @@ public class MapMgr
         Messenger.RemoveListener<RewardData>(MessageId.MAP_GET_REWARD, GetMapReward);
         Messenger.RemoveListener(MessageId.MAP_BACK_TO_MAINTOWN, ResponseBackToMaintown);
         Messenger.RemoveListener<ulong>(MessageId.MAP_PLAYER_DEAD, OnPlayerDead);
+        Messenger.RemoveListener<GCMapPlayerMove>(MessageId.MAP_PLAYER_MOVE, PlayerMove);
     }
 
 
@@ -334,7 +336,23 @@ public class MapMgr
         int distance = Mathf.Abs(mapCard.X - m_MyMapPlayer.CurPos.X) + Mathf.Abs(mapCard.Y - m_MyMapPlayer.CurPos.Y);
         if (distance == 1)
         {
-            m_MyMapPlayer.MoveTo(mapCard.Position);
+            CGMapPlayerMove mapPlayerMove = new CGMapPlayerMove();
+            mapPlayerMove.PlayerId = m_MyMapPlayer.Data.Id;
+            mapPlayerMove.TargetX = mapCard.X;
+            mapPlayerMove.TargetY = mapCard.Y;
+            Game.NetworkManager.SendToLobby(MessageId_Send.CGMapPlayerMove, mapPlayerMove);
+        }
+    }
+
+    void PlayerMove(GCMapPlayerMove data)
+    {
+        if (data.PlayerId == m_MyMapPlayer.Data.Id)
+        {
+            MapMgr.Instance.MyMapPlayer.MoveTo(new MapCardPos(data.X, data.Y));
+        }
+        else
+        {
+            Debug.LogError("没有找到移动的玩家");
         }
     }
 

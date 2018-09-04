@@ -21,6 +21,14 @@ public class GCMapPlayerMoveHandler : BasePacketHandler
         base.Handle(sender, packet);
         GCMapPlayerMove data = packet as GCMapPlayerMove;
         //处理完数据和逻辑后,发送消息通知其他模块,绝对不可以直接操作UI等Unity主线程的东西!
-        throw new System.NotImplementedException(GetType().ToString());
+        if (data.Result == 0)
+        {
+            Messenger.BroadcastAsync<GCMapPlayerMove>(MessageId.MAP_PLAYER_MOVE, data);
+            
+        }
+        else
+        {
+            Debug.LogError("移动失败");
+        }
     }
 }

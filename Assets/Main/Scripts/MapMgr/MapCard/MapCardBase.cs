@@ -344,12 +344,12 @@ public class MapCardBase
     {
         if (Used == false)
         {
-            MapMgr.Instance.MyMapPlayer.Data.Food--;
-            if (MapMgr.Instance.MyMapPlayer.Data.HP < MapMgr.Instance.MyMapPlayer.Data.MaxHP)
-            {
-                MapMgr.Instance.MyMapPlayer.Data.HP++;
-            }
-            Messenger.Broadcast(MessageId.MAP_UPDATE_PLAYER_INFO);
+            //MapMgr.Instance.MyMapPlayer.Data.Food--;
+            //if (MapMgr.Instance.MyMapPlayer.Data.HP < MapMgr.Instance.MyMapPlayer.Data.MaxHP)
+            //{
+            //    MapMgr.Instance.MyMapPlayer.Data.HP++;
+            //}
+            //Messenger.Broadcast(MessageId.MAP_UPDATE_PLAYER_INFO);
             OnPlayerEnter();
         }
         if (isFirstEnter)

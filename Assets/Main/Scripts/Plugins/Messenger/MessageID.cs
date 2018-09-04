@@ -84,6 +84,10 @@ public enum MessageId : uint
     /// 回到主城
     /// </summary>
     MAP_BACK_TO_MAINTOWN,
+    /// <summary>
+    /// 地图玩家移动
+    /// </summary>
+    MAP_PLAYER_MOVE,
     
     
     

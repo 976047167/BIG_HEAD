@@ -22,15 +22,16 @@ namespace BigHead.protocol {
     static PBMapLayerDataReflection() {
       byte[] descriptorData = global::System.Convert.FromBase64String(
           string.Concat(
-            "ChRQQk1hcExheWVyRGF0YS5wcm90byJmCg5QQk1hcExheWVyRGF0YRINCgVp",
+            "ChRQQk1hcExheWVyRGF0YS5wcm90byJ7Cg5QQk1hcExheWVyRGF0YRINCgVp",
             "bmRleBgBIAEoBRINCgV3aWR0aBgCIAEoBRIOCgZoZWlnaHQYAyABKAUSEwoL",
-            "cG9pbnRfdHlwZXMYBCADKAUSEQoJcG9pbnRfaWRzGAUgAygFQkoKHWNvbS53",
-            "aGFsZWlzbGFuZC5nYW1lLnByb3RvY29sQhZQQk1hcExheWVyRGF0YVByb3Rv",
-            "Y29sqgIQQmlnSGVhZC5wcm90b2NvbGIGcHJvdG8z"));
+            "cG9pbnRfdHlwZXMYBCADKAUSEQoJcG9pbnRfaWRzGAUgAygFEhMKC3BvaW50",
+            "X3N0YXRlGAYgAygFQkoKHWNvbS53aGFsZWlzbGFuZC5nYW1lLnByb3RvY29s",
+            "QhZQQk1hcExheWVyRGF0YVByb3RvY29sqgIQQmlnSGVhZC5wcm90b2NvbGIG",
+            "cHJvdG8z"));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { },
           new pbr::GeneratedClrTypeInfo(null, new pbr::GeneratedClrTypeInfo[] {
-            new pbr::GeneratedClrTypeInfo(typeof(global::BigHead.protocol.PBMapLayerData), global::BigHead.protocol.PBMapLayerData.Parser, new[]{ "Index", "Width", "Height", "PointTypes", "PointIds" }, null, null, null)
+            new pbr::GeneratedClrTypeInfo(typeof(global::BigHead.protocol.PBMapLayerData), global::BigHead.protocol.PBMapLayerData.Parser, new[]{ "Index", "Width", "Height", "PointTypes", "PointIds", "PointState" }, null, null, null)
           }));
     }
     #endregion
@@ -69,6 +70,7 @@ namespace BigHead.protocol {
       height_ = other.height_;
       pointTypes_ = other.pointTypes_.Clone();
       pointIds_ = other.pointIds_.Clone();
+      pointState_ = other.pointState_.Clone();
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -129,6 +131,19 @@ namespace BigHead.protocol {
       get { return pointIds_; }
     }
 
+    /// <summary>Field number for the "point_state" field.</summary>
+    public const int PointStateFieldNumber = 6;
+    private static readonly pb::FieldCodec<int> _repeated_pointState_codec
+        = pb::FieldCodec.ForInt32(50);
+    private readonly pbc::RepeatedField<int> pointState_ = new pbc::RepeatedField<int>();
+    /// <summary>
+    ///0没有走过,1走过了
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public pbc::RepeatedField<int> PointState {
+      get { return pointState_; }
+    }
+
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override bool Equals(object other) {
       return Equals(other as PBMapLayerData);
@@ -147,6 +162,7 @@ namespace BigHead.protocol {
       if (Height != other.Height) return false;
       if(!pointTypes_.Equals(other.pointTypes_)) return false;
       if(!pointIds_.Equals(other.pointIds_)) return false;
+      if(!pointState_.Equals(other.pointState_)) return false;
       return true;
     }
 
@@ -158,6 +174,7 @@ namespace BigHead.protocol {
       if (Height != 0) hash ^= Height.GetHashCode();
       hash ^= pointTypes_.GetHashCode();
       hash ^= pointIds_.GetHashCode();
+      hash ^= pointState_.GetHashCode();
       return hash;
     }
 
@@ -182,6 +199,7 @@ namespace BigHead.protocol {
       }
       pointTypes_.WriteTo(output, _repeated_pointTypes_codec);
       pointIds_.WriteTo(output, _repeated_pointIds_codec);
+      pointState_.WriteTo(output, _repeated_pointState_codec);
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -198,6 +216,7 @@ namespace BigHead.protocol {
       }
       size += pointTypes_.CalculateSize(_repeated_pointTypes_codec);
       size += pointIds_.CalculateSize(_repeated_pointIds_codec);
+      size += pointState_.CalculateSize(_repeated_pointState_codec);
       return size;
     }
 
@@ -217,6 +236,7 @@ namespace BigHead.protocol {
       }
       pointTypes_.Add(other.pointTypes_);
       pointIds_.Add(other.pointIds_);
+      pointState_.Add(other.pointState_);
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -247,6 +267,11 @@ namespace BigHead.protocol {
           case 42:
           case 40: {
             pointIds_.AddEntriesFrom(input, _repeated_pointIds_codec);
+            break;
+          }
+          case 50:
+          case 48: {
+            pointState_.AddEntriesFrom(input, _repeated_pointState_codec);
             break;
           }
         }

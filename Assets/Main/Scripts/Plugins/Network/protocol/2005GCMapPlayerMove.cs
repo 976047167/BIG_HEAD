@@ -22,14 +22,15 @@ namespace BigHead.protocol {
     static GCMapPlayerMoveReflection() {
       byte[] descriptorData = global::System.Convert.FromBase64String(
           string.Concat(
-            "ChoyMDA1X0dDTWFwUGxheWVyTW92ZS5wcm90byI0Cg9HQ01hcFBsYXllck1v",
-            "dmUSEQoJcGxheWVyX2lkGAEgASgEEg4KBnJlc3VsdBgCIAEoBUJLCh1jb20u",
-            "d2hhbGVpc2xhbmQuZ2FtZS5wcm90b2NvbEIXR0NNYXBQbGF5ZXJNb3ZlUHJv",
-            "dG9jb2yqAhBCaWdIZWFkLnByb3RvY29sYgZwcm90bzM="));
+            "ChoyMDA1X0dDTWFwUGxheWVyTW92ZS5wcm90byJKCg9HQ01hcFBsYXllck1v",
+            "dmUSEQoJcGxheWVyX2lkGAEgASgEEg4KBnJlc3VsdBgCIAEoBRIJCgF4GAMg",
+            "ASgFEgkKAXkYBCABKAVCSwodY29tLndoYWxlaXNsYW5kLmdhbWUucHJvdG9j",
+            "b2xCF0dDTWFwUGxheWVyTW92ZVByb3RvY29sqgIQQmlnSGVhZC5wcm90b2Nv",
+            "bGIGcHJvdG8z"));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { },
           new pbr::GeneratedClrTypeInfo(null, new pbr::GeneratedClrTypeInfo[] {
-            new pbr::GeneratedClrTypeInfo(typeof(global::BigHead.protocol.GCMapPlayerMove), global::BigHead.protocol.GCMapPlayerMove.Parser, new[]{ "PlayerId", "Result" }, null, null, null)
+            new pbr::GeneratedClrTypeInfo(typeof(global::BigHead.protocol.GCMapPlayerMove), global::BigHead.protocol.GCMapPlayerMove.Parser, new[]{ "PlayerId", "Result", "X", "Y" }, null, null, null)
           }));
     }
     #endregion
@@ -65,6 +66,8 @@ namespace BigHead.protocol {
     public GCMapPlayerMove(GCMapPlayerMove other) : this() {
       playerId_ = other.playerId_;
       result_ = other.result_;
+      x_ = other.x_;
+      y_ = other.y_;
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -97,6 +100,28 @@ namespace BigHead.protocol {
       }
     }
 
+    /// <summary>Field number for the "x" field.</summary>
+    public const int XFieldNumber = 3;
+    private int x_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int X {
+      get { return x_; }
+      set {
+        x_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "y" field.</summary>
+    public const int YFieldNumber = 4;
+    private int y_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int Y {
+      get { return y_; }
+      set {
+        y_ = value;
+      }
+    }
+
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override bool Equals(object other) {
       return Equals(other as GCMapPlayerMove);
@@ -112,6 +137,8 @@ namespace BigHead.protocol {
       }
       if (PlayerId != other.PlayerId) return false;
       if (Result != other.Result) return false;
+      if (X != other.X) return false;
+      if (Y != other.Y) return false;
       return true;
     }
 
@@ -120,6 +147,8 @@ namespace BigHead.protocol {
       int hash = 1;
       if (PlayerId != 0UL) hash ^= PlayerId.GetHashCode();
       if (Result != 0) hash ^= Result.GetHashCode();
+      if (X != 0) hash ^= X.GetHashCode();
+      if (Y != 0) hash ^= Y.GetHashCode();
       return hash;
     }
 
@@ -138,6 +167,14 @@ namespace BigHead.protocol {
         output.WriteRawTag(16);
         output.WriteInt32(Result);
       }
+      if (X != 0) {
+        output.WriteRawTag(24);
+        output.WriteInt32(X);
+      }
+      if (Y != 0) {
+        output.WriteRawTag(32);
+        output.WriteInt32(Y);
+      }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -148,6 +185,12 @@ namespace BigHead.protocol {
       }
       if (Result != 0) {
         size += 1 + pb::CodedOutputStream.ComputeInt32Size(Result);
+      }
+      if (X != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(X);
+      }
+      if (Y != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(Y);
       }
       return size;
     }
@@ -162,6 +205,12 @@ namespace BigHead.protocol {
       }
       if (other.Result != 0) {
         Result = other.Result;
+      }
+      if (other.X != 0) {
+        X = other.X;
+      }
+      if (other.Y != 0) {
+        Y = other.Y;
       }
     }
 
@@ -179,6 +228,14 @@ namespace BigHead.protocol {
           }
           case 16: {
             Result = input.ReadInt32();
+            break;
+          }
+          case 24: {
+            X = input.ReadInt32();
+            break;
+          }
+          case 32: {
+            Y = input.ReadInt32();
             break;
           }
         }
