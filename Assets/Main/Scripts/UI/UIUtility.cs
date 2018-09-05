@@ -104,4 +104,10 @@ public class UIUtility
                 Debug.LogError("加载失败!");
             });
     }
+    public static void ShowShortTips(string tips)
+    {
+        float duration = 0.2f;
+        float time = 1f;
+        Game.UI.OpenForm<WND_Tips>(new object[] { duration, time, tips });
+    }
 }

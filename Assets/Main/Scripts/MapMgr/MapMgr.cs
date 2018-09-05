@@ -48,6 +48,8 @@ public class MapMgr
         Messenger.AddListener(MessageId.MAP_BACK_TO_MAINTOWN, ResponseBackToMaintown);
         Messenger.AddListener<ulong>(MessageId.MAP_PLAYER_DEAD, OnPlayerDead);
         Messenger.AddListener<GCMapPlayerMove>(MessageId.MAP_PLAYER_MOVE, PlayerMove);
+        Messenger.AddListener(MessageId.MAP_PLAYER_NO_FOOD_DAMAGE, OnNoFoodDamageTips);
+        Messenger.AddListener<int>(MessageId.GAME_ENTER_BATTLE, EnterBattle);
     }
     void RemoveMessage()
     {
@@ -56,6 +58,7 @@ public class MapMgr
         Messenger.RemoveListener(MessageId.MAP_BACK_TO_MAINTOWN, ResponseBackToMaintown);
         Messenger.RemoveListener<ulong>(MessageId.MAP_PLAYER_DEAD, OnPlayerDead);
         Messenger.RemoveListener<GCMapPlayerMove>(MessageId.MAP_PLAYER_MOVE, PlayerMove);
+        Messenger.RemoveListener(MessageId.MAP_PLAYER_NO_FOOD_DAMAGE, OnNoFoodDamageTips);
     }
 
 
@@ -80,11 +83,11 @@ public class MapMgr
         }
         if (Input.GetKeyDown(KeyCode.A))
         {
-            //NextMapLayer();
-            CGExitBattle getReward = new CGExitBattle();
-            getReward.MonsterId = 1;
-            getReward.Reason = 0;
-            Game.NetworkManager.SendToLobby(MessageId_Send.CGExitBattle, getReward);
+            //CGExitBattle getReward = new CGExitBattle();
+            //getReward.MonsterId = 1;
+            //getReward.Reason = 0;
+            //Game.NetworkManager.SendToLobby(MessageId_Send.CGExitBattle, getReward);
+            UIUtility.ShowShortTips("你掉血啦~");
         }
         if (UICamera.isOverUI == false && Input.GetKeyDown(KeyCode.Mouse0))
         {
@@ -292,6 +295,15 @@ public class MapMgr
         getMapLayerData.PlayerY = MapMgr.Instance.MyMapPlayer.CurPos.Y;
         Game.NetworkManager.SendToLobby(MessageId_Send.CGGetMapLayerData, getMapLayerData);
     }
+    public void StartBattle(int monsterId)
+    {
+        CGEnterBattle enterBattle = new CGEnterBattle();
+        enterBattle.PlayerId = m_MyMapPlayer.Data.Id;
+        enterBattle.MonsterId = monsterId;
+        enterBattle.X = m_MyMapPlayer.CurPos.X;
+        enterBattle.Y = m_MyMapPlayer.CurPos.Y;
+        Game.NetworkManager.SendToLobby(MessageId_Send.CGEnterBattle, enterBattle);
+    }
     void GetMapReward(RewardData rewardData)
     {
         if (Game.BattleManager.State == BattleMgr.BattleState.None)
@@ -354,6 +366,21 @@ public class MapMgr
         {
             Debug.LogError("没有找到移动的玩家");
         }
+    }
+    void OnNoFoodDamageTips()
+    {
+        UIUtility.ShowShortTips(I18N.Get(1005002));
+    }
+
+
+    /// <summary>
+    /// 进入战斗
+    /// </summary>
+    /// <param name="monsterId"></param>
+    void EnterBattle(int monsterId)
+    {
+        Game.BattleManager.StartBattle(monsterId);
+        Game.UI.CloseForm<WND_Dialog>();
     }
 
     public MapCardBase GetMapCard(int x, int y)

@@ -159,3 +159,4 @@ int	string	string	string
 1004005	返回	返回	Exit
 1005000	WND_MapInfo	WND_MapInfo	WND_MapInfo
 1005001	第{0}层	Layer {0}	第{0}层
+1005002	没有食物了,血量[ff0000]-1[-]!	沒有食物了,血量[ff0000]-1[-]!	No Food!

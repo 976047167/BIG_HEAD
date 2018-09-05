@@ -22,14 +22,15 @@ namespace BigHead.protocol {
     static CGEnterBattleReflection() {
       byte[] descriptorData = global::System.Convert.FromBase64String(
           string.Concat(
-            "ChgzMDAwX0NHRW50ZXJCYXR0bGUucHJvdG8iIgoNQ0dFbnRlckJhdHRsZRIR",
-            "Cgltb25zdGVySWQYASABKAVCSQodY29tLndoYWxlaXNsYW5kLmdhbWUucHJv",
-            "dG9jb2xCFUNHRW50ZXJCYXR0bGVQcm90b2NvbKoCEEJpZ0hlYWQucHJvdG9j",
-            "b2xiBnByb3RvMw=="));
+            "ChgzMDAwX0NHRW50ZXJCYXR0bGUucHJvdG8iTAoNQ0dFbnRlckJhdHRsZRIR",
+            "CglwbGF5ZXJfaWQYASABKAQSEgoKbW9uc3Rlcl9pZBgCIAEoBRIJCgF4GAMg",
+            "ASgFEgkKAXkYBCABKAVCSQodY29tLndoYWxlaXNsYW5kLmdhbWUucHJvdG9j",
+            "b2xCFUNHRW50ZXJCYXR0bGVQcm90b2NvbKoCEEJpZ0hlYWQucHJvdG9jb2xi",
+            "BnByb3RvMw=="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { },
           new pbr::GeneratedClrTypeInfo(null, new pbr::GeneratedClrTypeInfo[] {
-            new pbr::GeneratedClrTypeInfo(typeof(global::BigHead.protocol.CGEnterBattle), global::BigHead.protocol.CGEnterBattle.Parser, new[]{ "MonsterId" }, null, null, null)
+            new pbr::GeneratedClrTypeInfo(typeof(global::BigHead.protocol.CGEnterBattle), global::BigHead.protocol.CGEnterBattle.Parser, new[]{ "PlayerId", "MonsterId", "X", "Y" }, null, null, null)
           }));
     }
     #endregion
@@ -63,7 +64,10 @@ namespace BigHead.protocol {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public CGEnterBattle(CGEnterBattle other) : this() {
+      playerId_ = other.playerId_;
       monsterId_ = other.monsterId_;
+      x_ = other.x_;
+      y_ = other.y_;
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -71,14 +75,47 @@ namespace BigHead.protocol {
       return new CGEnterBattle(this);
     }
 
-    /// <summary>Field number for the "monsterId" field.</summary>
-    public const int MonsterIdFieldNumber = 1;
+    /// <summary>Field number for the "player_id" field.</summary>
+    public const int PlayerIdFieldNumber = 1;
+    private ulong playerId_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public ulong PlayerId {
+      get { return playerId_; }
+      set {
+        playerId_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "monster_id" field.</summary>
+    public const int MonsterIdFieldNumber = 2;
     private int monsterId_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public int MonsterId {
       get { return monsterId_; }
       set {
         monsterId_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "x" field.</summary>
+    public const int XFieldNumber = 3;
+    private int x_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int X {
+      get { return x_; }
+      set {
+        x_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "y" field.</summary>
+    public const int YFieldNumber = 4;
+    private int y_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int Y {
+      get { return y_; }
+      set {
+        y_ = value;
       }
     }
 
@@ -95,14 +132,20 @@ namespace BigHead.protocol {
       if (ReferenceEquals(other, this)) {
         return true;
       }
+      if (PlayerId != other.PlayerId) return false;
       if (MonsterId != other.MonsterId) return false;
+      if (X != other.X) return false;
+      if (Y != other.Y) return false;
       return true;
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override int GetHashCode() {
       int hash = 1;
+      if (PlayerId != 0UL) hash ^= PlayerId.GetHashCode();
       if (MonsterId != 0) hash ^= MonsterId.GetHashCode();
+      if (X != 0) hash ^= X.GetHashCode();
+      if (Y != 0) hash ^= Y.GetHashCode();
       return hash;
     }
 
@@ -113,17 +156,38 @@ namespace BigHead.protocol {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public void WriteTo(pb::CodedOutputStream output) {
-      if (MonsterId != 0) {
+      if (PlayerId != 0UL) {
         output.WriteRawTag(8);
+        output.WriteUInt64(PlayerId);
+      }
+      if (MonsterId != 0) {
+        output.WriteRawTag(16);
         output.WriteInt32(MonsterId);
+      }
+      if (X != 0) {
+        output.WriteRawTag(24);
+        output.WriteInt32(X);
+      }
+      if (Y != 0) {
+        output.WriteRawTag(32);
+        output.WriteInt32(Y);
       }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public int CalculateSize() {
       int size = 0;
+      if (PlayerId != 0UL) {
+        size += 1 + pb::CodedOutputStream.ComputeUInt64Size(PlayerId);
+      }
       if (MonsterId != 0) {
         size += 1 + pb::CodedOutputStream.ComputeInt32Size(MonsterId);
+      }
+      if (X != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(X);
+      }
+      if (Y != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(Y);
       }
       return size;
     }
@@ -133,8 +197,17 @@ namespace BigHead.protocol {
       if (other == null) {
         return;
       }
+      if (other.PlayerId != 0UL) {
+        PlayerId = other.PlayerId;
+      }
       if (other.MonsterId != 0) {
         MonsterId = other.MonsterId;
+      }
+      if (other.X != 0) {
+        X = other.X;
+      }
+      if (other.Y != 0) {
+        Y = other.Y;
       }
     }
 
@@ -147,7 +220,19 @@ namespace BigHead.protocol {
             input.SkipLastField();
             break;
           case 8: {
+            PlayerId = input.ReadUInt64();
+            break;
+          }
+          case 16: {
             MonsterId = input.ReadInt32();
+            break;
+          }
+          case 24: {
+            X = input.ReadInt32();
+            break;
+          }
+          case 32: {
+            Y = input.ReadInt32();
             break;
           }
         }

@@ -20,3 +20,4 @@ int	string	string	string	int	int
 18	消息框	WND_MessageBox	Internal/WND_MessageBox	2	1
 19	战斗结果	WND_BattleResult	Instance/WND_BattleResult	1	1
 20	网络消息等待	WND_Waiting	Internal/WND_Waiting	3	1
+		WND_Tips	Internal/WND_Tips	1	1

@@ -88,6 +88,10 @@ public enum MessageId : uint
     /// 地图玩家移动
     /// </summary>
     MAP_PLAYER_MOVE,
+    /// <summary>
+    /// 地图玩家没有食物扣血了
+    /// </summary>
+    MAP_PLAYER_NO_FOOD_DAMAGE,
     
     
     

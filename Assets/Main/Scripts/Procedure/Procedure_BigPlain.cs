@@ -13,7 +13,7 @@ public class Procedure_BigPlain : ProcedureBase
         Game.UI.OpenForm<UIMapInfo>();
         Game.UI.OpenForm<UIMenu>();
 
-        Messenger.AddListener<int>(MessageId.GAME_ENTER_BATTLE, EnterBattle);
+        
 
     }
 
@@ -92,15 +92,7 @@ public class Procedure_BigPlain : ProcedureBase
         //    MapMgr.Instance.MakeMapByLayerData(mapLayerData);
         //}
     }
-    /// <summary>
-    /// 进入战斗
-    /// </summary>
-    /// <param name="monsterId"></param>
-    void EnterBattle(int monsterId)
-    {
-        Game.BattleManager.StartBattle(monsterId);
-        Game.UI.CloseForm<WND_Dialog>();
-    }
+    
     public enum InitState
     {
         None = 0,

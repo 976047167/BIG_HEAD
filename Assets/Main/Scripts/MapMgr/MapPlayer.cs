@@ -33,6 +33,11 @@ public class MapPlayer
     public void Update(PBMapPlayerData mapPlayerData)
     {
         CurPos = new MapCardPos(mapPlayerData.PlayerPosX, mapPlayerData.PlayerPosY);
+        if (m_Data.Id == MapMgr.Instance.MyMapPlayer.Data.Id && m_Data.HP > mapPlayerData.PlayerData.Hp && mapPlayerData.PlayerData.Food == 0)
+        {
+            //食物没有了，扣血
+            Messenger.Broadcast(MessageId.MAP_PLAYER_NO_FOOD_DAMAGE);
+        }
         m_InstanceId = mapPlayerData.InstanceId;
         m_Data.Update(mapPlayerData);
         if (m_Data.HP <= 0)

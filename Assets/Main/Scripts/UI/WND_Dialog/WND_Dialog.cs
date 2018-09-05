@@ -185,12 +185,11 @@ public class WND_Dialog : UIFormBase
                     Game.UI.CloseForm<WND_Dialog>();
                 break;
             case DialogType.Battle:
-                if (MonsterId != 0)
+                if (MonsterId != 0&& MapMgr.Instance != null && MapMgr.Inited)
                 {
-                    CGEnterBattle enterBattle = new CGEnterBattle();
-                    enterBattle.MonsterId = MonsterId;
-                    Game.NetworkManager.SendToLobby(MessageId_Send.CGEnterBattle, enterBattle);
+                    MapMgr.Instance.StartBattle(MonsterId);
                 }
+                Game.UI.CloseForm<WND_Dialog>();
                 break;
             case DialogType.NextPass:
                 if (MapMgr.Instance != null && MapMgr.Inited)
