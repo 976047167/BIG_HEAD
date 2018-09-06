@@ -160,3 +160,51 @@ int	string	string	string
 1005000	WND_MapInfo	WND_MapInfo	WND_MapInfo
 1005001	第{0}层	Layer {0}	第{0}层
 1005002	没有食物了,血量[ff0000]-1[-]!	沒有食物了,血量[ff0000]-1[-]!	No Food!
+2000000			
+2000001	烟雾缭绕中，你看到一口井。	煙霧繚繞中，妳看到壹口井。	The smoke is lingering and you see a well.
+2000002	井旁有一个用来打水的木桶。你会……	井旁有壹個用來打水的木桶。妳會……	There is a wooden bucket next to the well to draw water. You can......
+2000003	打水喝	打水喝	Drinking water
+2000004	离开	離開	go away
+2000005	前方走来一个身影，与你擦身而过	前方走來壹個身影，與妳擦身而過	Walked in front of you, passing you by
+2000006	拦下他	攔下他	Stop him
+2000007	让他走	讓他走	Let him go
+2000008	他惊愕的转身道：“大侠，我只是路过的，饶命”	他驚愕的轉身道：“大俠，我只是路過的，饒命”	He turned and said in amazement: "Heroes, I just passed by, forgive me"
+2000009	这点小伎俩骗不过你，你从他怀里掏出了你的钱袋。	這點小伎倆騙不過妳，妳從他懷裏掏出了妳的錢袋。	This little trick can't fool you, you pulled out your purse from his arms.
+2000010	“大爷，别报官，我混口饭吃不容易”	“大爺，別報官，我混口飯吃不容易”	Grandpa, don't tell the official, I can't eat it easily.
+2000011	让他走	讓他走	Let him go
+2000012	索要好处	索要好處	Ask for benefits
+2000013	你行至山中，正觉腹中饥渴	妳行至山中，正覺腹中饑渴	You go to the mountains and feel the thirst
+2000014	前方林中似乎有几只野兽，你想要	前方林中似乎有幾只野獸，妳想要	There seem to be a few beasts in the forest ahead, you want
+2000015	狩猎一番	狩獵壹番	Hunting
+2000016	爱护野生动物，绕道走	愛護野生動物，繞道走	Take care of wild animals and take a detour
+2000017	你路过一家小型商店	妳路過壹家小型商店	You pass by a small shop
+2000018	买一点食物	買壹點食物	Buy some food
+2000019	买一点药材	買壹點藥材	Buy some medicine
+2000020	离开	離開	go away
+2000021	你路过一家医馆	妳路過壹家醫館	You passed a medical center
+2000022	请名医整治	請名醫整治	Please rectify the doctor
+2000023	离开	離開	go away
+2000024	你路过一家饭馆	妳路過壹家飯館	You pass by a restaurant
+2000025	买大量的食物	買大量的食物	Buy a lot of food
+2000026	离开	離開	go away
+2000027	你的金钱不足	妳的金錢不足	Your money is insufficient
+2000028	花费了一定的金钱后，买了一些食物	花費了壹定的金錢後，買了壹些食物	After spending a certain amount of money, I bought some food.
+2000029	花费了一定的金钱后，买了一些药材，回复了血量	花費了壹定的金錢後，買了壹些藥材，回復了血量	After spending a certain amount of money, I bought some medicines and replied with blood.
+2000030	花费了大量的金钱后，买了大量食物	花費了大量的金錢後，買了大量食物	After spending a lot of money, I bought a lot of food.
+2000031	医生为你系统的检查了伤势，并给你做了治疗	醫生為妳系統的檢查了傷勢，並給妳做了治療	The doctor checked the injury for your system and treated you
+2000032	是否进入下一关	是否進入下壹關	Whether to enter the next level
+2000033	进入下一关	進入下壹關	Enter the next level
+2000034	在本关继续停留	在本關繼續停留	Continue to stay at this level
+2000035	你的面前出现了一个宝箱，你走过去打开了它	妳的面前出現了壹個寶箱，妳走過去打開了它	There is a treasure chest in front of you, you walked over and opened it.
+2000036	你来干啥了?	妳來幹啥了?	Are you doing it?
+2000037	吃饭	吃飯	eat
+2000038	吃完干什么	吃完幹什麽	What are you doing after eating?
+2000039	打架	打架	fight
+2000040	打谁?	打誰?	Who is it?
+2000041	你	妳	you
+2000042	你爸	妳爸	Your dad
+2000043	你妈	妳媽	Your mother
+2000044	不知道	不知道	do not know
+2000045	再说一遍	再說壹遍	Say it again
+2000046	开打吧	開打吧	Start playing
+2000047	跑路	跑路	Running

@@ -2333,7 +2333,7 @@ namespace AppSettings
         /// <summary>
         /// #文本
         /// </summary>
-        public string Text { get; private set;}
+        public int Text { get; private set;}
         
         /// <summary>
         /// #类型(1正常对话，2选项，3事件，4战斗）
@@ -2359,7 +2359,7 @@ namespace AppSettings
         internal void Reload(TableFileRow row)
         { 
             Id = row.Get_int(row.Values[0], ""); 
-            Text = row.Get_string(row.Values[1], ""); 
+            Text = row.Get_int(row.Values[1], ""); 
             Type = row.Get_int(row.Values[2], "1"); 
             NextIds = row.Get_List_int(row.Values[3], ""); 
             ImagePath = row.Get_int(row.Values[4], ""); 
@@ -3964,6 +3964,11 @@ namespace AppSettings
         public int Id { get; private set;}
         
         /// <summary>
+        /// 名字
+        /// </summary>
+        public int Name { get; private set;}
+        
+        /// <summary>
         /// #对话Id
         /// </summary>
         public int DialogId { get; private set;}
@@ -3972,6 +3977,31 @@ namespace AppSettings
         /// 地图卡模型
         /// </summary>
         public int ModelId { get; private set;}
+        
+        /// <summary>
+        /// 对话头像
+        /// </summary>
+        public List<int> HeadIcons { get; private set;}
+        
+        /// <summary>
+        /// 0自己1怪物2Boss
+        /// </summary>
+        public List<int> ShowMode { get; private set;}
+        
+        /// <summary>
+        /// 对话列表
+        /// </summary>
+        public List<int> DialogContents { get; private set;}
+        
+        /// <summary>
+        /// 对话操作(0结束1下一个2选择3执行特殊操作)
+        /// </summary>
+        public List<int> DialogAction { get; private set;}
+        
+        /// <summary>
+        /// 动作参数(0结束1下一个2选择3+执行特殊操作)
+        /// </summary>
+        public List<int> ActionParam { get; private set;}
         
 
         internal NpcTableSetting(TableFileRow row)
@@ -3982,8 +4012,14 @@ namespace AppSettings
         internal void Reload(TableFileRow row)
         { 
             Id = row.Get_int(row.Values[0], ""); 
-            DialogId = row.Get_int(row.Values[1], ""); 
-            ModelId = row.Get_int(row.Values[2], ""); 
+            Name = row.Get_int(row.Values[1], ""); 
+            DialogId = row.Get_int(row.Values[2], ""); 
+            ModelId = row.Get_int(row.Values[3], ""); 
+            HeadIcons = row.Get_List_int(row.Values[4], ""); 
+            ShowMode = row.Get_List_int(row.Values[5], ""); 
+            DialogContents = row.Get_List_int(row.Values[6], ""); 
+            DialogAction = row.Get_List_int(row.Values[7], ""); 
+            ActionParam = row.Get_List_int(row.Values[8], ""); 
         }
 
         /// <summary>

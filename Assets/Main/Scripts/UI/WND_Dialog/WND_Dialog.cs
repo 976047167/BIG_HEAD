@@ -72,7 +72,7 @@ public class WND_Dialog : UIFormBase
         //StopCoroutine("PrintStringByStep");
         StopAllCoroutines();
 
-        printString = DialogTableSettings.Get(Id).Text;
+        printString = I18N.Get(DialogTableSettings.Get(Id).Text);
         int path = DialogTableSettings.Get(Id).ImagePath;
         if (path == 0)
             imgHead.gameObject.SetActive(false);
@@ -156,7 +156,7 @@ public class WND_Dialog : UIFormBase
                     GameObject item = Instantiate(btnSelect.gameObject);
                     item.name = "option" + i;
                     item.transform.Find("imgNum/labSelectNum").GetComponent<UILabel>().text = (i + 1).ToString();
-                    item.transform.Find("labSelectString").GetComponent<UILabel>().text = DialogTableSettings.Get(NextIds[i]).Text;
+                    item.transform.Find("labSelectString").GetComponent<UILabel>().text = I18N.Get(DialogTableSettings.Get(NextIds[i]).Text);
                     int nextId = NextIds[i];
                     UIEventListener.Get(item.gameObject).onClick = (GameObject obj) =>
                     {
@@ -185,7 +185,7 @@ public class WND_Dialog : UIFormBase
                     Game.UI.CloseForm<WND_Dialog>();
                 break;
             case DialogType.Battle:
-                if (MonsterId != 0&& MapMgr.Instance != null && MapMgr.Inited)
+                if (MonsterId != 0 && MapMgr.Instance != null && MapMgr.Inited)
                 {
                     MapMgr.Instance.StartBattle(MonsterId);
                 }
