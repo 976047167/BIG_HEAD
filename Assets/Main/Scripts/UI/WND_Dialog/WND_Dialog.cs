@@ -10,7 +10,7 @@ public class WND_Dialog : UIFormBase
     private UILabel labTips;
     private GameObject btnShowAll;
     private UITexture imgHead;
-    private UIButton btnSelect;
+    private GameObject btnSelectTemplate;
     private int preserntIndex;
     private bool isPrinting;
     private bool isChosing;
@@ -34,8 +34,8 @@ public class WND_Dialog : UIFormBase
         imgHead = transform.Find("imgTips/imgHead").GetComponent<UITexture>();
         btnShowAll = transform.Find("btnShowAll").gameObject;
         UIEventListener.Get(btnShowAll).onClick = PrintStringAll;
-        btnSelect = transform.Find("btnSelect").GetComponent<UIButton>();
-
+        btnSelectTemplate = transform.Find("btnSelect").gameObject;
+        
         grid = transform.Find("Container/Grid").GetComponent<UIGrid>();
 
 
@@ -153,7 +153,7 @@ public class WND_Dialog : UIFormBase
                 ClearGrid();
                 for (int i = 0; i < nums; i++)
                 {
-                    GameObject item = Instantiate(btnSelect.gameObject);
+                    GameObject item = Instantiate(btnSelectTemplate.gameObject);
                     item.name = "option" + i;
                     item.transform.Find("imgNum/labSelectNum").GetComponent<UILabel>().text = (i + 1).ToString();
                     item.transform.Find("labSelectString").GetComponent<UILabel>().text = I18N.Get(DialogTableSettings.Get(NextIds[i]).Text);
