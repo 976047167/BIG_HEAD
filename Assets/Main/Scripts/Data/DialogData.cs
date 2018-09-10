@@ -7,6 +7,7 @@ using UnityEngine;
 /// </summary>
 public class DialogData
 {
+    int index;
     int head;
     int showMode;
     int content;
@@ -52,8 +53,18 @@ public class DialogData
             return actionParam;
         }
     }
-    public DialogData(int head, int showMode, int content, int action, int actionParam)
+
+    public int Index
     {
+        get
+        {
+            return index;
+        }
+    }
+
+    public DialogData(int index, int head, int showMode, int content, int action, int actionParam)
+    {
+        this.index = index;
         this.head = head;
         this.showMode = showMode;
         this.content = content;

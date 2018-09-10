@@ -20,7 +20,7 @@ public class testTypeWriter : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.A))
         {
-            label.text = "目的　探索激光显微技术(laser capture microdissection system, LCM)捕获口腔上皮细胞，" +
+            label.text = "目的　[n]探索激光显微技术(laser capture microdissection system, LCM)捕获口腔上皮细胞，" +
                 "并进行STR-DNA分型检测的方法。方法　用VERITAS显微切割仪红外低能激光显微捕获一定数量口腔上皮细胞，" +
                 "进行Profiler Plus试剂盒STR复合扩增，检测DNA基因型。" +
                 "结果　7~8个口腔上皮细胞能成功获得STR-DNA分型。3~4个口腔上皮细胞不能成功获得STR-DNA分型。" +
@@ -40,8 +40,9 @@ public class testTypeWriter : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.B))
         {
             //scrollView.UpdatePosition();
-            scrollView.OnPan(new Vector2(0f, 1000f));
-            //scrollView.SetDragAmount(0f, 1f, false);
+            //scrollView.OnPan(new Vector2(0f, 1000f));
+            scrollView.ResetPosition();
+            scrollView.SetDragAmount(0f, 1f, false);
         }
     }
 }
