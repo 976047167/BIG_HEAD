@@ -7,6 +7,7 @@ public class testTypeWriter : MonoBehaviour
     TypewriterEffect typewriter;
     UILabel label;
     UIScrollView scrollView;
+    float lastHeight;
     // Use this for initialization
     void Start()
     {
@@ -41,8 +42,14 @@ public class testTypeWriter : MonoBehaviour
         {
             //scrollView.UpdatePosition();
             //scrollView.OnPan(new Vector2(0f, 1000f));
+
+        }
+        if (label.height != lastHeight)
+        {
+
             scrollView.ResetPosition();
             scrollView.SetDragAmount(0f, 1f, false);
+            lastHeight = label.height;
         }
     }
 }
