@@ -11,6 +11,7 @@ public class DialogData
     int head;
     int showMode;
     int content;
+    int next;
     int action;
     int actionParam;
 
@@ -62,12 +63,21 @@ public class DialogData
         }
     }
 
-    public DialogData(int index, int head, int showMode, int content, int action, int actionParam)
+    public int Next
+    {
+        get
+        {
+            return next;
+        }
+    }
+
+    public DialogData(int index, int head, int showMode, int content, int next, int action, int actionParam)
     {
         this.index = index;
         this.head = head;
         this.showMode = showMode;
         this.content = content;
+        this.next = next;
         this.action = action;
         this.actionParam = actionParam;
     }

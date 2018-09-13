@@ -22,15 +22,15 @@ namespace BigHead.protocol {
     static CGMapApplyEffectReflection() {
       byte[] descriptorData = global::System.Convert.FromBase64String(
           string.Concat(
-            "ChsyMDEwX0NHTWFwQXBwbHlFZmZlY3QucHJvdG8iRAoQQ0dNYXBBcHBseUVm",
+            "ChsyMDEwX0NHTWFwQXBwbHlFZmZlY3QucHJvdG8iVAoQQ0dNYXBBcHBseUVm",
             "ZmVjdBIRCglwbGF5ZXJfaWQYASABKAQSDgoGYWN0aW9uGAIgASgFEg0KBXBh",
-            "cmFtGAMgASgFQkwKHWNvbS53aGFsZWlzbGFuZC5nYW1lLnByb3RvY29sQhhD",
-            "R01hcEFwcGx5RWZmZWN0UHJvdG9jb2yqAhBCaWdIZWFkLnByb3RvY29sYgZw",
-            "cm90bzM="));
+            "cmFtGAMgASgFEg4KBnBhcmFtMhgEIAEoBUJMCh1jb20ud2hhbGVpc2xhbmQu",
+            "Z2FtZS5wcm90b2NvbEIYQ0dNYXBBcHBseUVmZmVjdFByb3RvY29sqgIQQmln",
+            "SGVhZC5wcm90b2NvbGIGcHJvdG8z"));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { },
           new pbr::GeneratedClrTypeInfo(null, new pbr::GeneratedClrTypeInfo[] {
-            new pbr::GeneratedClrTypeInfo(typeof(global::BigHead.protocol.CGMapApplyEffect), global::BigHead.protocol.CGMapApplyEffect.Parser, new[]{ "PlayerId", "Action", "Param" }, null, null, null)
+            new pbr::GeneratedClrTypeInfo(typeof(global::BigHead.protocol.CGMapApplyEffect), global::BigHead.protocol.CGMapApplyEffect.Parser, new[]{ "PlayerId", "Action", "Param", "Param2" }, null, null, null)
           }));
     }
     #endregion
@@ -67,6 +67,7 @@ namespace BigHead.protocol {
       playerId_ = other.playerId_;
       action_ = other.action_;
       param_ = other.param_;
+      param2_ = other.param2_;
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -107,6 +108,17 @@ namespace BigHead.protocol {
       }
     }
 
+    /// <summary>Field number for the "param2" field.</summary>
+    public const int Param2FieldNumber = 4;
+    private int param2_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int Param2 {
+      get { return param2_; }
+      set {
+        param2_ = value;
+      }
+    }
+
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override bool Equals(object other) {
       return Equals(other as CGMapApplyEffect);
@@ -123,6 +135,7 @@ namespace BigHead.protocol {
       if (PlayerId != other.PlayerId) return false;
       if (Action != other.Action) return false;
       if (Param != other.Param) return false;
+      if (Param2 != other.Param2) return false;
       return true;
     }
 
@@ -132,6 +145,7 @@ namespace BigHead.protocol {
       if (PlayerId != 0UL) hash ^= PlayerId.GetHashCode();
       if (Action != 0) hash ^= Action.GetHashCode();
       if (Param != 0) hash ^= Param.GetHashCode();
+      if (Param2 != 0) hash ^= Param2.GetHashCode();
       return hash;
     }
 
@@ -154,6 +168,10 @@ namespace BigHead.protocol {
         output.WriteRawTag(24);
         output.WriteInt32(Param);
       }
+      if (Param2 != 0) {
+        output.WriteRawTag(32);
+        output.WriteInt32(Param2);
+      }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -167,6 +185,9 @@ namespace BigHead.protocol {
       }
       if (Param != 0) {
         size += 1 + pb::CodedOutputStream.ComputeInt32Size(Param);
+      }
+      if (Param2 != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(Param2);
       }
       return size;
     }
@@ -184,6 +205,9 @@ namespace BigHead.protocol {
       }
       if (other.Param != 0) {
         Param = other.Param;
+      }
+      if (other.Param2 != 0) {
+        Param2 = other.Param2;
       }
     }
 
@@ -205,6 +229,10 @@ namespace BigHead.protocol {
           }
           case 24: {
             Param = input.ReadInt32();
+            break;
+          }
+          case 32: {
+            Param2 = input.ReadInt32();
             break;
           }
         }

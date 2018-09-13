@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using AppSettings;
+using BigHead.protocol;
 
 public class WND_NpcDialog : UIFormBase
 {
@@ -21,7 +22,7 @@ public class WND_NpcDialog : UIFormBase
     List<DialogData> dialogDatas = null;
     DialogData myData = null;
     DialogData oppData = null;
-    int dialogIndex = 0;
+    DialogData currentDialogData = null;
 
     protected override void OnInit(object userdata)
     {
@@ -40,6 +41,8 @@ public class WND_NpcDialog : UIFormBase
         for (int i = 0; i < 4; i++)
         {
             goSelects[i] = gridSelectItems.transform.Find(i.ToString()).gameObject;
+            goSelects[i].SetActive(false);
+            UIEventListener.Get(goSelects[i]).onClick = OnClick_Selected;
         }
 
         npcId = (int)userdata;
@@ -48,12 +51,14 @@ public class WND_NpcDialog : UIFormBase
             && npcTable.HeadIcons.Count == npcTable.ShowMode.Count
             && npcTable.HeadIcons.Count == npcTable.DialogContents.Count
             && npcTable.HeadIcons.Count == npcTable.DialogAction.Count
-            && npcTable.HeadIcons.Count == npcTable.ActionParam.Count)
+            && npcTable.HeadIcons.Count == npcTable.ActionParam.Count
+            && npcTable.HeadIcons.Count == npcTable.NextIndexs.Count)
         {
             dialogDatas = new List<DialogData>(npcTable.HeadIcons.Count);
             for (int i = 0; i < npcTable.HeadIcons.Count; i++)
             {
-                DialogData data = new DialogData(i, npcTable.HeadIcons[i], npcTable.ShowMode[i], npcTable.DialogContents[i], npcTable.DialogAction[i], npcTable.ActionParam[i]);
+                DialogData data = new DialogData(i, npcTable.HeadIcons[i], npcTable.ShowMode[i], npcTable.DialogContents[i],
+                    npcTable.NextIndexs[i], npcTable.DialogAction[i], npcTable.ActionParam[i]);
                 dialogDatas.Add(data);
             }
         }
@@ -132,8 +137,8 @@ public class WND_NpcDialog : UIFormBase
 
     void StartDialog(int index)
     {
-        dialogIndex = index;
         DialogData dialogData = dialogDatas[index];
+        currentDialogData = dialogData;
         switch (dialogData.ShowMode)
         {
             case 0:
@@ -178,7 +183,7 @@ public class WND_NpcDialog : UIFormBase
         else
             tempScrollView.SetDragAmount(0f, 1f, false);
 
-        OnEndTypewriting();
+        //OnEndTypewriting();
     }
     void OnEndTypewriting()
     {
@@ -187,12 +192,17 @@ public class WND_NpcDialog : UIFormBase
         writingScrollView = null;
         writingEffect = null;
         lastHeight = 0f;
+        ApplyDialogAction(currentDialogData.Index, currentDialogData.Action, currentDialogData.ActionParam, currentDialogData.Next);
     }
     protected void ShowContent(DialogData dialogData)
     {
         if (dialogData == null)
         {
             Debug.LogError("null");
+        }
+        for (int i = 0; i < goSelects.Length; i++)
+        {
+            goSelects[i].SetActive(false);
         }
         int action = dialogData.Action;
         switch (dialogData.ShowMode)
@@ -228,21 +238,66 @@ public class WND_NpcDialog : UIFormBase
             default:
                 break;
         }
+    }
+    /// <summary>
+    /// 0结束1下一个2选择3执行特殊操作
+    /// </summary>
+    void ApplyDialogAction(int index, int action, int param, int next)
+    {
         switch (action)
         {
             case 0://结束
                 Game.UI.CloseForm(this);
                 break;
             case 1:
-
+                StartDialog(next);
                 break;
             case 2:
-                break;
-            case 3:
+                StartSelect(index, param);
                 break;
             default:
+                if (action > 2)
+                {
+                    CGMapApplyEffect mapApplyEffect = new CGMapApplyEffect();
+                    mapApplyEffect.PlayerId = MapMgr.Instance.MyMapPlayer.Data.Id;
+                    mapApplyEffect.Action = action;
+                    mapApplyEffect.Param = param;
+                    Game.NetworkManager.SendToLobby(MessageId_Send.CGMapApplyEffect, mapApplyEffect);
+                }
+                StartDialog(next);
                 break;
         }
     }
 
+    void StartSelect(int startIndex, int length)
+    {
+        if (length > 4)
+        {
+            Debug.LogError("数量过多!");
+        }
+        if (startIndex + length >= dialogDatas.Count)
+        {
+            Debug.LogError("超出界限!");
+        }
+        //List<DialogData> datas = new List<DialogData>(length);
+        //for (int i = 0; i < length; i++)
+        //{
+        //    datas.Add(dialogDatas[startIndex + i]);
+        //}
+        for (int i = 0; i < length; i++)
+        {
+            DialogData data = dialogDatas[startIndex + i];
+            GameObject go = goSelects[i];
+            go.name = data.Index.ToString();
+            go.SetActive(true);
+            go.transform.Find("content").GetComponent<UILabel>().text = I18N.Get(data.Content);
+        }
+        gridSelectItems.Reposition();
+    }
+    void OnClick_Selected(GameObject go)
+    {
+        DialogData data = dialogDatas[int.Parse(go.name)];
+        currentDialogData = data;
+        ApplyDialogAction(data.Index, data.Action, data.ActionParam, data.Next);
+    }
 }

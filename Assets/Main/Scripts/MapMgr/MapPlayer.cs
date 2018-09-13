@@ -12,6 +12,9 @@ public class MapPlayer
     protected int m_InstanceId;
     public MapPlayerData Data { get { return m_Data; } }
     public GameObject PlayerGO { get { return m_gameObject; } }
+    /// <summary>
+    /// 场景ID
+    /// </summary>
     public int InstanceId { get { return m_InstanceId; } }
     private Player m_Player;
     public Player Player { get { return m_Player; } }

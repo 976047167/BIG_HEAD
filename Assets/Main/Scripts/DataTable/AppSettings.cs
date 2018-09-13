@@ -3994,6 +3994,11 @@ namespace AppSettings
         public List<int> DialogContents { get; private set;}
         
         /// <summary>
+        /// 下一个(如果是选择节点填-1即可)
+        /// </summary>
+        public List<int> NextIndexs { get; private set;}
+        
+        /// <summary>
         /// 对话操作(0结束1下一个2选择3执行特殊操作)
         /// </summary>
         public List<int> DialogAction { get; private set;}
@@ -4018,8 +4023,9 @@ namespace AppSettings
             HeadIcons = row.Get_List_int(row.Values[4], ""); 
             ShowMode = row.Get_List_int(row.Values[5], ""); 
             DialogContents = row.Get_List_int(row.Values[6], ""); 
-            DialogAction = row.Get_List_int(row.Values[7], ""); 
-            ActionParam = row.Get_List_int(row.Values[8], ""); 
+            NextIndexs = row.Get_List_int(row.Values[7], ""); 
+            DialogAction = row.Get_List_int(row.Values[8], ""); 
+            ActionParam = row.Get_List_int(row.Values[9], ""); 
         }
 
         /// <summary>
