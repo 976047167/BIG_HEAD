@@ -77,7 +77,7 @@ public class PlayerDetailData : PlayerData
             {
                 deck.AddCard(new NormalCard(pbDeck.Cards[j], false));
             }
-            decks.Add(pbDeck.Index, deck);
+            decks[pbDeck.Index]= deck;
         }
         for (int i = 0; i < m_CardList.Count; i++)
         {

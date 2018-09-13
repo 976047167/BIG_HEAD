@@ -67,7 +67,7 @@ public class WND_NpcDialog : UIFormBase
             Debug.LogError("配置表错误!");
         }
 
-        UIEventListener.Get(btnMask).onClick = (go) => { EndTypewriting(); };
+        UIEventListener.Get(btnMask).onClick = OnClick_btnMask;
     }
 
     protected override void OnOpen()
@@ -182,7 +182,7 @@ public class WND_NpcDialog : UIFormBase
             tempScrollView.SetDragAmount(0f, 0f, false);
         else
             tempScrollView.SetDragAmount(0f, 1f, false);
-
+        btnMask.SetActive(false);
         //OnEndTypewriting();
     }
     void OnEndTypewriting()
@@ -192,7 +192,17 @@ public class WND_NpcDialog : UIFormBase
         writingScrollView = null;
         writingEffect = null;
         lastHeight = 0f;
-        ApplyDialogAction(currentDialogData.Index, currentDialogData.Action, currentDialogData.ActionParam, currentDialogData.Next);
+        //下一句是需要点击才会出现的
+        if (currentDialogData.Action <= 1)
+        {
+            btnMask.SetActive(true);
+
+        }
+        else
+        {
+            ApplyDialogAction(currentDialogData.Index, currentDialogData.Action, currentDialogData.ActionParam, currentDialogData.Next);
+        }
+
     }
     protected void ShowContent(DialogData dialogData)
     {
@@ -224,6 +234,7 @@ public class WND_NpcDialog : UIFormBase
                 }
                 goOppInfo.SetActive(true);
                 lblOppContent.text = I18N.Get(dialogData.Content);
+                StartTypewriting(lblOppContent);
                 texOppIcon.Load(dialogData.Head);
                 break;
             case 2://Boss
@@ -233,6 +244,7 @@ public class WND_NpcDialog : UIFormBase
                 }
                 goOppInfo.SetActive(true);
                 lblOppContent.text = I18N.Get(dialogData.Content);
+                StartTypewriting(lblOppContent);
                 texOppIcon.Load(dialogData.Head);
                 break;
             default:
@@ -249,10 +261,10 @@ public class WND_NpcDialog : UIFormBase
             case 0://结束
                 Game.UI.CloseForm(this);
                 break;
-            case 1:
+            case 1://下一个2选择
                 StartDialog(next);
                 break;
-            case 2:
+            case 2://选择
                 StartSelect(index, param);
                 break;
             default:
@@ -299,5 +311,15 @@ public class WND_NpcDialog : UIFormBase
         DialogData data = dialogDatas[int.Parse(go.name)];
         currentDialogData = data;
         ApplyDialogAction(data.Index, data.Action, data.ActionParam, data.Next);
+    }
+    void OnClick_btnMask(GameObject go)
+    {
+        EndTypewriting();
+        //下一句是需要点击才会出现的
+        if (currentDialogData.Action <= 1)
+        {
+            ApplyDialogAction(currentDialogData.Index, currentDialogData.Action, currentDialogData.ActionParam, currentDialogData.Next);
+        }
+        
     }
 }

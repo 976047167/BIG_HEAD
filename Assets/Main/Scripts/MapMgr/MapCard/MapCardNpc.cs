@@ -22,7 +22,7 @@ public class MapCardNpc : MapCardBase
             //UIModule.Instance.OpenForm<WND_Dialog>(DialogId);
             // UIModule.Instance.OpenForm<WND_Bag>(0);
             //UIModule.Instance.OpenForm<WND_Kaku>(0);
-            Game.UI.OpenForm<WND_NpcDialog>(id);
+            Game.UI.OpenForm<WND_NpcDialog>(1);
         }
 
         base.OnPlayerEnter();
