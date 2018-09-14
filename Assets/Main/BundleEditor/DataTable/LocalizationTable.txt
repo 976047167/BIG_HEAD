@@ -208,3 +208,6 @@ int	string	string	string
 2000045	再说一遍	再說壹遍	Say it again
 2000046	开打吧	開打吧	Start playing
 2000047	跑路	跑路	Running
+2000048	欢迎光临小店	歡迎光臨小店	Welcome to the store
+2000049	买东西	買東西	shopping
+2000050	离开	離開	go away

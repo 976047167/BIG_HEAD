@@ -252,7 +252,15 @@ public class WND_NpcDialog : UIFormBase
         }
     }
     /// <summary>
-    /// 0结束1下一个2选择3执行特殊操作
+    /// 0结束
+    ///1下一个
+    ///2选择
+    ///3进入战斗
+    ///4回血
+    ///5回魔
+    ///6回粮食
+    ///7进入商店
+    ///8打开宝箱
     /// </summary>
     void ApplyDialogAction(int index, int action, int param, int next)
     {
@@ -320,6 +328,6 @@ public class WND_NpcDialog : UIFormBase
         {
             ApplyDialogAction(currentDialogData.Index, currentDialogData.Action, currentDialogData.ActionParam, currentDialogData.Next);
         }
-        
+
     }
 }
