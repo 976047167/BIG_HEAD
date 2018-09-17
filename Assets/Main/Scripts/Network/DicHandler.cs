@@ -23,6 +23,8 @@ namespace BigHead.Net
             Dic.Add((ushort)MessageId_Receive.GCMapUseItem, new GCMapUseItemHandler());
             Dic.Add((ushort)MessageId_Receive.GCUpdateMapPlayerData, new GCUpdateMapPlayerDataHandler());
             Dic.Add((ushort)MessageId_Receive.GCMapApplyEffect, new GCMapApplyEffectHandler());
+            Dic.Add((ushort)MessageId_Receive.GCMapEnterShop, new GCMapEnterShopHandler());
+            Dic.Add((ushort)MessageId_Receive.GCMapOpenBox, new GCMapOpenBoxHandler());
             Dic.Add((ushort)MessageId_Receive.GCEnterBattle, new GCEnterBattleHandler());
             Dic.Add((ushort)MessageId_Receive.GCExitBattle, new GCExitBattleHandler());
         }

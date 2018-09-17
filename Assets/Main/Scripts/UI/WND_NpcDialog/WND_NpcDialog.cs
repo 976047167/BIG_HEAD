@@ -273,7 +273,7 @@ public class WND_NpcDialog : UIFormBase
                 StartDialog(next);
                 break;
             case 2://选择
-                StartSelect(index, param);
+                StartSelect(index + 1, param);
                 break;
             default:
                 if (action > 2)

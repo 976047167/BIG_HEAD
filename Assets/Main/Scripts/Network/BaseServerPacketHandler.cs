@@ -73,7 +73,7 @@ namespace BigHead.Net
                     string type = splites[1].Replace(SUFFIX, "");
                     IMessage data = GetType().Assembly.CreateInstance(type) as IMessage;
                     FileStream fs = file.Open(FileMode.Open);
-                    Debug.Log(file);
+                    //Debug.Log(file);
                     //StreamWriter sw = new StreamWriter(fs, System.Text.Encoding.UTF8);
                     data.MergeFrom(fs);
                     //sw.Close();

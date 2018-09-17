@@ -1,5 +1,3 @@
-Id	DialogId	ModelId
-int	int	int
-1	17	8
-2	21	8
-3	24	8
+Id	DialogId	ModelId	Goods	HeadIcons	ShowMode	DialogContents	DialogAction	NextIndexs	ActionParam
+int	int	int	List<int>	List<int>	List<int>	List<int>	List<int>	List<int>	List<int>
+1	17	8		10046,10046,10046	1,1,1	2000048,2000049,2000050	2,7,0	-1,0,0	2,1,0

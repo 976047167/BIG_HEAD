@@ -18,6 +18,8 @@ public enum MessageId_Send : ushort
     CGMapChangeDeck = 2007,
     CGMapUseItem = 2008,
     CGMapApplyEffect = 2010,
+    CGMapEnterShop = 2011,
+    CGMapOpenBox = 2012,
     CGEnterBattle = 3000,
     CGExitBattle = 3001,
     MAX = 65535,
