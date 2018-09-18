@@ -4684,6 +4684,41 @@ namespace AppSettings
         /// </summary>
         public int ModelId { get; private set;}
         
+        /// <summary>
+        /// 商店的商品
+        /// </summary>
+        public List<int> Goods { get; private set;}
+        
+        /// <summary>
+        /// 对话头像
+        /// </summary>
+        public List<int> HeadIcons { get; private set;}
+        
+        /// <summary>
+        /// 0自己1怪物2Boss
+        /// </summary>
+        public List<int> ShowMode { get; private set;}
+        
+        /// <summary>
+        /// 对话列表
+        /// </summary>
+        public List<int> DialogContents { get; private set;}
+        
+        /// <summary>
+        /// 对话操作(0结束1下一个2选择3执行特殊操作)
+        /// </summary>
+        public List<int> DialogAction { get; private set;}
+        
+        /// <summary>
+        /// 下一个(如果是选择节点填-1即可)
+        /// </summary>
+        public List<int> NextIndexs { get; private set;}
+        
+        /// <summary>
+        /// 动作参数(0结束1下一个2选择3+执行特殊操作)
+        /// </summary>
+        public List<int> ActionParam { get; private set;}
+        
 
         internal ShopTableSetting(TableFileRow row)
         {
@@ -4695,6 +4730,13 @@ namespace AppSettings
             Id = row.Get_int(row.Values[0], ""); 
             DialogId = row.Get_int(row.Values[1], ""); 
             ModelId = row.Get_int(row.Values[2], ""); 
+            Goods = row.Get_List_int(row.Values[3], ""); 
+            HeadIcons = row.Get_List_int(row.Values[4], ""); 
+            ShowMode = row.Get_List_int(row.Values[5], ""); 
+            DialogContents = row.Get_List_int(row.Values[6], ""); 
+            DialogAction = row.Get_List_int(row.Values[7], ""); 
+            NextIndexs = row.Get_List_int(row.Values[8], ""); 
+            ActionParam = row.Get_List_int(row.Values[9], ""); 
         }
 
         /// <summary>
@@ -5341,6 +5383,11 @@ namespace AppSettings
         public string Path { get; private set;}
         
         /// <summary>
+        /// 标题(0显示)
+        /// </summary>
+        public int Title { get; private set;}
+        
+        /// <summary>
         /// UI窗口分组(0默认1提示2对话框3最顶层)
         /// </summary>
         public int Group { get; private set;}
@@ -5362,8 +5409,9 @@ namespace AppSettings
             Desc = row.Get_string(row.Values[1], ""); 
             Name = row.Get_string(row.Values[2], ""); 
             Path = row.Get_string(row.Values[3], ""); 
-            Group = row.Get_int(row.Values[4], ""); 
-            ShowMode = row.Get_int(row.Values[5], ""); 
+            Title = row.Get_int(row.Values[4], ""); 
+            Group = row.Get_int(row.Values[5], ""); 
+            ShowMode = row.Get_int(row.Values[6], ""); 
         }
 
         /// <summary>
@@ -5550,7 +5598,7 @@ namespace AppSettings
 	{
 		
         /// <summary>
-        /// #Level
+        /// #ID
         /// </summary>
         public int Id { get; private set;}
         

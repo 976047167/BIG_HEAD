@@ -92,8 +92,15 @@ public enum MessageId : uint
     /// 地图玩家没有食物扣血了
     /// </summary>
     MAP_PLAYER_NO_FOOD_DAMAGE,
-    
-    
+    /// <summary>
+    /// 进入地图商店
+    /// </summary>
+    MAP_ENTER_SHOP,
+    /// <summary>
+    /// 打开地图宝箱
+    /// </summary>
+    MAP_OPEN_BOX,
+
     
 
     /////<summary> 断线</summary>

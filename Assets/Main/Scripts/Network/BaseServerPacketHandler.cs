@@ -14,7 +14,7 @@ namespace BigHead.Net
     {
         const char SPLITE = '#';
         const string SUFFIX = ".data";
-        public static string Save_Data_Path = "c:\\";
+        public static string Save_Data_Path = "c:\\BigHead\\";
 
         protected const string ACCOUNT_DATA_KEY = "accountData";
         protected const string PLAYER_DATA_KEY = "playerData";

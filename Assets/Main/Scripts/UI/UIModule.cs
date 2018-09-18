@@ -160,6 +160,7 @@ public partial class UIModule
             }
             sortedPanels[i].depth = baseDepths[group] + i;
         }
+        form.StartDepth = baseDepths[group];
         baseDepths[group] += panels.Length;
         //设置显示逻辑
         UIFormsShowMode mode = (UIFormsShowMode)config.ShowMode;

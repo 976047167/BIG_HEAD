@@ -22,6 +22,9 @@ public class GCMapEnterShopHandler : BasePacketHandler
         GCMapEnterShop data = packet as GCMapEnterShop;
         //处理完数据和逻辑后,发送消息通知其他模块,绝对不可以直接操作UI等Unity主线程的东西!
         //此处发送消息不允许使用Messenger.BroadcastSync同步通知
-        throw new System.NotImplementedException(GetType().ToString());
+        if (data.Result==0)
+        {
+            Messenger.BroadcastAsync(MessageId.MAP_ENTER_SHOP, data.ShopId);
+        }
     }
 }

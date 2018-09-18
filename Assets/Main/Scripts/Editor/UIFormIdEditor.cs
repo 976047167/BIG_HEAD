@@ -8,7 +8,7 @@ using System.Reflection;
 using AppSettings;
 public class UIFormIdEditor
 {
-    [MenuItem("Tools/Battle/UIFormId", false, 1001)]
+    [MenuItem("Tools/UIForm/UIFormId", false, 1001)]
     static void SeletEnable()
     {
         IEnumerable enumerable = UIFormTableSettings.GetAll();
@@ -38,7 +38,7 @@ public enum FormId : int
     {
         string path = Path.Combine(Application.dataPath, scriptPath);
         FileStream fs = File.Create(path);
-        Debug.LogError(path);
+        Debug.Log(path);
         StreamWriter sw = new StreamWriter(fs, System.Text.Encoding.UTF8);
         sw.Write(Template.Replace("#ENUM_ITEMS", actionName));
         sw.Close();

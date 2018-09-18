@@ -160,6 +160,11 @@ int	string	string	string
 1005000	WND_MapInfo	WND_MapInfo	WND_MapInfo
 1005001	第{0}层	Layer {0}	第{0}层
 1005002	没有食物了,血量[ff0000]-1[-]!	沒有食物了,血量[ff0000]-1[-]!	No Food!
+1006000	WND_MapShop	WND_MapShop	WND_MapShop
+1006001	小贩的铺子	小販的鋪子	Shop
+1007000	WND_MapShop	WND_MapShop	WND_MapShop
+1007001	宝箱	宝箱	treasure
+1007002			
 2000000			
 2000001	烟雾缭绕中，你看到一口井。	煙霧繚繞中，妳看到壹口井。	The smoke is lingering and you see a well.
 2000002	井旁有一个用来打水的木桶。你会……	井旁有壹個用來打水的木桶。妳會……	There is a wooden bucket next to the well to draw water. You can......

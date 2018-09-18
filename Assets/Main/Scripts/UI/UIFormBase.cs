@@ -7,6 +7,7 @@ using AppSettings;
 /// </summary>
 public abstract class UIFormBase : MonoBehaviour
 {
+    public int StartDepth { get; set; }
     public UIFormTableSetting Table { get; private set; }
     private UIFormState state;
     public UIFormState State { get { return state; } }
@@ -21,6 +22,21 @@ public abstract class UIFormBase : MonoBehaviour
         state = UIFormState.Hide;
         OnInit(userdata);
         isOpen = false;
+        if (table.Title != 0)
+        {
+            UIItemTableSetting uiItem = UIItemTableSettings.Get(2);
+            ResourceManager.LoadGameObject(uiItem.Path,
+                (p, data, go) =>
+                {
+                    go.transform.parent = transform;
+                    go.transform.localPosition = Vector3.zero;
+                    go.transform.localScale = Vector3.one;
+                    go.GetComponent<UIPanel>().depth = StartDepth + 1;
+                    UIEventListener.Get(go.transform.Find("btnClose").gameObject).onClick = (btn) => { UIModule.Instance.CloseForm(this); };
+                    go.transform.Find("btnClose").GetComponent<UILabel>().text = I18N.Get(table.Title);
+                },
+                (p, data) => { });
+        }
     }
     public void Open()
     {

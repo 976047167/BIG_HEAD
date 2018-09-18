@@ -50,5 +50,9 @@ public enum FormId : int
     WND_Tips = 21,
     ///<summary>npc对话</summary>
     WND_NpcDialog = 22,
+    ///<summary>地图商店</summary>
+    WND_MapShop = 23,
+    ///<summary>地图宝箱</summary>
+    WND_MapBox = 24,
 
 }

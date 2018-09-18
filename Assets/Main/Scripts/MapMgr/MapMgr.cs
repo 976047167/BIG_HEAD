@@ -50,6 +50,8 @@ public class MapMgr
         Messenger.AddListener<GCMapPlayerMove>(MessageId.MAP_PLAYER_MOVE, PlayerMove);
         Messenger.AddListener(MessageId.MAP_PLAYER_NO_FOOD_DAMAGE, OnNoFoodDamageTips);
         Messenger.AddListener<int>(MessageId.GAME_ENTER_BATTLE, EnterBattle);
+        Messenger.AddListener<int>(MessageId.MAP_ENTER_SHOP, OpenMapShop);
+        Messenger.AddListener<int>(MessageId.MAP_OPEN_BOX, OpenMapBox);
     }
     void RemoveMessage()
     {
@@ -59,6 +61,9 @@ public class MapMgr
         Messenger.RemoveListener<ulong>(MessageId.MAP_PLAYER_DEAD, OnPlayerDead);
         Messenger.RemoveListener<GCMapPlayerMove>(MessageId.MAP_PLAYER_MOVE, PlayerMove);
         Messenger.RemoveListener(MessageId.MAP_PLAYER_NO_FOOD_DAMAGE, OnNoFoodDamageTips);
+        Messenger.RemoveListener<int>(MessageId.GAME_ENTER_BATTLE, EnterBattle);
+        Messenger.RemoveListener<int>(MessageId.MAP_ENTER_SHOP, OpenMapShop);
+        Messenger.RemoveListener<int>(MessageId.MAP_OPEN_BOX, OpenMapBox);
     }
 
 
@@ -381,6 +386,16 @@ public class MapMgr
     {
         Game.BattleManager.StartBattle(monsterId);
         Game.UI.CloseForm<WND_Dialog>();
+    }
+
+    void OpenMapShop(int shopId)
+    {
+        Game.UI.OpenForm<WND_MapShop>(shopId);
+    }
+
+    void OpenMapBox(int boxId)
+    {
+        Game.UI.OpenForm<WND_MapBox>(boxId);
     }
 
     public MapCardBase GetMapCard(int x, int y)

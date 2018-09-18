@@ -1,24 +1,26 @@
-Id	Desc	Name	Path	Group	ShowMode
-int	string	string	string	int	int
-1	启动	WND_Launch	Internal/WND_Launch	0	2
-2	登录	WND_Login	Internal/WND_Login	0	2
-3	战斗界面	UIBattleForm	Instance/WND_BattleForm	0	2
-4	地图信息	UIMapInfo	WND_MapInfo	0	0
-5	对话选择	WND_Dialog	WND_Dialog	0	2
-6	背包	WND_Bag	WND_Bag	0	2
-7	卡牌详细信息	WND_ShowCard	WND_ShowCard	1	1
-8	卡库	WND_Kaku	WND_Kaku	0	2
-9	地图菜单	UIMenu	WND_Menu	0	0
-10	奖励发放	WND_Reward	WND_Reward	0	1
-11	主城	WND_MainTown	Lobby/WND_MainTown	0	0
-12	选择卡组	WND_ChoseDeck	WND_ChoseDeck	0	1
-13	加载界面	WND_Loading	Internal/WND_Loading	3	2
-14	设置界面	WND_Settings	WND_Settings	0	1
-15	战斗设置界面	WND_BattleSetting	Instance/WND_BattleSetting	0	1
-16	副本设置界面	WND_InstanceSetting	WND_InstanceSetting	0	2
-17	创角界面	WND_CreateCharacter	WND_CreateCharacter	0	2
-18	消息框	WND_MessageBox	Internal/WND_MessageBox	2	1
-19	战斗结果	WND_BattleResult	Instance/WND_BattleResult	1	1
-20	网络消息等待	WND_Waiting	Internal/WND_Waiting	3	1
-21	提示	WND_Tips	Internal/WND_Tips	1	1
-22	npc对话	WND_NpcDialog	Instance/WND_NpcDialog	1	2
+Id	Desc	Name	Path	Title	Group	ShowMode
+int	string	string	string	int	int	int
+1	启动	WND_Launch	Internal/WND_Launch	0	0	2
+2	登录	WND_Login	Internal/WND_Login	0	0	2
+3	战斗界面	UIBattleForm	Instance/WND_BattleForm	0	0	2
+4	地图信息	UIMapInfo	WND_MapInfo	0	0	0
+5	对话选择	WND_Dialog	WND_Dialog	0	0	2
+6	背包	WND_Bag	WND_Bag	0	0	2
+7	卡牌详细信息	WND_ShowCard	WND_ShowCard	0	1	1
+8	卡库	WND_Kaku	WND_Kaku	0	0	2
+9	地图菜单	UIMenu	WND_Menu	0	0	0
+10	奖励发放	WND_Reward	WND_Reward	0	1	1
+11	主城	WND_MainTown	Lobby/WND_MainTown	0	0	0
+12	选择卡组	WND_ChoseDeck	WND_ChoseDeck	0	0	1
+13	加载界面	WND_Loading	Internal/WND_Loading	0	3	2
+14	设置界面	WND_Settings	WND_Settings	0	0	1
+15	战斗设置界面	WND_BattleSetting	Instance/WND_BattleSetting	0	0	1
+16	副本设置界面	WND_InstanceSetting	WND_InstanceSetting	0	0	2
+17	创角界面	WND_CreateCharacter	WND_CreateCharacter	0	0	2
+18	消息框	WND_MessageBox	Internal/WND_MessageBox	0	2	1
+19	战斗结果	WND_BattleResult	Instance/WND_BattleResult	0	1	1
+20	网络消息等待	WND_Waiting	Internal/WND_Waiting	0	3	1
+21	提示	WND_Tips	Internal/WND_Tips	0	1	1
+22	npc对话	WND_NpcDialog	Instance/WND_NpcDialog	0	1	2
+23	地图商店	WND_MapShop	Instance/WND_MapShop	1006001	0	2
+24	地图宝箱	WND_MapBox	Instance/WND_MapBox	1007001	0	2
