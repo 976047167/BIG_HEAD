@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using AppSettings;
 
 /// <summary>
 /// 一条对话的数据
@@ -8,12 +9,14 @@ using UnityEngine;
 public class DialogData
 {
     int index;
-    int head;
     int showMode;
+    int head;
+    int name;
     int content;
     int next;
     int action;
     int actionParam;
+    int actionParam2;
 
     public int Head
     {
@@ -71,14 +74,32 @@ public class DialogData
         }
     }
 
-    public DialogData(int index, int head, int showMode, int content, int next, int action, int actionParam)
+    public int Name
+    {
+        get
+        {
+            return name;
+        }
+    }
+
+    public int ActionParam2
+    {
+        get
+        {
+            return actionParam2;
+        }
+    }
+
+    public DialogData(int index, int showMode, int head, int name, int content, int next, int action, int actionParam, int actionParam2)
     {
         this.index = index;
         this.head = head;
+        this.name = name;
         this.showMode = showMode;
         this.content = content;
         this.next = next;
         this.action = action;
         this.actionParam = actionParam;
+        this.actionParam = actionParam2;
     }
 }

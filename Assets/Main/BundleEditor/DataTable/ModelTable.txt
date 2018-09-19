@@ -1,10 +1,10 @@
-Id	Path
-int	string
-1	Character/Player/Player
-2	MapCard/MapCard
-3	MapCard/MapCardBoss
-4	MapCard/MapCardBox
-5	MapCard/MapCardDoor
-6	MapCard/MapCardMonster
-7	MapCard/MapCardNpc
-8	MapCard/MapCardShop
+Id	Path	Animations
+int	string	string[]
+1	Character/Player/Player	null
+2	MapCard/MapCard	null
+3	MapCard/MapCardBoss	null
+4	MapCard/MapCardBox	null
+5	MapCard/MapCardDoor	null
+6	MapCard/MapCardMonster	null
+7	MapCard/MapCardNpc	null
+8	MapCard/MapCardShop	null

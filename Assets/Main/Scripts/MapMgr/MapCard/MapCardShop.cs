@@ -11,7 +11,7 @@ public class MapCardShop : MapCardBase
     {
 
         int DialogId = ShopTableSettings.Get(shopId).DialogId;
-        UIModule.Instance.OpenForm<WND_Dialog>(DialogId);
+        UIModule.Instance.OpenForm<WND_NpcDialog>(DialogId);
         base.OnPlayerEnter();
         //进入商店
     }

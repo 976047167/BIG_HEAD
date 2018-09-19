@@ -98,6 +98,9 @@ public class CGMapApplyEffectHandler : BaseServerPacketHandler
                 //        break;
                 //}
                 break;
+            //9进入下一层
+            case 9:
+                break;
             default:
                 break;
         }

@@ -385,7 +385,7 @@ public class MapMgr
     void EnterBattle(int monsterId)
     {
         Game.BattleManager.StartBattle(monsterId);
-        Game.UI.CloseForm<WND_Dialog>();
+        Game.UI.CloseForm<WND_NpcDialog>();
     }
 
     void OpenMapShop(int shopId)

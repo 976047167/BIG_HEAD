@@ -62,6 +62,7 @@ namespace AppSettings
                         ItemTableSettings._instance,
                         LevelTableSettings._instance,
                         LocalizationTableSettings._instance,
+                        MapCardTableSettings._instance,
                         ModelTableSettings._instance,
                         NpcTableSettings._instance,
                         RewardTableSettings._instance,
@@ -2331,24 +2332,44 @@ namespace AppSettings
         public int Id { get; private set;}
         
         /// <summary>
-        /// #文本
+        /// 0自己1怪物2Boss
         /// </summary>
-        public int Text { get; private set;}
+        public List<int> ShowMode { get; private set;}
         
         /// <summary>
-        /// #类型(1正常对话，2选项，3事件，4战斗）
+        /// 对话头像
         /// </summary>
-        public int Type { get; private set;}
+        public List<int> HeadIcons { get; private set;}
         
         /// <summary>
-        /// #下一目录（组）（事件为事件ID+成功对话Id+失败对话Id，战斗为怪物代码）
+        /// 对话名字
         /// </summary>
-        public List<int> NextIds { get; private set;}
+        public List<int> ShowNames { get; private set;}
         
         /// <summary>
-        /// #头像图片路径
+        /// 对话列表
         /// </summary>
-        public int ImagePath { get; private set;}
+        public List<int> DialogContents { get; private set;}
+        
+        /// <summary>
+        /// 对话操作(0结束1下一个2选择3进入战斗4回血5回魔6回粮食7进入商店8打开宝箱9进入下一层)
+        /// </summary>
+        public List<int> DialogAction { get; private set;}
+        
+        /// <summary>
+        /// 下一个(如果是选择节点填-1即可)
+        /// </summary>
+        public List<int> NextIndexs { get; private set;}
+        
+        /// <summary>
+        /// 动作参数(0结束1下一个2选择3+执行特殊操作)
+        /// </summary>
+        public List<int> ActionParam { get; private set;}
+        
+        /// <summary>
+        /// 动作参数(0结束1下一个2选择4+执行特殊操作)
+        /// </summary>
+        public List<int> ActionParam2 { get; private set;}
         
 
         internal DialogTableSetting(TableFileRow row)
@@ -2359,10 +2380,14 @@ namespace AppSettings
         internal void Reload(TableFileRow row)
         { 
             Id = row.Get_int(row.Values[0], ""); 
-            Text = row.Get_int(row.Values[1], ""); 
-            Type = row.Get_int(row.Values[2], "1"); 
-            NextIds = row.Get_List_int(row.Values[3], ""); 
-            ImagePath = row.Get_int(row.Values[4], ""); 
+            ShowMode = row.Get_List_int(row.Values[1], ""); 
+            HeadIcons = row.Get_List_int(row.Values[2], ""); 
+            ShowNames = row.Get_List_int(row.Values[3], ""); 
+            DialogContents = row.Get_List_int(row.Values[4], ""); 
+            DialogAction = row.Get_List_int(row.Values[5], ""); 
+            NextIndexs = row.Get_List_int(row.Values[6], ""); 
+            ActionParam = row.Get_List_int(row.Values[7], ""); 
+            ActionParam2 = row.Get_List_int(row.Values[8], ""); 
         }
 
         /// <summary>
@@ -3583,6 +3608,235 @@ namespace AppSettings
 	}
 
 	/// <summary>
+	/// Auto Generate for Tab File: "MapCardTable.txt"
+    /// No use of generic and reflection, for better performance,  less IL code generating
+	/// </summary>>
+    public partial class MapCardTableSettings : IReloadableSettings
+    {
+        /// <summary>
+        /// How many reload function load?
+        /// </summary>>
+        public static int ReloadCount { get; private set; }
+
+		public static readonly string[] TabFilePaths = 
+        {
+            "MapCardTable.txt"
+        };
+        internal static MapCardTableSettings _instance = new MapCardTableSettings();
+        Dictionary<int, MapCardTableSetting> _dict = new Dictionary<int, MapCardTableSetting>();
+
+        /// <summary>
+        /// Trigger delegate when reload the Settings
+        /// </summary>>
+	    public static System.Action OnReload;
+
+        /// <summary>
+        /// Constructor, just reload(init)
+        /// When Unity Editor mode, will watch the file modification and auto reload
+        /// </summary>
+	    private MapCardTableSettings()
+	    {
+        }
+
+        /// <summary>
+        /// Get the singleton
+        /// </summary>
+        /// <returns></returns>
+	    public static MapCardTableSettings GetInstance()
+	    {
+            if (ReloadCount == 0)
+            {
+                _instance._ReloadAll(true);
+    #if UNITY_EDITOR
+                if (SettingModule.IsFileSystemMode)
+                {
+                    for (var j = 0; j < TabFilePaths.Length; j++)
+                    {
+                        var tabFilePath = TabFilePaths[j];
+                        SettingModule.WatchSetting(tabFilePath, (path) =>
+                        {
+                            if (path.Replace("\\", "/").EndsWith(path))
+                            {
+                                _instance.ReloadAll();
+                                Log.LogConsole_MultiThread("File Watcher! Reload success! -> " + path);
+                            }
+                        });
+                    }
+
+                }
+    #endif
+            }
+
+	        return _instance;
+	    }
+        
+        public int Count
+        {
+            get
+            {
+                return _dict.Count;
+            }
+        }
+
+        /// <summary>
+        /// Do reload the setting file: MapCardTable, no exception when duplicate primary key
+        /// </summary>
+        public void ReloadAll()
+        {
+            _ReloadAll(false);
+        }
+
+        /// <summary>
+        /// Do reload the setting class : MapCardTable, no exception when duplicate primary key, use custom string content
+        /// </summary>
+        public void ReloadAllWithString(string context)
+        {
+            _ReloadAll(false, context);
+        }
+
+        /// <summary>
+        /// Do reload the setting file: MapCardTable
+        /// </summary>
+	    void _ReloadAll(bool throwWhenDuplicatePrimaryKey, string customContent = null)
+        {
+            for (var j = 0; j < TabFilePaths.Length; j++)
+            {
+                var tabFilePath = TabFilePaths[j];
+                TableFile tableFile;
+                if (customContent == null)
+                    tableFile = SettingModule.Get(tabFilePath, false);
+                else
+                    tableFile = TableFile.LoadFromString(customContent);
+
+                using (tableFile)
+                {
+                    foreach (var row in tableFile)
+                    {
+                        var pk = MapCardTableSetting.ParsePrimaryKey(row);
+                        MapCardTableSetting setting;
+                        if (!_dict.TryGetValue(pk, out setting))
+                        {
+                            setting = new MapCardTableSetting(row);
+                            _dict[setting.Id] = setting;
+                        }
+                        else 
+                        {
+                            if (throwWhenDuplicatePrimaryKey) throw new System.Exception(string.Format("DuplicateKey, Class: {0}, File: {1}, Key: {2}", this.GetType().Name, tabFilePath, pk));
+                            else setting.Reload(row);
+                        }
+                    }
+                }
+            }
+
+	        if (OnReload != null)
+	        {
+	            OnReload();
+	        }
+
+            ReloadCount++;
+            Log.Info("Reload settings: {0}, Row Count: {1}, Reload Count: {2}", GetType(), Count, ReloadCount);
+        }
+
+	    /// <summary>
+        /// foreachable enumerable: MapCardTable
+        /// </summary>
+        public static IEnumerable GetAll()
+        {
+            foreach (var row in GetInstance()._dict.Values)
+            {
+                yield return row;
+            }
+        }
+
+        /// <summary>
+        /// GetEnumerator for `MoveNext`: MapCardTable
+        /// </summary> 
+	    public static IEnumerator GetEnumerator()
+	    {
+	        return GetInstance()._dict.Values.GetEnumerator();
+	    }
+         
+	    /// <summary>
+        /// Get class by primary key: MapCardTable
+        /// </summary>
+        public static MapCardTableSetting Get(int primaryKey)
+        {
+            MapCardTableSetting setting;
+            if (GetInstance()._dict.TryGetValue(primaryKey, out setting)) return setting;
+            return null;
+        }
+
+        // ========= CustomExtraString begin ===========
+        
+        // ========= CustomExtraString end ===========
+    }
+
+	/// <summary>
+	/// Auto Generate for Tab File: "MapCardTable.txt"
+    /// Singleton class for less memory use
+	/// </summary>
+	public partial class MapCardTableSetting : TableRowFieldParser
+	{
+		
+        /// <summary>
+        /// #目录
+        /// </summary>
+        public int Id { get; private set;}
+        
+        /// <summary>
+        /// 名字
+        /// </summary>
+        public int Name { get; private set;}
+        
+        /// <summary>
+        /// 类型(根据这个加逻辑脚本)1Door,2NPC,3Shop,4Box,5Monster,6Boss
+        /// </summary>
+        public int Type { get; private set;}
+        
+        /// <summary>
+        /// 外键
+        /// </summary>
+        public int RefrenceId { get; private set;}
+        
+        /// <summary>
+        /// 模型
+        /// </summary>
+        public int ModelId { get; private set;}
+        
+        /// <summary>
+        /// 对话
+        /// </summary>
+        public int DialogId { get; private set;}
+        
+
+        internal MapCardTableSetting(TableFileRow row)
+        {
+            Reload(row);
+        }
+
+        internal void Reload(TableFileRow row)
+        { 
+            Id = row.Get_int(row.Values[0], ""); 
+            Name = row.Get_int(row.Values[1], ""); 
+            Type = row.Get_int(row.Values[2], ""); 
+            RefrenceId = row.Get_int(row.Values[3], ""); 
+            ModelId = row.Get_int(row.Values[4], ""); 
+            DialogId = row.Get_int(row.Values[5], ""); 
+        }
+
+        /// <summary>
+        /// Get PrimaryKey from a table row
+        /// </summary>
+        /// <param name="row"></param>
+        /// <returns></returns>
+        public static int ParsePrimaryKey(TableFileRow row)
+        {
+            var primaryKey = row.Get_int(row.Values[0], "");
+            return primaryKey;
+        }
+	}
+
+	/// <summary>
 	/// Auto Generate for Tab File: "ModelTable.txt"
     /// No use of generic and reflection, for better performance,  less IL code generating
 	/// </summary>>
@@ -3763,6 +4017,11 @@ namespace AppSettings
         /// </summary>
         public string Path { get; private set;}
         
+        /// <summary>
+        /// 动画
+        /// </summary>
+        public string[] Animations { get; private set;}
+        
 
         internal ModelTableSetting(TableFileRow row)
         {
@@ -3773,6 +4032,7 @@ namespace AppSettings
         { 
             Id = row.Get_int(row.Values[0], ""); 
             Path = row.Get_string(row.Values[1], ""); 
+            Animations = row.Get_string_array(row.Values[2], ""); 
         }
 
         /// <summary>
@@ -3969,44 +4229,14 @@ namespace AppSettings
         public int Name { get; private set;}
         
         /// <summary>
-        /// #对话Id
+        /// NPC头像
         /// </summary>
-        public int DialogId { get; private set;}
+        public int HeadIcon { get; private set;}
         
         /// <summary>
-        /// 地图卡模型
+        /// 模型
         /// </summary>
         public int ModelId { get; private set;}
-        
-        /// <summary>
-        /// 对话头像
-        /// </summary>
-        public List<int> HeadIcons { get; private set;}
-        
-        /// <summary>
-        /// 0自己1怪物2Boss
-        /// </summary>
-        public List<int> ShowMode { get; private set;}
-        
-        /// <summary>
-        /// 对话列表
-        /// </summary>
-        public List<int> DialogContents { get; private set;}
-        
-        /// <summary>
-        /// 对话操作(0结束1下一个2选择3执行特殊操作)
-        /// </summary>
-        public List<int> DialogAction { get; private set;}
-        
-        /// <summary>
-        /// 下一个(如果是选择节点填-1即可)
-        /// </summary>
-        public List<int> NextIndexs { get; private set;}
-        
-        /// <summary>
-        /// 动作参数(0结束1下一个2选择3+执行特殊操作)
-        /// </summary>
-        public List<int> ActionParam { get; private set;}
         
 
         internal NpcTableSetting(TableFileRow row)
@@ -4018,14 +4248,8 @@ namespace AppSettings
         { 
             Id = row.Get_int(row.Values[0], ""); 
             Name = row.Get_int(row.Values[1], ""); 
-            DialogId = row.Get_int(row.Values[2], ""); 
+            HeadIcon = row.Get_int(row.Values[2], ""); 
             ModelId = row.Get_int(row.Values[3], ""); 
-            HeadIcons = row.Get_List_int(row.Values[4], ""); 
-            ShowMode = row.Get_List_int(row.Values[5], ""); 
-            DialogContents = row.Get_List_int(row.Values[6], ""); 
-            DialogAction = row.Get_List_int(row.Values[7], ""); 
-            NextIndexs = row.Get_List_int(row.Values[8], ""); 
-            ActionParam = row.Get_List_int(row.Values[9], ""); 
         }
 
         /// <summary>

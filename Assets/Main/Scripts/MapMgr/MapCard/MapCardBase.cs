@@ -123,7 +123,16 @@ public class MapCardBase
     public static MapCardBase CreateMapCard(MapCardType mapCardType, int dataId, MapCardPos pos)
     {
         MapCardBase mapCard = null;
-        ModelTableSetting model = null;
+        MapCardTableSetting mapCardTable = MapCardTableSettings.Get(dataId);
+        if (mapCardTable == null)
+        {
+            return null;
+        }
+        ModelTableSetting model = ModelTableSettings.Get(mapCardTable.ModelId);
+        if (model == null)
+        {
+            return null;
+        }
         switch (mapCardType)
         {
             case MapCardType.None:
@@ -137,7 +146,7 @@ public class MapCardBase
                 break;
             case MapCardType.Monster:
                 BattleMonsterTableSetting battleMonster = BattleMonsterTableSettings.Get(dataId);
-                model = ModelTableSettings.Get(battleMonster.ModelId);
+                //model = ModelTableSettings.Get(battleMonster.ModelId);
                 mapCard = new MapCardMonster();
                 mapCard.Position = pos;
                 mapCard.State = MapCardBase.CardState.Behind;
@@ -146,7 +155,7 @@ public class MapCardBase
                 break;
             case MapCardType.Shop:
                 ShopTableSetting shopTable = ShopTableSettings.Get(dataId);
-                model = ModelTableSettings.Get(shopTable.ModelId);
+                //model = ModelTableSettings.Get(shopTable.ModelId);
                 mapCard = new MapCardShop();
                 mapCard.Position = pos;
                 mapCard.State = MapCardBase.CardState.Behind;
@@ -155,7 +164,7 @@ public class MapCardBase
                 break;
             case MapCardType.Box:
                 BoxTableSetting boxTable = BoxTableSettings.Get(dataId);
-                model = ModelTableSettings.Get(boxTable.ModelId);
+                //model = ModelTableSettings.Get(boxTable.ModelId);
                 mapCard = new MapCardBox();
                 mapCard.Position = pos;
                 mapCard.State = MapCardBase.CardState.Behind;
@@ -164,7 +173,7 @@ public class MapCardBase
                 break;
             case MapCardType.NPC:
                 NpcTableSetting npcTable = NpcTableSettings.Get(dataId);
-                model = ModelTableSettings.Get(npcTable.ModelId);
+                //model = ModelTableSettings.Get(npcTable.ModelId);
                 mapCard = new MapCardNpc();
                 mapCard.Position = pos;
                 mapCard.State = MapCardBase.CardState.Behind;
@@ -519,7 +528,7 @@ public class MapCardPos
 
         return a.Equals(b);
     }
-   
+
     public static bool operator !=(MapCardPos a, MapCardPos b)
     {
 

@@ -89,7 +89,7 @@ public class CGGetMapLayerDataHandler : BaseServerPacketHandler
                     mapID[pos.X, pos.Y] = 0;
                     break;
                 case MapCardType.Door:
-                    mapID[pos.X, pos.Y] = 0;
+                    mapID[pos.X, pos.Y] = 2;
                     break;
                 case MapCardType.Monster:
                     mapID[pos.X, pos.Y] = layerTableSetting.Monsters[Random.Range(0, layerTableSetting.Monsters.Count)];

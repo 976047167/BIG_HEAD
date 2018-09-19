@@ -125,6 +125,9 @@ int	string	string	string
 51002	拥有强大魔力的人类	擁有強大魔力的人類	None
 60000	物品	物品	Item
 60001	面包	面包	bread
+100000	NPC名字	NPC名字	NPC名字
+100001	我	我	Me
+100002	流氓	流氓	rogue
 1000000	UI	UI	UI
 1000001	血	血	HP
 1000002	魔	魔	MP
@@ -164,7 +167,7 @@ int	string	string	string
 1006001	小贩的铺子	小販的鋪子	Shop
 1007000	WND_MapShop	WND_MapShop	WND_MapShop
 1007001	宝箱	宝箱	treasure
-1007002			
+1008000	WND_NpcDialog	WND_NpcDialog	WND_NpcDialog
 2000000			
 2000001	烟雾缭绕中，你看到一口井。	煙霧繚繞中，妳看到壹口井。	The smoke is lingering and you see a well.
 2000002	井旁有一个用来打水的木桶。你会……	井旁有壹個用來打水的木桶。妳會……	There is a wooden bucket next to the well to draw water. You can......

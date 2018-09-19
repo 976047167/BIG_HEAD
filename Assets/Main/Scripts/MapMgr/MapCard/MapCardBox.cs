@@ -12,7 +12,7 @@ public class MapCardBox : MapCardBase
         if (isFirstEnter)
         {
             int DialogId = BoxTableSettings.Get(boxId).DialogId;
-            UIModule.Instance.OpenForm<WND_Dialog>(DialogId);
+            UIModule.Instance.OpenForm<WND_NpcDialog>(DialogId);
         }
 
         base.OnPlayerEnter();

@@ -379,6 +379,12 @@ public class UITexture : UIBasicSprite
     protected OnAssetDestory assetDestory = null;
     public void Load(int textureId)
     {
+        if (textureId == 0)
+        {
+            mainTexture = null;
+            TextureId = 0;
+            return;
+        }
         if (mainTexture != null && TextureId == textureId)
         {
             return;

@@ -17,8 +17,9 @@ public class WND_NpcDialog : UIFormBase
     UIGrid gridSelectItems;
     GameObject[] goSelects;
 
-    int npcId = 0;
-    NpcTableSetting npcTable = null;
+    int mapCardId = 0;
+    MapCardTableSetting mapCardTable = null;
+    DialogTableSetting dialogTable = null;
     List<DialogData> dialogDatas = null;
     DialogData myData = null;
     DialogData oppData = null;
@@ -45,22 +46,32 @@ public class WND_NpcDialog : UIFormBase
             UIEventListener.Get(goSelects[i]).onClick = OnClick_Selected;
         }
 
-        npcId = (int)userdata;
-        npcTable = NpcTableSettings.Get(npcId);
-        if (npcTable != null
-            && npcTable.HeadIcons.Count == npcTable.ShowMode.Count
-            && npcTable.HeadIcons.Count == npcTable.DialogContents.Count
-            && npcTable.HeadIcons.Count == npcTable.DialogAction.Count
-            && npcTable.HeadIcons.Count == npcTable.ActionParam.Count
-            && npcTable.HeadIcons.Count == npcTable.NextIndexs.Count)
+        mapCardId = (int)userdata;
+        MapCardTableSetting mapCardTable = MapCardTableSettings.Get(mapCardId);
+        if (mapCardTable == null)
         {
-            dialogDatas = new List<DialogData>(npcTable.HeadIcons.Count);
-            for (int i = 0; i < npcTable.HeadIcons.Count; i++)
+            return;
+        }
+        dialogTable = DialogTableSettings.Get(mapCardTable.DialogId);
+        if (dialogTable != null
+            && dialogTable.HeadIcons.Count == dialogTable.ShowMode.Count
+            && dialogTable.HeadIcons.Count == dialogTable.DialogContents.Count
+            && dialogTable.HeadIcons.Count == dialogTable.DialogAction.Count
+            && dialogTable.HeadIcons.Count == dialogTable.ActionParam.Count
+            && dialogTable.HeadIcons.Count == dialogTable.NextIndexs.Count
+            && dialogTable.HeadIcons.Count == dialogTable.ShowNames.Count
+            && dialogTable.HeadIcons.Count == dialogTable.ActionParam2.Count
+            )
+        {
+            dialogDatas = new List<DialogData>(dialogTable.HeadIcons.Count);
+            for (int i = 0; i < dialogTable.HeadIcons.Count; i++)
             {
-                DialogData data = new DialogData(i, npcTable.HeadIcons[i], npcTable.ShowMode[i], npcTable.DialogContents[i],
-                    npcTable.NextIndexs[i], npcTable.DialogAction[i], npcTable.ActionParam[i]);
+                DialogData data = new DialogData(i, dialogTable.ShowMode[i], dialogTable.HeadIcons[i], dialogTable.ShowNames[i],
+                    dialogTable.DialogContents[i], dialogTable.NextIndexs[i], dialogTable.DialogAction[i],
+                    dialogTable.ActionParam[i], dialogTable.ActionParam2[i]);
                 dialogDatas.Add(data);
             }
+
         }
         else
         {
@@ -275,6 +286,9 @@ public class WND_NpcDialog : UIFormBase
             case 2://选择
                 StartSelect(index + 1, param);
                 break;
+            case 9://下一层
+                MapMgr.Instance.NextMapLayer();
+                break;
             default:
                 if (action > 2)
                 {
@@ -330,4 +344,15 @@ public class WND_NpcDialog : UIFormBase
         }
 
     }
+}
+
+public enum MapDialogType : int
+{
+    None = 0,
+    Door,
+    NPC,
+    Shop,
+    Box,
+    Monster,
+    Boss,
 }

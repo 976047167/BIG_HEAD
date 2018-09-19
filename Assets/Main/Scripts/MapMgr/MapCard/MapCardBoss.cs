@@ -19,11 +19,11 @@ public class MapCardBoss : MapCardBase
             List<int> a = new List<int>();
             a.Add(DialogId);
             a.Add(monsterId);
-            UIModule.Instance.OpenForm<WND_Dialog>(a);
+            UIModule.Instance.OpenForm<WND_NpcDialog>(a);
         }
         else
         {
-            UIModule.Instance.OpenForm<WND_Dialog>(32);
+            UIModule.Instance.OpenForm<WND_NpcDialog>(32);
         }
 
         Used = true;
