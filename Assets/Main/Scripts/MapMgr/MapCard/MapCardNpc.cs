@@ -5,13 +5,10 @@ using AppSettings;
 
 public class MapCardNpc : MapCardBase
 {
-    int id;
+    NpcTableSetting npcData = null;
     protected override void OnInit()
     {
-
-        int NpcCount = NpcTableSettings.GetInstance().Count;
-
-        id = Random.Range(1, NpcCount + 1);
+        npcData = NpcTableSettings.Get(TableData.DataId);
     }
 
     protected override void OnPlayerEnter()
@@ -22,7 +19,7 @@ public class MapCardNpc : MapCardBase
             //UIModule.Instance.OpenForm<WND_Dialog>(DialogId);
             // UIModule.Instance.OpenForm<WND_Bag>(0);
             //UIModule.Instance.OpenForm<WND_Kaku>(0);
-            Game.UI.OpenForm<WND_NpcDialog>(1);
+            UIUtility.ShowMapDialog(TableData.Id);
         }
 
         base.OnPlayerEnter();

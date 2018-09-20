@@ -12,7 +12,7 @@ public class MapCardDoor : MapCardBase
         {
             return;
         }
-        UIModule.Instance.OpenForm<WND_NpcDialog>(32);
+        UIUtility.ShowMapDialog(2);
         base.OnPlayerEnter();
         //MapLogic.Instance
         //下一关

@@ -14,16 +14,11 @@ public class MapCardMonster : MapCardBase
         //进入战斗
         if (isFirstEnter)
         {
-
-            int DialogId = BattleMonsterTableSettings.Get(monsterId).DialogId;
-            List<int> a = new List<int>();
-            a.Add(DialogId);
-            a.Add(monsterId);
-            UIModule.Instance.OpenForm<WND_NpcDialog>(a);
+            UIUtility.ShowMapDialog(TableData.Id);
         }
         else
         {
-            UIModule.Instance.OpenForm<WND_NpcDialog>(32);
+            UIUtility.ShowMapDialog(2, TableData.Id);
         }
 
         Used = true;

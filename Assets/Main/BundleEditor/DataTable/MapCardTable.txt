@@ -1,4 +1,4 @@
-Id	Name	Type	RefrenceId	ModelId	DialogId
+Id	Name	Type	DataId	ModelId	DialogId
 int	int	int	int	int	int
 1	1	2	1	7	1
 2	1	1	0	5	2

@@ -3796,7 +3796,7 @@ namespace AppSettings
         /// <summary>
         /// 外键
         /// </summary>
-        public int RefrenceId { get; private set;}
+        public int DataId { get; private set;}
         
         /// <summary>
         /// 模型
@@ -3819,7 +3819,7 @@ namespace AppSettings
             Id = row.Get_int(row.Values[0], ""); 
             Name = row.Get_int(row.Values[1], ""); 
             Type = row.Get_int(row.Values[2], ""); 
-            RefrenceId = row.Get_int(row.Values[3], ""); 
+            DataId = row.Get_int(row.Values[3], ""); 
             ModelId = row.Get_int(row.Values[4], ""); 
             DialogId = row.Get_int(row.Values[5], ""); 
         }

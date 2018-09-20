@@ -17,6 +17,7 @@ public class WND_NpcDialog : UIFormBase
     UIGrid gridSelectItems;
     GameObject[] goSelects;
 
+    int dialogId = 0;
     int mapCardId = 0;
     MapCardTableSetting mapCardTable = null;
     DialogTableSetting dialogTable = null;
@@ -46,13 +47,15 @@ public class WND_NpcDialog : UIFormBase
             UIEventListener.Get(goSelects[i]).onClick = OnClick_Selected;
         }
 
-        mapCardId = (int)userdata;
-        MapCardTableSetting mapCardTable = MapCardTableSettings.Get(mapCardId);
-        if (mapCardTable == null)
-        {
-            return;
-        }
-        dialogTable = DialogTableSettings.Get(mapCardTable.DialogId);
+        int[] datas = (int[])userdata;
+        dialogId = datas[0];
+        mapCardId = datas[1];
+        //MapCardTableSetting mapCardTable = MapCardTableSettings.Get(mapCardId);
+        //if (mapCardTable == null)
+        //{
+        //    return;
+        //}
+        dialogTable = DialogTableSettings.Get(dialogId);
         if (dialogTable != null
             && dialogTable.HeadIcons.Count == dialogTable.ShowMode.Count
             && dialogTable.HeadIcons.Count == dialogTable.DialogContents.Count
@@ -148,6 +151,10 @@ public class WND_NpcDialog : UIFormBase
 
     void StartDialog(int index)
     {
+        if (index < 0 || index >= dialogDatas.Count)
+        {
+            Game.UI.CloseForm(this);
+        }
         DialogData dialogData = dialogDatas[index];
         currentDialogData = dialogData;
         switch (dialogData.ShowMode)
@@ -211,7 +218,7 @@ public class WND_NpcDialog : UIFormBase
         }
         else
         {
-            ApplyDialogAction(currentDialogData.Index, currentDialogData.Action, currentDialogData.ActionParam, currentDialogData.Next);
+            ApplyDialogAction(currentDialogData.Index, currentDialogData.Action, currentDialogData.ActionParam, currentDialogData.ActionParam2, currentDialogData.Next);
         }
 
     }
@@ -273,7 +280,7 @@ public class WND_NpcDialog : UIFormBase
     ///7进入商店
     ///8打开宝箱
     /// </summary>
-    void ApplyDialogAction(int index, int action, int param, int next)
+    void ApplyDialogAction(int index, int action, int param, int param2, int next)
     {
         switch (action)
         {
@@ -295,7 +302,23 @@ public class WND_NpcDialog : UIFormBase
                     CGMapApplyEffect mapApplyEffect = new CGMapApplyEffect();
                     mapApplyEffect.PlayerId = MapMgr.Instance.MyMapPlayer.Data.Id;
                     mapApplyEffect.Action = action;
-                    mapApplyEffect.Param = param;
+                    //使用外部参数
+                    if (param == -1)
+                    {
+                        MapCardTableSetting mapCardTable = MapCardTableSettings.Get(mapCardId);
+                        if (mapCardTable == null)
+                        {
+                            mapApplyEffect.Param = param;
+                        }
+                        else
+                        {
+                            mapApplyEffect.Param = mapCardTable.DataId;
+                        }
+                    }
+                    else
+                        mapApplyEffect.Param = param;
+                    mapApplyEffect.Param2 = param2;
+                    mapApplyEffect.MapCardId = mapCardId;
                     Game.NetworkManager.SendToLobby(MessageId_Send.CGMapApplyEffect, mapApplyEffect);
                 }
                 StartDialog(next);
@@ -332,7 +355,7 @@ public class WND_NpcDialog : UIFormBase
     {
         DialogData data = dialogDatas[int.Parse(go.name)];
         currentDialogData = data;
-        ApplyDialogAction(data.Index, data.Action, data.ActionParam, data.Next);
+        ApplyDialogAction(data.Index, data.Action, data.ActionParam, data.ActionParam2, data.Next);
     }
     void OnClick_btnMask(GameObject go)
     {
@@ -340,7 +363,7 @@ public class WND_NpcDialog : UIFormBase
         //下一句是需要点击才会出现的
         if (currentDialogData.Action <= 1)
         {
-            ApplyDialogAction(currentDialogData.Index, currentDialogData.Action, currentDialogData.ActionParam, currentDialogData.Next);
+            ApplyDialogAction(currentDialogData.Index, currentDialogData.Action, currentDialogData.ActionParam, currentDialogData.ActionParam2, currentDialogData.Next);
         }
 
     }

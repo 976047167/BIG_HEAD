@@ -34,7 +34,7 @@ public class MapCardBase
     protected bool isFirstEnter = true;
     public bool Used { get; protected set; }
     public virtual MapCardType CardType { get; protected set; }
-    public int DataId { get; protected set; }
+    public MapCardTableSetting TableData { get; protected set; }
     /// <summary>
     /// 修改这个会引起ChangeState
     /// </summary>
@@ -120,10 +120,10 @@ public class MapCardBase
         ResourceManager.LoadGameObject("MapCard/" + cardType, LoadAssetSuccessess, LoadAssetFailed, mapCard);
         return mapCard;
     }
-    public static MapCardBase CreateMapCard(MapCardType mapCardType, int dataId, MapCardPos pos)
+    public static MapCardBase CreateMapCard(MapCardType mapCardType, int mapcardId, MapCardPos pos)
     {
         MapCardBase mapCard = null;
-        MapCardTableSetting mapCardTable = MapCardTableSettings.Get(dataId);
+        MapCardTableSetting mapCardTable = MapCardTableSettings.Get(mapcardId);
         if (mapCardTable == null)
         {
             return null;
@@ -142,48 +142,53 @@ public class MapCardBase
                 mapCard.Position = pos;
                 mapCard.State = MapCardBase.CardState.Behind;
                 mapCard.CardType = mapCardType;
+                mapCard.TableData = mapCardTable;
                 ResourceManager.LoadGameObject("MapCard/" + typeof(MapCardDoor).ToString(), LoadAssetSuccessess, LoadAssetFailed, mapCard);
                 break;
             case MapCardType.Monster:
-                BattleMonsterTableSetting battleMonster = BattleMonsterTableSettings.Get(dataId);
+                BattleMonsterTableSetting battleMonster = BattleMonsterTableSettings.Get(mapcardId);
                 //model = ModelTableSettings.Get(battleMonster.ModelId);
                 mapCard = new MapCardMonster();
                 mapCard.Position = pos;
                 mapCard.State = MapCardBase.CardState.Behind;
                 mapCard.CardType = mapCardType;
+                mapCard.TableData = mapCardTable;
                 ResourceManager.LoadGameObject(model.Path, LoadAssetSuccessess, LoadAssetFailed, mapCard);
                 break;
             case MapCardType.Shop:
-                ShopTableSetting shopTable = ShopTableSettings.Get(dataId);
+                ShopTableSetting shopTable = ShopTableSettings.Get(mapcardId);
                 //model = ModelTableSettings.Get(shopTable.ModelId);
                 mapCard = new MapCardShop();
                 mapCard.Position = pos;
                 mapCard.State = MapCardBase.CardState.Behind;
                 mapCard.CardType = mapCardType;
+                mapCard.TableData = mapCardTable;
                 ResourceManager.LoadGameObject(model.Path, LoadAssetSuccessess, LoadAssetFailed, mapCard);
                 break;
             case MapCardType.Box:
-                BoxTableSetting boxTable = BoxTableSettings.Get(dataId);
+                BoxTableSetting boxTable = BoxTableSettings.Get(mapcardId);
                 //model = ModelTableSettings.Get(boxTable.ModelId);
                 mapCard = new MapCardBox();
                 mapCard.Position = pos;
                 mapCard.State = MapCardBase.CardState.Behind;
                 mapCard.CardType = mapCardType;
+                mapCard.TableData = mapCardTable;
                 ResourceManager.LoadGameObject(model.Path, LoadAssetSuccessess, LoadAssetFailed, mapCard);
                 break;
             case MapCardType.NPC:
-                NpcTableSetting npcTable = NpcTableSettings.Get(dataId);
+                NpcTableSetting npcTable = NpcTableSettings.Get(mapcardId);
                 //model = ModelTableSettings.Get(npcTable.ModelId);
                 mapCard = new MapCardNpc();
                 mapCard.Position = pos;
                 mapCard.State = MapCardBase.CardState.Behind;
                 mapCard.CardType = mapCardType;
+                mapCard.TableData = mapCardTable;
                 ResourceManager.LoadGameObject(model.Path, LoadAssetSuccessess, LoadAssetFailed, mapCard);
                 break;
             default:
                 break;
         }
-
+        
         return mapCard;
     }
     static void LoadAssetSuccessess(string path, object[] args, GameObject go)
