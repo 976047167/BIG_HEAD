@@ -38,8 +38,20 @@ public class Game : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Escape))
         {
+
 #if !UNITY_EDITOR
-            Application.Quit();
+            if (dataMgr != null && dataMgr.Inited == true)
+            {
+                UIUtility.ShowMessageBox(MessageBoxType.YesNo, 1009001, (result) =>
+                {
+                    if (result == MessageBoxReturnType.Yes)
+                    {
+                        Application.Quit();
+                    }
+                });
+            }
+            else
+                Application.Quit();
 #endif
         }
     }

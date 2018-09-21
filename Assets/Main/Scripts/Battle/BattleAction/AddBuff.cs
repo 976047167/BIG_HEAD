@@ -11,7 +11,8 @@ public partial class BattleAction
         public static BattleActionType ActionType { get { return BattleActionType.AddBuff; } }
         public override void Excute()
         {
-            Debug.LogError((owner.IsMe ? "[我]" : "[怪]") + "添加了一个buff-> " + actionArg + "[L:" + actionArg2 + "][T:" + BattleBuffTableSettings.Get(actionArg).Time + "]");
+            Debug.LogError((owner.IsMe ? "[我]" : "[怪]") + "添加了一个buff-> " + actionArg + 
+                "[L:" + actionArg2 + "][T:" + BattleBuffTableSettings.Get(actionArg).Time + "]");
             //buff已经存在的标识
             bool added = false;
             for (int i = 0; i < owner.Data.BuffList.Count; i++)
@@ -29,7 +30,8 @@ public partial class BattleAction
                     //有持续时间的
                     if (buff.Time >= 0)
                     {
-                        buff.Time = Mathf.Max(buff.Time + buffData.Time, buffData.MaxLayer);
+                        //buff.Time = Mathf.Max(buff.Time + buffData.Time, buffData.MaxLayer);
+                        buff.Time = buff.Time + buffData.Time;
                     }
                     break;
                 }

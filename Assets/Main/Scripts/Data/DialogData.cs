@@ -100,6 +100,11 @@ public class DialogData
         this.next = next;
         this.action = action;
         this.actionParam = actionParam;
-        this.actionParam = actionParam2;
+        this.actionParam2 = actionParam2;
+    }
+
+    public override string ToString()
+    {
+        return index + "[" + I18N.Get(content) + "]  action=" + action + "[" + actionParam + "," + actionParam2 + "]  ->" + next;
     }
 }

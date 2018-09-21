@@ -40,7 +40,8 @@ public class I18N
 
     public static string Get(int stringId, params object[] args)
     {
-        string result = null;
+        LocalizationTableSetting localizationTable = null;
+        string result = "";
         switch (language)
         {
             case LanguageType.None:
@@ -48,16 +49,41 @@ public class I18N
                 result = Get(stringId, args);
                 break;
             case LanguageType.ChineseSimplified:
-                result = LocalizationTableSettings.Get(stringId).ChineseSimplified;
+                localizationTable = LocalizationTableSettings.Get(stringId);
+                if (localizationTable == null)
+                {
+                    Debug.LogError("无法找到匹配的字符串[" + stringId + "]");
+                    break;
+                }
+                result = localizationTable.ChineseSimplified;
                 break;
             case LanguageType.ChineseTraditional:
-                result = LocalizationTableSettings.Get(stringId).ChineseTraditional;
+                localizationTable = LocalizationTableSettings.Get(stringId);
+                if (localizationTable == null)
+                {
+                    Debug.LogError("无法找到匹配的字符串[" + stringId + "]");
+                    break;
+                }
+                result = localizationTable.ChineseTraditional;
                 break;
             case LanguageType.English:
-                result = LocalizationTableSettings.Get(stringId).English;
+                localizationTable = LocalizationTableSettings.Get(stringId);
+                if (localizationTable == null)
+                {
+                    Debug.LogError("无法找到匹配的字符串[" + stringId + "]");
+                    break;
+                }
+                result = localizationTable.English;
                 break;
             default:
-                return LocalizationTableSettings.Get(stringId).ChineseSimplified;
+                localizationTable = LocalizationTableSettings.Get(stringId);
+                if (localizationTable == null)
+                {
+                    Debug.LogError("无法找到匹配的字符串[" + stringId + "]");
+                    break;
+                }
+                result = localizationTable.ChineseSimplified;
+                break;
         }
         if (args == null)
         {

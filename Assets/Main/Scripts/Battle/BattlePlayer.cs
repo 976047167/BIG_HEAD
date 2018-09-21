@@ -95,6 +95,7 @@ public class BattlePlayer
         foreach (var item in removeList)
         {
             this.Data.BuffList.Remove(item);
+            Game.BattleManager.AddUIAction(new UIAction.UIRemoveBuff(this, item.BuffId, -1));
         }
     }
     public void ApplyEquips(BattleActionTime actionTime)
@@ -148,7 +149,7 @@ public class BattlePlayer
     {
         Game.BattleManager.EscapeBattle(this);
     }
-    
+
     public void StartAI()
     {
         if (playerAI == null)

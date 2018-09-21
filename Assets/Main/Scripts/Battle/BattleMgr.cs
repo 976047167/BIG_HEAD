@@ -47,8 +47,10 @@ public class BattleMgr
         OppPlayer.StartAI();
         uiActions.Clear();
         RegisterMessage();
+#if UNITY_EDITOR
         MyPlayer.Data.MP = MyPlayer.Data.MaxMP = 100;
         OppPlayer.Data.HP = 1;
+#endif
         Game.UI.OpenForm<UIBattleForm>();
     }
     /// <summary>
@@ -229,12 +231,12 @@ public class BattleMgr
                 State = BattleState.MyRoundStart;
                 break;
             case BattleState.BattleEnd_MyEscape:
-                uiActions.Enqueue(new UIAction.UIMeEscapeBattle());
+                
                 MyPlayer.Data.HP = 1;
                 SaveData(2);
                 break;
             case BattleState.BattleEnd_OppEscape:
-                uiActions.Enqueue(new UIAction.UIOppEscapeBattle());
+                
                 SaveData(3);
                 break;
             case BattleState.BattleEnd_Win:
@@ -243,7 +245,7 @@ public class BattleMgr
                 break;
             case BattleState.BattleEnd_Lose:
                 //battleForm.LoseBattle();
-                uiActions.Enqueue(new UIAction.UILoseBattle());
+                
                 SaveData(1);
 
                 break;

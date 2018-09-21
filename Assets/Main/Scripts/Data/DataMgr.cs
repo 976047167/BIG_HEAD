@@ -8,7 +8,7 @@ public class DataMgr
 {
     public DataMgr()
     {
-
+        Inited = false;
     }
     //static DataMgr instance = null;
     //public static DataMgr Instance
@@ -25,7 +25,7 @@ public class DataMgr
 
     //}
     public float DialogSpeed;
-
+    public bool Inited { get; private set; }
     public MyPlayer MyPlayer { get; private set; }
     public AccountData AccountData { get; private set; }
     public PlayerData PlayerData { get; private set; }
@@ -38,7 +38,7 @@ public class DataMgr
     public void OnInit()
     {
         AppSettings.SettingsManager.AllSettingsReload();
-
+        Inited = true;
 
         DialogSpeed = 0.5f;
     }

@@ -14,3 +14,6 @@
 /Assets/StreamingAssets/iOS.meta
 /Assets/StreamingAssets/iOS
 /*.user
+/obj
+/*.unityproj
+/*.userprefs

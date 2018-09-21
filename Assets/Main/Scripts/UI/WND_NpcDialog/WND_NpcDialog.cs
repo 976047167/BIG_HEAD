@@ -87,11 +87,13 @@ public class WND_NpcDialog : UIFormBase
     protected override void OnOpen()
     {
         base.OnOpen();
+        Messenger.AddListener(MessageId.MAP_APPLY_EFFECT, OnEffectApplyed);
         StartDialog(0);
     }
     protected override void OnClose()
     {
         base.OnClose();
+        Messenger.RemoveListener(MessageId.MAP_APPLY_EFFECT, OnEffectApplyed);
     }
 
     //    private void Start()
@@ -282,6 +284,7 @@ public class WND_NpcDialog : UIFormBase
     /// </summary>
     void ApplyDialogAction(int index, int action, int param, int param2, int next)
     {
+        Debug.Log(index + "  action=" + action + "[" + param + "," + param2 + "]  ->" + next);
         switch (action)
         {
             case 0://结束
@@ -320,9 +323,23 @@ public class WND_NpcDialog : UIFormBase
                     mapApplyEffect.Param2 = param2;
                     mapApplyEffect.MapCardId = mapCardId;
                     Game.NetworkManager.SendToLobby(MessageId_Send.CGMapApplyEffect, mapApplyEffect);
+                    waitingNext = next;
                 }
-                StartDialog(next);
+
                 break;
+        }
+    }
+    int waitingNext = -1;
+
+    void OnEffectApplyed()
+    {
+        if (waitingNext >= 0)
+        {
+            StartDialog(waitingNext);
+        }
+        else
+        {
+            Game.UI.CloseForm(this);
         }
     }
 

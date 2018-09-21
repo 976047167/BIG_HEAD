@@ -2357,12 +2357,12 @@ namespace AppSettings
         public List<int> DialogAction { get; private set;}
         
         /// <summary>
-        /// 下一个(如果是选择节点填-1即可)
+        /// 下一个(如果是选择节点该参数无效，效果节点填-1为效果结束后退出)
         /// </summary>
         public List<int> NextIndexs { get; private set;}
         
         /// <summary>
-        /// 动作参数(0结束1下一个2选择3+执行特殊操作)
+        /// 动作参数(如果是-1，则使用外部传递参数)
         /// </summary>
         public List<int> ActionParam { get; private set;}
         

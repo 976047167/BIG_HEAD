@@ -90,11 +90,11 @@ public class PlayerInfoView : MonoBehaviour
         for (int i = 0; i < playerInfo.Buffs.Count; i++)
         {
             BattleBuffData buffData = playerInfo.Buffs[i];
-            if (buffData.Time == 0)
-            {
-                removeList.Add(buffData);
-                continue;
-            }
+            //if (buffData.Time == 0)
+            //{
+            //    removeList.Add(buffData);
+            //    continue;
+            //}
             GameObject buffIcon;
             if (!buffIcons.ContainsKey(buffData.BuffId))
             {

@@ -100,6 +100,10 @@ public enum MessageId : uint
     /// 打开地图宝箱
     /// </summary>
     MAP_OPEN_BOX,
+    /// <summary>
+    /// 应用效果
+    /// </summary>
+    MAP_APPLY_EFFECT,
 
     
 

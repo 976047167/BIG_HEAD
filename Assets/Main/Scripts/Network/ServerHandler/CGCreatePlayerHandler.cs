@@ -49,7 +49,7 @@ public class CGCreatePlayerHandler : BaseServerPacketHandler
             {
                 return;
             }
-            userData.PlayerData.Food = 0;
+            userData.PlayerData.Food = 10;
             userData.PlayerData.Gold = 0;
             //userData.PlayerData.Name = data.Name;
             userData.PlayerData.Name = I18N.Get(characterData.Name);
