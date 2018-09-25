@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using BigHead.Setting;
 
 
 public class Game : MonoBehaviour
@@ -32,6 +33,7 @@ public class Game : MonoBehaviour
         dataMgr = new DataMgr();
         battleMgr = new BattleMgr();
         networkManager = new NetworkManager();
+        setting = new LocalSetting();
         StartGame();
     }
     private void Update()
@@ -87,9 +89,12 @@ public class Game : MonoBehaviour
     static BattleMgr battleMgr;
     static UIModule uiModule;
     static NetworkManager networkManager;
+    static ISetting setting;
     public static DataMgr DataManager { get { return dataMgr; } }
     public static BattleMgr BattleManager { get { return battleMgr; } }
     public static UIModule UI { get { return uiModule; } }
     public static NetworkManager NetworkManager { get { return networkManager; } }
+
+    public static ISetting Setting { get { return setting; } }
     #endregion
 }
