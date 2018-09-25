@@ -27,22 +27,38 @@ public class SoundManager
     public bool MusicMute
     {
         get { return Game.Setting.GetBool(MUSIC_MUTE_KEY); }
-        set { }
+        set
+        {
+            Game.Setting.SetBool(MUSIC_MUTE_KEY, value);
+            Game.Setting.Save();
+        }
     }
     public bool SoundMute
     {
         get { return Game.Setting.GetBool(SOUND_MUTE_KEY); }
-        set { }
+        set
+        {
+            Game.Setting.SetBool(SOUND_MUTE_KEY, value);
+            Game.Setting.Save();
+        }
     }
     public float MusicVolume
     {
         get { return Game.Setting.GetFloat(MUSIC_VOLUME_KEY); }
-        set { }
+        set
+        {
+            Game.Setting.SetFloat(MUSIC_VOLUME_KEY, value);
+            Game.Setting.Save();
+        }
     }
     public float SoundVolume
     {
         get { return Game.Setting.GetFloat(SOUND_VOLUME_KEY); }
-        set { }
+        set
+        {
+            Game.Setting.SetFloat(SOUND_VOLUME_KEY, value);
+            Game.Setting.Save();
+        }
     }
 
 
