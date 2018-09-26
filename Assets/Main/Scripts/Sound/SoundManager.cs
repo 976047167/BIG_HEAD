@@ -9,9 +9,12 @@ public class SoundManager
     const string SOUND_MUTE_KEY = "SOUND_MUTE";
     const string MUSIC_VOLUME_KEY = "MUSIC_VOLUME";
     const string SOUND_VOLUME_KEY = "SOUND_VOLUME";
+    GameObject goHelper = null;
+
     public SoundManager()
     {
-
+        goHelper = new GameObject();
+        goHelper.AddComponent<SoundManagerHelper>();
     }
 
     public void PlayMusic()
@@ -48,8 +51,13 @@ public class SoundManager
         set
         {
             Game.Setting.SetFloat(MUSIC_VOLUME_KEY, value);
-            Game.Setting.Save();
+
         }
+    }
+    public void SaveMusicVolume(float value)
+    {
+        MusicVolume = value;
+        Game.Setting.Save();
     }
     public float SoundVolume
     {
@@ -57,8 +65,13 @@ public class SoundManager
         set
         {
             Game.Setting.SetFloat(SOUND_VOLUME_KEY, value);
-            Game.Setting.Save();
+
         }
+    }
+    public void SaveSoundVolume(float value)
+    {
+        SoundVolume = value;
+        Game.Setting.Save();
     }
 
 

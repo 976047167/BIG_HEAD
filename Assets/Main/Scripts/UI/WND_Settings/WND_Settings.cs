@@ -43,6 +43,7 @@ public class WND_Settings : UIFormBase {
         EventDelegate.Add(sliderMusic.onChange, MusicChange);
         EventDelegate.Add(sliderVoice.onChange, VoiceChange);
         EventDelegate.Add(IconInstence.GetComponent<UIToggle>().onChange,IconChose);
+
     }
 
     protected override void OnOpen()
@@ -56,6 +57,24 @@ public class WND_Settings : UIFormBase {
 
     }
     private void MusicChange()
+    {
+
+    }
+    void VoiceFinishChange()
+    {
+
+    }
+    void MusicFinishChange()
+    {
+
+    }
+
+    void VoiceMute()
+    {
+
+    }
+
+    void MusicMute()
     {
 
     }
