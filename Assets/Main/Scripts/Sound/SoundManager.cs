@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using BigHead.Setting;
+using AppSettings;
 
 public class SoundManager
 {
@@ -76,3 +77,4 @@ public class SoundManager
 
 
 }
+

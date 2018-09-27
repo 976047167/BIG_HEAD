@@ -185,6 +185,12 @@ namespace BigHead.Sound
         /// <param name="soundAsset">声音资源。</param>
         /// <returns>设置声音资源是否成功。</returns>
         bool SetSoundAsset(object soundAsset);
+
+        /// <summary>
+        /// 释放声音资源。
+        /// </summary>
+        /// <param name="soundAsset">要释放的声音资源。</param>
+        void ReleaseSoundAsset(object soundAsset);
     }
 
 }

@@ -124,9 +124,13 @@ public class SoundGroup : ISoundGroup
     /// </summary>
     /// <param name="soundHelper">声音辅助器接口。</param>
     /// <param name="soundAgentHelper">要增加的声音代理辅助器。</param>
-    public void AddSoundAgentHelper(ISoundHelper soundHelper, ISoundAgentHelper soundAgentHelper)
+    public void AddSoundAgentHelper()
     {
-        m_SoundAgents.Add(new SoundAgent(this, soundHelper, soundAgentHelper));
+        GameObject gameObject = new GameObject("SoundAgent");
+        gameObject.AddComponent<AudioSource>();
+        SoundAgent soundAgent = gameObject.AddComponent<SoundAgent>();
+        soundAgent.Init(this);
+        m_SoundAgents.Add(soundAgent);
     }
 
     /// <summary>

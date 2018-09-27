@@ -3,25 +3,30 @@ using System.Collections.Generic;
 using UnityEngine;
 using BigHead.Sound;
 using System;
+using DG.Tweening;
 /// <summary>
 /// 声音代理。
 /// </summary>
-public class SoundAgent : ISoundAgent, ISoundHelper
+public class SoundAgent : MonoBehaviour, ISoundAgent
 {
-    private readonly SoundGroup m_SoundGroup;
+    private SoundGroup m_SoundGroup;
     private int m_SerialId;
     private object m_SoundAsset;
     private DateTime m_SetSoundAssetTime;
     private bool m_MuteInSoundGroup;
     private float m_VolumeInSoundGroup;
 
+    private Transform m_CachedTransform = null;
+    private AudioSource m_AudioSource = null;
+    private float m_Volume = 0f;
+
+    
+
     /// <summary>
     /// 初始化声音代理的新实例。
     /// </summary>
     /// <param name="soundGroup">所在的声音组。</param>
-    /// <param name="soundHelper">声音辅助器接口。</param>
-    /// <param name="soundAgentHelper">声音代理辅助器接口。</param>
-    public SoundAgent(SoundGroup soundGroup)
+    public void Init(SoundGroup soundGroup)
     {
         if (soundGroup == null)
         {
@@ -31,9 +36,6 @@ public class SoundAgent : ISoundAgent, ISoundHelper
 
 
         m_SoundGroup = soundGroup;
-        m_SoundHelper = soundHelper;
-        m_SoundAgentHelper = soundAgentHelper;
-        m_SoundAgentHelper.ResetSoundAgent += OnResetSoundAgent;
         m_SerialId = 0;
         m_SoundAsset = null;
         Reset();
@@ -72,7 +74,7 @@ public class SoundAgent : ISoundAgent, ISoundHelper
     {
         get
         {
-            return m_SoundAgentHelper.IsPlaying;
+            return m_AudioSource.isPlaying;
         }
     }
 
@@ -83,11 +85,11 @@ public class SoundAgent : ISoundAgent, ISoundHelper
     {
         get
         {
-            return m_SoundAgentHelper.Time;
+            return m_AudioSource.time;
         }
         set
         {
-            m_SoundAgentHelper.Time = value;
+            m_AudioSource.time = value;
         }
     }
 
@@ -98,7 +100,7 @@ public class SoundAgent : ISoundAgent, ISoundHelper
     {
         get
         {
-            return m_SoundAgentHelper.Mute;
+            return m_AudioSource.mute;
         }
     }
 
@@ -125,11 +127,11 @@ public class SoundAgent : ISoundAgent, ISoundHelper
     {
         get
         {
-            return m_SoundAgentHelper.Loop;
+            return m_AudioSource.loop;
         }
         set
         {
-            m_SoundAgentHelper.Loop = value;
+            m_AudioSource.loop = value;
         }
     }
 
@@ -140,22 +142,27 @@ public class SoundAgent : ISoundAgent, ISoundHelper
     {
         get
         {
-            return m_SoundAgentHelper.Priority;
+            return m_AudioSource.priority;
         }
         set
         {
-            m_SoundAgentHelper.Priority = value;
+            m_AudioSource.priority = value;
         }
     }
 
     /// <summary>
-    /// 获取音量大小。
+    /// 获取或设置音量大小。
     /// </summary>
     public float Volume
     {
         get
         {
-            return m_SoundAgentHelper.Volume;
+            return m_Volume;
+        }
+        set
+        {
+            m_Volume = value;
+            m_AudioSource.volume = m_Volume;
         }
     }
 
@@ -182,11 +189,11 @@ public class SoundAgent : ISoundAgent, ISoundHelper
     {
         get
         {
-            return m_SoundAgentHelper.Pitch;
+            return m_AudioSource.pitch;
         }
         set
         {
-            m_SoundAgentHelper.Pitch = value;
+            m_AudioSource.pitch = value;
         }
     }
 
@@ -197,26 +204,26 @@ public class SoundAgent : ISoundAgent, ISoundHelper
     {
         get
         {
-            return m_SoundAgentHelper.PanStereo;
+            return m_AudioSource.panStereo;
         }
         set
         {
-            m_SoundAgentHelper.PanStereo = value;
+            m_AudioSource.panStereo = value;
         }
     }
 
     /// <summary>
-    /// 获取或设置声音空间混合量。
+    /// 获取或设置声音空间混合量。0.0是2D，1是3D
     /// </summary>
     public float SpatialBlend
     {
         get
         {
-            return m_SoundAgentHelper.SpatialBlend;
+            return m_AudioSource.spatialBlend;
         }
         set
         {
-            m_SoundAgentHelper.SpatialBlend = value;
+            m_AudioSource.spatialBlend = value;
         }
     }
 
@@ -227,24 +234,14 @@ public class SoundAgent : ISoundAgent, ISoundHelper
     {
         get
         {
-            return m_SoundAgentHelper.MaxDistance;
+            return m_AudioSource.maxDistance;
         }
         set
         {
-            m_SoundAgentHelper.MaxDistance = value;
+            m_AudioSource.maxDistance = value;
         }
     }
 
-    /// <summary>
-    /// 获取声音代理辅助器。
-    /// </summary>
-    public ISoundAgentHelper Helper
-    {
-        get
-        {
-            return m_SoundAgentHelper;
-        }
-    }
 
     /// <summary>
     /// 获取声音创建时间。
@@ -262,16 +259,28 @@ public class SoundAgent : ISoundAgent, ISoundHelper
     /// </summary>
     public void Play()
     {
-        m_SoundAgentHelper.Play(Constant.DefaultFadeInSeconds);
+        m_AudioSource.Play();
     }
 
+    Tweener fadeTweener = null;
     /// <summary>
     /// 播放声音。
     /// </summary>
     /// <param name="fadeInSeconds">声音淡入时间，以秒为单位。</param>
     public void Play(float fadeInSeconds)
     {
-        m_SoundAgentHelper.Play(fadeInSeconds);
+        m_AudioSource.Play();
+        if (fadeInSeconds > 0f)
+        {
+            if (fadeTweener != null)
+            {
+                fadeTweener.Complete();
+            }
+            fadeTweener = DOTween.To(() => { return 0f; }, (f) => { m_AudioSource.volume = f; }, m_Volume, fadeInSeconds)
+                .Play();
+
+        }
+
     }
 
     /// <summary>
@@ -279,7 +288,7 @@ public class SoundAgent : ISoundAgent, ISoundHelper
     /// </summary>
     public void Stop()
     {
-        m_SoundAgentHelper.Stop(Constant.DefaultFadeOutSeconds);
+        m_AudioSource.Stop();
     }
 
     /// <summary>
@@ -288,7 +297,20 @@ public class SoundAgent : ISoundAgent, ISoundHelper
     /// <param name="fadeOutSeconds">声音淡出时间，以秒为单位。</param>
     public void Stop(float fadeOutSeconds)
     {
-        m_SoundAgentHelper.Stop(fadeOutSeconds);
+        if (fadeOutSeconds > 0f)
+        {
+            if (fadeTweener != null)
+            {
+                fadeTweener.Complete();
+            }
+            fadeTweener = DOTween.To(() => { return m_AudioSource.volume; }, (f) => { m_AudioSource.volume = f; }, 0f, fadeOutSeconds)
+                .OnComplete(() => { m_AudioSource.Stop(); })
+                .Play();
+        }
+        else
+        {
+            m_AudioSource.Stop();
+        }
     }
 
     /// <summary>
@@ -296,7 +318,7 @@ public class SoundAgent : ISoundAgent, ISoundHelper
     /// </summary>
     public void Pause()
     {
-        m_SoundAgentHelper.Pause(Constant.DefaultFadeOutSeconds);
+        m_AudioSource.Pause();
     }
 
     /// <summary>
@@ -305,7 +327,20 @@ public class SoundAgent : ISoundAgent, ISoundHelper
     /// <param name="fadeOutSeconds">声音淡出时间，以秒为单位。</param>
     public void Pause(float fadeOutSeconds)
     {
-        m_SoundAgentHelper.Pause(fadeOutSeconds);
+        if (fadeOutSeconds > 0f)
+        {
+            if (fadeTweener != null)
+            {
+                fadeTweener.Complete();
+            }
+            fadeTweener = DOTween.To(() => { return m_AudioSource.volume; }, (f) => { m_AudioSource.volume = f; }, 0f, fadeOutSeconds)
+                .OnComplete(() => { m_AudioSource.Pause(); })
+                .Play();
+        }
+        else
+        {
+            m_AudioSource.Stop();
+        }
     }
 
     /// <summary>
@@ -313,7 +348,7 @@ public class SoundAgent : ISoundAgent, ISoundHelper
     /// </summary>
     public void Resume()
     {
-        m_SoundAgentHelper.Resume(Constant.DefaultFadeInSeconds);
+        m_AudioSource.UnPause();
     }
 
     /// <summary>
@@ -322,7 +357,20 @@ public class SoundAgent : ISoundAgent, ISoundHelper
     /// <param name="fadeInSeconds">声音淡入时间，以秒为单位。</param>
     public void Resume(float fadeInSeconds)
     {
-        m_SoundAgentHelper.Resume(fadeInSeconds);
+        if (fadeInSeconds > 0f)
+        {
+            if (fadeTweener != null)
+            {
+                fadeTweener.Complete();
+            }
+            fadeTweener = DOTween.To(() => { return 0f; }, (f) => { m_AudioSource.volume = f; }, m_Volume, fadeInSeconds)
+                .OnComplete(() => { m_AudioSource.UnPause(); })
+                .Play();
+        }
+        else
+        {
+            m_AudioSource.Stop();
+        }
     }
 
     /// <summary>
@@ -332,7 +380,7 @@ public class SoundAgent : ISoundAgent, ISoundHelper
     {
         if (m_SoundAsset != null)
         {
-            m_SoundHelper.ReleaseSoundAsset(m_SoundAsset);
+            ReleaseSoundAsset(m_SoundAsset);
             m_SoundAsset = null;
         }
 
@@ -346,7 +394,8 @@ public class SoundAgent : ISoundAgent, ISoundHelper
         PanStereo = Constant.DefaultPanStereo;
         SpatialBlend = Constant.DefaultSpatialBlend;
         MaxDistance = Constant.DefaultMaxDistance;
-        m_SoundAgentHelper.Reset();
+        m_CachedTransform.localPosition = Vector3.zero;
+        m_AudioSource.clip = null;
     }
 
     public bool SetSoundAsset(object soundAsset)
@@ -354,22 +403,34 @@ public class SoundAgent : ISoundAgent, ISoundHelper
         Reset();
         m_SoundAsset = soundAsset;
         m_SetSoundAssetTime = DateTime.Now;
-        return m_SoundAgentHelper.SetSoundAsset(soundAsset);
+        AudioClip audioClip = soundAsset as AudioClip;
+        if (audioClip == null)
+        {
+            return false;
+        }
+
+        m_AudioSource.clip = audioClip;
+        return true;
     }
 
     internal void RefreshMute()
     {
-        m_SoundAgentHelper.Mute = m_SoundGroup.Mute || m_MuteInSoundGroup;
+        m_AudioSource.mute = m_SoundGroup.Mute || m_MuteInSoundGroup;
     }
 
     internal void RefreshVolume()
     {
-        m_SoundAgentHelper.Volume = m_SoundGroup.Volume * m_VolumeInSoundGroup;
+        Volume = m_SoundGroup.Volume * m_VolumeInSoundGroup;
     }
 
-    private void OnResetSoundAgent(object sender, ResetSoundAgentEventArgs e)
+
+    /// <summary>
+    /// 释放声音资源。
+    /// </summary>
+    /// <param name="soundAsset">要释放的声音资源。</param>
+    public void ReleaseSoundAsset(object soundAsset)
     {
-        Reset();
+        //TODO: 代做
     }
 
 }
