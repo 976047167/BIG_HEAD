@@ -1,0 +1,5 @@
+Id	Type	Path
+int	int	string
+1	0	Sound/Music/HuaTaiXiang
+2	0	Sound/Music/taohuadu
+3	1	Sound/skill

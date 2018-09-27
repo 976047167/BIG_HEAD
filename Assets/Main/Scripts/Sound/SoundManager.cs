@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using BigHead.Setting;
 using AppSettings;
+using BigHead.Sound;
 
 public class SoundManager
 {
@@ -10,7 +11,11 @@ public class SoundManager
     const string SOUND_MUTE_KEY = "SOUND_MUTE";
     const string MUSIC_VOLUME_KEY = "MUSIC_VOLUME";
     const string SOUND_VOLUME_KEY = "SOUND_VOLUME";
+    const string MUSIC_GROUP_KEY = "MUSIC";
+    const string SOUND_GROUP_KEY = "SOUND";
     GameObject goHelper = null;
+
+    Dictionary<string, SoundGroup> dicSoundGroups = new Dictionary<string, SoundGroup>();
 
     public SoundManager()
     {
@@ -20,11 +25,23 @@ public class SoundManager
 
     public void PlayMusic()
     {
-
+        SoundGroup musicGroup = dicSoundGroups[MUSIC_GROUP_KEY];
+        if (musicGroup == null)
+        {
+            musicGroup = new SoundGroup(MUSIC_GROUP_KEY, null);
+            dicSoundGroups[MUSIC_GROUP_KEY] = musicGroup;
+        }
+        //SoundAgent soundAgent = musicGroup.AddSoundAgentHelper();
     }
 
     public void PlaySound()
     {
+        SoundGroup soundGroup = dicSoundGroups[SOUND_GROUP_KEY];
+        if (soundGroup == null)
+        {
+            soundGroup = new SoundGroup(SOUND_GROUP_KEY, null);
+            dicSoundGroups[SOUND_GROUP_KEY] = soundGroup;
+        }
 
     }
 

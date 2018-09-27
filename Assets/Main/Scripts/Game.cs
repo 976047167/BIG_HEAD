@@ -34,6 +34,7 @@ public class Game : MonoBehaviour
         battleMgr = new BattleMgr();
         networkManager = new NetworkManager();
         setting = new LocalSetting();
+        sound = new SoundManager();
         StartGame();
     }
     private void Update()
@@ -90,11 +91,13 @@ public class Game : MonoBehaviour
     static UIModule uiModule;
     static NetworkManager networkManager;
     static ISetting setting;
+    static SoundManager sound;
     public static DataMgr DataManager { get { return dataMgr; } }
     public static BattleMgr BattleManager { get { return battleMgr; } }
     public static UIModule UI { get { return uiModule; } }
     public static NetworkManager NetworkManager { get { return networkManager; } }
 
     public static ISetting Setting { get { return setting; } }
+    public static SoundManager Sound { get { return sound; } }
     #endregion
 }
