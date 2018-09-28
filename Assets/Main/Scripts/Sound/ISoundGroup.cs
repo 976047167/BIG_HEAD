@@ -71,6 +71,19 @@ namespace BigHead.Sound
         /// </summary>
         /// <param name="fadeOutSeconds">声音淡出时间，以秒为单位。</param>
         void StopAllLoadedSounds(float fadeOutSeconds);
-
+        /// <summary>
+        /// 停止所有已加载的声音。
+        /// </summary>
+        /// <param name="exceptId">排除在外的声音</param>
+        void StopAllLoadedSounds(int exceptId);
+        /// <summary>
+        /// 释放所有声音资源
+        /// </summary>
+        void ReleaseAllSoundAssets();
+        /// <summary>
+        /// 释放所有声音资源
+        /// </summary>
+        /// <param name="exceptId">排除在外的音乐</param>
+        void ReleaseAllSoundAssets(int exceptId);
     }
 }

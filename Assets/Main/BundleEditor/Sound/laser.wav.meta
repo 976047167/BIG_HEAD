@@ -1,6 +1,6 @@
 fileFormatVersion: 2
-guid: 6d8b7441dd48c3947b85dd7e6bbdc0de
-timeCreated: 1528703472
+guid: d291b6ff29c5feb4cbd8da0783dea5bb
+timeCreated: 1538124537
 licenseType: Pro
 AudioImporter:
   serializedVersion: 6
@@ -18,5 +18,5 @@ AudioImporter:
   loadInBackground: 0
   3D: 1
   userData: 
-  assetBundleName: sound/music/bergentruckung.bundle
+  assetBundleName: sound/laser.bundle
   assetBundleVariant: 

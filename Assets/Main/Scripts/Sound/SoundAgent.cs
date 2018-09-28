@@ -18,9 +18,9 @@ public class SoundAgent : MonoBehaviour, ISoundAgent
 
     private Transform m_CachedTransform = null;
     private AudioSource m_AudioSource = null;
-    private float m_Volume = 0f;
+    private float m_Volume = 1f;
+    OnAssetDestory onAssetDestory = null;
 
-    
 
     /// <summary>
     /// 初始化声音代理的新实例。
@@ -33,7 +33,10 @@ public class SoundAgent : MonoBehaviour, ISoundAgent
             throw new Exception("Sound group is invalid.");
         }
 
-
+        m_AudioSource = gameObject.GetOrAddComponent<AudioSource>();
+        m_AudioSource.playOnAwake = false;
+        m_AudioSource.rolloffMode = AudioRolloffMode.Custom;
+        m_CachedTransform = transform;
 
         m_SoundGroup = soundGroup;
         m_SerialId = 0;
@@ -378,11 +381,7 @@ public class SoundAgent : MonoBehaviour, ISoundAgent
     /// </summary>
     public void Reset()
     {
-        if (m_SoundAsset != null)
-        {
-            ReleaseSoundAsset(m_SoundAsset);
-            m_SoundAsset = null;
-        }
+        ReleaseSoundAsset();
 
         m_SetSoundAssetTime = DateTime.MinValue;
         Time = Constant.DefaultTime;
@@ -396,9 +395,10 @@ public class SoundAgent : MonoBehaviour, ISoundAgent
         MaxDistance = Constant.DefaultMaxDistance;
         m_CachedTransform.localPosition = Vector3.zero;
         m_AudioSource.clip = null;
+        m_Volume = Constant.DefaultVolume;
     }
 
-    public bool SetSoundAsset(object soundAsset)
+    public bool SetSoundAsset(object soundAsset, OnAssetDestory onAssetDestory)
     {
         Reset();
         m_SoundAsset = soundAsset;
@@ -408,7 +408,7 @@ public class SoundAgent : MonoBehaviour, ISoundAgent
         {
             return false;
         }
-
+        this.onAssetDestory = onAssetDestory;
         m_AudioSource.clip = audioClip;
         return true;
     }
@@ -428,9 +428,12 @@ public class SoundAgent : MonoBehaviour, ISoundAgent
     /// 释放声音资源。
     /// </summary>
     /// <param name="soundAsset">要释放的声音资源。</param>
-    public void ReleaseSoundAsset(object soundAsset)
+    public void ReleaseSoundAsset()
     {
-        //TODO: 代做
+        if (onAssetDestory != null)
+        {
+            onAssetDestory();
+        }
     }
 
 }

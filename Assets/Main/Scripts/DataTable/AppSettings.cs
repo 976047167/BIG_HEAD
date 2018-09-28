@@ -4697,6 +4697,11 @@ namespace AppSettings
         /// </summary>
         public string Procedure { get; private set;}
         
+        /// <summary>
+        /// 默认的BGM
+        /// </summary>
+        public int BGM { get; private set;}
+        
 
         internal SceneTableSetting(TableFileRow row)
         {
@@ -4709,6 +4714,7 @@ namespace AppSettings
             Name = row.Get_string(row.Values[1], ""); 
             Path = row.Get_string(row.Values[2], ""); 
             Procedure = row.Get_string(row.Values[3], ""); 
+            BGM = row.Get_int(row.Values[4], ""); 
         }
 
         /// <summary>
@@ -5162,6 +5168,61 @@ namespace AppSettings
         /// </summary>
         public string Path { get; private set;}
         
+        /// <summary>
+        /// 后缀(原则上背景音乐mp3，特效声音wav)
+        /// </summary>
+        public string Extension { get; private set;}
+        
+        /// <summary>
+        /// 播放声音组(MUSIC1个通道，SOUND暂定3个)
+        /// </summary>
+        public string Group { get; private set;}
+        
+        /// <summary>
+        /// 同组播放优先级
+        /// </summary>
+        public int Priority { get; private set;}
+        
+        /// <summary>
+        /// 开始播放的位置
+        /// </summary>
+        public float Time { get; private set;}
+        
+        /// <summary>
+        /// 循环播放
+        /// </summary>
+        public bool Loop { get; private set;}
+        
+        /// <summary>
+        /// 播放速率(1正常速度)
+        /// </summary>
+        public int Pitch { get; private set;}
+        
+        /// <summary>
+        /// 立体声声相(0正常1右声道-1左声道)
+        /// </summary>
+        public float PanStereo { get; private set;}
+        
+        /// <summary>
+        /// 空间混合量(0:2D声音 1:3D声音)
+        /// </summary>
+        public float SpatialBlend { get; private set;}
+        
+        /// <summary>
+        /// 使用3D声音时最大可听距离
+        /// </summary>
+        public float MaxDistance { get; private set;}
+        
+        /// <summary>
+        /// 渐入时间，单位秒
+        /// </summary>
+        public float FadeInSeconds { get; private set;}
+        
+        /// <summary>
+        /// 渐出时间
+        /// </summary>
+        public float FadeOutSeconds { get; private set;}
+        
 
         internal SoundTableSetting(TableFileRow row)
         {
@@ -5173,6 +5234,17 @@ namespace AppSettings
             Id = row.Get_int(row.Values[0], ""); 
             Type = row.Get_int(row.Values[1], ""); 
             Path = row.Get_string(row.Values[2], ""); 
+            Extension = row.Get_string(row.Values[3], ""); 
+            Group = row.Get_string(row.Values[4], ""); 
+            Priority = row.Get_int(row.Values[5], ""); 
+            Time = row.Get_float(row.Values[6], ""); 
+            Loop = row.Get_bool(row.Values[7], ""); 
+            Pitch = row.Get_int(row.Values[8], ""); 
+            PanStereo = row.Get_float(row.Values[9], ""); 
+            SpatialBlend = row.Get_float(row.Values[10], ""); 
+            MaxDistance = row.Get_float(row.Values[11], ""); 
+            FadeInSeconds = row.Get_float(row.Values[12], ""); 
+            FadeOutSeconds = row.Get_float(row.Values[13], ""); 
         }
 
         /// <summary>

@@ -1,5 +1,6 @@
-Id	Type	Path
-int	int	string
-1	0	Sound/Music/HuaTaiXiang
-2	0	Sound/Music/taohuadu
-3	1	Sound/skill
+Id	Type	Path	Extension	Group	Priority	Time	Loop	Pitch	PanStereo	SpatialBlend	MaxDistance	FadeInSeconds	FadeOutSeconds
+int	int	string	string	string	int	float	bool	int	float	float	float	float	float
+1	0	Music/HuaTaiXiang	mp3	MUSIC	0	0	1	1	0	0	500	0	0
+2	0	Music/taohuadu	mp3	MUSIC	0	0	1	1	0	0	500	0	0
+3	1	skill	wav	SOUND	0	0	0	1	0	0	500	0	0
+4	1	laser	wav	SOUND	0	0	0	1	0	0	500	0	0

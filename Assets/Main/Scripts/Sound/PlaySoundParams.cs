@@ -18,6 +18,7 @@ namespace BigHead.Sound
         private int m_Priority;
         private float m_VolumeInSoundGroup;
         private float m_FadeInSeconds;
+        private float m_FadeOutSeconds;
         private float m_Pitch;
         private float m_PanStereo;
         private float m_SpatialBlend;
@@ -34,6 +35,7 @@ namespace BigHead.Sound
             m_Priority = Constant.DefaultPriority;
             m_VolumeInSoundGroup = Constant.DefaultVolume;
             m_FadeInSeconds = Constant.DefaultFadeInSeconds;
+            m_FadeOutSeconds = Constant.DefaultFadeOutSeconds;
             m_Pitch = Constant.DefaultPitch;
             m_PanStereo = Constant.DefaultPanStereo;
             m_SpatialBlend = Constant.DefaultSpatialBlend;
@@ -187,6 +189,21 @@ namespace BigHead.Sound
             set
             {
                 m_MaxDistance = value;
+            }
+        }
+        /// <summary>
+        /// 获取或设置声音淡出时间，以秒为单位。
+        /// </summary>
+        public float FadeOutSeconds
+        {
+            get
+            {
+                return m_FadeOutSeconds;
+            }
+
+            set
+            {
+                m_FadeOutSeconds = value;
             }
         }
     }

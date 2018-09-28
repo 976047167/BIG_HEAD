@@ -140,7 +140,10 @@ public class ResourceManager
         path = "DataTable/" + path + (EditorMode ? ".txt" : BUNDLE_SUFFIX);
         Load<TextAsset>(path, AssetType.UnityAsset, (str, userdata, ta, destory) => { callback(str, userData, ta.text, destory); }, failure, userData);
     }
-
+    public static void LoadSound(string path, Action<string, object[], AudioClip, OnAssetDestory> callback, Action<string, object[]> failure, params object[] userData)
+    {
+        Load<AudioClip>(path, AssetType.UnityAsset, callback, failure, userData);
+    }
     /// <summary>
     /// 场景需要专门去处理，暂不管
     /// </summary>

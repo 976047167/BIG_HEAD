@@ -10,6 +10,7 @@ public class WND_Login : UIFormBase
     protected override void OnClose()
     {
         base.OnClose();
+        Game.Sound.StopAll();
     }
 
     protected override void OnHide()
@@ -30,6 +31,7 @@ public class WND_Login : UIFormBase
     {
         base.OnOpen();
         Messenger.AddListener<string>(MessageId.NetworkConnect, OnCnnectServerSuccess);
+        Game.Sound.Play(1);
     }
 
     protected override void OnShow()

@@ -19,20 +19,21 @@ public class SoundGroup : ISoundGroup
     /// </summary>
     /// <param name="name">声音组名称。</param>
     /// <param name="soundGroupHelper">声音组辅助器。</param>
-    public SoundGroup(string name, AudioMixerGroup soundGroupHelper)
+    public SoundGroup(string name, AudioMixerGroup audioMixerGroup)
     {
         if (string.IsNullOrEmpty(name))
         {
             throw new Exception("Sound group name is invalid.");
         }
 
-        if (soundGroupHelper == null)
-        {
-            throw new Exception("Sound group helper is invalid.");
-        }
+        //if (audioMixerGroup == null)
+        //{
+        //    throw new Exception("Sound group helper is invalid.");
+        //}
 
         m_Name = name;
-        m_AudioMixerGroup = soundGroupHelper;
+        m_AudioMixerGroup = audioMixerGroup;
+        m_Volume = 1f;
         m_SoundAgents = new List<SoundAgent>();
     }
 
@@ -124,11 +125,14 @@ public class SoundGroup : ISoundGroup
     /// </summary>
     /// <param name="soundHelper">声音辅助器接口。</param>
     /// <param name="soundAgentHelper">要增加的声音代理辅助器。</param>
-    public void AddSoundAgentHelper()
+    public void AddSoundAgentHelper(Transform parent)
     {
-        GameObject gameObject = new GameObject("SoundAgent");
-        gameObject.AddComponent<AudioSource>();
+        GameObject gameObject = new GameObject(m_Name + "[SoundAgent]" + m_SoundAgents.Count);
         SoundAgent soundAgent = gameObject.AddComponent<SoundAgent>();
+        if (parent != null)
+        {
+            gameObject.transform.parent = parent;
+        }
         soundAgent.Init(this);
         m_SoundAgents.Add(soundAgent);
     }
@@ -139,9 +143,10 @@ public class SoundGroup : ISoundGroup
     /// <param name="serialId">声音的序列编号。</param>
     /// <param name="soundAsset">声音资源。</param>
     /// <param name="playSoundParams">播放声音参数。</param>
+    /// <param name="onDestory">销毁资源的操作</param>
     /// <param name="errorCode">错误码。</param>
     /// <returns>用于播放的声音代理。</returns>
-    public ISoundAgent PlaySound(int serialId, object soundAsset, PlaySoundParams playSoundParams, out PlaySoundErrorCode? errorCode)
+    public ISoundAgent PlaySound(int serialId, object soundAsset, PlaySoundParams playSoundParams, OnAssetDestory onDestory, out PlaySoundErrorCode? errorCode)
     {
         errorCode = null;
         SoundAgent candidateAgent = null;
@@ -175,7 +180,7 @@ public class SoundGroup : ISoundGroup
             return null;
         }
 
-        if (!candidateAgent.SetSoundAsset(soundAsset))
+        if (!candidateAgent.SetSoundAsset(soundAsset, onDestory))
         {
             errorCode = PlaySoundErrorCode.SetSoundAssetFailure;
             return null;
@@ -287,6 +292,37 @@ public class SoundGroup : ISoundGroup
             {
                 soundAgent.Stop(fadeOutSeconds);
             }
+        }
+    }
+    /// <summary>
+    /// 停止所有已加载的声音。
+    /// </summary>
+    public void StopAllLoadedSounds(int exceptId)
+    {
+        foreach (SoundAgent soundAgent in m_SoundAgents)
+        {
+            if (soundAgent.IsPlaying && soundAgent.SerialId != exceptId)
+            {
+                soundAgent.Stop();
+            }
+        }
+    }
+    public void ReleaseAllSoundAssets()
+    {
+        for (int i = 0; i < m_SoundAgents.Count; i++)
+        {
+            m_SoundAgents[i].ReleaseSoundAsset();
+        }
+    }
+    public void ReleaseAllSoundAssets(int exceptId)
+    {
+        for (int i = 0; i < m_SoundAgents.Count; i++)
+        {
+            if (m_SoundAgents[i].SerialId == exceptId)
+            {
+                continue;
+            }
+            m_SoundAgents[i].ReleaseSoundAsset();
         }
     }
 

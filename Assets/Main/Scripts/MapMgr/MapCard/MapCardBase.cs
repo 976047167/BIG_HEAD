@@ -188,7 +188,7 @@ public class MapCardBase
             default:
                 break;
         }
-        
+
         return mapCard;
     }
     static void LoadAssetSuccessess(string path, object[] args, GameObject go)
@@ -356,6 +356,7 @@ public class MapCardBase
     /// </summary>
     public void PlayerEnter()
     {
+        Game.Sound.Play(3);
         if (Used == false)
         {
             //MapMgr.Instance.MyMapPlayer.Data.Food--;

@@ -73,6 +73,8 @@ public class WND_Loading : UIFormBase
                     }
                     break;
                 case LoadState.Success:
+                    Game.Sound.StopAll(sceneTable.BGM);
+                    Game.Sound.Play(sceneTable.BGM);
                     break;
                 case LoadState.Failed:
                     break;
