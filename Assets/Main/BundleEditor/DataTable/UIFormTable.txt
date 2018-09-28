@@ -15,7 +15,7 @@ int	string	string	string	int	int	int
 13	设置界面	WND_Settings	WND_Settings	0	0	1
 14	战斗设置界面	WND_BattleSetting	Instance/WND_BattleSetting	0	0	1
 15	副本设置界面	WND_InstanceSetting	WND_InstanceSetting	0	0	2
-16	创角界面	WND_CreateCharacter	WND_CreateCharacter	0	0	2
+16	创角界面	WND_CreateCharacter	WND_CreateCharacter	0	0	0
 17	消息框	WND_MessageBox	Internal/WND_MessageBox	0	2	1
 18	战斗结果	WND_BattleResult	Instance/WND_BattleResult	0	1	1
 19	网络消息等待	WND_Waiting	Internal/WND_Waiting	0	3	1

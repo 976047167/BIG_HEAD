@@ -112,6 +112,20 @@ public class SoundGroup : ISoundGroup
         }
     }
 
+    public void RefreshVolume()
+    {
+        foreach (SoundAgent soundAgent in m_SoundAgents)
+        {
+            soundAgent.RefreshVolume();
+        }
+    }
+    public void RefreshMute()
+    {
+        foreach (SoundAgent soundAgent in m_SoundAgents)
+        {
+            soundAgent.RefreshMute();
+        }
+    }
     /// <summary>
     /// 获取声音组辅助器。
     /// </summary>

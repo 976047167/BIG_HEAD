@@ -37,6 +37,10 @@ public class SoundAgent : MonoBehaviour, ISoundAgent
         m_AudioSource.playOnAwake = false;
         m_AudioSource.rolloffMode = AudioRolloffMode.Custom;
         m_CachedTransform = transform;
+        if (soundGroup.MixerGroup != null)
+        {
+            m_AudioSource.outputAudioMixerGroup = soundGroup.MixerGroup;
+        }
 
         m_SoundGroup = soundGroup;
         m_SerialId = 0;
@@ -415,12 +419,14 @@ public class SoundAgent : MonoBehaviour, ISoundAgent
 
     internal void RefreshMute()
     {
-        m_AudioSource.mute = m_SoundGroup.Mute || m_MuteInSoundGroup;
+        //m_AudioSource.mute = m_SoundGroup.Mute || m_MuteInSoundGroup || (Game.Sound == null ? false : Game.Sound.ALLMute);
+        m_AudioSource.mute = m_SoundGroup.Mute || m_MuteInSoundGroup || SoundManager.Instance.ALLMute;
     }
 
     internal void RefreshVolume()
     {
-        Volume = m_SoundGroup.Volume * m_VolumeInSoundGroup;
+        //Volume = m_SoundGroup.Volume * m_VolumeInSoundGroup * (Game.Sound == null ? 1f : Game.Sound.AllVolume);
+        Volume = m_SoundGroup.Volume * m_VolumeInSoundGroup *  SoundManager.Instance.AllVolume;
     }
 
 

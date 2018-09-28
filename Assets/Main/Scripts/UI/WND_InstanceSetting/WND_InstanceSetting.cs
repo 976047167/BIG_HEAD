@@ -21,6 +21,8 @@ public class WND_InstanceSetting : UIFormBase
     private UIToggle Fast;
     private UIToggle Mid;
     private UIToggle Slow;
+    private UIToggle togVoice;
+    private UIToggle togMusic;
     protected override void OnInit(object userdata)
     {
         base.OnInit(userdata);
@@ -35,12 +37,17 @@ public class WND_InstanceSetting : UIFormBase
         Fast = transform.Find("bg/frame/spDialogSpeed/toggleFast").GetComponent<UIToggle>();
         Mid = transform.Find("bg/frame/spDialogSpeed/toggleMid").GetComponent<UIToggle>();
         Slow = transform.Find("bg/frame/spDialogSpeed/toggleSlow").GetComponent<UIToggle>();
-
+        togVoice = spVoice.GetComponent<UIToggle>();
+        togMusic = spMusic.GetComponent<UIToggle>();
 
         UIEventListener.Get(btnGiveUp).onClick = GiveUpClick;
 
         UIEventListener.Get(spExit.gameObject).onClick = ExitClick;
         UIEventListener.Get(btnConfim).onClick = ExitClick;
+        EventDelegate.Add(togVoice.onChange, OnVoiceMute);
+        EventDelegate.Add(togMusic.onChange, OnMusicMute);
+        sliderVoice.onDragFinished = OnVoiceSave;
+        sliderMusic.onDragFinished = OnMusicSave;
         EventDelegate.Add(sliderMusic.onChange, MusicChange);
         EventDelegate.Add(sliderVoice.onChange, VoiceChange);
         EventDelegate.Add(Fast.onChange, FastChange);
@@ -60,16 +67,38 @@ public class WND_InstanceSetting : UIFormBase
             Mid.value = true;
         else if (Game.DataManager.DialogSpeed == 1.0f)
             Slow.value = true;
+        togMusic.value = Game.Sound.MusicMute;
+        togVoice.value = Game.Sound.ALLMute;
+        sliderMusic.value = Game.Sound.MusicVolume;
+        sliderVoice.value = Game.Sound.AllVolume;
 
+    }
+    private void OnMusicSave()
+    {
+        Game.Sound.SaveMusicVolume(sliderMusic.value);
+    }
 
+    private void OnVoiceSave()
+    {
+        Game.Sound.SaveAllVolume(sliderVoice.value);
+    }
+
+    private void OnMusicMute()
+    {
+        Game.Sound.MusicMute = togMusic.value;
+    }
+
+    private void OnVoiceMute()
+    {
+        Game.Sound.ALLMute = togVoice.value;
     }
     private void VoiceChange()
     {
-
+        Game.Sound.AllVolume = sliderVoice.value;
     }
     private void MusicChange()
     {
-
+        Game.Sound.MusicVolume = sliderMusic.value;
     }
     private void ExitClick(GameObject obj)
     {

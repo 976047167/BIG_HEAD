@@ -60,7 +60,6 @@ namespace BigHead.Sound
         {
             get;
         }
-
         /// <summary>
         /// 停止所有已加载的声音。
         /// </summary>

@@ -366,15 +366,6 @@ public class UITexture : UIBasicSprite
         if (onPostFill != null)
             onPostFill(this, offset, verts, uvs, cols);
     }
-    [System.Obsolete("用表格配置")]
-    public void Load(string path)
-    {
-        if (mainTexture != null && path.Substring(path.LastIndexOf('/') + 1) == mainTexture.name)
-        {
-            return;
-        }
-        ResourceManager.LoadTexture(path, LoadCallback, LoadFailed);
-    }
     protected int TextureId;
     protected OnAssetDestory assetDestory = null;
     public void Load(int textureId)
@@ -393,7 +384,8 @@ public class UITexture : UIBasicSprite
         if (setting != null)
         {
             TextureId = textureId;
-            ResourceManager.LoadTexture(setting.Path, LoadCallback, LoadFailed);
+            string path = string.Format("UITexture/{0}{1}", setting.Path, (ResourceManager.EditorMode ? "." + setting.Extension : ResourceManager.BUNDLE_SUFFIX));
+            ResourceManager.LoadTexture(path, LoadCallback, LoadFailed);
         }
 
     }

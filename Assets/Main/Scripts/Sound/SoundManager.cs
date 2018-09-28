@@ -4,42 +4,54 @@ using UnityEngine;
 using BigHead.Setting;
 using AppSettings;
 using BigHead.Sound;
+using UnityEngine.Audio;
 
 public class SoundManager
 {
     const string MUSIC_MUTE_KEY = "MUSIC_MUTE";
-    const string SOUND_MUTE_KEY = "SOUND_MUTE";
+    const string ALL_MUTE_KEY = "ALL_MUTE";
     const string MUSIC_VOLUME_KEY = "MUSIC_VOLUME";
-    const string SOUND_VOLUME_KEY = "SOUND_VOLUME";
+    const string ALL_VOLUME_KEY = "ALL_VOLUME";
     const string MUSIC_GROUP_KEY = "MUSIC";
     const string SOUND_GROUP_KEY = "SOUND";
     GameObject goHelper = null;
 
+    AudioMixer audioMixer = null;
+    AudioMixerGroup allMixGroup = null;
 
     Dictionary<string, SoundGroup> dicSoundGroups = new Dictionary<string, SoundGroup>();
 
+    public static SoundManager Instance { get; private set; }
     public SoundManager()
     {
+        Instance = this;
         goHelper = new GameObject();
         goHelper.AddComponent<SoundManagerHelper>();
 
         if (!dicSoundGroups.ContainsKey(MUSIC_GROUP_KEY))
         {
-            SoundGroup musicGroup = new SoundGroup(MUSIC_GROUP_KEY, null);
+            SoundGroup musicGroup = new SoundGroup(MUSIC_GROUP_KEY, audioMixer == null ? null : audioMixer.FindMatchingGroups("BGM")[0]);
             dicSoundGroups[MUSIC_GROUP_KEY] = musicGroup;
-
+            musicGroup.Volume = MusicVolume;
+            musicGroup.Mute = MusicMute;
             musicGroup.AddSoundAgentHelper(goHelper.transform);
         }
         if (!dicSoundGroups.ContainsKey(SOUND_GROUP_KEY))
         {
-            SoundGroup soundGroup = new SoundGroup(SOUND_GROUP_KEY, null);
+            SoundGroup soundGroup = new SoundGroup(SOUND_GROUP_KEY, audioMixer == null ? null : audioMixer.FindMatchingGroups("Sound")[0]);
             dicSoundGroups[SOUND_GROUP_KEY] = soundGroup;
             soundGroup.AddSoundAgentHelper(goHelper.transform);
             soundGroup.AddSoundAgentHelper(goHelper.transform);
             soundGroup.AddSoundAgentHelper(goHelper.transform);
+            
         }
-    }
 
+    }
+    //public IEnumerator Init()
+    //{
+    //    ResourceManager.LoadAudioMixer("Sound/Mixer/Main");
+    //        allMixGroup
+    //}
     public void Play(int soundId)
     {
         if (soundId == 0)
@@ -117,24 +129,39 @@ public class SoundManager
         {
             Game.Setting.SetBool(MUSIC_MUTE_KEY, value);
             Game.Setting.Save();
+            if (dicSoundGroups.ContainsKey(MUSIC_GROUP_KEY))
+            {
+                dicSoundGroups[MUSIC_GROUP_KEY].Mute = value;
+            }
         }
     }
-    public bool SoundMute
+
+    public bool ALLMute
     {
-        get { return Game.Setting.GetBool(SOUND_MUTE_KEY); }
+        get { return Game.Setting.GetBool(ALL_MUTE_KEY); }
         set
         {
-            Game.Setting.SetBool(SOUND_MUTE_KEY, value);
+            Game.Setting.SetBool(ALL_MUTE_KEY, value);
             Game.Setting.Save();
+            foreach (var group in dicSoundGroups)
+            {
+                group.Value.RefreshMute();
+            }
         }
     }
+    /// <summary>
+    /// 背景音量
+    /// </summary>
     public float MusicVolume
     {
         get { return Game.Setting.GetFloat(MUSIC_VOLUME_KEY); }
         set
         {
             Game.Setting.SetFloat(MUSIC_VOLUME_KEY, value);
-
+            if (dicSoundGroups.ContainsKey(MUSIC_GROUP_KEY))
+            {
+                dicSoundGroups[MUSIC_GROUP_KEY].Volume = value;
+            }
         }
     }
     public void SaveMusicVolume(float value)
@@ -142,18 +169,24 @@ public class SoundManager
         MusicVolume = value;
         Game.Setting.Save();
     }
-    public float SoundVolume
+    /// <summary>
+    /// 总音量
+    /// </summary>
+    public float AllVolume
     {
-        get { return Game.Setting.GetFloat(SOUND_VOLUME_KEY); }
+        get { return Game.Setting.GetFloat(ALL_VOLUME_KEY); }
         set
         {
-            Game.Setting.SetFloat(SOUND_VOLUME_KEY, value);
-
+            Game.Setting.SetFloat(ALL_VOLUME_KEY, value);
+            foreach (var group in dicSoundGroups)
+            {
+                group.Value.RefreshVolume();
+            }
         }
     }
-    public void SaveSoundVolume(float value)
+    public void SaveAllVolume(float value)
     {
-        SoundVolume = value;
+        AllVolume = value;
         Game.Setting.Save();
     }
 

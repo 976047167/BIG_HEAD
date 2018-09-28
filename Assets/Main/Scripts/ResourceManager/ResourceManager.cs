@@ -44,7 +44,7 @@ public class ResourceManager
     {
         //if (!EditorMode)
         {
-            
+
             TablePreloaded = false;
             PreloadDataTables();
         }
@@ -129,7 +129,7 @@ public class ResourceManager
 
     public static void LoadTexture(string path, Action<string, object[], Texture2D, OnAssetDestory> callback, Action<string, object[]> failure, params object[] userData)
     {
-        Load<Texture2D>("UITexture/" + path + (EditorMode ? ".png" : BUNDLE_SUFFIX), AssetType.UnityAsset, callback, failure, userData);
+        Load<Texture2D>(path, AssetType.UnityAsset, callback, failure, userData);
     }
     public static void LoadGameObject(string path, Action<string, object[], GameObject> callback, Action<string, object[]> failure, params object[] userData)
     {
@@ -143,6 +143,10 @@ public class ResourceManager
     public static void LoadSound(string path, Action<string, object[], AudioClip, OnAssetDestory> callback, Action<string, object[]> failure, params object[] userData)
     {
         Load<AudioClip>(path, AssetType.UnityAsset, callback, failure, userData);
+    }
+    public static void LoadAudioMixer(string path, Action<string, object[], UnityEngine.Audio.AudioMixer, OnAssetDestory> callback, Action<string, object[]> failure, params object[] userData)
+    {
+        Load<UnityEngine.Audio.AudioMixer>(path, AssetType.UnityAsset, callback, failure, userData);
     }
     /// <summary>
     /// 场景需要专门去处理，暂不管

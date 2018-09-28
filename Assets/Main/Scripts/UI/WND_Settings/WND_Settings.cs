@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 using AppSettings;
+using System;
 
-public class WND_Settings : UIFormBase {
+public class WND_Settings : UIFormBase
+{
 
     // Use this for initialization
 
@@ -12,6 +14,8 @@ public class WND_Settings : UIFormBase {
     private UISprite spExit;
     private UISprite spVoice;
     private UISprite spMusic;
+    private UIToggle togVoice;
+    private UIToggle togMusic;
     private UIGrid IconGrid;
     private GameObject btnChangeIcon;
     private UITexture headIcon;
@@ -19,7 +23,7 @@ public class WND_Settings : UIFormBase {
     private GameObject IconInstence;
     private GameObject btnCommand;
     private int myIconIndex;
-    private bool haveLoading; 
+    private bool haveLoading;
     protected override void OnInit(object userdata)
     {
         base.OnInit(userdata);
@@ -34,50 +38,63 @@ public class WND_Settings : UIFormBase {
         IconGrid = IconMaskBg.transform.Find("headIconBg/ScrollView/Grid").GetComponent<UIGrid>();
         IconInstence = transform.Find("headIconInstence").gameObject;
         btnCommand = IconMaskBg.transform.Find("headIconBg/btnCommand").gameObject;
+        togVoice = spVoice.GetComponent<UIToggle>();
+        togMusic = spMusic.GetComponent<UIToggle>();
 
         myIconIndex = Game.DataManager.PlayerData.HeadIcon;
         UIEventListener.Get(spExit.gameObject).onClick = ExitClick;
         UIEventListener.Get(btnChangeIcon).onClick = ChangeIconClick;
         UIEventListener.Get(IconMaskBg).onClick = CanceClick;
         UIEventListener.Get(btnCommand).onClick = CommandClick;
+        EventDelegate.Add(togVoice.onChange, OnVoiceMute);
+        EventDelegate.Add(togMusic.onChange, OnMusicMute);
+        sliderVoice.onDragFinished = OnVoiceSave;
+        sliderMusic.onDragFinished = OnMusicSave;
         EventDelegate.Add(sliderMusic.onChange, MusicChange);
         EventDelegate.Add(sliderVoice.onChange, VoiceChange);
-        EventDelegate.Add(IconInstence.GetComponent<UIToggle>().onChange,IconChose);
+        EventDelegate.Add(IconInstence.GetComponent<UIToggle>().onChange, IconChose);
 
+    }
+
+    private void OnMusicSave()
+    {
+        Game.Sound.SaveMusicVolume(sliderMusic.value);
+    }
+
+    private void OnVoiceSave()
+    {
+        Game.Sound.SaveAllVolume(sliderVoice.value);
+    }
+
+    private void OnMusicMute()
+    {
+        Game.Sound.MusicMute = togMusic.value;
+    }
+
+    private void OnVoiceMute()
+    {
+        Game.Sound.ALLMute = togVoice.value;
     }
 
     protected override void OnOpen()
     {
         base.OnOpen();
-        
+
         headIcon.Load(myIconIndex);
+        togMusic.value = Game.Sound.MusicMute;
+        togVoice.value = Game.Sound.ALLMute;
+        sliderMusic.value = Game.Sound.MusicVolume;
+        sliderVoice.value = Game.Sound.AllVolume;
     }
     private void VoiceChange()
     {
-
+        Game.Sound.AllVolume = sliderVoice.value;
     }
     private void MusicChange()
     {
-
-    }
-    void VoiceFinishChange()
-    {
-
-    }
-    void MusicFinishChange()
-    {
-
+        Game.Sound.MusicVolume = sliderMusic.value;
     }
 
-    void VoiceMute()
-    {
-
-    }
-
-    void MusicMute()
-    {
-
-    }
     private void ExitClick(GameObject obj)
     {
         Game.UI.CloseForm<WND_Settings>();
@@ -95,12 +112,13 @@ public class WND_Settings : UIFormBase {
     private void LoadHeadIconList()
     {
         List<int> iconIndexList = new List<int>();
-        foreach(TextureTableSetting texSetting in TextureTableSettings.GetAll())
+        foreach (TextureTableSetting texSetting in TextureTableSettings.GetAll())
         {
             if (texSetting.Id >= 10000 && texSetting.Id < 20000)
                 iconIndexList.Add(texSetting.Id);
         }
-         for(int i = 0; i<iconIndexList.Count; i++) {
+        for (int i = 0; i < iconIndexList.Count; i++)
+        {
             int iconIndex = iconIndexList[i];
             GameObject item = Instantiate(IconInstence);
             item.SetActive(true);
@@ -119,7 +137,7 @@ public class WND_Settings : UIFormBase {
     {
         if (UIToggle.current.value == true)
         {
-            int.TryParse(UIToggle.current.name,out myIconIndex);
+            int.TryParse(UIToggle.current.name, out myIconIndex);
         }
     }
     private void CommandClick(GameObject obj)

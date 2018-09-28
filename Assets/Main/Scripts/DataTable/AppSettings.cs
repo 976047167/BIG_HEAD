@@ -5440,6 +5440,11 @@ namespace AppSettings
         /// </summary>
         public string Path { get; private set;}
         
+        /// <summary>
+        /// 后缀(原则上png,为了在编辑器上跑jpg)
+        /// </summary>
+        public string Extension { get; private set;}
+        
 
         internal TextureTableSetting(TableFileRow row)
         {
@@ -5450,6 +5455,7 @@ namespace AppSettings
         { 
             Id = row.Get_int(row.Values[0], ""); 
             Path = row.Get_string(row.Values[1], ""); 
+            Extension = row.Get_string(row.Values[2], ""); 
         }
 
         /// <summary>
