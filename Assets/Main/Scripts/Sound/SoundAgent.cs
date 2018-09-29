@@ -267,6 +267,9 @@ public class SoundAgent : MonoBehaviour, ISoundAgent
     public void Play()
     {
         m_AudioSource.Play();
+        Messenger.Broadcast<int, float>(MessageId.SOUND_PLAYED, SerialId, m_AudioSource.clip.length - Time);
+        StopAllCoroutines();
+        StartCoroutine(CalcSoundStopTime());
     }
 
     Tweener fadeTweener = null;
@@ -287,7 +290,22 @@ public class SoundAgent : MonoBehaviour, ISoundAgent
                 .Play();
 
         }
-
+        Messenger.Broadcast<int, float>(MessageId.SOUND_PLAYED, SerialId, m_AudioSource.clip.length - Time);
+        StopAllCoroutines();
+        StartCoroutine(CalcSoundStopTime());
+    }
+    /// <summary>
+    /// 计算剩余时间
+    /// </summary>
+    /// <returns></returns>
+    IEnumerator CalcSoundStopTime()
+    {
+        while (m_AudioSource.isPlaying)
+        {
+            float lastTime = m_AudioSource.clip.length - m_AudioSource.time;
+            yield return new WaitForSeconds(lastTime);
+        }
+        Messenger.Broadcast<int>(MessageId.SOUND_STOPED, SerialId);
     }
 
     /// <summary>
@@ -296,6 +314,7 @@ public class SoundAgent : MonoBehaviour, ISoundAgent
     public void Stop()
     {
         m_AudioSource.Stop();
+        Messenger.Broadcast<int>(MessageId.SOUND_STOPED, SerialId);
     }
 
     /// <summary>
@@ -311,7 +330,11 @@ public class SoundAgent : MonoBehaviour, ISoundAgent
                 fadeTweener.Complete();
             }
             fadeTweener = DOTween.To(() => { return m_AudioSource.volume; }, (f) => { m_AudioSource.volume = f; }, 0f, fadeOutSeconds)
-                .OnComplete(() => { m_AudioSource.Stop(); })
+                .OnComplete(() =>
+                {
+                    m_AudioSource.Stop();
+                    Messenger.Broadcast<int>(MessageId.SOUND_STOPED, SerialId);
+                })
                 .Play();
         }
         else
@@ -426,7 +449,7 @@ public class SoundAgent : MonoBehaviour, ISoundAgent
     internal void RefreshVolume()
     {
         //Volume = m_SoundGroup.Volume * m_VolumeInSoundGroup * (Game.Sound == null ? 1f : Game.Sound.AllVolume);
-        Volume = m_SoundGroup.Volume * m_VolumeInSoundGroup *  SoundManager.Instance.AllVolume;
+        Volume = m_SoundGroup.Volume * m_VolumeInSoundGroup * SoundManager.Instance.AllVolume;
     }
 
 

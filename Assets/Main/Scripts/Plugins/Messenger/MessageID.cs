@@ -105,6 +105,15 @@ public enum MessageId : uint
     /// </summary>
     MAP_APPLY_EFFECT,
 
+    /// <summary>
+    /// 音乐播放开始id:int,length:float
+    /// </summary>
+    SOUND_PLAYED,
+    /// <summary>
+    /// 音乐播放结束id
+    /// </summary>
+    SOUND_STOPED,
+
     
 
     /////<summary> 断线</summary>

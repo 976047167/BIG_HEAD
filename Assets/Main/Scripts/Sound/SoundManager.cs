@@ -5,7 +5,11 @@ using BigHead.Setting;
 using AppSettings;
 using BigHead.Sound;
 using UnityEngine.Audio;
-
+/// <summary>
+/// 背景音乐一个频道，覆盖式播放；
+/// 特效声音三个频道，优先级同时播放；
+/// 语音一个频道，队列播放；
+/// </summary>
 public class SoundManager
 {
     const string MUSIC_MUTE_KEY = "MUSIC_MUTE";
@@ -14,6 +18,7 @@ public class SoundManager
     const string ALL_VOLUME_KEY = "ALL_VOLUME";
     const string MUSIC_GROUP_KEY = "MUSIC";
     const string SOUND_GROUP_KEY = "SOUND";
+    const string VOICE_GROUP_KEY = "VOICE";
     GameObject goHelper = null;
 
     AudioMixer audioMixer = null;
@@ -21,6 +26,8 @@ public class SoundManager
 
     Dictionary<string, SoundGroup> dicSoundGroups = new Dictionary<string, SoundGroup>();
 
+    Queue<int> queueVoice = new Queue<int>();
+    int currentVoice = 0;
     public static SoundManager Instance { get; private set; }
     public SoundManager()
     {
@@ -43,9 +50,16 @@ public class SoundManager
             soundGroup.AddSoundAgentHelper(goHelper.transform);
             soundGroup.AddSoundAgentHelper(goHelper.transform);
             soundGroup.AddSoundAgentHelper(goHelper.transform);
-            
-        }
 
+        }
+        if (!dicSoundGroups.ContainsKey(VOICE_GROUP_KEY))
+        {
+            SoundGroup voiceGroup = new SoundGroup(VOICE_GROUP_KEY, audioMixer == null ? null : audioMixer.FindMatchingGroups("Voice")[0]);
+            dicSoundGroups[VOICE_GROUP_KEY] = voiceGroup;
+            voiceGroup.AddSoundAgentHelper(goHelper.transform);
+
+        }
+        Messenger.AddListener<int>(MessageId.SOUND_STOPED, OnSoundStoped);
     }
     //public IEnumerator Init()
     //{
@@ -70,12 +84,31 @@ public class SoundManager
             Debug.LogError("soundGroup [" + soundTable.Group + "] doesn't exist!id = " + soundId);
             return;
         }
+        if (soundGroup.Name == VOICE_GROUP_KEY)
+        {
+
+            if (currentVoice == 0)
+            {
+                currentVoice = soundId;
+                LoadSoundAssetAndPlay(soundId);
+            }
+            else
+                queueVoice.Enqueue(soundId);
+            return;
+        }
+
+        LoadSoundAssetAndPlay(soundId);
+    }
+    void LoadSoundAssetAndPlay(int soundId)
+    {
+        if (soundId == 0)
+        {
+            return;
+        }
+        SoundTableSetting soundTable = SoundTableSettings.Get(soundId);
         string path = string.Format("Sound/{0}{1}", soundTable.Path, (ResourceManager.EditorMode ? "." + soundTable.Extension : ResourceManager.BUNDLE_SUFFIX));
         ResourceManager.LoadSound(path, LoadSoundAssetSuccess, LoadSoundAssetFaild, soundId, soundTable);
-
-
     }
-
     void LoadSoundAssetSuccess(string path, object[] userdata, AudioClip audioAsset, OnAssetDestory onDestory)
     {
         int soundId = (int)userdata[0];
@@ -105,6 +138,21 @@ public class SoundManager
     {
         Debug.LogError("path doesn't exist!\n" + path + "\nID:" + userdata[0]);
     }
+
+
+    void OnSoundStoped(int soundId)
+    {
+        if (soundId == currentVoice)
+        {
+            if (queueVoice.Count > 0)
+            {
+                currentVoice = queueVoice.Dequeue();
+                LoadSoundAssetAndPlay(currentVoice);
+            }
+            else
+                currentVoice = 0;
+        }
+    }
     public void StopAll()
     {
         foreach (var group in dicSoundGroups)
@@ -112,6 +160,7 @@ public class SoundManager
             group.Value.StopAllLoadedSounds();
             group.Value.ReleaseAllSoundAssets();
         }
+        queueVoice.Clear();
     }
     public void StopAll(int exceptId)
     {
@@ -120,8 +169,12 @@ public class SoundManager
             group.Value.StopAllLoadedSounds(exceptId);
             group.Value.ReleaseAllSoundAssets(exceptId);
         }
+        queueVoice.Clear();
     }
-
+    public void StopAllVoice()
+    {
+        queueVoice.Clear();
+    }
     public bool MusicMute
     {
         get { return Game.Setting.GetBool(MUSIC_MUTE_KEY); }
@@ -189,7 +242,6 @@ public class SoundManager
         AllVolume = value;
         Game.Setting.Save();
     }
-
 
 }
 

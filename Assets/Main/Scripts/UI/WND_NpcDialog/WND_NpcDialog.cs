@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using AppSettings;
 using BigHead.protocol;
+using DG.Tweening;
+using System;
 
 public class WND_NpcDialog : UIFormBase
 {
@@ -59,6 +61,7 @@ public class WND_NpcDialog : UIFormBase
         if (dialogTable != null
             && dialogTable.HeadIcons.Count == dialogTable.ShowMode.Count
             && dialogTable.HeadIcons.Count == dialogTable.DialogContents.Count
+            && dialogTable.HeadIcons.Count == dialogTable.DialogSound.Count
             && dialogTable.HeadIcons.Count == dialogTable.DialogAction.Count
             && dialogTable.HeadIcons.Count == dialogTable.ActionParam.Count
             && dialogTable.HeadIcons.Count == dialogTable.NextIndexs.Count
@@ -70,7 +73,7 @@ public class WND_NpcDialog : UIFormBase
             for (int i = 0; i < dialogTable.HeadIcons.Count; i++)
             {
                 DialogData data = new DialogData(i, dialogTable.ShowMode[i], dialogTable.HeadIcons[i], dialogTable.ShowNames[i],
-                    dialogTable.DialogContents[i], dialogTable.NextIndexs[i], dialogTable.DialogAction[i],
+                    dialogTable.DialogContents[i], dialogTable.DialogSound[i], dialogTable.NextIndexs[i], dialogTable.DialogAction[i],
                     dialogTable.ActionParam[i], dialogTable.ActionParam2[i]);
                 dialogDatas.Add(data);
             }
@@ -88,12 +91,18 @@ public class WND_NpcDialog : UIFormBase
     {
         base.OnOpen();
         Messenger.AddListener(MessageId.MAP_APPLY_EFFECT, OnEffectApplyed);
+        Messenger.AddListener<int, float>(MessageId.SOUND_PLAYED, OnSoundStart);
         StartDialog(0);
     }
+
+
+
     protected override void OnClose()
     {
         base.OnClose();
         Messenger.RemoveListener(MessageId.MAP_APPLY_EFFECT, OnEffectApplyed);
+        Messenger.RemoveListener<int, float>(MessageId.SOUND_PLAYED, OnSoundStart);
+        Game.Sound.StopAllVoice();
     }
 
     //    private void Start()
@@ -234,6 +243,10 @@ public class WND_NpcDialog : UIFormBase
         {
             goSelects[i].SetActive(false);
         }
+        if (dialogData.Sound > 0)
+        {
+            Game.Sound.Play(dialogData.Sound);
+        }
         int action = dialogData.Action;
         switch (dialogData.ShowMode)
         {
@@ -342,7 +355,10 @@ public class WND_NpcDialog : UIFormBase
             Game.UI.CloseForm(this);
         }
     }
+    private void OnSoundStart(int soundId, float length)
+    {
 
+    }
     void StartSelect(int startIndex, int length)
     {
         if (length > 4)
@@ -372,7 +388,19 @@ public class WND_NpcDialog : UIFormBase
     {
         DialogData data = dialogDatas[int.Parse(go.name)];
         currentDialogData = data;
-        ApplyDialogAction(data.Index, data.Action, data.ActionParam, data.ActionParam2, data.Next);
+
+        if (data.Sound > 0)
+        {
+            Game.Sound.Play(data.Sound);
+        }
+        for (int i = 0; i < goSelects.Length; i++)
+        {
+            if (goSelects[i] != go)
+                goSelects[i].SetActive(false);
+        }
+        DOTween.To(() => { return go.transform.localPosition; }, (v3) => { go.transform.localPosition = v3; }, Vector3.zero, 0.5f)
+            .OnComplete(() => { ApplyDialogAction(data.Index, data.Action, data.ActionParam, data.ActionParam2, data.Next); })
+            .Play();
     }
     void OnClick_btnMask(GameObject go)
     {

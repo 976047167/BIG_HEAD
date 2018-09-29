@@ -397,7 +397,6 @@ public class MapMgr
     {
         Game.UI.OpenForm<WND_MapBox>(boxId);
     }
-
     public MapCardBase GetMapCard(int x, int y)
     {
         return currentMapLayerData[x, y];

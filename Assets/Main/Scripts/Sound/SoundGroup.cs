@@ -339,5 +339,4 @@ public class SoundGroup : ISoundGroup
             m_SoundAgents[i].ReleaseSoundAsset();
         }
     }
-
 }

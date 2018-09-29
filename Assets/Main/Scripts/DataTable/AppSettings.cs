@@ -2353,6 +2353,11 @@ namespace AppSettings
         public List<int> DialogContents { get; private set;}
         
         /// <summary>
+        /// 对话声音()
+        /// </summary>
+        public List<int> DialogSound { get; private set;}
+        
+        /// <summary>
         /// 对话操作(0结束1下一个2选择3进入战斗4回血5回魔6回粮食7进入商店8打开宝箱9进入下一层)
         /// </summary>
         public List<int> DialogAction { get; private set;}
@@ -2385,10 +2390,11 @@ namespace AppSettings
             HeadIcons = row.Get_List_int(row.Values[2], ""); 
             ShowNames = row.Get_List_int(row.Values[3], ""); 
             DialogContents = row.Get_List_int(row.Values[4], ""); 
-            DialogAction = row.Get_List_int(row.Values[5], ""); 
-            NextIndexs = row.Get_List_int(row.Values[6], ""); 
-            ActionParam = row.Get_List_int(row.Values[7], ""); 
-            ActionParam2 = row.Get_List_int(row.Values[8], ""); 
+            DialogSound = row.Get_List_int(row.Values[5], ""); 
+            DialogAction = row.Get_List_int(row.Values[6], ""); 
+            NextIndexs = row.Get_List_int(row.Values[7], ""); 
+            ActionParam = row.Get_List_int(row.Values[8], ""); 
+            ActionParam2 = row.Get_List_int(row.Values[9], ""); 
         }
 
         /// <summary>
@@ -5159,7 +5165,7 @@ namespace AppSettings
         public int Id { get; private set;}
         
         /// <summary>
-        /// 音乐类型(0背景音乐1特效声)
+        /// 音乐类型(背景音乐一个频道，覆盖式播放；特效声音三个频道，优先级同时播放；语音一个频道，队列播放；)
         /// </summary>
         public int Type { get; private set;}
         
@@ -5174,7 +5180,7 @@ namespace AppSettings
         public string Extension { get; private set;}
         
         /// <summary>
-        /// 播放声音组(MUSIC1个通道，SOUND暂定3个)
+        /// 播放声音组(MUSIC1个通道，SOUND暂定3个,VOICE语音一个通道)
         /// </summary>
         public string Group { get; private set;}
         
