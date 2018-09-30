@@ -398,7 +398,7 @@ public class WND_NpcDialog : UIFormBase
             if (goSelects[i] != go)
                 goSelects[i].SetActive(false);
         }
-        DOTween.To(() => { return go.transform.localPosition; }, (v3) => { go.transform.localPosition = v3; }, Vector3.zero, 0.5f)
+        DOTween.To(() => { return go.transform.localPosition; }, (v3) => { go.transform.localPosition = v3; }, Vector3.zero, 0.3f)
             .OnComplete(() => { ApplyDialogAction(data.Index, data.Action, data.ActionParam, data.ActionParam2, data.Next); })
             .Play();
     }

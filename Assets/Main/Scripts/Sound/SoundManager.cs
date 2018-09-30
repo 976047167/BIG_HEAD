@@ -93,7 +93,10 @@ public class SoundManager
                 LoadSoundAssetAndPlay(soundId);
             }
             else
+            {
+                queueVoice.Clear();
                 queueVoice.Enqueue(soundId);
+            }
             return;
         }
 
