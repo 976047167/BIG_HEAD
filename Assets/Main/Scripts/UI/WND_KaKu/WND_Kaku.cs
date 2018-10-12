@@ -51,13 +51,13 @@ public class WND_Kaku : UIFormBase
         MovingPanel = transform.Find("MovingPanel").GetComponent<UIPanel>();
         btnExit = transform.Find("btnExit").gameObject;
         charaterIcon = transform.Find("texClassCharacter").GetComponent<UITexture>();
-        toggleAll = transform.Find("bgKaku/toggleAll").GetComponent<UIToggle>(); 
-         toggleCommon = transform.Find("bgKaku/toggleCommon").GetComponent<UIToggle>();
-        toggleClassType = transform.Find("bgKaku/toggleClassType").GetComponent<UIToggle>();
+        toggleAll = transform.Find("topToogles/toggleAll").GetComponent<UIToggle>();
+        toggleCommon = transform.Find("topToogles/toggleCommon").GetComponent<UIToggle>();
+        toggleClassType = transform.Find("topToogles/toggleClassType").GetComponent<UIToggle>();
         currentClassType = Game.DataManager.MyPlayer.Data.ClassData.Type;
-        EventDelegate.Add(toggleAll.onChange, AllChose);
-        EventDelegate.Add(toggleCommon.onChange, CommonChose);
-        EventDelegate.Add(toggleClassType.onChange, ClassTypeChose);
+        EventDelegate.Add(toggleAll.onChange, AllChoose);
+        EventDelegate.Add(toggleCommon.onChange, CommonChoose);
+        EventDelegate.Add(toggleClassType.onChange, ClassTypeChoose);
         UIEventListener.Get(btnExit).onClick = ExitClick;
         deckInstence = transform.Find("deckInstence").gameObject;
         KaKu = Game.DataManager.PlayerDetailData.KaKu;
@@ -75,7 +75,7 @@ public class WND_Kaku : UIFormBase
             {
                 tempDeck.Add(Deck[i]);
             }
-           // tempDeck.AddCards(ExtraDeckCards.Cards);
+            // tempDeck.AddCards(ExtraDeckCards.Cards);
         }
         else
         {
@@ -89,10 +89,10 @@ public class WND_Kaku : UIFormBase
         }
 
 
-        
- 
 
-       
+
+
+
 
 
     }
@@ -100,11 +100,11 @@ public class WND_Kaku : UIFormBase
     {
         base.OnOpen();
         ResourceManager.LoadGameObject("UI/Item/UINormalCard", LoadSucess, (str, obj) => { });
-         
+
 
     }
 
-    private void LoadSucess(string str,object[] obj,GameObject go)
+    private void LoadSucess(string str, object[] obj, GameObject go)
     {
         CardInstence = go;
         CardInstence.transform.SetParent(transform);
@@ -168,14 +168,14 @@ public class WND_Kaku : UIFormBase
             Destroy(trans.gameObject);
         }
 
-        for (int i = 0; i < KaKu.Count;i++)
+        for (int i = 0; i < KaKu.Count; i++)
         {
             int cardId = KaKu[i].CardId;
-           if (kakuGrid.transform.Find(cardId.ToString()) == null)
-           {
+            if (kakuGrid.transform.Find(cardId.ToString()) == null)
+            {
                 GameObject item = Instantiate(CardInstence);
                 item.SetActive(true);
-               int id = cardId;
+                int id = cardId;
 
                 item.GetComponent<UINormalCard>().SetCard(id);
                 item.GetComponent<UINormalCard>().CardNum = 0;
@@ -189,24 +189,24 @@ public class WND_Kaku : UIFormBase
                 item.transform.localScale = cardScale;
             }
             bool isInDeck = false;
-            for(int j = 0; j < tempDeck.Count; j++)
+            for (int j = 0; j < tempDeck.Count; j++)
             {
                 if (KaKu[i] == tempDeck[j])
                 {
                     isInDeck = true;
                     break;
                 }
-                   
+
             }
             if (isInDeck)
                 continue;
 
 
 
-           
 
-          GameObject itemCard = kakuGrid.transform.Find(cardId.ToString()).gameObject;
-            itemCard.GetComponent<UINormalCard>().CardNum++ ;
+
+            GameObject itemCard = kakuGrid.transform.Find(cardId.ToString()).gameObject;
+            itemCard.GetComponent<UINormalCard>().CardNum++;
 
 
         }
@@ -215,20 +215,20 @@ public class WND_Kaku : UIFormBase
 
     }
 
-    private void AllChose()
+    private void AllChoose()
     {
         //直接用Grid的GetChild会出问题。改用transfom的
-        for (int i = 0;i<kakuGrid.transform.childCount;i++)
+        for (int i = 0; i < kakuGrid.transform.childCount; i++)
         {
             Transform trans = kakuGrid.transform.GetChild(i);
             trans.gameObject.SetActive(UIToggle.current.value);
         }
-    
-       
+
+
         kakuGrid.repositionNow = true;
     }
 
-    private void CommonChose()
+    private void CommonChoose()
     {
         for (int i = 0; i < kakuGrid.transform.childCount; i++)
         {
@@ -238,7 +238,7 @@ public class WND_Kaku : UIFormBase
         }
         kakuGrid.repositionNow = true;
     }
-    private void ClassTypeChose()
+    private void ClassTypeChoose()
     {
         for (int i = 0; i < kakuGrid.transform.childCount; i++)
         {
@@ -257,26 +257,27 @@ public class WND_Kaku : UIFormBase
     private void MoveCardFromDeckToKaKu(int cardId)
     {
 
-            UINormalCard cardFromDeck =  cardGrid.transform.Find("" + cardId).GetComponent<UINormalCard>();
-            if (cardFromDeck.CardNum <= 0 ){
-                Debug.LogError("Move failed, the Card has wrong num!");
-                return;
-            }
-            cardFromDeck.CardNum -= 1;
-            if (cardFromDeck.CardNum == 0 )
-                Destroy(cardFromDeck.gameObject);
-            UINormalCard cardToKaKu =  kakuGrid.transform.Find("" + cardId).GetComponent<UINormalCard>();
-            cardToKaKu.CardNum += 1;
-            kakuGrid.repositionNow = true;
-            cardGrid.repositionNow = true;
-            for (int i = 0; i < tempDeck.Count; i++)
+        UINormalCard cardFromDeck = cardGrid.transform.Find("" + cardId).GetComponent<UINormalCard>();
+        if (cardFromDeck.CardNum <= 0)
+        {
+            Debug.LogError("Move failed, the Card has wrong num!");
+            return;
+        }
+        cardFromDeck.CardNum -= 1;
+        if (cardFromDeck.CardNum == 0)
+            Destroy(cardFromDeck.gameObject);
+        UINormalCard cardToKaKu = kakuGrid.transform.Find("" + cardId).GetComponent<UINormalCard>();
+        cardToKaKu.CardNum += 1;
+        kakuGrid.repositionNow = true;
+        cardGrid.repositionNow = true;
+        for (int i = 0; i < tempDeck.Count; i++)
+        {
+            if (tempDeck[i].CardId == cardId)
             {
-                if(tempDeck[i].CardId == cardId)
-                 {
                 tempDeck.RemoveAt(i);
-                 break;
-                 }
+                break;
             }
+        }
 
 
 
@@ -285,81 +286,82 @@ public class WND_Kaku : UIFormBase
     private void MoveCardFromKaKuToDeck(int cardId)
     {
 
- 
-            UINormalCard cardFromKaKu =  kakuGrid.transform.Find("" + cardId).GetComponent<UINormalCard>();
-            if (cardFromKaKu.CardNum <= 0 ){
-                Debug.LogError("Move failed, the Card has wrong num!");
-                return;
-            }
-            cardFromKaKu.CardNum -= 1;
-            bool isFoud = false;
-            for (int i = 0; i < tempDeck.Count; i++)
+
+        UINormalCard cardFromKaKu = kakuGrid.transform.Find("" + cardId).GetComponent<UINormalCard>();
+        if (cardFromKaKu.CardNum <= 0)
+        {
+            Debug.LogError("Move failed, the Card has wrong num!");
+            return;
+        }
+        cardFromKaKu.CardNum -= 1;
+        bool isFoud = false;
+        for (int i = 0; i < tempDeck.Count; i++)
+        {
+            if (tempDeck[i].CardId == cardId)
             {
-                if (tempDeck[i].CardId == cardId)
+                isFoud = true;
+                break;
+            }
+        }
+        if (isFoud == false)
+        {
+
+            GameObject item = Instantiate(CardInstence);
+            item.SetActive(true);
+            int id = cardId;
+            item.name = "" + id;
+            item.AddComponent<UIDragScrollView>();
+            item.GetComponent<UINormalCard>().SetCard(id);
+            UIEventListener.Get(item).onDragStart = OnCardDragStart;
+            UIEventListener.Get(item).onDrag = OnCardDrag;
+            UIEventListener.Get(item).onDragEnd = OnCardDragEnd;
+            item.transform.SetParent(cardGrid.transform, false);
+            item.transform.localPosition = new Vector3();
+            item.transform.localScale = cardScale;
+
+
+        }
+        else
+        {
+            UINormalCard cardToDeck = cardGrid.transform.Find("" + cardId).GetComponent<UINormalCard>();
+            cardToDeck.CardNum += 1;
+        }
+
+
+        kakuGrid.repositionNow = true;
+        cardGrid.repositionNow = true;
+        for (int i = 0; i < tempDeck.Count; i++)
+        {
+            bool isFind = false;
+            for (int j = 0; j < KaKu.Count; j++)
+            {
+                if (KaKu[j].CardId == cardId && KaKu[j] != tempDeck[i])
                 {
-                    isFoud = true;
+                    isFind = true;
+                    tempDeck.Add(KaKu[j]);
                     break;
                 }
             }
-            if (isFoud == false)
-            {
-
-                GameObject item = Instantiate(CardInstence);
-                item.SetActive(true);
-                int id = cardId;
-                item.name = "" + id;
-                item.AddComponent<UIDragScrollView>();
-                item.GetComponent<UINormalCard>().SetCard(id);
-                UIEventListener.Get(item).onDragStart = OnCardDragStart;
-                UIEventListener.Get(item).onDrag = OnCardDrag;
-                UIEventListener.Get(item).onDragEnd = OnCardDragEnd;
-                item.transform.SetParent(cardGrid.transform, false);
-                item.transform.localPosition = new Vector3();
-                item.transform.localScale = cardScale;
-
-                
-            }
-            else
-            {
-                UINormalCard cardToDeck =  cardGrid.transform.Find("" + cardId).GetComponent<UINormalCard>();
-                cardToDeck.CardNum += 1;
-            }
+            if (isFind)
+                break;
 
 
-            kakuGrid.repositionNow = true;
-            cardGrid.repositionNow = true;
-            for(int i = 0; i < tempDeck.Count; i++)
-            {
-                bool isFind = false;
-                for (int j = 0; j < KaKu.Count; j++)
-                {
-                    if (KaKu[j].CardId ==cardId && KaKu[j] != tempDeck[i])
-                    {
-                        isFind = true;
-                        tempDeck.Add(KaKu[j]);
-                        break;
-                    }
-                }
-                if (isFind)
-                    break;
-                
+        }
 
-            }
-          
 
- 
+
 
 
 
     }
 
-    
+
     private void OnCardDragStart(GameObject obj)
     {
         Debug.Log("OnDragStart ：" + obj.name);
-        
+
         offsetPos = obj.transform.position - UICamera.lastWorldPosition;
-        Vector2 delta =  UICamera.currentTouch.totalDelta;
+        Vector2 delta = UICamera.currentTouch.totalDelta;
         if (Mathf.Abs(delta.y) > Mathf.Abs(delta.x))
         {
             if (obj.GetComponent<UINormalCard>().CardNum == 0)
@@ -367,9 +369,9 @@ public class WND_Kaku : UIFormBase
 
             Debug.Log("OnDragStart ：is Drang Card");
             isDraging = true;
-            startDragGrid =  obj.GetComponentInParent<UIGrid>();
+            startDragGrid = obj.GetComponentInParent<UIGrid>();
             obj.GetComponent<UIDragScrollView>().enabled = false;
-            
+
             dragObj = Instantiate(obj);
             dragObj.SetActive(true);
             dragObj.GetComponent<UINormalCard>().SetCard(obj.GetComponent<UINormalCard>().CardId);
@@ -417,7 +419,7 @@ public class WND_Kaku : UIFormBase
             Destroy(dragObj);
             RefreshDepth();
         }
-   
+
 
     }
     protected void OnCardDrag(GameObject obj, Vector2 delta)
@@ -433,7 +435,7 @@ public class WND_Kaku : UIFormBase
     {
         RefreshDepth(transform);
     }
-    private void RefreshDepth(Transform trans) 
+    private void RefreshDepth(Transform trans)
     {
         UIWidget[] widgets = trans.GetComponentsInChildren<UIWidget>(true);
         foreach (var item in widgets)
@@ -472,7 +474,7 @@ public class WND_Kaku : UIFormBase
 
     private void ExitClick(GameObject btn)
     {
-   
+
         print("ExitClick");
         UIModule.Instance.CloseForm<WND_Kaku>();
 
